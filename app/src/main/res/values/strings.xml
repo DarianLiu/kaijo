@@ -1,0 +1,108 @@
+<resources>
+    <string name="app_name">海城</string>
+
+    <!--底部菜单-->
+    <string name="tab_case">案件管理</string>
+    <string name="tab_social">社会治理</string>
+    <string name="tab_business">营商环境</string>
+    <string name="tab_service">惠民服务</string>
+    <string name="tab_message">我的消息</string>
+
+    <!--案件相关-->
+    <string name="case_time"> 案发时间</string>
+    <string name="case_street">案件所属街道</string>
+    <string name="case_community"> 案件所属社区</string>
+    <string name="case_grid"> 案件所属网格</string>
+    <string name="case_address"> 地址</string>
+    <string name="case_problem_description"> 问题描述</string>
+    <string name="case_attribute"> 案件属性</string>
+    <string name="case_number"> 案件编号</string>
+
+    <string name="case_report">上报</string>
+    <string name="case_rehandle">重新处理</string>
+    <string name="case_temporary_save">暂存</string>
+    <string name="case_inquiry">案件查询</string>
+    <string name="case_handle">处理</string>
+    <string name="case_verify">核实</string>
+    <string name="case_check">核查</string>
+
+    <!--类别-->
+    <string name="category_large">大类</string>
+    <string name="category_small">小类</string>
+    <string name="category_sub">子类</string>
+
+    <!--位置相关-->
+    <string name="location_longitude">经度</string>
+    <string name="location_latitude">纬度</string>
+    <string name="location_obtain">获取坐标</string>
+
+    <!--我的消息模块-->
+    <string name="inspection_register">巡查项登记</string>
+    <string name="inspection_project_manager">巡查项管理</string>
+    <string name="change_password">修改密码</string>
+    <string name="login_out">退出登录</string>
+
+    <!--hint文字 -->
+    <string name="hint_address">请输入地址</string>
+    <string name="hint_description">100字以内</string>
+    <string name="hint_situation_description">情况描述：500字内</string>
+    <string name="hint_name">请输入名称</string>
+    <string name="hint_other">请输入其他</string>
+
+    <!--按钮文字-->
+    <string name="btn_next_step">下一步</string>
+    <string name="btn_login">登录</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_sure">确定</string>
+    <string name="btn_today">今天</string>
+    <string name="btn_view_location">查看坐标</string>
+    <string name="btn_view_handle_process">查看处理过程</string>
+    <string name="btn_upload_image">上传照片</string>
+    <string name="btn_sign_in">签收</string>
+    <string name="btn_submit">提交</string>
+    <string name="btn_query">查询</string>
+
+    <string name="business_guide">办事指南</string>
+    <string name="business_policy">扶持政策</string>
+    <string name="business_legal_service">公益法律服务</string>
+    <string name="business_legal">公益法律</string>
+
+    <string name="benefit_birth_control">计划生育</string>
+    <string name="benefit_marry">结婚登记</string>
+    <string name="benefit_medical">医疗卫生</string>
+    <string name="benefit_help">社会救助</string>
+    <string name="benefit_security">社会保障</string>
+    <string name="benefit_death">死亡殡葬</string>
+    <string name="benefit_pension">养老服务</string>
+    <string name="benefit_military_service">兵役</string>
+    <string name="benefit_land">土地房产</string>
+
+    <string name="social_product_device">特种设备</string>
+    <string name="social_product_work_site">在建工地</string>
+    <string name="social_product_danger">危化品</string>
+    <string name="social_fad_foot">食品</string>
+    <string name="social_fad_drug">药品</string>
+    <string name="social_prevent_forest_fire">森林防火</string>
+    <string name="social_prevent_flood">防台防洪</string>
+    <string name="social_prevent_snow_removal">冬季除雪</string>
+    <string name="social_prevent_sacrifice">文明祭祀</string>
+    <string name="social_cultura_internet_bar">网吧</string>
+    <string name="social_cultura_relic_protect">文物保护</string>
+    <string name="social_cultura_performing_place">演出场所</string>
+    <string name="social_cultura_recreation">游艺娱乐</string>
+    <string name="social_cultura_place">娱乐场所</string>
+
+    <string name="view_plan">预案查看</string>
+    <string name="search_key">关键字：</string>
+    <string name="create_time">发布时间：</string>
+    <string name="btn_submit_pic">上传图片</string>
+    <string name="btn_submit_check_record">上传检查记录</string>
+    <string name="details">详情</string>
+
+
+    <string-array name="array_case_attribute">
+        <item>请选择</item>
+        <item>部件</item>
+        <item>事件</item>
+    </string-array>
+</resources>

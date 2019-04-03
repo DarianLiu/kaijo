@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_main_background"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_social_product_device"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawablePadding="6dp"
+        android:drawableTop="@drawable/icon_social_product_device"
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:text="@string/social_product_device"
+        android:textColor="@color/color_text_caption"
+        android:textSize="@dimen/t12" />
+
+    <TextView
+        android:id="@+id/tv_social_product_work_site"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawablePadding="6dp"
+        android:drawableTop="@drawable/icon_social_product_work_site"
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:text="@string/social_product_work_site"
+        android:textColor="@color/color_text_caption"
+        android:textSize="@dimen/t12" />
+
+    <TextView
+        android:id="@+id/tv_social_product_danger"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawablePadding="6dp"
+        android:drawableTop="@drawable/icon_social_product_danger"
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:text="@string/social_product_danger"
+        android:textColor="@color/color_text_caption"
+        android:textSize="@dimen/t12" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawablePadding="6dp"
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:textColor="@color/color_text_caption"
+        android:textSize="@dimen/t12" />
+
+</LinearLayout>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_toolbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="@string/case_attribute"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/spinner_case_attribute"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="@string/category_large"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/spinner_category_large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="@string/category_small"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/spinner_category_small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="@string/category_sub"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/spinner_category_sub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/case_number"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_case_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:hint="请输入案件编号"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:textSize="@dimen/t14"
+        android:background="@drawable/selector_frame_background" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/tv_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/tv_cancel"
+            android:background="@drawable/shape_corner_bg_primary"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
+            android:text="@string/btn_query"
+            android:textColor="@color/color_title_text"
+            android:textSize="@dimen/t16" />
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/shape_corner_bg_gray"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
+            android:text="@string/btn_cancel"
+            android:textColor="@color/color_text_title"
+            android:textSize="@dimen/t16" />
+
+    </RelativeLayout>
+
+</LinearLayout>

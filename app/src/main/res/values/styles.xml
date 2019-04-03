@@ -1,0 +1,77 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowBackground">@color/default_background</item>
+        <item name="android:windowAnimationStyle">@style/AnimalActivity</item>
+        <item name="android:spinnerStyle">@style/spinner_style</item>
+    </style>
+
+    <style name="AnimalActivity">
+        <item name="android:activityOpenEnterAnimation">@anim/translate_right_to_center</item>
+        <item name="android:activityOpenExitAnimation">@anim/translate_center_to_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/translate_left_to_center</item>
+        <item name="android:activityCloseExitAnimation">@anim/translate_center_to_right</item>
+    </style>
+
+    <!--选项样式-->
+    <declare-styleable name="OptionView">
+        <attr name="option_background" format="reference|integer" />
+        <attr name="option_left_ImageView_drawable" format="reference|integer" />
+        <attr name="option_right_ImageView_drawable" format="reference|integer" />
+        <attr name="option_title_text" format="string" />
+        <attr name="option_title_text_color" format="color" />
+    </declare-styleable>
+
+    <!--下拉框样式-->
+    <style name="spinner_style" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/selector_spinner_background</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:spinnerMode">dialog</item>
+    </style>
+
+    <!--日期选择框样式-->
+    <style name="Theme.Picker" parent="@android:style/Theme.Holo.Light">
+        <item name="android:editTextStyle">@style/Widget.EditText.White</item>
+    </style>
+
+    <style name="Widget.EditText.White" parent="@android:style/Widget.EditText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/color_text_title</item>
+    </style>
+
+    <style name="main_menu_animstyle">
+        <item name="android:windowEnterAnimation">@anim/photo_dialog_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/photo_dialog_out_anim</item>
+    </style>
+
+    <style name="transparentFrameWindowStyle" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/photo_choose_bg</item>
+    </style>
+
+    <!-- 加载ProgressDialog -->
+    <style name="LoadingProgressDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <!-- Dialog的windowFrame框为无 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否漂现在activity上 -->
+        <item name="android:windowIsTranslucent">true</item> <!--&lt;!&ndash; 是否半透明 &ndash;&gt; -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- 是否允许对话框背景变亮 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">@dimen/t12</item>
+    </style>
+
+</resources>

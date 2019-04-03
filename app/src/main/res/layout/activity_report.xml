@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_toolbar" />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smartRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/case_time"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_case_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_bg_with_gray"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="8dp"
+                    android:text="2018-08-08 08:08"
+                    android:textColor="@color/color_text_title"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/case_street"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_case_street"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/case_community"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_case_community"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/case_grid"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_case_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/case_address"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_case_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/case_problem_description"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_case_problem_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:gravity="start"
+                    android:hint="@string/hint_description"
+                    android:inputType="text"
+                    android:maxLines="3"
+                    android:minHeight="100dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/case_attribute"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_case_attribute"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/category_large"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_category_large"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/category_small"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_category_small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/category_sub"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_category_sub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/location_longitude"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_location_longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_bg_with_gray"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="8dp"
+                    android:text=""
+                    android:textColor="@color/color_text_title"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="@string/location_latitude"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_location_latitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_bg_with_gray"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="8dp"
+                    android:text=""
+                    android:textColor="@color/color_text_title"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:id="@+id/btn_location_obtain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="@string/location_obtain"
+                    android:textSize="@dimen/t14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginTop="15dp">
+
+                    <TextView
+                        android:id="@+id/btn_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/btn_cancel"
+                        android:background="@drawable/shape_btn_bg_blue"
+                        android:gravity="center"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/btn_next_step"
+                        android:textSize="@dimen/t14" />
+
+                    <TextView
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/shape_btn_bg_normal"
+                        android:gravity="center"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/btn_cancel"
+                        android:textSize="@dimen/t14" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

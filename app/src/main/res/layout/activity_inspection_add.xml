@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_toolbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="25dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="巡查项"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_thing_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/selector_frame_bg_with_gray"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="8dp"
+        android:text=""
+        android:textColor="@color/color_text_title"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:text="备注"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_thing_remark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/selector_frame_background"
+        android:gravity="start"
+        android:hint="长度少于20字"
+        android:inputType="text"
+        android:maxLines="3"
+        android:minHeight="60dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="经度"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_location_lng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/selector_frame_bg_with_gray"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="8dp"
+        android:text=""
+        android:textColor="@color/color_text_title"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="纬度"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_location_lat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/selector_frame_bg_with_gray"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="8dp"
+        android:text=""
+        android:textColor="@color/color_text_title"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/selector_frame_background"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="获取坐标"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t16" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp">
+
+        <TextView
+            android:id="@+id/btn_save_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btn_back"
+            android:layout_toStartOf="@+id/btn_back"
+            android:background="@drawable/shape_btn_bg_blue"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
+            android:text="保存并返回"
+            android:textColor="@color/color_title_text"
+            android:textSize="@dimen/t16" />
+
+        <TextView
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/shape_corner_bg_gray"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
+            android:text="返回"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t16" />
+
+    </RelativeLayout>
+
+</LinearLayout>

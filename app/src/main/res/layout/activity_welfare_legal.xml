@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="20dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="20dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/icon_required"
+                android:drawablePadding="5dp"
+                android:text="申请企业"
+                android:textColor="@color/color_text_black"
+                android:textSize="@dimen/t12"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_edit_search_key"
+                android:hint="请输入申请企业"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:spinnerMode="dialog"
+                android:textColor="@color/black"
+                android:textColorHint="@color/color_text_hint"
+                android:textSize="@dimen/t14" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableRight="@drawable/icon_required"
+                android:drawablePadding="5dp"
+                android:text="申请人"
+                android:textColor="@color/color_text_black"
+                android:textSize="@dimen/t12"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_edit_search_key"
+                android:hint="请输入申请人"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:spinnerMode="dialog"
+                android:textColor="@color/black"
+                android:textColorHint="@color/color_text_hint"
+                android:textSize="@dimen/t14" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableRight="@drawable/icon_required"
+                android:drawablePadding="5dp"
+                android:text="联系方式"
+                android:textColor="@color/color_text_black"
+                android:textSize="@dimen/t12"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_edit_search_key"
+                android:hint="请输入电话号码"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:spinnerMode="dialog"
+                android:textColor="@color/black"
+                android:textColorHint="@color/color_text_hint"
+                android:textSize="@dimen/t14" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableRight="@drawable/icon_required"
+                android:drawablePadding="5dp"
+                android:text="法律类型"
+                android:textColor="@color/color_text_black"
+                android:textSize="@dimen/t12"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableRight="@drawable/icon_required"
+                android:drawablePadding="5dp"
+                android:text="为您推荐以下律师"
+                android:textColor="@color/color_text_black"
+                android:textSize="@dimen/t12"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableRight="@drawable/icon_required"
+                android:drawablePadding="5dp"
+                android:text="服务要求"
+                android:textColor="@color/color_text_black"
+                android:textSize="@dimen/t12"
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_edit_search_key"
+                android:gravity="top"
+                android:hint="请输入服务要求..."
+                android:maxLength="10000"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:scrollbars="vertical"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/color_text_hint"
+                android:textSize="@dimen/t14" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_corner_bg_primary"
+                android:paddingLeft="15dp"
+                android:paddingTop="8dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="8dp"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="@dimen/t16" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

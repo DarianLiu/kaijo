@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginTop="5dp"
+    android:gravity="center"
+    android:layout_marginRight="15dp"
+    android:layout_marginBottom="5dp">
+
+    <ImageView
+        android:id="@+id/wg_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/book" />
+
+    <TextView
+        android:id="@+id/wg_content_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/wg_right_img"
+        android:layout_toRightOf="@id/wg_img"
+        android:text="slsdjf打开斯拉夫看lsdjf打开斯拉夫看lsdjf打开斯拉夫看lsdjf打开斯拉夫看lsdjf打开斯拉夫看"
+        android:textSize="@dimen/t18" />
+
+    <ImageView
+        android:id="@+id/wg_right_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/right_img" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/wg_content_title"
+        android:layout_marginTop="10dp"
+        android:background="@color/line_color" />
+
+
+</RelativeLayout>
