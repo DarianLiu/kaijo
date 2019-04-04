@@ -29,7 +29,7 @@ public interface ReportContract {
     interface Model extends IModel {
         Observable<BaseResult<List<CaseAttribute>>> findCaseCategoryListByAttribute(String caseCategory);
 
-        Observable<BaseResult<List<Street>>> findAllStreetCommunity();
+        Observable<BaseResult<List<Street>>> findAllStreetCommunity(int type);
 
         Observable<BaseResult<List<Grid>>> findGridListByCommunityId(String communityId);
 

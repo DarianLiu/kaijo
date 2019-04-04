@@ -43,7 +43,7 @@ import static me.jessyan.retrofiturlmanager.RetrofitUrlManager.DOMAIN_NAME_HEADE
 public interface AppService {
 
     /**
-     * 登录(8763端口)
+     * 登录(8766端口)
      *
      * @param username 用户名/账号
      * @param password 密码
@@ -103,7 +103,7 @@ public interface AppService {
      */
     @NonNull
     @GET("/area/findAllStreetCommunity.json")
-    Observable<BaseResult<List<Street>>> findAllStreetCommunity();
+    Observable<BaseResult<List<Street>>> findAllStreetCommunity(@Query("type") int type);
 
     /**
      * 根据社区id，获取网格列表(8763端口)

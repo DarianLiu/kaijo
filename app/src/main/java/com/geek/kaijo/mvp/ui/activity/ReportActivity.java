@@ -221,7 +221,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         initRefreshLayout();
 
         if (mPresenter != null) {
-            mPresenter.findAllStreetCommunity();
+            mPresenter.findAllStreetCommunity(0);
         }
 
         //更新案发时间
@@ -248,7 +248,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         refreshLayout.setEnableLoadMore(false);
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             if (mPresenter != null)
-                mPresenter.findAllStreetCommunity();
+                mPresenter.findAllStreetCommunity(0);
         });
     }
 

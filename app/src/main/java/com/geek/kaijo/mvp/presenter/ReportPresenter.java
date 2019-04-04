@@ -64,8 +64,8 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
     /**
      * 获取所有街道社区列表
      */
-    public void findAllStreetCommunity() {
-        mModel.findAllStreetCommunity() .subscribeOn(Schedulers.io())
+    public void findAllStreetCommunity(int type) {
+        mModel.findAllStreetCommunity(type) .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> {
 //                                disposable.dispose();
                 })
