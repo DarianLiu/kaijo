@@ -49,7 +49,7 @@ public class ReportModel extends BaseModel implements ReportContract.Model {
 
     @Override
     public Observable<BaseResult<List<Street>>> findAllStreetCommunity(int type) {
-        return mRepositoryManager.obtainRetrofitService(AppService.class).findAllStreetCommunity(type);
+        return mRepositoryManager.obtainRetrofitService(AppService.class).dfindAllStreetCommunity(type);
     }
 
     @Override
