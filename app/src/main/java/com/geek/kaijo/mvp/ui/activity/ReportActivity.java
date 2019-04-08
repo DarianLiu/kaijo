@@ -152,6 +152,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private RxPermissions rxPermissions;
 
     private LoadingProgressDialog loadingDialog;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onStart() {
@@ -625,7 +626,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 mTimePickerPopupWindow.show();
                 break;
             case R.id.btn_location_obtain://获取坐标
-                checkPermissionAndAction();
+                    checkPermissionAndAction();
                 break;
             case R.id.btn_next://下一步
                 String caseTime = tvCaseTime.getText().toString();
@@ -749,13 +750,17 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             if (msg.what == 0x1233) {
                 mClient.pause();
                 if (mLat == 0 || mLng == 0) {
-                    new AlertDialog.Builder(ReportActivity.this)
+                    alertDialog = new AlertDialog.Builder(ReportActivity.this)
                             .setTitle("手机定位失败")
                             .setMessage("手机定位失败,获取中心点坐标")
                             .setPositiveButton("确定", (dialog, which) -> {
                                 launchActivity(new Intent(ReportActivity.this, MapActivity.class));
                                 dialog.dismiss();
-                            }).create().show();
+                            }).create();
+                    alertDialog.show();
+                } else {
+                    tvLocationLatitude.setText(String.valueOf(mLat));
+                    tvLocationLongitude.setText(String.valueOf(mLng));
                 }
                 showMessage("经纬度: " + mLat + " " + mLng);
             }
@@ -792,6 +797,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
         tvLocationLatitude.setText(String.valueOf(event.getLat()));
         tvLocationLongitude.setText(String.valueOf(event.getLng()));
+
+        alertDialog.dismiss();
     }
 
     @Override

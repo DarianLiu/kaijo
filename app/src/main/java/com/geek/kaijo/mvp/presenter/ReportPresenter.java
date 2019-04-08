@@ -4,28 +4,27 @@ import android.app.Application;
 import android.content.Intent;
 
 import com.geek.kaijo.app.api.RxUtils;
-import com.geek.kaijo.mvp.model.entity.CaseInfo;
+import com.geek.kaijo.mvp.contract.ReportContract;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
+import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.Street;
 import com.geek.kaijo.mvp.ui.activity.UploadActivity;
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxLifecycleUtils;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-
-import javax.inject.Inject;
-
-import com.geek.kaijo.mvp.contract.ReportContract;
-import com.jess.arms.utils.RxLifecycleUtils;
-
-import java.util.List;
 
 
 @ActivityScope

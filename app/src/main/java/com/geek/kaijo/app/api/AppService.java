@@ -103,7 +103,7 @@ public interface AppService {
      */
     @NonNull
     @GET("/area/findAllStreetCommunity.json")
-    Observable<BaseResult<List<Street>>> findAllStreetCommunity(@Query("type") int type);
+    Observable<BaseResult<List<Street>>> dfindAllStreetCommunity(@Query("type") int type);
 
     /**
      * 根据社区id，获取网格列表(8763端口)
