@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_toolbar" />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smartRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp">
+
+                <include layout="@layout/addtop_layout" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="5dp"
+                    android:text="受理书标号"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
+                    android:text="工程名称"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
+                    android:text="工程地址"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
+                    android:text="施工单位"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+
+                <EditText
+                    android:id="@+id/et_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_other"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableRight="@drawable/icon_required"
+                    android:text="是否有施工许可证"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinner_street"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="5dp"
+                    android:text="工程造价（万元）"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="5dp"
+                    android:text="形象进度/状态"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="5dp"
+                    android:text="建筑面积（万平）"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="5dp"
+                    android:text="开工日期"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="5dp"
+                    android:text="竣工日期"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="5dp"
+                    android:text="建设单位"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawablePadding="5dp"
+                    android:text="监理单位"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_frame_background"
+                    android:hint="@string/hint_address"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="@color/color_text_title"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/t14" />
+
+                <include layout="@layout/addtail_layout" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

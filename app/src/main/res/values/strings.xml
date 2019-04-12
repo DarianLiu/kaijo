@@ -98,6 +98,7 @@
     <string name="btn_submit_pic">上传图片</string>
     <string name="btn_submit_check_record">上传检查记录</string>
     <string name="details">详情</string>
+    <string name="add_special">增加特种设备</string>
 
 
     <string-array name="array_case_attribute">

@@ -74,18 +74,39 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        assortId = getIntent().getIntExtra("assortId", 0);
+        thingType = getIntent().getIntExtra("thingType", 0);
+
+
         ivAdd.setImageDrawable(getResources().getDrawable(R.drawable.icon_add));
         ivAdd.setVisibility(View.VISIBLE);
         ivAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(SocialManageActivity.this, SocialProductDangerActivity.class);
+            Intent intents = new Intent();
+            switch (thingType) {
+                case 3:
+                    intents.setClass(this, DrugSafetyActivity.class);
+                    break;
+                case 4:
+                    intents.setClass(this, FoodSafteActivity.class);
+                    break;
+                case 5:
+                    intents.setClass(this, SpecialCollectionActivity.class);
+                    break;
+                case 6:
+                    intents.setClass(this, BuilderSiteActivity.class);
+                    break;
+
+                default:
+                    intents.setClass(this, SocialProductDangerActivity.class);
+                    break;
+            }
+//            Intent intent = new Intent(SocialManageActivity.this, SocialProductDangerActivity.class);
 //            intent.putExtra("entry_type", assortId);
 //            intent.putExtra("title", ((ServiceBean) data).getTitle());
 //            intent.putExtra("content", ((ServiceBean) data).getContent());
-            launchActivity(intent);
+            launchActivity(intents);
         });
 
-        assortId = getIntent().getIntExtra("assortId", 0);
-        thingType = getIntent().getIntExtra("thingType", 0);
 
         initTitle();
         initRecycleView();
@@ -265,7 +286,7 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
             return;
         }
 
-        if (datas != null){
+        if (datas != null) {
             int index = mDatas.size();
             mDatas.addAll(datas);
             mAdapter.notifyItemRangeInserted(index + 1, datas.size());

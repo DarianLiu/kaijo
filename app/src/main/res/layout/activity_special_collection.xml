@@ -38,7 +38,7 @@
                     android:layout_marginTop="12dp"
                     android:drawableRight="@drawable/icon_required"
                     android:drawablePadding="5dp"
-                    android:text="名称"
+                    android:text="单位名称"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
                     android:textStyle="bold" />
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:drawablePadding="5dp"
-                    android:text="地址"
+                    android:text="法定代表人"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
                     android:textStyle="bold" />
@@ -93,8 +93,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableRight="@drawable/icon_required"
                     android:drawablePadding="5dp"
-                    android:text="其他"
+                    android:text="使用地点"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
                     android:textStyle="bold" />
@@ -118,31 +119,14 @@
                     android:textSize="@dimen/t14" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:drawablePadding="5dp"
-                    android:text="分类"
-                    android:textColor="@color/color_text_black"
-                    android:textSize="@dimen/t12"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/et_sort"
+                    android:id="@+id/btn_location_obtain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/selector_frame_background"
-                    android:hint="@string/hint_address"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="15dp"
-                    android:paddingBottom="10dp"
-                    android:spinnerMode="dialog"
-                    android:textColor="@color/color_text_title"
-                    android:textColorHint="@color/color_text_hint"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="@string/add_special"
                     android:textSize="@dimen/t14" />
 
                 <include layout="@layout/addtail_layout" />
