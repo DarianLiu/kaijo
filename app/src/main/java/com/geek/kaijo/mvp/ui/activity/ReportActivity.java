@@ -268,7 +268,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         if (rxPermissions == null) {
             rxPermissions = new RxPermissions(this);
         }
-        rxPermissions.requestEach(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)
+        rxPermissions.requestEachCombined(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)
                 .subscribe(new Consumer<Permission>() {
                     @Override
                     public void accept(Permission permission) throws Exception {
