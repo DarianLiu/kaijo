@@ -268,24 +268,32 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         if (rxPermissions == null) {
             rxPermissions = new RxPermissions(this);
         }
-        rxPermissions.requestEachCombined(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)
-                .subscribe(new Consumer<Permission>() {
-                    @Override
-                    public void accept(Permission permission) throws Exception {
-                        if (permission.granted) {
-                            // 用户已经同意该权限
-                            startLocation();
-                        } else if (permission.shouldShowRequestPermissionRationale) {
-                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
-//                            Log.d(TAG, permission.name + " is denied. More info should be provided.");
-                        } else {
-                            // 用户拒绝了该权限，并且选中『不再询问』
-//                            Log.d(TAG, permission.name + " is denied.");
-                            showPermissionsDialog();
-
-                        }
-                    }
-                });
+        //同时申请多个权限
+        rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE).subscribe(granted -> {
+            if (granted) {           // All requested permissions are granted
+                startLocation();
+            } else {
+                showPermissionsDialog();
+            }
+        });
+//        rxPermissions.requestEachCombined(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)
+//                .subscribe(new Consumer<Permission>() {
+//                    @Override
+//                    public void accept(Permission permission) throws Exception {
+//                        if (permission.granted) {
+//                            // 用户已经同意该权限
+//                            startLocation();
+//                        } else if (permission.shouldShowRequestPermissionRationale) {
+//                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+////                            Log.d(TAG, permission.name + " is denied. More info should be provided.");
+//                        } else {
+//                            // 用户拒绝了该权限，并且选中『不再询问』
+////                            Log.d(TAG, permission.name + " is denied.");
+//                            showPermissionsDialog();
+//
+//                        }
+//                    }
+//                });
     }
 
 
@@ -494,7 +502,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 if (position > 0) {
                     mGridId = mGridList.get(position).getId();
                 } else {
-                    mGridId = "";
+                    mGridId = "5";
                 }
             }
 
@@ -626,7 +634,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 mTimePickerPopupWindow.show();
                 break;
             case R.id.btn_location_obtain://获取坐标
-                    checkPermissionAndAction();
+                checkPermissionAndAction();
                 break;
             case R.id.btn_next://下一步
                 String caseTime = tvCaseTime.getText().toString();

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.geek.kaijo.R;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.EventBusTags;
+import com.geek.kaijo.app.ImageConfigImpl;
 import com.geek.kaijo.di.component.DaggerMainComponent;
 import com.geek.kaijo.di.module.MainModule;
 import com.geek.kaijo.mvp.contract.MainContract;
@@ -33,7 +34,6 @@ import com.geek.kaijo.view.autoviewpager.AutoScrollViewPager;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
 

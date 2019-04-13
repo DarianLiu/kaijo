@@ -9,7 +9,7 @@ import com.geek.kaijo.di.module.SpecialCollectionModule;
 import com.geek.kaijo.mvp.contract.SpecialCollectionContract;
 
 import com.jess.arms.di.scope.ActivityScope;
-import com.geek.kaijo.mvp.ui.activity.SpecialCollectionActivity;
+import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 
 
 /**

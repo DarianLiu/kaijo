@@ -1,6 +1,7 @@
 package com.geek.kaijo.mvp.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -128,6 +129,7 @@ public class VideoRecordActivity extends BaseActivity<VideoRecordPresenter> impl
         mMyOrientationDetector.disable();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void onStart() {
         super.onStart();

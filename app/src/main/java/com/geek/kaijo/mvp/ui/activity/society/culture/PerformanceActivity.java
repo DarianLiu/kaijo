@@ -1,4 +1,4 @@
-package com.geek.kaijo.mvp.ui.activity;
+package com.geek.kaijo.mvp.ui.activity.society.culture;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,23 +6,29 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.geek.kaijo.R;
-import com.geek.kaijo.di.component.DaggerSpecialCollectionComponent;
-import com.geek.kaijo.mvp.contract.SpecialCollectionContract;
-import com.geek.kaijo.mvp.presenter.SpecialCollectionPresenter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 
+import com.geek.kaijo.di.component.DaggerPerformanceComponent;
+import com.geek.kaijo.mvp.contract.PerformanceContract;
+import com.geek.kaijo.mvp.presenter.PerformancePresenter;
+
+
+
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
+
 /**
- * 特种设备采集
+ * ================================================
+ * 演出场所采集
+ * ================================================
  */
-public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPresenter> implements SpecialCollectionContract.View {
+public class PerformanceActivity extends BaseActivity<PerformancePresenter> implements PerformanceContract.View {
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
-        DaggerSpecialCollectionComponent //如找不到该类,请编译一下项目
+        DaggerPerformanceComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -32,7 +38,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
-        return R.layout.activity_special_collection; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return R.layout.activity_performance; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
     @Override

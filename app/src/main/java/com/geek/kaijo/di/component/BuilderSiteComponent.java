@@ -2,7 +2,7 @@ package com.geek.kaijo.di.component;
 
 import com.geek.kaijo.di.module.BuilderSiteModule;
 import com.geek.kaijo.mvp.contract.BuilderSiteContract;
-import com.geek.kaijo.mvp.ui.activity.BuilderSiteActivity;
+import com.geek.kaijo.mvp.ui.activity.society.safety.BuilderSiteActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.di.scope.ActivityScope;
 

@@ -19,6 +19,20 @@ import com.geek.kaijo.mvp.contract.SocialManageContract;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.SocialManagePresenter;
+import com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity;
+import com.geek.kaijo.mvp.ui.activity.society.culture.EntertainmentActivity;
+import com.geek.kaijo.mvp.ui.activity.society.culture.InternetBarActivity;
+import com.geek.kaijo.mvp.ui.activity.society.culture.PerformanceActivity;
+import com.geek.kaijo.mvp.ui.activity.society.culture.RecreationalActivity;
+import com.geek.kaijo.mvp.ui.activity.society.emergency.ForestFireActivity;
+import com.geek.kaijo.mvp.ui.activity.society.emergency.SacrificeActivity;
+import com.geek.kaijo.mvp.ui.activity.society.emergency.TyphoonFloodActivity;
+import com.geek.kaijo.mvp.ui.activity.society.emergency.WinterSnowActivity;
+import com.geek.kaijo.mvp.ui.activity.society.foot.DrugSafetyActivity;
+import com.geek.kaijo.mvp.ui.activity.society.foot.FoodSafteActivity;
+import com.geek.kaijo.mvp.ui.activity.society.safety.BuilderSiteActivity;
+import com.geek.kaijo.mvp.ui.activity.society.safety.SocialProductDangerActivity;
+import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 import com.geek.kaijo.mvp.ui.adapter.SocialThingAdapter;
 import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
@@ -83,21 +97,63 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         ivAdd.setOnClickListener(v -> {
             Intent intents = new Intent();
             switch (thingType) {
-                case 3:
+                case 3://药品
                     intents.setClass(this, DrugSafetyActivity.class);
+                    intents.putExtra("title", "药品");
                     break;
-                case 4:
+                case 4://食品
                     intents.setClass(this, FoodSafteActivity.class);
+                    intents.putExtra("title", "食品");
                     break;
-                case 5:
+                case 5://特种设备
                     intents.setClass(this, SpecialCollectionActivity.class);
+                    intents.putExtra("title", "特种设备");
                     break;
-                case 6:
+                case 6://在建工地
                     intents.setClass(this, BuilderSiteActivity.class);
+                    intents.putExtra("title", "在建工地");
                     break;
-
-                default:
+                case 7://危化品
                     intents.setClass(this, SocialProductDangerActivity.class);
+                    intents.putExtra("title", "危化品");
+                    break;
+                case 8://森森防火
+                    intents.setClass(this, ForestFireActivity.class);
+                    intents.putExtra("title", "危化品");
+                    break;
+                case 9://防台防汛
+                    intents.setClass(this, TyphoonFloodActivity.class);
+                    intents.putExtra("title", "森森防火");
+                    break;
+                case 10://文明祭祀
+                    intents.setClass(this, SacrificeActivity.class);
+                    intents.putExtra("title", "防台防汛");
+                    break;
+                case 11://冬季除雪
+                    intents.setClass(this, WinterSnowActivity.class);
+                    intents.putExtra("title", "文明祭祀");
+                    break;
+                case 12://网吧
+                    intents.setClass(this, InternetBarActivity.class);
+                    intents.putExtra("title", "网吧");
+                    break;
+                case 13://文物保护单位
+                    intents.setClass(this, CulturalRelicActivity.class);
+                    intents.putExtra("title", "文物保护单位");
+                    break;
+                case 14://演出场所
+                    intents.setClass(this, PerformanceActivity.class);
+                    intents.putExtra("title", "演出场所");
+                    break;
+                case 15://游艺娱乐
+                    intents.setClass(this, RecreationalActivity.class);
+                    intents.putExtra("title", "游艺娱乐");
+                    break;
+                case 16://娱乐场所
+                    intents.setClass(this, EntertainmentActivity.class);
+                    intents.putExtra("title", "娱乐场所");
+                    break;
+                default:
                     break;
             }
 //            Intent intent = new Intent(SocialManageActivity.this, SocialProductDangerActivity.class);

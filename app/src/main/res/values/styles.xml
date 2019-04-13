@@ -74,4 +74,33 @@
         <item name="android:textSize">@dimen/t12</item>
     </style>
 
+    <declare-styleable name="MyEditbox">
+        <attr name="attributeText" format="string" />
+        <attr name="attributeTextColor" format="reference|color" />
+        <attr name="attributeTextSize" format="dimension" />
+        <attr name="attributeDrawableRight" format="reference" />
+
+        <attr name="attributeValueText" format="string" />
+        <attr name="attributeValueTextHint" format="string" />
+        <attr name="attributeValueTextHintColor" format="reference|color" />
+        <attr name="attributeValueTextColor" format="reference|color" />
+        <attr name="attributeValueTextSize" format="dimension" />
+        <!--设置编辑框背景-->
+        <attr name="attributeValueBg" format="reference" />
+        <!--设置最大行数-->
+        <attr name="attributeValueMaxLines" format="integer" />
+        <!--设置编辑框高度-->
+        <attr name="attributeValueHeight" format="dimension" />
+        <!--设置hint位置-->
+        <attr name="attributeValueHintGravity" format="integer" />
+
+        <!--edit编辑框滚动类型-->
+        <attr name="scrollBarType" format="enum">
+            <enum name="horizon" value="1" />
+            <enum name="vertical" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+
 </resources>

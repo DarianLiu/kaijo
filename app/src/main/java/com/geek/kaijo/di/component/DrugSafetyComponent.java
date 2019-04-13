@@ -9,7 +9,7 @@ import com.geek.kaijo.di.module.DrugSafetyModule;
 import com.geek.kaijo.mvp.contract.DrugSafetyContract;
 
 import com.jess.arms.di.scope.ActivityScope;
-import com.geek.kaijo.mvp.ui.activity.DrugSafetyActivity;
+import com.geek.kaijo.mvp.ui.activity.society.foot.DrugSafetyActivity;
 
 
 /**

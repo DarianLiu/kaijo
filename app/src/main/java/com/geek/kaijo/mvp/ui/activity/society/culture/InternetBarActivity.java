@@ -1,4 +1,4 @@
-package com.geek.kaijo.mvp.ui.activity;
+package com.geek.kaijo.mvp.ui.activity.society.culture;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,26 +6,28 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.geek.kaijo.R;
-import com.geek.kaijo.di.component.DaggerFoodSafteComponent;
-import com.geek.kaijo.mvp.contract.FoodSafteContract;
-import com.geek.kaijo.mvp.presenter.FoodSaftePresenter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+
+import com.geek.kaijo.di.component.DaggerInternetBarComponent;
+import com.geek.kaijo.mvp.contract.InternetBarContract;
+import com.geek.kaijo.mvp.presenter.InternetBarPresenter;
+
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 /**
  * ================================================
- * 食品安全采集
+ * 网吧采集
  * ================================================
  */
-public class FoodSafteActivity extends BaseActivity<FoodSaftePresenter> implements FoodSafteContract.View {
+public class InternetBarActivity extends BaseActivity<InternetBarPresenter> implements InternetBarContract.View {
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
-        DaggerFoodSafteComponent //如找不到该类,请编译一下项目
+        DaggerInternetBarComponent //如找不到该类,请编译一下项目
                 .builder()
                 .appComponent(appComponent)
                 .view(this)
@@ -35,7 +37,7 @@ public class FoodSafteActivity extends BaseActivity<FoodSaftePresenter> implemen
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
-        return R.layout.activity_food_safte; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
+        return R.layout.activity_internet_bar; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
     @Override

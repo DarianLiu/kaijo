@@ -1,4 +1,4 @@
-package com.geek.kaijo.mvp.ui.activity;
+package com.geek.kaijo.mvp.ui.activity.society.safety;
 
 import android.content.Intent;
 import android.os.Bundle;

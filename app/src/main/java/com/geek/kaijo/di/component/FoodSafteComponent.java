@@ -9,7 +9,7 @@ import com.geek.kaijo.di.module.FoodSafteModule;
 import com.geek.kaijo.mvp.contract.FoodSafteContract;
 
 import com.jess.arms.di.scope.ActivityScope;
-import com.geek.kaijo.mvp.ui.activity.FoodSafteActivity;
+import com.geek.kaijo.mvp.ui.activity.society.foot.FoodSafteActivity;
 
 
 /**

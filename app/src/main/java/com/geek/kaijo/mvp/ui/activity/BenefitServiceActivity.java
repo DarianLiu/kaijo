@@ -37,6 +37,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 /**
  * 营商环境、慧明服务所属事件列表
+ * 安全  食品  应急  文化
+ *
  */
 public class BenefitServiceActivity extends BaseActivity<BenefitServicePresenter> implements BenefitServiceContract.View {
 

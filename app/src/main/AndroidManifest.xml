@@ -8,7 +8,6 @@
     <!-- <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
@@ -143,17 +142,24 @@
         <activity android:name="com.geek.kaijo.mvp.ui.activity.BenefitServiceActivity" />
         <activity android:name="com.geek.kaijo.mvp.ui.activity.ServiceDetailActivity" />
         <activity android:name="com.geek.kaijo.mvp.ui.activity.SocialManageActivity" />
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.SocialProductDangerActivity" />
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.safety.SocialProductDangerActivity" />
         <activity android:name="com.geek.kaijo.mvp.ui.activity.ChangePasswordActivity" />
         <activity android:name="com.geek.kaijo.mvp.ui.activity.PlanViewActivity"></activity>
         <activity android:name="com.geek.kaijo.mvp.ui.activity.WordGuildActivity" />
         <activity android:name="com.geek.kaijo.mvp.ui.activity.LegalServiceActivity"></activity>
         <activity android:name="com.geek.kaijo.mvp.ui.activity.WelfareLegalActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.SpecialCollectionActivity"></activity>
-
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.BuilderSiteActivity"></activity>
-
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.FoodSafteActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.DrugSafetyActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.safety.BuilderSiteActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.foot.FoodSafteActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.foot.DrugSafetyActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.ForestFireActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.TyphoonFloodActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.WinterSnowActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.SacrificeActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.InternetBarActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.PerformanceActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.RecreationalActivity"></activity>
+        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.EntertainmentActivity"></activity>
     </application>
 </manifest>

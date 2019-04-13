@@ -275,9 +275,6 @@
 -libraryjars libs/cmmap.jar
 -libraryjars libs/LoginLib.jar
 
-#保留属性：
--keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
-
 #保留类：
 # SDK proguard
 -keep class com.cmmap.api.maps.**{*;}
@@ -285,3 +282,11 @@
 -keep class com.cmmap.internal.mapcore.**{*;}
 -keep class com.cmmap.internal.maps.**{*;}
 -keep class com.cmmap.internal.services**{*;}
+
+#自身
+-keep class com.geek.kaijo.mvp.model.entity.**{*;}
+-keep class com.geek.kaijo.view.**{*;}
+-keep class com.geek.kaijo.app.**{*;}
+-keep class com.geek.kaijo.Utils.**{*;}
+-keep class com.geek.kaijo.mvp.ui.adapter.**{*;}
+-keep class com.geek.kaijo.mvp.ui.activity.**{*;}

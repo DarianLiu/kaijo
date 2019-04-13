@@ -10,7 +10,7 @@ import com.geek.kaijo.R;
 import com.geek.kaijo.app.EventBusTags;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.event.ServiceEvent;
-import com.geek.kaijo.mvp.ui.activity.SocialProductDangerActivity;
+import com.geek.kaijo.mvp.ui.activity.society.safety.SocialProductDangerActivity;
 import com.jess.arms.base.BaseHolder;
 
 import org.simple.eventbus.EventBus;

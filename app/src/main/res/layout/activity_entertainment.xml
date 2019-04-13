@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.geek.kaijo.view.MyEditBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        custom:attributeDrawableRight="@drawable/icon_required"
+        custom:attributeText="属性"
+        custom:attributeTextColor="@color/color_text_black"
+        custom:attributeTextSize="6sp"
+        custom:attributeValueBg="@drawable/selector_frame_background"
+        custom:attributeValueTextColor="@color/color_text_title"
+        custom:attributeValueTextHint="请输入属性"
+        custom:attributeValueTextHintColor="@color/color_text_hint"
+        custom:attributeValueTextSize="8sp"
+        custom:scrollBarType="vertical"
+        custom:attributeValueHeight="80dp" />
+
+    <com.geek.kaijo.view.MyEditBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        custom:attributeDrawableRight="@drawable/icon_required"
+        custom:attributeText="属性"
+        custom:attributeTextColor="@color/color_text_black"
+        custom:attributeTextSize="6sp"
+        custom:attributeValueBg="@drawable/selector_frame_background"
+        custom:attributeValueMaxLines="1"
+        custom:attributeValueTextColor="@color/color_text_title"
+        custom:attributeValueTextHint="请输入属性"
+        custom:attributeValueTextHintColor="@color/color_text_hint"
+        custom:attributeValueTextSize="8sp"/>
+
+    <com.geek.kaijo.view.MyEditBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        custom:attributeText="属性"
+        custom:attributeTextColor="@color/color_text_black"
+        custom:attributeTextSize="6sp"
+        custom:attributeValueBg="@drawable/selector_frame_background"
+        custom:attributeValueMaxLines="1"
+        custom:attributeValueTextColor="@color/color_text_title"
+        custom:attributeValueTextHint="请输入属性"
+        custom:attributeValueTextHintColor="@color/color_text_hint"
+        custom:attributeValueTextSize="8sp"/>
+
+
+</LinearLayout>
