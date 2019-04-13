@@ -1,5 +1,6 @@
 package com.geek.kaijo.mvp.model.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by LiuLi on 2018/9/8.
  */
 
-public class CaseInfo {
+public class CaseInfo implements Serializable {
     
     private int currPage;
     private int pageSize;

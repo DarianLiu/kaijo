@@ -205,5 +205,9 @@
         <activity
             android:name="com.geek.kaijo.mvp.ui.activity.society.culture.EntertainmentActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.TemporaryActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

@@ -31,6 +31,7 @@ import com.geek.kaijo.Utils.PictureHelper;
 import com.geek.kaijo.di.component.DaggerUploadComponent;
 import com.geek.kaijo.di.module.UploadModule;
 import com.geek.kaijo.mvp.contract.UploadContract;
+import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.UploadCaseFile;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.presenter.UploadPresenter;
@@ -41,6 +42,7 @@ import com.geek.kaijo.view.SelectDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DataHelper;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -107,6 +109,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
 
     private int caseId;
     private int entry_type;
+    private CaseInfo caseInfo;
 
 
     @Override
@@ -134,9 +137,9 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         if (Build.VERSION.SDK_INT >= 24) {
             builder.detectFileUriExposure();
         }
-        String caseIdString = getIntent().getStringExtra("case_id");
-        if (!TextUtils.isEmpty(caseIdString)) {
-            caseId = Integer.parseInt(caseIdString);
+        caseInfo = (CaseInfo) getIntent().getSerializableExtra("caseInfo");
+        if (caseInfo != null && !TextUtils.isEmpty(caseInfo.getCaseId())) {
+            caseId = Integer.parseInt(caseInfo.getCaseId());
         }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -365,9 +368,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         finish();
     }
 
-    @OnClick({R.id.btn_image, R.id.btn_image_later, R.id.btn_video, R.id.btn_video_later, R.id.tv_ok, R.id.tv_previous_step, R.id.tv_cancel})
+    @OnClick({R.id.btn_image, R.id.btn_image_later, R.id.btn_video, R.id.btn_video_later, R.id.tv_ok, R.id.tv_previous_step, R.id.tv_cancel, R.id.tv_pause_save})
     public void onClick(View view) {
-        Intent intent;
         switch (view.getId()) {
             case R.id.btn_image:
                 isBeforePhoto = true;
@@ -466,6 +468,11 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 break;
             case R.id.tv_cancel:
                 finish();
+                break;
+            case R.id.tv_pause_save:
+                Intent intent3 = new Intent(UploadActivity.this, TemporaryActivity.class);
+                DataHelper.saveDeviceData(getApplicationContext(), "caseInfo", caseInfo);
+                launchActivity(intent3);
                 break;
         }
     }

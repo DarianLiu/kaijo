@@ -51,6 +51,7 @@
         android:background="@color/color_tab_line" />
 
     <LinearLayout
+        android:id="@+id/tv_case_source_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_comment_background"
@@ -87,6 +88,7 @@
         android:background="@color/color_tab_line" />
 
     <LinearLayout
+        android:id="@+id/tv_case_flag_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FBFFFF"

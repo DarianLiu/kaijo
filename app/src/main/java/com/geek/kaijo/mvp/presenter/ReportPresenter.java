@@ -22,6 +22,7 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -145,8 +146,10 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                 .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {
                     @Override
                     public void onNext(CaseInfo caseInfoEntity) {
+
+
                         Intent intent = new Intent(mAppManager.getTopActivity(), UploadActivity.class);
-                        intent.putExtra("case_id", caseInfoEntity.getCaseId());
+                        intent.putExtra("caseInfo", caseInfoEntity);
                         mRootView.launchActivity(intent);
 //                        mRootView.killMyself();
                     }

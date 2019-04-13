@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.geek.kaijo.R;
 import com.geek.kaijo.mvp.ui.activity.CaseSearchActivity;
 import com.geek.kaijo.mvp.ui.activity.ReportActivity;
+import com.geek.kaijo.mvp.ui.activity.TemporaryActivity;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.BindView;
@@ -64,7 +65,7 @@ public class CaseHandleFragment extends Fragment {
 //                launchActivity(intent);
 //                break;
             case R.id.tv_temporary_save://暂存
-                intent = new Intent(getActivity(), ReportActivity.class);
+                intent = new Intent(getActivity(), TemporaryActivity.class);
                 launchActivity(intent);
                 break;
             case R.id.tv_case_query://案件查询
