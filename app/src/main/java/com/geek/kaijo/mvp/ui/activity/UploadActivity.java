@@ -94,7 +94,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
     private List<UploadFile> uploadPhotoList_later;  //整改后
     private boolean isBeforePhoto; //照片整改前
 
-    private int isWhich = 0;//1 视频整改前  2 视频整改后
+    private int isWhich = 0;//1 视频整改前  2 视频整改后   3.图片整改前  4，图片整改后
     private List<UploadFile> videoList;  //视频拍摄  整改前
     private List<UploadFile> videoList_later;  //视频拍摄  整改后
 
@@ -154,6 +154,28 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         LinearLayoutManager layoutManager_video_later = new LinearLayoutManager(this);
         recyclerView_video_later.addItemDecoration(divider);
         recyclerView_video_later.setLayoutManager(layoutManager_video_later);
+    }
+
+
+    /**
+     * 头像选择 PictureSelector
+     */
+    private void pictureSelector() {
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .imageSpanCount(4)
+                .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
+                .previewImage(false)
+                .isCamera(true)
+                .enableCrop(false)
+                .compress(true)
+                .minimumCompressSize(100)
+                .glideOverride(200, 200)
+                .withAspectRatio(1, 1)
+                .showCropFrame(true)
+                .rotateEnabled(true)
+                .isDragFrame(true)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
     }
 
     //整改前
@@ -349,10 +371,12 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         switch (view.getId()) {
             case R.id.btn_image:
                 isBeforePhoto = true;
+                isWhich = 3;
                 checkPermissionAndAction();
                 break;
             case R.id.btn_image_later: //整改后
                 isBeforePhoto = false;
+                isWhich = 4;
                 checkPermissionAndAction();
                 break;
             case R.id.btn_video:
@@ -473,35 +497,38 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
     }
 
     private void showDialog() {
-        List<String> names = new ArrayList<>();
-        names.add("拍照");
-        names.add("相册");
-        showDialog(new SelectDialog.SelectDialogListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent;
-                switch (position) {
-                    case 0: // 直接调起相机
-                        //启动相机程序
-                        openCamera();
-                        break;
-                    case 1:
-//                        intent = new Intent(Intent.ACTION_PICK);
-//                        intent.setType("image/*");
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                            startActivityForResult(intent, REQUEST_CODE_ALBUM_PHOTO);
-//                        } else {
-//                            startActivityForResult(intent, REQUEST_CODE_ALBUM);
-//                        }
 
-                        intent = new Intent(UploadActivity.this, PhotoActivityActivity.class);
-                        startActivityForResult(intent, RESULT_PHOTO);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }, names);
+        pictureSelector();
+
+//        List<String> names = new ArrayList<>();
+//        names.add("拍照");
+//        names.add("相册");
+//        showDialog(new SelectDialog.SelectDialogListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent;
+//                switch (position) {
+//                    case 0: // 直接调起相机
+//                        //启动相机程序
+//                        openCamera();
+//                        break;
+//                    case 1:
+////                        intent = new Intent(Intent.ACTION_PICK);
+////                        intent.setType("image/*");
+////                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+////                            startActivityForResult(intent, REQUEST_CODE_ALBUM_PHOTO);
+////                        } else {
+////                            startActivityForResult(intent, REQUEST_CODE_ALBUM);
+////                        }
+//
+//                        intent = new Intent(UploadActivity.this, PhotoActivityActivity.class);
+//                        startActivityForResult(intent, RESULT_PHOTO);
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        }, names);
     }
 
     private SelectDialog showDialog(SelectDialog.SelectDialogListener listener, List<String> names) {
@@ -546,7 +573,9 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                         // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                         String compressedPath = media.getPath();
 
-                        showMessage("picture==" + compressedPath);
+//                        showMessage("picture==" + compressedPath);
+
+                        List<UploadFile> selectPhotoList = new ArrayList<>();
                         switch (isWhich) {
                             case 1:
                                 UploadFile uploadFile = new UploadFile();
@@ -575,6 +604,22 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                                 if (mPresenter != null) {
                                     mPresenter.uploadFile(compressedPath);
                                 }
+                                break;
+                            case 3:
+                                UploadFile uploadFile3 = new UploadFile();
+                                uploadFile3.setFileName(compressedPath);
+                                String size3 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile3.getFileName());
+                                uploadFile3.setFileSize(size3);
+                                selectPhotoList.add(uploadFile3);
+                                compressImageUploadList(selectPhotoList, uploadPhotoList);
+                                break;
+                            case 4:
+                                UploadFile uploadFile4 = new UploadFile();
+                                uploadFile4.setFileName(compressedPath);
+                                String size4 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile4.getFileName());
+                                uploadFile4.setFileSize(size4);
+                                selectPhotoList.add(uploadFile4);
+                                compressImageUploadList(selectPhotoList, uploadPhotoList_later);
                                 break;
                             default:
                                 break;
@@ -837,6 +882,26 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         if (uploadPhoto != null) {
             switch (isWhich) {
                 case 1:
+                    for (int i = 0; i < videoList.size(); i++) {
+                        if (videoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+                            videoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
+                            videoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+                            videoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            adapter_video.notifyItemChanged(i);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < videoList_later.size(); i++) {
+                        if (videoList_later.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+                            videoList_later.get(i).setFileDomain(uploadPhoto.getFileDomain());
+                            videoList_later.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+                            videoList_later.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            adapter_video_later.notifyItemChanged(i);
+                        }
+                    }
+                    break;
+                case 3:
                     for (int i = 0; i < uploadPhotoList.size(); i++) {
                         if (uploadPhotoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
                             uploadPhotoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
@@ -844,10 +909,9 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                             uploadPhotoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
                             adapter.notifyItemChanged(i);
                         }
-
                     }
                     break;
-                case 2:
+                case 4:
                     for (int i = 0; i < uploadPhotoList_later.size(); i++) {
                         if (uploadPhotoList_later.get(i).getFileName().equals(uploadPhoto.getFileName())) {
                             uploadPhotoList_later.get(i).setFileDomain(uploadPhoto.getFileDomain());

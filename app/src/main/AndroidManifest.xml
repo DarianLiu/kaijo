@@ -139,27 +139,71 @@
         <activity
             android:name="com.geek.kaijo.mvp.ui.activity.InspectionAddActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.BenefitServiceActivity" />
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.ServiceDetailActivity" />
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.SocialManageActivity" />
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.safety.SocialProductDangerActivity" />
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.ChangePasswordActivity" />
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.PlanViewActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.WordGuildActivity" />
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.LegalServiceActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.WelfareLegalActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.safety.BuilderSiteActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.foot.FoodSafteActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.foot.DrugSafetyActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.ForestFireActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.TyphoonFloodActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.WinterSnowActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.SacrificeActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.InternetBarActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.PerformanceActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.RecreationalActivity"></activity>
-        <activity android:name="com.geek.kaijo.mvp.ui.activity.society.culture.EntertainmentActivity"></activity>
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.BenefitServiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.ServiceDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.SocialManageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.safety.SocialProductDangerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.ChangePasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.PlanViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.WordGuildActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.LegalServiceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.WelfareLegalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.safety.BuilderSiteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.foot.FoodSafteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.foot.DrugSafetyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.ForestFireActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.TyphoonFloodActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.WinterSnowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.emergency.SacrificeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.culture.InternetBarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.culture.PerformanceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.culture.RecreationalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.geek.kaijo.mvp.ui.activity.society.culture.EntertainmentActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

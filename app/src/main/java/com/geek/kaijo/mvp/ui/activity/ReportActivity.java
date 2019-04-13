@@ -12,9 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -175,7 +177,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private List<UploadFile> uploadVideoList;
     private List<UploadFile> uploadPhotoList;
     private UploadPhotoAdapter adapter1;
-    private UploadVideoAdapter adapter2;
+    private UploadVideoAdapter adapterVideo;
 
     @Override
     protected void onStart() {
@@ -286,9 +288,12 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         raPictureList.setHasFixedSize(true);
 
         uploadPhotoList = new ArrayList<>();
-        //检查列表
-        raVideoList.setLayoutManager(new LinearLayoutManager(this));
-        raVideoList.setHasFixedSize(true);
+
+        //视频列表
+        DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        LinearLayoutManager layoutManager_video_later = new LinearLayoutManager(this);
+        raVideoList.addItemDecoration(divider);
+        raVideoList.setLayoutManager(layoutManager_video_later);
 
         uploadVideoList = new ArrayList<>();
 
@@ -665,7 +670,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 if (position > 0) {
                     mCaseChildCategory = mCategorySub.get(position).getCategoryId();
                 } else {
-                    mCaseChildCategory = "";
+                    mCaseChildCategory = "1";
                 }
             }
 
@@ -935,8 +940,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
         tvLocationLatitude.setText(String.valueOf(event.getLat()));
         tvLocationLongitude.setText(String.valueOf(event.getLng()));
-
-        alertDialog.dismiss();
     }
 
     @Override
@@ -954,35 +957,35 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                         // 1.media.getPath(); 为原图path
                         // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
                         // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-                        if (media.isCompressed()) {
-                            String compressedPath = media.getCompressPath();
-                            Timber.d("picture==" + compressedPath);
-                            switch (isWhich) {
-                                case 1:
-                                    UploadFile uploadPhoto1 = new UploadFile();
-                                    uploadPhoto1.setFileName(compressedPath);
-                                    String size1 = FileSizeUtil.getAutoFileOrFilesSize(uploadPhoto1.getFileName());
-                                    uploadPhoto1.setFileSize(size1);
-                                    uploadPhotoList.add(uploadPhoto1);
-                                    recyclerViewAdapter1();
-                                    if (mPresenter != null) {
-                                        mPresenter.uploadFile(compressedPath);
-                                    }
-                                    break;
-                                case 2:
-                                    UploadFile uploadFile = new UploadFile();
-                                    uploadFile.setFileName(compressedPath);
-                                    String size5 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
-                                    uploadFile.setFileSize(size5);
-                                    uploadVideoList.add(uploadFile);
-                                    recyclerViewAdapter_video();
-                                    if (mPresenter != null) {
-                                        mPresenter.uploadFile(compressedPath);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
+                        String compressedPath = media.getPath();
+                        Timber.d("视频地址：=="+compressedPath);
+                        System.out.print("视频地址：=="+compressedPath);
+
+                        switch (isWhich) {
+                            case 1:
+                                UploadFile uploadPhoto1 = new UploadFile();
+                                uploadPhoto1.setFileName(compressedPath);
+                                String size1 = FileSizeUtil.getAutoFileOrFilesSize(uploadPhoto1.getFileName());
+                                uploadPhoto1.setFileSize(size1);
+                                uploadPhotoList.add(uploadPhoto1);
+                                recyclerViewAdapter1();
+                                if (mPresenter != null) {
+                                    mPresenter.uploadFile(compressedPath);
+                                }
+                                break;
+                            case 2:
+                                UploadFile uploadFile5 = new UploadFile();
+                                uploadFile5.setFileName(compressedPath);
+                                String size5 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile5.getFileName());
+                                uploadFile5.setFileSize(size5);
+                                uploadVideoList.add(uploadFile5);
+                                recyclerViewAdapter_video();
+                                if (mPresenter != null) {
+                                    mPresenter.uploadFile(compressedPath);
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
                     break;
@@ -1021,18 +1024,18 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     //视频
     private void recyclerViewAdapter_video() {
-        if (adapter2 == null) {
-            adapter2 = new UploadVideoAdapter(this, uploadVideoList);
-            raVideoList.setAdapter(adapter2);
+        if (adapterVideo == null) {
+            adapterVideo = new UploadVideoAdapter(this, uploadVideoList);
+            raVideoList.setAdapter(adapterVideo);
         } else {
-            adapter2.notifyDataSetChanged();
+            adapterVideo.notifyDataSetChanged();
         }
-        adapter2.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
+        adapterVideo.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
                 if (uploadVideoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
                     uploadVideoList.remove(position);
-                    adapter2.notifyDataSetChanged();
+                    adapterVideo.notifyDataSetChanged();
                 } else if (uploadVideoList.get(position).getIsSuccess() == 0) {
 
                 } else { //上传失败 重新上传
@@ -1064,7 +1067,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                             uploadVideoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
                             uploadVideoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
                             uploadVideoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
-                            adapter2.notifyItemChanged(i);
+                            adapterVideo.notifyItemChanged(i);
                         }
                     }
                     break;
