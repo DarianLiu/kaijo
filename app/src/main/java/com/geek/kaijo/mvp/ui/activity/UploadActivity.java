@@ -41,6 +41,10 @@ import com.geek.kaijo.view.SelectDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -52,6 +56,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -88,6 +93,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
     private List<UploadFile> uploadPhotoList;  //整改前
     private List<UploadFile> uploadPhotoList_later;  //整改后
     private boolean isBeforePhoto; //照片整改前
+
+    private int isWhich = 0;//1 视频整改前  2 视频整改后
     private List<UploadFile> videoList;  //视频拍摄  整改前
     private List<UploadFile> videoList_later;  //视频拍摄  整改后
 
@@ -350,13 +357,17 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 break;
             case R.id.btn_video:
 //                startVideo();
-                intent = new Intent(this, VideoRecordActivity.class);
-                startActivityForResult(intent, RESULT_VIDEO);
+//                intent = new Intent(this, VideoRecordActivity.class);
+//                startActivityForResult(intent, RESULT_VIDEO);
+                isWhich = 1;
+                checkPermissionAndVideo();
                 break;
             case R.id.btn_video_later:
 //                startVideo();
-                intent = new Intent(this, VideoRecordActivity.class);
-                startActivityForResult(intent, RESULT_VIDEO_later);
+//                intent = new Intent(this, VideoRecordActivity.class);
+//                startActivityForResult(intent, RESULT_VIDEO_later);
+                isWhich = 2;
+                checkPermissionAndVideo();
                 break;
             case R.id.tv_ok:
                 List<UploadCaseFile> caseFileList = new ArrayList<>();
@@ -448,6 +459,19 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         startActivityForResult(intent, RESULT_VIDEO);
     }
 
+    /**
+     * 视频选择
+     */
+    private void videoSelector() {
+        PictureSelector.create(this)
+                .openCamera(PictureMimeType.ofVideo())
+                .previewVideo(true)
+                .videoQuality(0)
+                .videoMaxSecond(60)
+                .videoMinSecond(1)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
+    }
+
     private void showDialog() {
         List<String> names = new ArrayList<>();
         names.add("拍照");
@@ -512,91 +536,141 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    for (LocalMedia media : selectList) {
+                        // 1.media.getPath(); 为原图path
+                        // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
+                        // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
+                        String compressedPath = media.getPath();
 
-        switch (requestCode) {
-            case REQUEST_CODE_ALBUM:  //4.4 以前
-                if (data == null) return;
-
-                if (data.getData() == null) return;
-
-                String path = data.getData().getPath();
-                compressImageUpload(path);
-                break;
-            case REQUEST_CODE_ALBUM_PHOTO: //4.4以后
-                if (data == null) return;
-                Uri selectedImage = data.getData();
-                if (selectedImage != null) {
-                    String picturePath = PictureHelper.getPath(this, selectedImage);
-                    compressImageUpload(picturePath);
-                }
-                break;
-            case RESULT_CAMERA: //相机
-                if (imageUri != null) {
-                    compressImageUpload(imageUri.getPath());
-                }
-
-//                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-//                    img_.setImageBitmap(bitmap);
-                break;
-            case RESULT_PHOTO: //选择多张图片返回
-                if (data != null && data.hasExtra("selectPhotoList")) {
-                    List<UploadFile> selectPhotoList = data.getParcelableArrayListExtra("selectPhotoList");
-                    if (selectPhotoList != null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle("图片上传");
-                        builder.setMessage("上传将会产生流量");
-                        builder.setNegativeButton("取消", null);
-                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int position) {
-//                                mPresenter.uploadFileList(uploadPhotoList);
-                                if (isBeforePhoto) {  //整改前
-                                    compressImageUploadList(selectPhotoList, uploadPhotoList);
-                                } else {//整改后
-                                    compressImageUploadList(selectPhotoList, uploadPhotoList_later);
+                        showMessage("picture==" + compressedPath);
+                        switch (isWhich) {
+                            case 1:
+                                UploadFile uploadFile = new UploadFile();
+                                uploadFile.setFileName(compressedPath);
+                                String size1 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
+                                uploadFile.setFileSize(size1);
+                                if (videoList == null) {
+                                    videoList = new ArrayList<>();
                                 }
-                            }
-                        });
-                        builder.show();
-
-                    }
-                }
-            case RESULT_VIDEO: //视频录制
-                if (data != null) {
-//                   Uri uri =  data.getData();
-//                   if(uri!=null && !TextUtils.isEmpty(uri.getPath())){
-//                       mPresenter.uploadFile(uri.getPath());
-//                   }
-
-                    UploadFile uploadFile = data.getParcelableExtra("UploadFile");
-                    if (uploadFile != null) {
-                        String size = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
-                        uploadFile.setFileSize(size);
-                        if (videoList == null) {
-                            videoList = new ArrayList<>();
+                                videoList.add(uploadFile);
+                                recyclerViewAdapter_video();
+                                if (mPresenter != null) {
+                                    mPresenter.uploadFile(compressedPath);
+                                }
+                                break;
+                            case 2:
+                                UploadFile uploadFile2 = new UploadFile();
+                                uploadFile2.setFileName(compressedPath);
+                                String size = FileSizeUtil.getAutoFileOrFilesSize(uploadFile2.getFileName());
+                                uploadFile2.setFileSize(size);
+                                if (videoList_later == null) {
+                                    videoList_later = new ArrayList<>();
+                                }
+                                videoList_later.add(uploadFile2);
+                                recyclerViewAdapter_video_later();
+                                if (mPresenter != null) {
+                                    mPresenter.uploadFile(compressedPath);
+                                }
+                                break;
+                            default:
+                                break;
                         }
-                        videoList.add(uploadFile);
-                        recyclerViewAdapter_video();
-                    }
-                }
-                break;
-            case RESULT_VIDEO_later:
-                if (data != null) {
-                    UploadFile uploadFile = data.getParcelableExtra("UploadFile");
-                    if (uploadFile != null) {
-                        String size = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
-                        uploadFile.setFileSize(size);
-                        if (videoList_later == null) {
-                            videoList_later = new ArrayList<>();
-                        }
-                        videoList_later.add(uploadFile);
-                        recyclerViewAdapter_video_later();
-                    }
-                }
 
-                break;
-
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
+//        switch (requestCode) {
+//            case REQUEST_CODE_ALBUM:  //4.4 以前
+//                if (data == null) return;
+//
+//                if (data.getData() == null) return;
+//
+//                String path = data.getData().getPath();
+//                compressImageUpload(path);
+//                break;
+//            case REQUEST_CODE_ALBUM_PHOTO: //4.4以后
+//                if (data == null) return;
+//                Uri selectedImage = data.getData();
+//                if (selectedImage != null) {
+//                    String picturePath = PictureHelper.getPath(this, selectedImage);
+//                    compressImageUpload(picturePath);
+//                }
+//                break;
+//            case RESULT_CAMERA: //相机
+//                if (imageUri != null) {
+//                    compressImageUpload(imageUri.getPath());
+//                }
+//
+////                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+////                    img_.setImageBitmap(bitmap);
+//                break;
+//            case RESULT_PHOTO: //选择多张图片返回
+//                if (data != null && data.hasExtra("selectPhotoList")) {
+//                    List<UploadFile> selectPhotoList = data.getParcelableArrayListExtra("selectPhotoList");
+//                    if (selectPhotoList != null) {
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                        builder.setTitle("图片上传");
+//                        builder.setMessage("上传将会产生流量");
+//                        builder.setNegativeButton("取消", null);
+//                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int position) {
+////                                mPresenter.uploadFileList(uploadPhotoList);
+//                                if (isBeforePhoto) {  //整改前
+//                                    compressImageUploadList(selectPhotoList, uploadPhotoList);
+//                                } else {//整改后
+//                                    compressImageUploadList(selectPhotoList, uploadPhotoList_later);
+//                                }
+//                            }
+//                        });
+//                        builder.show();
+//
+//                    }
+//                }
+//            case RESULT_VIDEO: //视频录制
+//                if (data != null) {
+////                   Uri uri =  data.getData();
+////                   if(uri!=null && !TextUtils.isEmpty(uri.getPath())){
+////                       mPresenter.uploadFile(uri.getPath());
+////                   }
+//
+//                    UploadFile uploadFile = data.getParcelableExtra("UploadFile");
+//                    if (uploadFile != null) {
+//                        String size = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
+//                        uploadFile.setFileSize(size);
+//                        if (videoList == null) {
+//                            videoList = new ArrayList<>();
+//                        }
+//                        videoList.add(uploadFile);
+//                        recyclerViewAdapter_video();
+//                    }
+//                }
+//                break;
+//            case RESULT_VIDEO_later:
+//
+//                if (data != null) {
+//                    UploadFile uploadFile = data.getParcelableExtra("UploadFile");
+//                    if (uploadFile != null) {
+//                        String size = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
+//                        uploadFile.setFileSize(size);
+//                        if (videoList_later == null) {
+//                            videoList_later = new ArrayList<>();
+//                        }
+//                        videoList_later.add(uploadFile);
+//                        recyclerViewAdapter_video_later();
+//                    }
+//                }
+//
+//                break;
+//
+//        }
     }
 
     /**
@@ -709,6 +783,33 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 });
     }
 
+    @SuppressLint("CheckResult")
+    private void checkPermissionAndVideo() {
+        if (rxPermissions == null) {
+            rxPermissions = new RxPermissions(this);
+        }
+        rxPermissions.requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(new Consumer<Permission>() {
+                    @Override
+                    public void accept(Permission permission) throws Exception {
+                        if (permission.granted) {
+                            // 用户已经同意该权限
+                            videoSelector();
+
+                        } else if (permission.shouldShowRequestPermissionRationale) {
+                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+//                            Log.d(TAG, permission.name + " is denied. More info should be provided.");
+                        } else {
+                            // 用户拒绝了该权限，并且选中『不再询问』
+//                            Log.d(TAG, permission.name + " is denied.");
+                            showPermissionsDialog();
+
+                        }
+                    }
+                });
+    }
+
+
     /**
      * 提示需要权限 AlertDialog
      */
@@ -734,26 +835,31 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
     @Override
     public void uploadSuccess(UploadFile uploadPhoto) {
         if (uploadPhoto != null) {
-            if (isBeforePhoto) {
-                for (int i = 0; i < uploadPhotoList.size(); i++) {
-                    if (uploadPhotoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
-                        uploadPhotoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
-                        uploadPhotoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
-                        uploadPhotoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
-                        adapter.notifyItemChanged(i);
+            switch (isWhich) {
+                case 1:
+                    for (int i = 0; i < uploadPhotoList.size(); i++) {
+                        if (uploadPhotoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+                            uploadPhotoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
+                            uploadPhotoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+                            uploadPhotoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            adapter.notifyItemChanged(i);
+                        }
+
                     }
-                }
-            } else {
-                for (int i = 0; i < uploadPhotoList_later.size(); i++) {
-                    if (uploadPhotoList_later.get(i).getFileName().equals(uploadPhoto.getFileName())) {
-                        uploadPhotoList_later.get(i).setFileDomain(uploadPhoto.getFileDomain());
-                        uploadPhotoList_later.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
-                        uploadPhotoList_later.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
-                        adapter_later.notifyItemChanged(i);
+                    break;
+                case 2:
+                    for (int i = 0; i < uploadPhotoList_later.size(); i++) {
+                        if (uploadPhotoList_later.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+                            uploadPhotoList_later.get(i).setFileDomain(uploadPhoto.getFileDomain());
+                            uploadPhotoList_later.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+                            uploadPhotoList_later.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            adapter_later.notifyItemChanged(i);
+                        }
                     }
-                }
+                    break;
+                default:
+                    break;
             }
         }
-
     }
 }

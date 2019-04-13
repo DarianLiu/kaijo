@@ -1,6 +1,7 @@
 package com.geek.kaijo.mvp.presenter;
 
 import android.app.Application;
+import android.content.Intent;
 
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.EventBusTags;
@@ -8,6 +9,7 @@ import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.LoginContract;
 import com.geek.kaijo.mvp.model.entity.User;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
+import com.geek.kaijo.mvp.ui.activity.MainActivity;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
@@ -69,7 +71,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                         DataHelper.saveDeviceData(mApplication, Constant.SP_KEY_USER_INFO, user);
                         mRootView.showMessage("登录成功");
                         EventBus.getDefault().post(user, EventBusTags.TAG_LOGIN_STATE);
-//                        mRootView.launchActivity(new Intent(mAppManager.getTopActivity(), MainActivity.class));
+                        mRootView.launchActivity(new Intent(mAppManager.getTopActivity(), MainActivity.class));
                         mRootView.killMyself();
                     }
                 });

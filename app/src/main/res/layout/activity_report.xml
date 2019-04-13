@@ -30,8 +30,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/case_time"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -43,10 +43,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/selector_frame_bg_with_gray"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="8dp"
                     android:text="2018-08-08 08:08"
                     android:textColor="@color/color_text_title"
                     android:textSize="@dimen/t14" />
@@ -55,8 +55,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/case_street"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -72,8 +72,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/case_community"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -89,8 +89,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/case_grid"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -106,8 +106,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/case_address"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -122,10 +122,10 @@
                     android:hint="@string/hint_address"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
                     android:spinnerMode="dialog"
                     android:textColor="@color/color_text_title"
                     android:textColorHint="@color/color_text_hint"
@@ -135,8 +135,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/case_problem_description"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -153,10 +153,10 @@
                     android:inputType="text"
                     android:maxLines="3"
                     android:minHeight="100dp"
-                    android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
                     android:textColor="@color/color_text_title"
                     android:textColorHint="@color/color_text_hint"
                     android:textSize="@dimen/t14" />
@@ -164,10 +164,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
+                    android:layout_marginBottom="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/case_attribute"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -182,8 +182,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/category_large"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -199,8 +199,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/category_small"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -216,8 +216,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/category_sub"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -233,8 +233,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/location_longitude"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -246,10 +246,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/selector_frame_bg_with_gray"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="8dp"
                     android:text=""
                     android:textColor="@color/color_text_title"
                     android:textSize="@dimen/t14" />
@@ -258,8 +258,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_required"
+                    android:drawablePadding="5dp"
                     android:text="@string/location_latitude"
                     android:textColor="@color/color_text_black"
                     android:textSize="@dimen/t12"
@@ -271,10 +271,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/selector_frame_bg_with_gray"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="8dp"
                     android:text=""
                     android:textColor="@color/color_text_title"
                     android:textSize="@dimen/t14" />
@@ -289,12 +289,100 @@
                     android:padding="8dp"
                     android:text="@string/location_obtain"
                     android:textSize="@dimen/t14" />
+                <LinearLayout
+                    android:id="@+id/rp_bottom_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!--上传图片-->
+                    <TextView
+                        android:id="@+id/ra_pic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/shape_btn_bg_blue"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="8dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/btn_submit_pic"
+                        android:textColor="@color/color_title_text"
+                        android:textSize="@dimen/t14" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/color_text_tip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="照片列表"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t14" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/ra_picture_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/color_text_tip" />
+                    <!--上传视频-->
+                    <TextView
+                        android:id="@+id/ra_video"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/shape_btn_bg_blue"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="8dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/btn_submit_video"
+                        android:textColor="@color/color_title_text"
+                        android:textSize="@dimen/t14" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/color_text_tip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="视频列表"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t14" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/ra_video_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/color_text_tip" />
+
+                </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="30dp">
 
                     <TextView
                         android:id="@+id/btn_next"
@@ -304,10 +392,10 @@
                         android:layout_toLeftOf="@+id/btn_cancel"
                         android:background="@drawable/shape_btn_bg_blue"
                         android:gravity="center"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/btn_next_step"
                         android:textSize="@dimen/t14" />
 
@@ -318,14 +406,16 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/shape_btn_bg_normal"
                         android:gravity="center"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/btn_cancel"
                         android:textSize="@dimen/t14" />
 
                 </RelativeLayout>
+
+
 
             </LinearLayout>
 

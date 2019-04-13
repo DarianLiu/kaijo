@@ -12,20 +12,23 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.cmcc.api.fpp.bean.CmccLocation;
 import com.cmcc.api.fpp.bean.LocationParam;
 import com.cmcc.api.fpp.login.SecurityLogin;
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.DateUtils;
+import com.geek.kaijo.Utils.FileSizeUtil;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerReportComponent;
@@ -34,31 +37,35 @@ import com.geek.kaijo.mvp.contract.ReportContract;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
 import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.Street;
+import com.geek.kaijo.mvp.model.entity.UploadCaseFile;
+import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.model.event.LocationEvent;
 import com.geek.kaijo.mvp.presenter.ReportPresenter;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
+import com.geek.kaijo.mvp.ui.adapter.UploadPhotoAdapter;
+import com.geek.kaijo.mvp.ui.adapter.UploadVideoAdapter;
 import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.widget.CustomPopupWindow;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.simple.eventbus.Subscriber;
-import org.xml.sax.SAXException;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import butterknife.BindDrawable;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -106,6 +113,16 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     @BindDrawable(R.drawable.shape_date_picker_bg)
     Drawable popupWindowBg;
+    @BindView(R.id.ra_pic)
+    TextView raPic;
+    @BindView(R.id.ra_picture_list)
+    RecyclerView raPictureList;
+    @BindView(R.id.ra_video)
+    TextView raVideo;
+    @BindView(R.id.ra_video_list)
+    RecyclerView raVideoList;
+    @BindView(R.id.rp_bottom_layout)
+    LinearLayout raBottomLayout;
 
     private int entry_type;
 
@@ -154,6 +171,12 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private LoadingProgressDialog loadingDialog;
     private AlertDialog alertDialog;
 
+    private int isWhich = 0;//1 上传图片  2 上传视频
+    private List<UploadFile> uploadVideoList;
+    private List<UploadFile> uploadPhotoList;
+    private UploadPhotoAdapter adapter1;
+    private UploadVideoAdapter adapter2;
+
     @Override
     protected void onStart() {
         mClient.start();
@@ -201,6 +224,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         return R.layout.activity_report; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+
     private interface TimePickerListener {
         void updateTime(String time);
     }
@@ -214,7 +238,20 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         entry_type = getIntent().getIntExtra("entry_type", 0);
-        tvToolbarTitle.setText(entry_type == 0 ? "自行处理" : "非自行处理");
+        tvToolbarTitle.setText(entry_type == 0 ? "自行处理" : "案件上报");
+
+        switch (entry_type) {
+            case 0:
+                raBottomLayout.setVisibility(View.GONE);
+                btnNext.setText(getResources().getString(R.string.btn_next_step));
+                break;
+            case 1:
+                raBottomLayout.setVisibility(View.VISIBLE);
+                btnNext.setText(getResources().getString(R.string.btn_submit));
+                break;
+            default:
+                break;
+        }
 
         handler = new MessageHandler();
         initLocation();
@@ -243,6 +280,52 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         initSpinnerCaseAttribute();
         initSpinnerCategory();
 
+
+        //照片列表
+        raPictureList.setLayoutManager(new LinearLayoutManager(this));
+        raPictureList.setHasFixedSize(true);
+
+        uploadPhotoList = new ArrayList<>();
+        //检查列表
+        raVideoList.setLayoutManager(new LinearLayoutManager(this));
+        raVideoList.setHasFixedSize(true);
+
+        uploadVideoList = new ArrayList<>();
+
+    }
+
+    /**
+     * 头像选择 PictureSelector
+     */
+    private void pictureSelector() {
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .imageSpanCount(4)
+                .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
+                .previewImage(false)
+                .isCamera(true)
+                .enableCrop(false)
+                .compress(true)
+                .minimumCompressSize(100)
+                .glideOverride(200, 200)
+                .withAspectRatio(1, 1)
+                .showCropFrame(true)
+                .rotateEnabled(true)
+                .isDragFrame(true)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
+    }
+
+    /**
+     * 视频选择
+     */
+    private void videoSelector() {
+        PictureSelector.create(this)
+                .openCamera(PictureMimeType.ofVideo())
+                .previewVideo(true)
+                .videoQuality(0)
+                .videoMaxSecond(60)
+                .videoMinSecond(1)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
     }
 
     private void initRefreshLayout() {
@@ -301,18 +384,18 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         new Thread(() -> {
             Message msg = Message.obtain();
             msg.what = 0x1233;
-            try {
-                CmccLocation loc = mClient.locCapability();
-                mLat = loc.getLatitude();
-                mLng = loc.getLongitude();
-                if (handler != null)
-                    handler.sendMessage(msg);
-                Timber.d("=====location: " + loc.getCode() + "  " + loc.getErrorCode() + "  " + loc.getErrRange() + " " + loc.getsdkErrCode());
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                CmccLocation loc = mClient.locCapability();
+//                mLat = loc.getLatitude();
+//                mLng = loc.getLongitude();
+            if (handler != null)
+                handler.sendMessage(msg);
+//                Timber.d("=====location: " + loc.getCode() + "  " + loc.getErrorCode() + "  " + loc.getErrRange() + " " + loc.getsdkErrCode());
+//            } catch (SAXException e) {
+//                e.printStackTrace();
+//            } catch (ParserConfigurationException e) {
+//                e.printStackTrace();
+//            }
         }).start();
     }
 
@@ -502,7 +585,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 if (position > 0) {
                     mGridId = mGridList.get(position).getId();
                 } else {
-                    mGridId = "5";
+                    mGridId = "";
                 }
             }
 
@@ -627,40 +710,85 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         finish();
     }
 
-    @OnClick({R.id.tv_case_time, R.id.btn_location_obtain, R.id.btn_next, R.id.btn_cancel})
+    @OnClick({R.id.tv_case_time, R.id.btn_location_obtain, R.id.btn_next, R.id.btn_cancel, R.id.ra_pic, R.id.ra_video})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_case_time://选择时间
                 mTimePickerPopupWindow.show();
                 break;
+            case R.id.ra_pic://上传图片
+                isWhich = 1;
+                pictureSelector();
+                break;
+            case R.id.ra_video://上传视频
+                isWhich = 2;
+                videoSelector();
+                break;
             case R.id.btn_location_obtain://获取坐标
                 checkPermissionAndAction();
                 break;
             case R.id.btn_next://下一步
+                String type = btnNext.getText().toString();
+                String sumbit = getResources().getString(R.string.btn_next_step);
+                String next = getResources().getString(R.string.btn_submit);
+
                 String caseTime = tvCaseTime.getText().toString();
                 String address = etCaseAddress.getText().toString();
                 String description = etCaseProblemDescription.getText().toString();
-                if (checkParams(caseTime, address, description) && mPresenter != null) {
 
-                    String handleType = "1";//直接处理传1 ，非直接处理传2
-                    String whenType = "1";//直接处理( 整改前的写1  整改后写2),  非直接处理 whenType 1
-                    String caseProcessRecordID = "19";// 直接处理 caseProcessRecordID  19,  非直接处理 caseProcessRecordID  11
-                    if (entry_type == 0) {
-                        //自行处理
-                        handleType = "1";
-                        whenType = "1";
-                        caseProcessRecordID = "19";
-                    } else if (entry_type == 1) {
-                        //非自行处理
-                        handleType = "2";
-                        whenType = "1";
-                        caseProcessRecordID = "11";
+                String handleType = "1";//直接处理传1 ，非直接处理传2
+                String whenType = "1";//直接处理( 整改前的写1  整改后写2),  非直接处理 whenType 1
+                String caseProcessRecordID = "19";// 直接处理 caseProcessRecordID  19,  非直接处理 caseProcessRecordID  11
+                if (entry_type == 0) {
+                    //自行处理
+                    handleType = "1";
+                    whenType = "1";
+                    caseProcessRecordID = "19";
+                } else if (entry_type == 1) {
+                    //非自行处理
+                    handleType = "2";
+                    whenType = "1";
+                    caseProcessRecordID = "11";
+                }
+
+                if (type.equals(sumbit)) {//下一步
+                    if (checkParams(caseTime, address, description) && mPresenter != null) {
+                        mPresenter.addOrUpdateCaseInfo(caseTime, mStreetId, mCommunityId, mGridId,
+                                String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
+                                mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
+                                mCaseChildCategory, handleType, whenType, caseProcessRecordID);
+                    }
+                } else if (type.equals(next)) {//提交
+
+                    List<UploadCaseFile> caseFileList = new ArrayList<>();
+                    if (uploadPhotoList != null) { //照片整改前
+                        for (int i = 0; i < uploadPhotoList.size(); i++) {
+                            UploadCaseFile caseFile = new UploadCaseFile();
+                            caseFile.setCaseId(Integer.valueOf(mCaseAttributeId));
+                            caseFile.setUrl(uploadPhotoList.get(i).getFileRelativePath());
+                            caseFile.setCaseProcessRecordId(Integer.valueOf(caseProcessRecordID));
+                            caseFile.setFileType(0); //照片
+                            caseFile.setWhenType(1); //整改前
+                            caseFile.setHandleType(2);
+                            caseFileList.add(caseFile);
+                        }
+                    }
+                    if (uploadVideoList != null) { //照片整改前
+                        for (int i = 0; i < uploadVideoList.size(); i++) {
+                            UploadCaseFile caseFile = new UploadCaseFile();
+                            caseFile.setCaseId(Integer.valueOf(mCaseAttributeId));
+                            caseFile.setUrl(uploadVideoList.get(i).getFileRelativePath());
+                            caseFile.setCaseProcessRecordId(Integer.valueOf(caseProcessRecordID));
+                            caseFile.setFileType(1); //视频
+                            caseFile.setWhenType(1);
+                            caseFile.setHandleType(2);
+                            caseFileList.add(caseFile);
+                        }
+                    }
+                    if (mPresenter != null) {
+                        mPresenter.addCaseAttach(caseFileList);
                     }
 
-                    mPresenter.addOrUpdateCaseInfo(caseTime, mStreetId, mCommunityId, mGridId,
-                            String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
-                            mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
-                            mCaseChildCategory, handleType, whenType, caseProcessRecordID);
                 }
                 break;
             case R.id.btn_cancel://取消
@@ -757,20 +885,22 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         public void handleMessage(Message msg) {
             if (msg.what == 0x1233) {
                 mClient.pause();
-                if (mLat == 0 || mLng == 0) {
-                    alertDialog = new AlertDialog.Builder(ReportActivity.this)
-                            .setTitle("手机定位失败")
-                            .setMessage("手机定位失败,获取中心点坐标")
-                            .setPositiveButton("确定", (dialog, which) -> {
-                                launchActivity(new Intent(ReportActivity.this, MapActivity.class));
-                                dialog.dismiss();
-                            }).create();
-                    alertDialog.show();
-                } else {
-                    tvLocationLatitude.setText(String.valueOf(mLat));
-                    tvLocationLongitude.setText(String.valueOf(mLng));
-                }
-                showMessage("经纬度: " + mLat + " " + mLng);
+
+                launchActivity(new Intent(ReportActivity.this, MapActivity.class));
+//                if (mLat == 0 || mLng == 0) {
+//                alertDialog = new AlertDialog.Builder(ReportActivity.this)
+//                        .setTitle("手机定位失败")
+//                        .setMessage("手机定位失败,获取中心点坐标")
+//                        .setPositiveButton("确定", (dialog, which) -> {
+//                            launchActivity(new Intent(ReportActivity.this, MapActivity.class));
+//                            dialog.dismiss();
+//                        }).create();
+//                alertDialog.show();
+//                } else {
+//                    tvLocationLatitude.setText(String.valueOf(mLat));
+//                    tvLocationLongitude.setText(String.valueOf(mLng));
+//                }
+//                showMessage("经纬度: " + mLat + " " + mLng);
             }
             super.handleMessage(msg);
         }
@@ -814,6 +944,133 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == 1) {
             finish();
+        }
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    for (LocalMedia media : selectList) {
+                        // 1.media.getPath(); 为原图path
+                        // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
+                        // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
+                        if (media.isCompressed()) {
+                            String compressedPath = media.getCompressPath();
+                            Timber.d("picture==" + compressedPath);
+                            switch (isWhich) {
+                                case 1:
+                                    UploadFile uploadPhoto1 = new UploadFile();
+                                    uploadPhoto1.setFileName(compressedPath);
+                                    String size1 = FileSizeUtil.getAutoFileOrFilesSize(uploadPhoto1.getFileName());
+                                    uploadPhoto1.setFileSize(size1);
+                                    uploadPhotoList.add(uploadPhoto1);
+                                    recyclerViewAdapter1();
+                                    if (mPresenter != null) {
+                                        mPresenter.uploadFile(compressedPath);
+                                    }
+                                    break;
+                                case 2:
+                                    UploadFile uploadFile = new UploadFile();
+                                    uploadFile.setFileName(compressedPath);
+                                    String size5 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
+                                    uploadFile.setFileSize(size5);
+                                    uploadVideoList.add(uploadFile);
+                                    recyclerViewAdapter_video();
+                                    if (mPresenter != null) {
+                                        mPresenter.uploadFile(compressedPath);
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+
+    //图片列表
+    private void recyclerViewAdapter1() {
+        if (adapter1 == null) {
+            adapter1 = new UploadPhotoAdapter(this, uploadPhotoList);
+            raPictureList.setAdapter(adapter1);
+        } else {
+            adapter1.notifyChanged(uploadPhotoList);
+        }
+        adapter1.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
+            @Override
+            public void onItemDeleteClick(View v, int position) {
+                if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
+                    uploadPhotoList.remove(position);
+                    adapter1.notifyDataSetChanged();
+                } else if (uploadPhotoList.get(position).getIsSuccess() == 0) {
+
+                } else { //上传失败 重新上传
+                    if (mPresenter != null) {
+                        mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    }
+                }
+
+            }
+        });
+    }
+
+    //视频
+    private void recyclerViewAdapter_video() {
+        if (adapter2 == null) {
+            adapter2 = new UploadVideoAdapter(this, uploadVideoList);
+            raVideoList.setAdapter(adapter2);
+        } else {
+            adapter2.notifyDataSetChanged();
+        }
+        adapter2.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
+            @Override
+            public void onItemDeleteClick(View v, int position) {
+                if (uploadVideoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
+                    uploadVideoList.remove(position);
+                    adapter2.notifyDataSetChanged();
+                } else if (uploadVideoList.get(position).getIsSuccess() == 0) {
+
+                } else { //上传失败 重新上传
+                    if (mPresenter != null) {
+                        mPresenter.uploadFile(uploadVideoList.get(position).getFileName());
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void uploadSuccess(UploadFile uploadPhoto) {
+        if (uploadPhoto != null) {
+            switch (isWhich) {
+                case 1:
+                    for (int i = 0; i < uploadPhotoList.size(); i++) {
+                        if (uploadPhotoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+                            uploadPhotoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
+                            uploadPhotoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+                            uploadPhotoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            adapter1.notifyItemChanged(i);
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < uploadVideoList.size(); i++) {
+                        if (uploadVideoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+                            uploadVideoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
+                            uploadVideoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+                            uploadVideoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            adapter2.notifyItemChanged(i);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

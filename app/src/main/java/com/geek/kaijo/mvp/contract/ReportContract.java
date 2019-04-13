@@ -5,12 +5,16 @@ import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
 import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.Street;
+import com.geek.kaijo.mvp.model.entity.UploadFile;
+import com.geek.kaijo.mvp.model.entity.User;
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 
 public interface ReportContract {
@@ -23,6 +27,8 @@ public interface ReportContract {
         void setAllStreetCommunity(List<Street> list);
 
         void setGridList(List<Grid> list);
+
+        void uploadSuccess(UploadFile uploadPhoto);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -39,5 +45,9 @@ public interface ReportContract {
                                                              String casePrimaryCategory, String caseSecondaryCategory,
                                                              String caseChildCategory, String handleType, String whenType,
                                                              String caseProcessRecordID);
+
+
+        Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);
+        Observable<BaseResult<User>> addCaseAttach(RequestBody info);
     }
 }

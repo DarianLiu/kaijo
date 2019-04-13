@@ -10,6 +10,8 @@ import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
 import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.Street;
+import com.geek.kaijo.mvp.model.entity.UploadFile;
+import com.geek.kaijo.mvp.model.entity.User;
 import com.google.gson.Gson;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
@@ -20,6 +22,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 
@@ -68,5 +71,16 @@ public class ReportModel extends BaseModel implements ReportContract.Model {
                 communityId, gridId, lat, lng, source, address, description, caseAttribute,
                 casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID);
         return mRepositoryManager.obtainRetrofitService(AppService.class).addOrUpdateCaseInfo(requestBody);
+    }
+
+    @Override
+    public Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).uploadFile(parts);
+    }
+
+
+    @Override
+    public Observable<BaseResult<User>> addCaseAttach(RequestBody info) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).addCaseAttach(info);
     }
 }
