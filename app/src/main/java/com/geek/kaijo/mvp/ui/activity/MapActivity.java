@@ -1,9 +1,18 @@
 package com.geek.kaijo.mvp.ui.activity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cmmap.api.maps.Map;
 import com.cmmap.api.maps.MapView;
@@ -14,6 +23,8 @@ import com.geek.kaijo.R;
 import com.geek.kaijo.mvp.model.event.LocationEvent;
 
 import org.simple.eventbus.EventBus;
+
+import java.util.List;
 
 /**
  * 地图
@@ -27,7 +38,7 @@ public class MapActivity extends AppCompatActivity {
 
     private Map mMap;
 
-    private double lng = 40.000565, lat = 116.486073;
+    private double lng = 38.9381318, lat = 121.6110992;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +61,7 @@ public class MapActivity extends AppCompatActivity {
 //        mMap.showMapText(true);//是否显示文字
 //        mMap.showBuildings(true);//是否显示建筑物
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLng(40.000565, 116.486073));
+        markerOptions.position(new LatLng(38.9381318, 121.6110992));
         markerOptions.draggable(true);
         mMap.addMarker(markerOptions);
 
