@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
     useLibrary 'org.apache.http.legacy'
@@ -132,4 +133,6 @@ dependencies {
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
     //    implementation files('libs/LoginLib.jar')
     //    implementation files('libs/cmmap.jar')
+
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
 }

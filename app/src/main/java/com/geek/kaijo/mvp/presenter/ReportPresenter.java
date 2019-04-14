@@ -188,10 +188,6 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                         mRootView.uploadSuccess(uploadPhoto);
                     }
 
-                    @Override
-                    public void onError(Throwable t) {
-                        super.onError(t);
-                    }
                 });
     }
 
@@ -209,16 +205,11 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
 //        mRootView.showLoading();
         mModel.addCaseAttach(body).compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
-                .subscribeWith(new ErrorHandleSubscriber<User>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<User>(mErrorHandler) {
                     @Override
                     public void onNext(User user) {
+                       mRootView.showMessage("案件上报成功");
 //                        mRootView.hideLoading();
-                        mRootView.killMyself();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        super.onComplete();
                         mRootView.killMyself();
                     }
 
