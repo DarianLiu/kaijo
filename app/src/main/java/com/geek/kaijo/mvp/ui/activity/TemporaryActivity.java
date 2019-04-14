@@ -11,11 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.app.AppLifecyclesImpl;
+import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.di.component.DaggerTemporaryComponent;
 import com.geek.kaijo.mvp.contract.TemporaryContract;
 import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
-import com.geek.kaijo.mvp.model.entity.ServiceBean;
 import com.geek.kaijo.mvp.presenter.TemporaryPresenter;
 import com.geek.kaijo.mvp.ui.adapter.CaseAdapter;
 import com.geek.kaijo.mvp.ui.adapter.ServiceAdapter;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import dao.CaseInfoDao;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -82,12 +84,14 @@ public class TemporaryActivity extends BaseActivity<TemporaryPresenter> implemen
         tvToolbarTitle.setText("暂存列表");
 
         mCaseList = new ArrayList<>();
-        caseInfo = DataHelper.getDeviceData(getApplicationContext(), "caseInfo");
-        if (caseInfo != null) {
-            mCaseList.add(caseInfo);
-        }
-        if (mCaseList != null) {
-            initRefreshLayout(mCaseList);
+//        caseInfo = DataHelper.getDeviceData(getApplicationContext(), "caseInfo");
+//        if (caseInfo != null) {
+//            mCaseList.add(caseInfo);
+//        }
+
+        List<CaseInfo> caseInfos = MyApplication.get().getDaoSession().getCaseInfoDao().loadAll();
+        if (caseInfos != null) {
+            initRefreshLayout(caseInfos);
         }
 
 

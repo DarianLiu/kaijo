@@ -3,6 +3,8 @@ package com.geek.kaijo.mvp.presenter;
 import android.app.Application;
 import android.content.Intent;
 
+import com.geek.kaijo.app.AppLifecyclesImpl;
+import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.ReportContract;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
@@ -27,6 +29,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dao.CaseInfoDao;
+import dao.DaoSession;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
@@ -146,8 +150,6 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                 .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {
                     @Override
                     public void onNext(CaseInfo caseInfoEntity) {
-
-
                         Intent intent = new Intent(mAppManager.getTopActivity(), UploadActivity.class);
                         intent.putExtra("caseInfo", caseInfoEntity);
                         mRootView.launchActivity(intent);
