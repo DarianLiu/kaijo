@@ -84,19 +84,12 @@ public class UploadPresenter extends BasePresenter<UploadContract.Model, UploadC
 //        mRootView.showLoading();
         mModel.addCaseAttach(body).compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
-                .subscribeWith(new ErrorHandleSubscriber<User>(mErrorHandler) {
+                .subscribeWith(new ErrorHandleSubscriber<String>(mErrorHandler) {
                     @Override
-                    public void onNext(User user) {
+                    public void onNext(String user) {
 //                        mRootView.hideLoading();
                         mRootView.killMyself();
                     }
-
-                    @Override
-                    public void onComplete() {
-                        super.onComplete();
-                        mRootView.killMyself();
-                    }
-
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);

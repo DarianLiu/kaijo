@@ -478,7 +478,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
             case R.id.tv_pause_save:
                 DaoSession daoSession1 = MyApplication.get().getDaoSession();
                 CaseInfoDao caseInfoDao = daoSession1.getCaseInfoDao();
-                caseInfoDao.insertInTx(caseInfo);
+                caseInfoDao.insertOrReplaceInTx(caseInfo);
                 Intent intent3 = new Intent(UploadActivity.this, TemporaryActivity.class);
                 launchActivity(intent3);
                 break;
