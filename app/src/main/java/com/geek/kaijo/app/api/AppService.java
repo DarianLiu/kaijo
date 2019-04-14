@@ -166,7 +166,7 @@ public interface AppService {
     @NonNull
     @Headers({DOMAIN_NAME_HEADER + Api.USER_DOMAIN_NAME})
     @POST("/case/addCaseAttachList.json")
-    Observable<BaseResult<User>> addCaseAttach(@Body RequestBody info);
+    Observable<BaseResult<String>> addCaseAttach(@Body RequestBody info);
 
     /**
      * 获取所有轮播图列表(8763端口)

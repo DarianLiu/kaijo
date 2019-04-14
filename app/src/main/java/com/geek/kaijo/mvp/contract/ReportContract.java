@@ -48,6 +48,6 @@ public interface ReportContract {
 
 
         Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);
-        Observable<BaseResult<User>> addCaseAttach(RequestBody info);
+        Observable<BaseResult<String>> addCaseAttach(RequestBody info);
     }
 }

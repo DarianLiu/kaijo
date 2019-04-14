@@ -205,9 +205,9 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
 //        mRootView.showLoading();
         mModel.addCaseAttach(body).compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
-                .subscribe(new ErrorHandleSubscriber<User>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
                     @Override
-                    public void onNext(User user) {
+                    public void onNext(String user) {
                        mRootView.showMessage("案件上报成功");
 //                        mRootView.hideLoading();
                         mRootView.killMyself();
