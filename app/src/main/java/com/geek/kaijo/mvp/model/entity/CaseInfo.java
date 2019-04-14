@@ -1,15 +1,24 @@
 package com.geek.kaijo.mvp.model.entity;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
+
 import java.io.Serializable;
 import java.util.List;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 案件
  * Created by LiuLi on 2018/9/8.
  */
 
+@Entity
 public class CaseInfo implements Serializable {
-    
+
+    static final long serialVersionUID = 536871008;
+    @Id(autoincrement = true)
+    private Long id;
     private int currPage;
     private int pageSize;
     private String caseId;
@@ -56,9 +65,11 @@ public class CaseInfo implements Serializable {
     private String handleResult;
     private String handleResultDescription;
     private String handerId;
+    @Transient
     private List<Attach> attachList;
     private String caseCode;
     private int curNode;
+    @Transient
     private Object curNodeList;
     private String caseStatus;
     private String state;
@@ -75,6 +86,97 @@ public class CaseInfo implements Serializable {
     private String redLightStartTime;
     private String yellowLightStartTime;
     private String queryFlag;
+
+    @Generated(hash = 4215126)
+    public CaseInfo(Long id, int currPage, int pageSize, String caseId,
+            long createTime, String createUser, long modifyTime, String modifyUser,
+            String acceptDate, String address, String streetId,
+            String caseChildCategory, String caseNumber, String casePrimaryCategory,
+            String caseSecondaryCategory, String caseAttribute,
+            String closeCaseDisposalEntity, String description,
+            String dispatchUserId, String element, String emergencyDegree,
+            String endNode, String grade, String knottyType, String lat,
+            String lightType, String lng, String gridId, String managePoint,
+            String personName, String personTel, String redLightStart,
+            String communityId, String source, String status,
+            String subWorkflowDisposalEntity, String taskId, String urgeFlag,
+            String widgetNumber, String workflowId, String yellowLightStart,
+            String delFlag, String startDate, String endDate, String handleResult,
+            String handleResultDescription, String handerId, String caseCode,
+            int curNode, String caseStatus, String state, int handleType,
+            String userId, int processId, String caseListStatus, int caseType,
+            String roleId, String district, String firstWorkunit,
+            String secondWorkunit, String cityWorkunit, String redLightStartTime,
+            String yellowLightStartTime, String queryFlag) {
+        this.id = id;
+        this.currPage = currPage;
+        this.pageSize = pageSize;
+        this.caseId = caseId;
+        this.createTime = createTime;
+        this.createUser = createUser;
+        this.modifyTime = modifyTime;
+        this.modifyUser = modifyUser;
+        this.acceptDate = acceptDate;
+        this.address = address;
+        this.streetId = streetId;
+        this.caseChildCategory = caseChildCategory;
+        this.caseNumber = caseNumber;
+        this.casePrimaryCategory = casePrimaryCategory;
+        this.caseSecondaryCategory = caseSecondaryCategory;
+        this.caseAttribute = caseAttribute;
+        this.closeCaseDisposalEntity = closeCaseDisposalEntity;
+        this.description = description;
+        this.dispatchUserId = dispatchUserId;
+        this.element = element;
+        this.emergencyDegree = emergencyDegree;
+        this.endNode = endNode;
+        this.grade = grade;
+        this.knottyType = knottyType;
+        this.lat = lat;
+        this.lightType = lightType;
+        this.lng = lng;
+        this.gridId = gridId;
+        this.managePoint = managePoint;
+        this.personName = personName;
+        this.personTel = personTel;
+        this.redLightStart = redLightStart;
+        this.communityId = communityId;
+        this.source = source;
+        this.status = status;
+        this.subWorkflowDisposalEntity = subWorkflowDisposalEntity;
+        this.taskId = taskId;
+        this.urgeFlag = urgeFlag;
+        this.widgetNumber = widgetNumber;
+        this.workflowId = workflowId;
+        this.yellowLightStart = yellowLightStart;
+        this.delFlag = delFlag;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.handleResult = handleResult;
+        this.handleResultDescription = handleResultDescription;
+        this.handerId = handerId;
+        this.caseCode = caseCode;
+        this.curNode = curNode;
+        this.caseStatus = caseStatus;
+        this.state = state;
+        this.handleType = handleType;
+        this.userId = userId;
+        this.processId = processId;
+        this.caseListStatus = caseListStatus;
+        this.caseType = caseType;
+        this.roleId = roleId;
+        this.district = district;
+        this.firstWorkunit = firstWorkunit;
+        this.secondWorkunit = secondWorkunit;
+        this.cityWorkunit = cityWorkunit;
+        this.redLightStartTime = redLightStartTime;
+        this.yellowLightStartTime = yellowLightStartTime;
+        this.queryFlag = queryFlag;
+    }
+
+    @Generated(hash = 1752644044)
+    public CaseInfo() {
+    }
 
     public void setHandleType(int handleType) {
         this.handleType = handleType;
@@ -593,8 +695,16 @@ public class CaseInfo implements Serializable {
         this.caseType = caseType;
     }
 
-    public Object getRoleId() {
+    public String getRoleId() {
         return roleId;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }

@@ -325,7 +325,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
      */
     private void videoSelector() {
         PictureSelector.create(this)
-                .openCamera(PictureMimeType.ofVideo())
+                .openGallery(PictureMimeType.ofVideo())
                 .selectionMode(PictureConfig.SINGLE)
                 .previewVideo(true)
                 .videoQuality(0)
