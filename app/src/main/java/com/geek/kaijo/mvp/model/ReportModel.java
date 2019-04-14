@@ -80,7 +80,7 @@ public class ReportModel extends BaseModel implements ReportContract.Model {
 
 
     @Override
-    public Observable<BaseResult<User>> addCaseAttach(RequestBody info) {
+    public Observable<BaseResult<String>> addCaseAttach(RequestBody info) {
         return mRepositoryManager.obtainRetrofitService(AppService.class).addCaseAttach(info);
     }
 }

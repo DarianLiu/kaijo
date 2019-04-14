@@ -3,8 +3,6 @@ package com.geek.kaijo.mvp.presenter;
 import android.app.Application;
 import android.content.Intent;
 
-import com.geek.kaijo.app.AppLifecyclesImpl;
-import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.ReportContract;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
@@ -13,7 +11,6 @@ import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.Street;
 import com.geek.kaijo.mvp.model.entity.UploadCaseFile;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
-import com.geek.kaijo.mvp.model.entity.User;
 import com.geek.kaijo.mvp.ui.activity.UploadActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,13 +21,10 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import dao.CaseInfoDao;
-import dao.DaoSession;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
@@ -207,10 +201,10 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
 //        mRootView.showLoading();
         mModel.addCaseAttach(body).compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
-                .subscribe(new ErrorHandleSubscriber<User>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
                     @Override
-                    public void onNext(User user) {
-                        mRootView.showMessage("案件上报成功");
+                    public void onNext(String user) {
+                       mRootView.showMessage("案件上报成功");
 //                        mRootView.hideLoading();
                         mRootView.killMyself();
                     }
