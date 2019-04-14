@@ -735,8 +735,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 break;
             case R.id.btn_next://下一步
                 String type = btnNext.getText().toString();
-                String sumbit = getResources().getString(R.string.btn_next_step);
-                String next = getResources().getString(R.string.btn_submit);
+                String next = getResources().getString(R.string.btn_next_step);
+                String submit  = getResources().getString(R.string.btn_submit);
 
                 String caseTime = tvCaseTime.getText().toString();
                 String address = etCaseAddress.getText().toString();
@@ -757,14 +757,14 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     caseProcessRecordID = "11";
                 }
 
-                if (type.equals(sumbit)) {//下一步
+                if (type.equals(next)) {//下一步
                     if (checkParams(caseTime, address, description) && mPresenter != null) {
                         mPresenter.addOrUpdateCaseInfo(caseTime, mStreetId, mCommunityId, mGridId,
                                 String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
                                 mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
                                 mCaseChildCategory, handleType, whenType, caseProcessRecordID);
                     }
-                } else if (type.equals(next)) {//提交
+                } else if (type.equals(submit)) {//提交
 
                     List<UploadCaseFile> caseFileList = new ArrayList<>();
                     if (uploadPhotoList != null) { //照片整改前
