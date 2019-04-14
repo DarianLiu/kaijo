@@ -2,6 +2,7 @@ package com.geek.kaijo.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDex;
 
 import com.geek.kaijo.BuildConfig;
@@ -10,6 +11,8 @@ import com.jess.arms.base.delegate.AppLifecycles;
 import com.jess.arms.utils.ArmsUtils;
 
 import butterknife.ButterKnife;
+import dao.DaoMaster;
+import dao.DaoSession;
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
 import timber.log.Timber;
 
@@ -29,7 +32,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
     @Override
     public void attachBaseContext(Context base) {
-          MultiDex.install(base);  //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
+        MultiDex.install(base);  //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
     }
 
     @Override
@@ -64,12 +67,13 @@ public class AppLifecyclesImpl implements AppLifecycles {
         //msg.what = 0;
         //AppManager.post(msg); like EventBus
 
-        RetrofitUrlManager.getInstance().putDomain(Api.USER_DOMAIN_NAME, Api.URL_USER);
-        RetrofitUrlManager.getInstance().putDomain(Api.FILE_UPLOAD_DOMAIN_NAME, Api.URL_FILE_UPLOAD);
+
     }
 
     @Override
     public void onTerminate(Application application) {
 
     }
+
+
 }

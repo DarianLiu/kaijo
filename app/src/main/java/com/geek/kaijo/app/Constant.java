@@ -14,4 +14,9 @@ public class Constant {
     public final static String SP_KEY_USER_TOKEN = "token";
 
     public final static String SP_KEY_USER_INFO= "userInfo";
+
+    /**
+     * 数据库名称
+     */
+    public static final String DB_NAME = "kaijo_db";
 }

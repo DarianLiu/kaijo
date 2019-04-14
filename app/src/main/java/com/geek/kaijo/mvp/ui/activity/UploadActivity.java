@@ -28,6 +28,8 @@ import com.geek.kaijo.Utils.BitmapUtil;
 import com.geek.kaijo.Utils.FileSizeUtil;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.Utils.PictureHelper;
+import com.geek.kaijo.app.AppLifecyclesImpl;
+import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.di.component.DaggerUploadComponent;
 import com.geek.kaijo.di.module.UploadModule;
 import com.geek.kaijo.mvp.contract.UploadContract;
@@ -57,6 +59,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import dao.CaseInfoDao;
+import dao.DaoMaster;
+import dao.DaoSession;
 import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
@@ -172,6 +177,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 .isCamera(true)
                 .enableCrop(false)
                 .compress(true)
+                .setOutputCameraPath("")
                 .minimumCompressSize(100)
                 .glideOverride(200, 200)
                 .withAspectRatio(1, 1)
@@ -470,8 +476,10 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 finish();
                 break;
             case R.id.tv_pause_save:
+                DaoSession daoSession1 = MyApplication.get().getDaoSession();
+                CaseInfoDao caseInfoDao = daoSession1.getCaseInfoDao();
+                caseInfoDao.insertInTx(caseInfo);
                 Intent intent3 = new Intent(UploadActivity.this, TemporaryActivity.class);
-                DataHelper.saveDeviceData(getApplicationContext(), "caseInfo", caseInfo);
                 launchActivity(intent3);
                 break;
         }
@@ -579,13 +587,12 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                         // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
                         // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                         String compressedPath = media.getPath();
-
 //                        showMessage("picture==" + compressedPath);
-
                         List<UploadFile> selectPhotoList = new ArrayList<>();
                         switch (isWhich) {
                             case 1:
                                 UploadFile uploadFile = new UploadFile();
+
                                 uploadFile.setFileName(compressedPath);
                                 String size1 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
                                 uploadFile.setFileSize(size1);
