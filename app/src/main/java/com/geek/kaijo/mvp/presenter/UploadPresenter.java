@@ -1,5 +1,6 @@
 package com.geek.kaijo.mvp.presenter;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import com.geek.kaijo.app.api.RxUtils;
@@ -41,6 +42,7 @@ public class UploadPresenter extends BasePresenter<UploadContract.Model, UploadC
     public UploadPresenter(UploadContract.Model model, UploadContract.View rootView) {
         super(model, rootView);
     }
+
     /**
      * 上传图片 单张图片
      */
@@ -74,11 +76,12 @@ public class UploadPresenter extends BasePresenter<UploadContract.Model, UploadC
 
     /**
      * 上传案件
-     *
      */
+    @SuppressLint("CheckResult")
     public void addCaseAttach(List<UploadCaseFile> caseFileList) {
-        if(caseFileList==null ||caseFileList.size()==0)return;
-        String jsonString = new Gson().toJson(caseFileList,new TypeToken<List<UploadCaseFile>>(){}.getType());
+        if (caseFileList == null || caseFileList.size() == 0) return;
+        String jsonString = new Gson().toJson(caseFileList, new TypeToken<List<UploadCaseFile>>() {
+        }.getType());
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), jsonString);
 //        mRootView.showLoading();
@@ -88,8 +91,10 @@ public class UploadPresenter extends BasePresenter<UploadContract.Model, UploadC
                     @Override
                     public void onNext(String user) {
 //                        mRootView.hideLoading();
+                        mRootView.showMessage("提交成功");
                         mRootView.killMyself();
                     }
+
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
@@ -108,7 +113,7 @@ public class UploadPresenter extends BasePresenter<UploadContract.Model, UploadC
     public void uploadFileList(List<UploadFile> photoList) {
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);//表单类型
-        for(int i=0;i<photoList.size();i++){
+        for (int i = 0; i < photoList.size(); i++) {
             File file = new File(photoList.get(i).getFileName());//filePath 图片地址
             builder.addFormDataPart("fileName", file.getPath());//
             RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);

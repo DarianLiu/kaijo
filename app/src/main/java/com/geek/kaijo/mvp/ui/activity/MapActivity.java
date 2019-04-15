@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.cmmap.api.maps.Map;
 import com.cmmap.api.maps.MapView;
+import com.cmmap.api.maps.model.BitmapDescriptor;
 import com.cmmap.api.maps.model.LatLng;
 import com.cmmap.api.maps.model.Marker;
 import com.cmmap.api.maps.model.MarkerOptions;
@@ -60,7 +62,7 @@ public class MapActivity extends AppCompatActivity {
 
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -103,24 +105,22 @@ public class MapActivity extends AppCompatActivity {
         markerOptions.position(new LatLng(lat, lng));
         markerOptions.draggable(true);
         mMap.addMarker(markerOptions);
+        mMap.setOnMarkerDragListener(new Map.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
 
-//        mMap.setOnMarkerDragListener(new Map.OnMarkerDragListener() {
-//            @Override
-//            public void onMarkerDragStart(Marker marker) {
-//
-//            }
-//
-//            @Override
-//            public void onMarkerDrag(Marker marker) {
-//
-//            }
-//
-//            @Override
-//            public void onMarkerDragEnd(Marker marker) {
-//                lng = marker.getPosition().longitude;
-//                lat = marker.getPosition().latitude;
-//            }
-//        });
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                lng = marker.getPosition().longitude;
+                lat = marker.getPosition().latitude;
+            }
+        });
     }
 
     LocationListener locationListener = new LocationListener() {

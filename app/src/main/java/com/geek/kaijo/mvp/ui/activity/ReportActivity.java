@@ -37,6 +37,7 @@ import com.geek.kaijo.di.component.DaggerReportComponent;
 import com.geek.kaijo.di.module.ReportModule;
 import com.geek.kaijo.mvp.contract.ReportContract;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
+import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.Street;
 import com.geek.kaijo.mvp.model.entity.UploadCaseFile;
@@ -178,6 +179,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private List<UploadFile> uploadPhotoList;
     private UploadPhotoAdapter adapter1;
     private UploadVideoAdapter adapterVideo;
+    private List<UploadCaseFile> caseFileList;
 
     @Override
     protected void onStart() {
@@ -736,7 +738,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             case R.id.btn_next://下一步
                 String type = btnNext.getText().toString();
                 String next = getResources().getString(R.string.btn_next_step);
-                String submit  = getResources().getString(R.string.btn_submit);
+                String submit = getResources().getString(R.string.btn_submit);
 
                 String caseTime = tvCaseTime.getText().toString();
                 String address = etCaseAddress.getText().toString();
@@ -766,7 +768,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     }
                 } else if (type.equals(submit)) {//提交
 
-                    List<UploadCaseFile> caseFileList = new ArrayList<>();
+                    caseFileList = new ArrayList<>();
                     if (uploadPhotoList != null) { //照片整改前
                         for (int i = 0; i < uploadPhotoList.size(); i++) {
                             UploadCaseFile caseFile = new UploadCaseFile();
@@ -800,8 +802,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                                     mCaseChildCategory, handleType, whenType, caseProcessRecordID);
                         }
                     }
-
-                }
                 break;
             case R.id.btn_cancel://取消
                 killMyself();
@@ -965,8 +965,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                         // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
                         // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                         String compressedPath = media.getPath();
-                        Timber.d("视频地址：=="+compressedPath);
-                        System.out.print("视频地址：=="+compressedPath);
+                        Timber.d("视频地址：==" + compressedPath);
+                        System.out.print("视频地址：==" + compressedPath);
 
                         switch (isWhich) {
                             case 1:
@@ -1081,6 +1081,29 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 default:
                     break;
             }
+        }
+    }
+
+    /**
+     * 案件上传成功
+     *
+     * @param caseInfoEntity
+     */
+    @Override
+    public void uploadCaseInfoSuccess(CaseInfo caseInfoEntity) {
+        switch (entry_type) {
+            case 0:
+                Intent intent = new Intent(this, UploadActivity.class);
+                intent.putExtra("caseInfo", caseInfoEntity);
+                launchActivity(intent);
+                break;
+            case 1:
+                if (mPresenter != null) {
+                    mPresenter.addCaseAttach(caseFileList);
+                }
+                break;
+            default:
+                break;
         }
     }
 }

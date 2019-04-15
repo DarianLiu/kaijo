@@ -144,9 +144,7 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                 .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {
                     @Override
                     public void onNext(CaseInfo caseInfoEntity) {
-                        Intent intent = new Intent(mAppManager.getTopActivity(), UploadActivity.class);
-                        intent.putExtra("caseInfo", caseInfoEntity);
-                        mRootView.launchActivity(intent);
+                        mRootView.uploadCaseInfoSuccess(caseInfoEntity);
 //                        mRootView.killMyself();
                     }
                 });

@@ -29,6 +29,8 @@ public interface ReportContract {
         void setGridList(List<Grid> list);
 
         void uploadSuccess(UploadFile uploadPhoto);
+
+        void uploadCaseInfoSuccess(CaseInfo caseInfoEntity);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

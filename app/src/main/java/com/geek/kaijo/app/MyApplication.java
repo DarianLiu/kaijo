@@ -3,6 +3,7 @@ package com.geek.kaijo.app;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.geek.kaijo.BuildConfig;
@@ -10,9 +11,6 @@ import com.geek.kaijo.R;
 import com.geek.kaijo.app.api.Api;
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.ArmsUtils;
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
-
-import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -45,6 +43,8 @@ public class MyApplication extends BaseApplication {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         fix();
+
+        MultiDex.install(base);  //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
     }
 
     /**
@@ -111,37 +111,6 @@ public class MyApplication extends BaseApplication {
         daoSession = daoMaster.newSession();
     }
 
-
-    private void initDatabase() {
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, Constant.DB_NAME, null);
-        SQLiteDatabase database = devOpenHelper.getWritableDatabase();
-        database.enableWriteAheadLogging();//这将允许来自多个线程的事务
-//        database.setLocale(Locale.CHINA);
-        DaoMaster daoMaster = new DaoMaster(database);
-        daoSession = daoMaster.newSession();
-
-        QueryBuilder.LOG_SQL = true;//是否开启数据库日志；正式版false；
-        QueryBuilder.LOG_VALUES = true;
-    }
-
-    private String getProcessName(Context context) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> runningApps = null;
-        if (am != null) {
-            runningApps = am.getRunningAppProcesses();
-        }
-        if (runningApps == null) {
-            return null;
-        }
-        for (ActivityManager.RunningAppProcessInfo proInfo : runningApps) {
-            if (proInfo.pid == android.os.Process.myPid()) {
-                if (proInfo.processName != null) {
-                    return proInfo.processName;
-                }
-            }
-        }
-        return null;
-    }
 
     public DaoSession getDaoSession() {
         return daoSession;
