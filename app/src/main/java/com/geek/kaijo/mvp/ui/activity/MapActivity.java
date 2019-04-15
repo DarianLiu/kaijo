@@ -62,6 +62,9 @@ public class MapActivity extends AppCompatActivity {
         mMapView = findViewById(R.id.mMap);
         mMapView.onCreate(savedInstanceState);
         btnSure = findViewById(R.id.btn_sure);
+
+        handler = new MessageHandler();
+
         btnSure.setOnClickListener(v -> {
             LocationEvent event = new LocationEvent();
             event.setLat(lat);
@@ -223,15 +226,25 @@ public class MapActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        mClient.start();
+        super.onStart();
+    }
+
+    @Override
     protected void onResume() {
+        mClient.restart();
         super.onResume();
         mMapView.onResume();
+
     }
 
     @Override
     protected void onPause() {
+        mClient.pause();
         super.onPause();
         mMapView.onPause();
+
     }
 
     @Override
@@ -246,6 +259,9 @@ public class MapActivity extends AppCompatActivity {
         mMapView.onDestroy();
         mMap.clear();
         mMap = null;
+        handler.removeCallbacksAndMessages(null);
+        handler = null;
+        locParam = null;
     }
 
 }
