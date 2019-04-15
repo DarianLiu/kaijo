@@ -3,7 +3,6 @@ package com.geek.kaijo.mvp.ui.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -150,15 +149,22 @@ public class MapActivity extends AppCompatActivity {
 
         @Override
         public void handleMessage(Message msg) {
+            super.handleMessage(msg);
             if (msg.what == 0x1233) {
                 mClient.pause();
 
                 if (lat == 0 || lng == 0) {
                 } else {
-
+                    if (marker == null) {
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(new LatLng(lat, lng));
+                        markerOptions.draggable(true);
+                        marker = mMap.addMarker(markerOptions);
+                    }
+                    marker.setPosition(new LatLng(lat, lng));
                 }
             }
-            super.handleMessage(msg);
+
         }
     }
 
