@@ -16,7 +16,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.cmcc.api.fpp.bean.CmccLocation;
 import com.cmcc.api.fpp.bean.LocationParam;
 import com.cmcc.api.fpp.login.SecurityLogin;
 import com.geek.kaijo.R;
@@ -60,14 +60,16 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.simple.eventbus.Subscriber;
+import org.xml.sax.SAXException;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import butterknife.BindDrawable;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
@@ -172,7 +174,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private RxPermissions rxPermissions;
 
     private LoadingProgressDialog loadingDialog;
-    private AlertDialog alertDialog;
 
     private int isWhich = 0;//1 上传图片  2 上传视频
     private List<UploadFile> uploadVideoList;
@@ -367,24 +368,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 showPermissionsDialog();
             }
         });
-//        rxPermissions.requestEachCombined(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)
-//                .subscribe(new Consumer<Permission>() {
-//                    @Override
-//                    public void accept(Permission permission) throws Exception {
-//                        if (permission.granted) {
-//                            // 用户已经同意该权限
-//                            startLocation();
-//                        } else if (permission.shouldShowRequestPermissionRationale) {
-//                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
-////                            Log.d(TAG, permission.name + " is denied. More info should be provided.");
-//                        } else {
-//                            // 用户拒绝了该权限，并且选中『不再询问』
-////                            Log.d(TAG, permission.name + " is denied.");
-//                            showPermissionsDialog();
-//
-//                        }
-//                    }
-//                });
     }
 
 
@@ -392,18 +375,17 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         new Thread(() -> {
             Message msg = Message.obtain();
             msg.what = 0x1233;
-//            try {
-//                CmccLocation loc = mClient.locCapability();
-//                mLat = loc.getLatitude();
-//                mLng = loc.getLongitude();
-            if (handler != null)
-                handler.sendMessage(msg);
-//                Timber.d("=====location: " + loc.getCode() + "  " + loc.getErrorCode() + "  " + loc.getErrRange() + " " + loc.getsdkErrCode());
-//            } catch (SAXException e) {
-//                e.printStackTrace();
-//            } catch (ParserConfigurationException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                CmccLocation loc = mClient.locCapability();
+                mLat = loc.getLatitude();
+                mLng = loc.getLongitude();
+                if (handler != null)
+                    handler.sendMessage(msg);
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
         }).start();
     }
 
@@ -898,21 +880,14 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             if (msg.what == 0x1233) {
                 mClient.pause();
 
-                launchActivity(new Intent(ReportActivity.this, MapActivity.class));
-//                if (mLat == 0 || mLng == 0) {
-//                alertDialog = new AlertDialog.Builder(ReportActivity.this)
-//                        .setTitle("手机定位失败")
-//                        .setMessage("手机定位失败,获取中心点坐标")
-//                        .setPositiveButton("确定", (dialog, which) -> {
-//                            launchActivity(new Intent(ReportActivity.this, MapActivity.class));
-//                            dialog.dismiss();
-//                        }).create();
-//                alertDialog.show();
-//                } else {
-//                    tvLocationLatitude.setText(String.valueOf(mLat));
-//                    tvLocationLongitude.setText(String.valueOf(mLng));
-//                }
-//                showMessage("经纬度: " + mLat + " " + mLng);
+                if (mLat == 0 || mLng == 0) {
+                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
+                } else {
+                    Intent intent = new Intent(ReportActivity.this, MapActivity.class);
+                    intent.putExtra("lat", mLat);
+                    intent.putExtra("lng", mLng);
+                    launchActivity(intent);
+                }
             }
             super.handleMessage(msg);
         }
