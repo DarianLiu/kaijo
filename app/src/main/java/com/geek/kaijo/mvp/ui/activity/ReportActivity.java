@@ -802,6 +802,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                                     mCaseChildCategory, handleType, whenType, caseProcessRecordID);
                         }
                     }
+                }
                 break;
             case R.id.btn_cancel://取消
                 killMyself();
