@@ -125,6 +125,10 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
     }
+
+    implementation 'me.jessyan:arms-imageloader-glide:2.5.0'
+    implementation rootProject.ext.dependencies["androideventbus"]
+
     //权限
     //    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
     implementation rootProject.ext.dependencies["rxpermissions2"]
