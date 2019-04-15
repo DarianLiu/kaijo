@@ -793,6 +793,12 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     }
                     if (mPresenter != null) {
                         mPresenter.addCaseAttach(caseFileList);
+                        if (checkParams(caseTime, address, description) && mPresenter != null) {
+                            mPresenter.addOrUpdateCaseInfo(caseTime, mStreetId, mCommunityId, mGridId,
+                                    String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
+                                    mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
+                                    mCaseChildCategory, handleType, whenType, caseProcessRecordID);
+                        }
                     }
 
                 }
