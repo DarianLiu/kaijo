@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
 
+import static com.geek.kaijo.app.api.Api.URL_FILE_UPLOAD;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -329,8 +331,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         public Object instantiateItem(@NonNull final ViewGroup container, final int position) {
             View view = getLayoutInflater().inflate(R.layout.include_viewpager_banner, null);
             ImageView ivBanner = view.findViewById(R.id.bannerImg);
+            Log.e("====","====== imageUlr: "+URL_FILE_UPLOAD+"/"+mBannerList.get(position).getUrl());
             mImageLoader.loadImage(MainActivity.this, ImageConfigImpl.builder()
-                    .url("http://221.180.255.233:8088/" + mBannerList.get(position).getUrl())
+                    .url(URL_FILE_UPLOAD +"/"+ mBannerList.get(position).getUrl())
                     .isCenterCrop(true)
                     .imageView(ivBanner)
                     .build());

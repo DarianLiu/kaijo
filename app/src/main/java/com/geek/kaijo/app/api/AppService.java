@@ -106,7 +106,7 @@ public interface AppService {
     Observable<BaseResult<List<Street>>> dfindAllStreetCommunity(@Query("type") int type);
 
     /**
-     * 根据社区id，获取网格列表(8763端口)
+     * 根据社区id，获取网格列表(8766端口)
      *
      * @param communityId 社区id
      */
