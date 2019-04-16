@@ -169,7 +169,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private String mCaseSecondaryCategory;
     private String mCaseChildCategory;
 
-    private double mLat = 0.123, mLng = 15.320;
+    private double mLat = 41.072847, mLng = 122.827825;
 
     private RxPermissions rxPermissions;
 
@@ -361,7 +361,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             rxPermissions = new RxPermissions(this);
         }
         //同时申请多个权限
-        rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE).subscribe(granted -> {
+        rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(granted -> {
             if (granted) {           // All requested permissions are granted
                 startLocation();
             } else {
@@ -377,8 +380,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             msg.what = 0x1233;
             try {
                 CmccLocation loc = mClient.locCapability();
-                mLat = loc.getLatitude();
-                mLng = loc.getLongitude();
+//                mLat = loc.getLatitude();
+//                mLng = loc.getLongitude();
                 if (handler != null)
                     handler.sendMessage(msg);
             } catch (SAXException e) {
@@ -881,14 +884,18 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             if (msg.what == 0x1233) {
                 mClient.pause();
 
-                if (mLat == 0 || mLng == 0) {
-                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
-                } else {
+
+                tvLocationLatitude.setText(String.valueOf(mLat));
+                tvLocationLongitude.setText(String.valueOf(mLng));
+
+//                if (mLat == 0 || mLng == 0) {
+//                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
+//                } else {
                     Intent intent = new Intent(ReportActivity.this, MapActivity.class);
                     intent.putExtra("lat", mLat);
                     intent.putExtra("lng", mLng);
                     launchActivity(intent);
-                }
+//                }
             }
             super.handleMessage(msg);
         }

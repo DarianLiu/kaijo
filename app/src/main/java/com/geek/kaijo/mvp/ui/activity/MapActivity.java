@@ -14,6 +14,7 @@ import android.widget.Button;
 import com.cmcc.api.fpp.bean.CmccLocation;
 import com.cmcc.api.fpp.bean.LocationParam;
 import com.cmcc.api.fpp.login.SecurityLogin;
+import com.cmmap.api.maps.CameraUpdateFactory;
 import com.cmmap.api.maps.Map;
 import com.cmmap.api.maps.MapView;
 import com.cmmap.api.maps.model.Arc;
@@ -139,6 +140,9 @@ public class MapActivity extends AppCompatActivity {
         mMap.setMapType(Map.MAP_TYPE_NORMAL);
         mMap.showMapText(true);//是否显示文字
         mMap.showBuildings(true);//是否显示建筑物
+//        41.072847
+        mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(41.072847, 122.827825)));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
     @SuppressLint("HandlerLeak")
@@ -182,7 +186,7 @@ public class MapActivity extends AppCompatActivity {
     private void checkPermissionAndAction() {
 
         //同时申请多个权限
-        new RxPermissions(this).request(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE).subscribe(granted -> {
+        new RxPermissions(this).request(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(granted -> {
             if (granted) {           // All requested permissions are granted
                 startLocation();
             } else {
