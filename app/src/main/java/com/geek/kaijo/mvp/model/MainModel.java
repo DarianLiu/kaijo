@@ -6,6 +6,7 @@ import com.geek.kaijo.app.api.AppService;
 import com.geek.kaijo.mvp.contract.MainContract;
 import com.geek.kaijo.mvp.model.entity.Banner;
 import com.geek.kaijo.mvp.model.entity.BaseResult;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.google.gson.Gson;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
@@ -40,6 +41,11 @@ public class MainModel extends BaseModel implements MainContract.Model {
     @Override
     public Observable<BaseResult<List<Banner>>> findAllBannerList() {
         return mRepositoryManager.obtainRetrofitService(AppService.class).findAllBannerList();
+    }
+
+    @Override
+    public Observable<BaseResult<UserInfo>> addUserCoordinate(String userId,double lat,double lng) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).addUserCoordinate(userId,lat,lng);
     }
 
 //    @Override

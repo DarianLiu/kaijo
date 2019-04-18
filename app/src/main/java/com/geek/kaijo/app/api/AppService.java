@@ -237,4 +237,15 @@ public interface AppService {
     @NonNull
     @POST("/thing/findThingPositionList.json")
     Observable<BaseResult<List<SocialThing>>> findThingPositionList(@Query("currPage") int currPage, @Query("pageSize") int pageSize, @Query("assortId") long assortId, @Query("streetId") long streetId, @Query("communityId") long communityId, @Query("gridId") long gridId, @Query("thingType") int thingType, @Query("name") String name);
+
+
+    /**
+     * 实时位置上传
+     *
+     * @param userId 用户ID
+     */
+    @NonNull
+//    @POST("/user/addUserCoordinate.json")
+    @POST("http://221.180.255.15:8766/user/addUserCoordinate.json")
+    Observable<BaseResult<UserInfo>> addUserCoordinate(@Query("userId") String userId,@Query("lat") double lat,@Query("lng") double lng);
 }

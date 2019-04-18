@@ -1,9 +1,12 @@
 package com.geek.kaijo.mvp.presenter;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.model.entity.Banner;
+import com.geek.kaijo.mvp.model.entity.User;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -50,6 +53,18 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                     }
                 });
     }
+
+    public void uploadGpsLocation(String userId,double lat,double lng){
+
+        mModel.addUserCoordinate(userId,lat,lng).compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.handleBaseResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<UserInfo>(mErrorHandler) {
+                    @Override
+                    public void onNext(UserInfo user) {
+                    }
+                });
+    }
+
 
 //    /**
 //     * 根取当前登录用户，所属街道、社区、网格

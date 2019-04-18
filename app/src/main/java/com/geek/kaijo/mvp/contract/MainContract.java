@@ -2,6 +2,7 @@ package com.geek.kaijo.mvp.contract;
 
 import com.geek.kaijo.mvp.model.entity.Banner;
 import com.geek.kaijo.mvp.model.entity.BaseResult;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
 
@@ -21,6 +22,8 @@ public interface MainContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<BaseResult<List<Banner>>> findAllBannerList();
+
+        Observable<BaseResult<UserInfo>> addUserCoordinate(String userId,double lat,double lng);
 
 //        Observable<BaseResult<UserInfo>> findStreetById(String userId);
     }
