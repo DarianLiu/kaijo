@@ -246,6 +246,6 @@ public interface AppService {
      */
     @NonNull
 //    @POST("/user/addUserCoordinate.json")
-    @POST("http://221.180.255.15:8766/user/addUserCoordinate.json")
+    @POST("/user/addUserCoordinate.json")
     Observable<BaseResult<UserInfo>> addUserCoordinate(@Query("userId") String userId,@Query("lat") double lat,@Query("lng") double lng);
 }

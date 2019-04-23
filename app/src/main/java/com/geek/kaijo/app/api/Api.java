@@ -10,7 +10,7 @@ public interface Api {
     /**
      * 测试环境与生产环境切换
      **/
-    boolean RELEASE_VERSION = false;
+    boolean RELEASE_VERSION = true;
 
     /**
      * 服务器IP地址
@@ -52,4 +52,6 @@ public interface Api {
 //    String URL_FILE_UPLOAD = "http://" + IP + PORT_FILE_UPLOAD;
 //    String URL_FILE_UPLOAD = "http://221.180.255.233:8088";
     String URL_FILE_UPLOAD = RELEASE_VERSION ? "http://192.168.0.252:8088": "http://221.180.255.233:8088";
+
+    String URL_BANNER = RELEASE_VERSION ? "http://192.168.0.252:8088/filecloud-service": "http://221.180.255.233:8088/filecloud-service";
 }

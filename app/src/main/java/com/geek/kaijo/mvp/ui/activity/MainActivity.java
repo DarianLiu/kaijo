@@ -62,6 +62,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import io.reactivex.functions.Consumer;
 
+import static com.geek.kaijo.app.api.Api.URL_BANNER;
 import static com.geek.kaijo.app.api.Api.URL_FILE_UPLOAD;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -357,7 +358,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             ImageView ivBanner = view.findViewById(R.id.bannerImg);
             Log.e("====", "====== imageUlr: " + URL_FILE_UPLOAD + "/" + mBannerList.get(position).getUrl());
             mImageLoader.loadImage(MainActivity.this, ImageConfigImpl.builder()
-                    .url(URL_FILE_UPLOAD + "/" + mBannerList.get(position).getUrl())
+                    .url(URL_BANNER + "/" + mBannerList.get(position).getUrl())
                     .isCenterCrop(true)
                     .imageView(ivBanner)
                     .build());
