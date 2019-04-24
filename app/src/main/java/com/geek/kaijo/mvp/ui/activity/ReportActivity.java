@@ -314,8 +314,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 .isCamera(true)
                 .enableCrop(false)
                 .compress(true)
+                .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
                 .minimumCompressSize(100)
-                .glideOverride(200, 200)
                 .withAspectRatio(1, 1)
                 .showCropFrame(true)
                 .rotateEnabled(true)
@@ -331,6 +331,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 .openGallery(PictureMimeType.ofVideo())
                 .selectionMode(PictureConfig.SINGLE)
                 .previewVideo(true)
+                .compress(true)
                 .videoQuality(0)
                 .videoMaxSecond(60)
                 .videoMinSecond(1)
@@ -891,10 +892,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 //                if (mLat == 0 || mLng == 0) {
 //                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
 //                } else {
-                    Intent intent = new Intent(ReportActivity.this, MapActivity.class);
-                    intent.putExtra("lat", mLat);
-                    intent.putExtra("lng", mLng);
-                    launchActivity(intent);
+                Intent intent = new Intent(ReportActivity.this, MapActivity.class);
+                intent.putExtra("lat", mLat);
+                intent.putExtra("lng", mLng);
+                launchActivity(intent);
 //                }
             }
             super.handleMessage(msg);
@@ -947,12 +948,9 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                         // 1.media.getPath(); 为原图path
                         // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
                         // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-                        String compressedPath = media.getPath();
-                        Timber.d("视频地址：==" + compressedPath);
-                        System.out.print("视频地址：==" + compressedPath);
-
                         switch (isWhich) {
                             case 1:
+                                String compressedPath = media.getCompressPath();
                                 UploadFile uploadPhoto1 = new UploadFile();
                                 uploadPhoto1.setFileName(compressedPath);
                                 String size1 = FileSizeUtil.getAutoFileOrFilesSize(uploadPhoto1.getFileName());
@@ -964,14 +962,15 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                                 }
                                 break;
                             case 2:
+                                String path = media.getPath();
                                 UploadFile uploadFile5 = new UploadFile();
-                                uploadFile5.setFileName(compressedPath);
+                                uploadFile5.setFileName(path);
                                 String size5 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile5.getFileName());
                                 uploadFile5.setFileSize(size5);
                                 uploadVideoList.add(uploadFile5);
                                 recyclerViewAdapter_video();
                                 if (mPresenter != null) {
-                                    mPresenter.uploadFile(compressedPath);
+                                    mPresenter.uploadFile(path);
                                 }
                                 break;
                             default:

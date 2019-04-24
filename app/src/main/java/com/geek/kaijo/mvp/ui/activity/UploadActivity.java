@@ -177,9 +177,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 .isCamera(true)
                 .enableCrop(false)
                 .compress(true)
-                .setOutputCameraPath("")
+                .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
                 .minimumCompressSize(100)
-                .glideOverride(200, 200)
                 .withAspectRatio(1, 1)
                 .showCropFrame(true)
                 .rotateEnabled(true)
@@ -586,14 +585,14 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                         // 1.media.getPath(); 为原图path
                         // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
                         // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-                        String compressedPath = media.getPath();
+                        String path = media.getPath();
+                        String compressedPath = media.getCompressPath();
 //                        showMessage("picture==" + compressedPath);
                         List<UploadFile> selectPhotoList = new ArrayList<>();
                         switch (isWhich) {
                             case 1:
                                 UploadFile uploadFile = new UploadFile();
-
-                                uploadFile.setFileName(compressedPath);
+                                uploadFile.setFileName(path);
                                 String size1 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile.getFileName());
                                 uploadFile.setFileSize(size1);
                                 if (videoList == null) {
@@ -602,12 +601,12 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                                 videoList.add(uploadFile);
                                 recyclerViewAdapter_video();
                                 if (mPresenter != null) {
-                                    mPresenter.uploadFile(compressedPath);
+                                    mPresenter.uploadFile(path);
                                 }
                                 break;
                             case 2:
                                 UploadFile uploadFile2 = new UploadFile();
-                                uploadFile2.setFileName(compressedPath);
+                                uploadFile2.setFileName(path);
                                 String size = FileSizeUtil.getAutoFileOrFilesSize(uploadFile2.getFileName());
                                 uploadFile2.setFileSize(size);
                                 if (videoList_later == null) {
@@ -616,7 +615,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                                 videoList_later.add(uploadFile2);
                                 recyclerViewAdapter_video_later();
                                 if (mPresenter != null) {
-                                    mPresenter.uploadFile(compressedPath);
+                                    mPresenter.uploadFile(path);
                                 }
                                 break;
                             case 3:
