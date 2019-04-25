@@ -171,7 +171,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private String mCaseSecondaryCategory;
     private String mCaseChildCategory;
 
-    private double mLat = 41.072847, mLng = 122.827825;
+    private double mLat, mLng;
 
     private RxPermissions rxPermissions;
 
