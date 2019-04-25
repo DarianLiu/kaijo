@@ -58,13 +58,12 @@ public class MapActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
         mMapView = findViewById(R.id.mMap);
         mMapView.onCreate(savedInstanceState);
         btnSure = findViewById(R.id.btn_sure);
-
+        initLocation();
+        initMap();
         handler = new MessageHandler();
-
         btnSure.setOnClickListener(v -> {
             LocationEvent event = new LocationEvent();
             event.setLat(lat);
@@ -73,8 +72,6 @@ public class MapActivity extends AppCompatActivity {
             finish();
         });
 
-        initMap();
-        initLocation();
 
         lng = getIntent().getDoubleExtra("lng", 0);
         lat = getIntent().getDoubleExtra("lat", 0);
@@ -82,11 +79,12 @@ public class MapActivity extends AppCompatActivity {
             checkPermissionAndAction();
         } else {
             MarkerOptions markerOptions = new MarkerOptions();
+            Timber.e("经度=：" + lat + "纬度=：" + lng);
             markerOptions.position(new LatLng(lat, lng));
             markerOptions.draggable(true);
+            mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(lat, lng)));
             marker = mMap.addMarker(markerOptions);
         }
-
 
         mMap.setOnArcDragListener(new Map.OnArcDragListener() {
             @Override
@@ -140,8 +138,6 @@ public class MapActivity extends AppCompatActivity {
         mMap.setMapType(Map.MAP_TYPE_NORMAL);
         mMap.showMapText(true);//是否显示文字
         mMap.showBuildings(true);//是否显示建筑物
-//        41.072847
-        mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(41.072847, 122.827825)));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
@@ -158,14 +154,16 @@ public class MapActivity extends AppCompatActivity {
                 mClient.pause();
 
                 if (lat == 0 || lng == 0) {
+                    Timber.e("定位失败！");
                 } else {
                     if (marker == null) {
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(new LatLng(lat, lng));
                         markerOptions.draggable(true);
                         marker = mMap.addMarker(markerOptions);
+                    } else {
+                        marker.setPosition(new LatLng(lat, lng));
                     }
-                    marker.setPosition(new LatLng(lat, lng));
                 }
             }
 
@@ -203,6 +201,7 @@ public class MapActivity extends AppCompatActivity {
                 CmccLocation loc = mClient.locCapability();
                 lat = loc.getLatitude();
                 lng = loc.getLongitude();
+                Timber.e("经度=：" + lat + "纬度=：" + lng);
                 if (handler != null)
                     handler.sendMessage(msg);
             } catch (SAXException e) {
