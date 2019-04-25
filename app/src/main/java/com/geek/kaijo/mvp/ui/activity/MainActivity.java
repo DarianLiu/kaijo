@@ -418,7 +418,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             showMessage("再按一次退出程序");
             exitTime = System.currentTimeMillis();
         } else {
-            ArmsUtils.exitApp();
+//            ArmsUtils.exitApp();
+            this.finish();
         }
     }
 
@@ -437,7 +438,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 showPermissionsDialog();
             }
         });
-        
+
 //        //同时申请多个权限
 //        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
 //                Manifest.permission.ACCESS_COARSE_LOCATION).subscribe(granted -> {
