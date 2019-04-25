@@ -192,7 +192,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     @Override
     protected void onPause() {
-        mClient.pause();
+//        mClient.pause();
         super.onPause();
     }
 
@@ -204,7 +204,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     @Override
     protected void onDestroy() {
-        mClient.stop();
+//        mClient.stop();
         if (mTimePickerPopupWindow != null && mTimePickerPopupWindow.isShowing()) {
             mTimePickerPopupWindow.dismiss();
             mTimePickerPopupWindow = null;
@@ -383,8 +383,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             msg.what = 0x1233;
             try {
                 CmccLocation loc = mClient.locCapability();
-//                mLat = loc.getLatitude();
-//                mLng = loc.getLongitude();
+                mLat = loc.getLatitude();
+                mLng = loc.getLongitude();
                 if (handler != null)
                     handler.sendMessage(msg);
             } catch (SAXException e) {
@@ -905,6 +905,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 intent.putExtra("lng", mLng);
                 launchActivity(intent);
 //                }
+
             }
             super.handleMessage(msg);
         }

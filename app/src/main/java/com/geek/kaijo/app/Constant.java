@@ -13,6 +13,8 @@ public class Constant {
 
     public final static String SP_KEY_USER_TOKEN = "token";
 
+    public final static String SP_KEY_USER_NAME = "userName";
+
     public final static String SP_KEY_USER_INFO= "userInfo";
 
     /**

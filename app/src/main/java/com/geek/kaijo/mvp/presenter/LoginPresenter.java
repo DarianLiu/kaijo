@@ -2,6 +2,7 @@ package com.geek.kaijo.mvp.presenter;
 
 import android.app.Application;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.EventBusTags;
@@ -68,6 +69,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     public void onNext(UserInfo user) {
                         DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_ID, userId);
                         DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_TOKEN, token);
+                        if(user!=null && !TextUtils.isEmpty(user.getUsername())){
+                            DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_NAME, user.getUsername());
+                        }
                         DataHelper.saveDeviceData(mApplication, Constant.SP_KEY_USER_INFO, user);
                         mRootView.showMessage("登录成功");
                         EventBus.getDefault().post(user, EventBusTags.TAG_LOGIN_STATE);

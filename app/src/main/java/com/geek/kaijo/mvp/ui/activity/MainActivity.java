@@ -2,6 +2,7 @@ package com.geek.kaijo.mvp.ui.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,8 +29,10 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.EventBusTags;
+import com.geek.kaijo.app.service.LocalService;
 import com.geek.kaijo.di.component.DaggerMainComponent;
 import com.geek.kaijo.di.module.MainModule;
 import com.geek.kaijo.mvp.contract.MainContract;
@@ -153,9 +157,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         setBannerHeight();
 
         initGpsLocation();
-        userId = DataHelper.getStringSF(this, Constant.SP_KEY_USER_ID);
-        myHandler = new MyHandler(this);
-        myHandler.sendEmptyMessageDelayed(1, 3000);
+//        userId = DataHelper.getStringSF(this, Constant.SP_KEY_USER_ID);
+//        myHandler = new MyHandler(this);
+//        myHandler.sendEmptyMessageDelayed(1, 3000);
     }
 
     /**
@@ -422,24 +426,46 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         if (rxPermissions == null) {
             rxPermissions = new RxPermissions(this);
         }
-        rxPermissions.requestEach(Manifest.permission.ACCESS_FINE_LOCATION) //gps定位
-                .subscribe(new Consumer<Permission>() {
-                    @Override
-                    public void accept(Permission permission) throws Exception {
-                        if (permission.granted) {
-                            // 用户已经同意该权限
-                            getGpsLocation();
-                        } else if (permission.shouldShowRequestPermissionRationale) {
-                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
-//                            Log.d(TAG, permission.name + " is denied. More info should be provided.");
-                        } else {
-                            // 用户拒绝了该权限，并且选中『不再询问』
-//                            Log.d(TAG, permission.name + " is denied.");
-//                            showDialog();
-
-                        }
-                    }
-                });
+        //同时申请多个权限
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) {           // All requested permissions are granted
+                startService(new Intent(MainActivity.this, LocalService.class));
+            } else {
+                showPermissionsDialog();
+            }
+        });
+        
+//        //同时申请多个权限
+//        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.ACCESS_COARSE_LOCATION).subscribe(granted -> {
+//            if (granted) {           // All requested permissions are granted
+//                startService(new Intent(MainActivity.this, LocalService.class));
+//            } else {
+//                showPermissionsDialog();
+//            }
+//        });
+//        rxPermissions.requestEach(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION) //gps定位
+//                .subscribe(new Consumer<Permission>() {
+//                    @Override
+//                    public void accept(Permission permission) throws Exception {
+//                        if (permission.granted) {
+//                            // 用户已经同意该权限
+////                            getGpsLocation();
+//                            startService(new Intent(MainActivity.this, LocalService.class));
+//                        } else if (permission.shouldShowRequestPermissionRationale) {
+//                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+////                            Log.d(TAG, permission.name + " is denied. More info should be provided.");
+//                        } else {
+//                            // 用户拒绝了该权限，并且选中『不再询问』
+////                            Log.d(TAG, permission.name + " is denied.");
+////                            showDialog();
+//
+//                        }
+//                    }
+//                });
 
     }
 
@@ -527,5 +553,27 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
             }
         }
+    }
+
+    /**
+     * 提示需要权限 AlertDialog
+     */
+    private void showPermissionsDialog() {
+        /*
+         * 这里使用了 android.support.v7.app.AlertDialog.Builder
+         * 可以直接在头部写 import android.support.v7.app.AlertDialog
+         * 那么下面就可以写成 AlertDialog.Builder
+         */
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("权限提醒");
+        builder.setMessage("获取坐标需要位置权限");
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                PermissionUtils.permissionSkipSetting(MainActivity.this);
+            }
+        });
+        builder.show();
     }
 }

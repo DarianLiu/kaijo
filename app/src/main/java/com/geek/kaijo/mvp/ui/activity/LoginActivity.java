@@ -11,14 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerLoginComponent;
 import com.geek.kaijo.di.module.LoginModule;
 import com.geek.kaijo.mvp.contract.LoginContract;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.LoginPresenter;
 import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DataHelper;
 
 import butterknife.BindView;
 
@@ -59,8 +62,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 //        int height = width * 1280 / 1080 + 1;
 //        ivLogo.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
 
-        etUsername.setText("nsc_wgy1");
-        etPassword.setText("111111");
+//        etUsername.setText("nsc_wgy1");
+//        etPassword.setText("111111");
+        String sfUserName = DataHelper.getStringSF(this, Constant.SP_KEY_USER_NAME);
+        if (!TextUtils.isEmpty(sfUserName)) {
+            etUsername.setText(sfUserName);
+        }
 
         tvLogin.setOnClickListener(v -> {
             String userName = etUsername.getText().toString();

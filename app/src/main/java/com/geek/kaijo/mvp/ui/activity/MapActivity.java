@@ -73,11 +73,12 @@ public class MapActivity extends AppCompatActivity {
             finish();
         });
 
+        lng = getIntent().getDoubleExtra("lng", 0);
+        lat = getIntent().getDoubleExtra("lat", 0);
         initMap();
         initLocation();
 
-        lng = getIntent().getDoubleExtra("lng", 0);
-        lat = getIntent().getDoubleExtra("lat", 0);
+
         if (lng == 0 || lat == 0) {
             checkPermissionAndAction();
         } else {
@@ -141,7 +142,8 @@ public class MapActivity extends AppCompatActivity {
         mMap.showMapText(true);//是否显示文字
         mMap.showBuildings(true);//是否显示建筑物
 //        41.072847
-        mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(41.072847, 122.827825)));
+//        mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(41.072847, 122.827825)));
+        mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(lat, lng)));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
@@ -168,7 +170,6 @@ public class MapActivity extends AppCompatActivity {
                     marker.setPosition(new LatLng(lat, lng));
                 }
             }
-
         }
     }
 

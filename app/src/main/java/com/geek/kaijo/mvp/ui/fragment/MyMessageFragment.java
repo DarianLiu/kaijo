@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerMyMessageComponent;
 import com.geek.kaijo.di.module.MyMessageModule;
 import com.geek.kaijo.mvp.contract.MyMessageContract;
@@ -101,7 +102,10 @@ public class MyMessageFragment extends BaseFragment<MyMessagePresenter> implemen
                 launchActivity(new Intent(getActivity(),PlanViewActivity.class));
                 break;
             case R.id.tv_login_out://退出登录
-                DataHelper.clearShareprefrence(getContext());
+//                DataHelper.clearShareprefrence(getContext());
+                DataHelper.removeSF(getContext(), Constant.SP_KEY_USER_INFO);
+                DataHelper.removeSF(getContext(), Constant.SP_KEY_USER_TOKEN);
+                DataHelper.removeSF(getContext(), Constant.SP_KEY_USER_ID);
                 launchActivity(new Intent(getActivity(), LoginActivity.class));
                 killMyself();
                 break;
