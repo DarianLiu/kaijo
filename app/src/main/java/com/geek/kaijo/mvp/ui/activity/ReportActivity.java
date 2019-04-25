@@ -16,6 +16,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,6 +52,7 @@ import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.widget.CustomPopupWindow;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -477,8 +479,14 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         spinnerCaseAttribute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Timber.d("=======position" + position);
-                mCaseAttributeId = String.valueOf(position);
+                if(position==1){
+                    mCaseAttributeId = "2"; //部件2
+                }else if(position==2){
+                    mCaseAttributeId = "1"; //事件1
+                }else {
+                    mCaseAttributeId = "0";
+                }
+//                mCaseAttributeId = String.valueOf(position);
 
                 spinnerCategoryLarge.setSelection(0);
                 mCategoryLarge.clear();
