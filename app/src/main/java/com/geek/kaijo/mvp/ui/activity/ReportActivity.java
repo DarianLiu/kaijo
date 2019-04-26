@@ -185,7 +185,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private UploadPhotoAdapter adapter1;
     private UploadVideoAdapter adapterVideo;
     private List<UploadCaseFile> caseFileList;
-    UserInfo userInfo;
+    private UserInfo userInfo;
 
     @Override
     protected void onStart() {
@@ -195,7 +195,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     @Override
     protected void onPause() {
-//        mClient.pause();
+        mClient.pause();
         super.onPause();
     }
 
@@ -207,7 +207,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     @Override
     protected void onDestroy() {
-//        mClient.stop();
+        mClient.stop();
         if (mTimePickerPopupWindow != null && mTimePickerPopupWindow.isShowing()) {
             mTimePickerPopupWindow.dismiss();
             mTimePickerPopupWindow = null;
@@ -509,7 +509,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 mCategorySubAdapter.notifyDataSetChanged();
 
                 if (position != 0 && mPresenter != null) {
-                    mPresenter.findCaseCategoryListByAttribute(position);
+                    mPresenter.findCaseCategoryListByAttribute(Integer.parseInt(mCaseAttributeId));
                 }
             }
 

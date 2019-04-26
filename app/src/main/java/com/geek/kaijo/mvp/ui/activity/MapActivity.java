@@ -3,13 +3,16 @@ package com.geek.kaijo.mvp.ui.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cmcc.api.fpp.bean.CmccLocation;
 import com.cmcc.api.fpp.bean.LocationParam;
@@ -18,20 +21,44 @@ import com.cmmap.api.maps.CameraUpdateFactory;
 import com.cmmap.api.maps.Map;
 import com.cmmap.api.maps.MapView;
 import com.cmmap.api.maps.model.Arc;
+import com.cmmap.api.maps.model.CircleOptions;
 import com.cmmap.api.maps.model.LatLng;
 import com.cmmap.api.maps.model.Marker;
 import com.cmmap.api.maps.model.MarkerOptions;
+import com.cmmap.api.maps.model.Polyline;
+import com.cmmap.api.maps.model.PolylineOptions;
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
+import com.geek.kaijo.app.api.Api;
+import com.geek.kaijo.mvp.model.entity.GridBorder;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.model.event.LocationEvent;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.jess.arms.utils.DataHelper;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.xml.sax.SAXException;
 
+import java.io.IOException;
+import java.util.List;
+
 import javax.xml.parsers.ParserConfigurationException;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import timber.log.Timber;
 
 /**
@@ -53,18 +80,22 @@ public class MapActivity extends AppCompatActivity {
     private LocationParam locParam = null;//移动定位
     private SecurityLogin mClient;
     private MessageHandler handler;
+    private UserInfo userInfo;
+    private double lngDefault = 40.000565, latDefaut = 116.486073;  //定位失败 默认显示点
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
         mMapView = findViewById(R.id.mMap);
         mMapView.onCreate(savedInstanceState);
         btnSure = findViewById(R.id.btn_sure);
+        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
 
+
+        initLocation();
+        initMap();
         handler = new MessageHandler();
-
         btnSure.setOnClickListener(v -> {
             LocationEvent event = new LocationEvent();
             event.setLat(lat);
@@ -72,21 +103,29 @@ public class MapActivity extends AppCompatActivity {
             EventBus.getDefault().post(event, "location");
             finish();
         });
+
+
         lng = getIntent().getDoubleExtra("lng", 0);
         lat = getIntent().getDoubleExtra("lat", 0);
-        initMap();
-        initLocation();
-
-
-        if (lng == 0 || lat == 0) {
-            checkPermissionAndAction();
+        if (lng == 0 || lat == 0) {  //定位失败  显示默认位置
+//            checkPermissionAndAction();
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLng(latDefaut, lngDefault));
+            markerOptions.draggable(true);
+            mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(latDefaut, lngDefault)));
+            marker = mMap.addMarker(markerOptions);
         } else {
             MarkerOptions markerOptions = new MarkerOptions();
+            Timber.e("经度=：" + lat + "纬度=：" + lng);
             markerOptions.position(new LatLng(lat, lng));
             markerOptions.draggable(true);
+            mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(lat, lng)));
             marker = mMap.addMarker(markerOptions);
         }
 
+        if(userInfo!=null){
+            httpFindCoordinateListByGridId(userInfo.getGridId());
+        }
 
         mMap.setOnArcDragListener(new Map.OnArcDragListener() {
             @Override
@@ -110,7 +149,9 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void onMapClick(LatLng latLng) {
                 Timber.d("=====onMapClick " + "lat: " + latLng.latitude + "lng: " + latLng.longitude);
-                marker.setPosition(new LatLng(latLng.latitude, latLng.longitude));
+                if(marker!=null){
+                    marker.setPosition(new LatLng(latLng.latitude, latLng.longitude));
+                }
             }
         });
 
@@ -140,8 +181,6 @@ public class MapActivity extends AppCompatActivity {
         mMap.setMapType(Map.MAP_TYPE_NORMAL);
         mMap.showMapText(true);//是否显示文字
         mMap.showBuildings(true);//是否显示建筑物
-//        41.072847
-        mMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(lat, lng)));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
@@ -158,14 +197,17 @@ public class MapActivity extends AppCompatActivity {
                 mClient.pause();
 
                 if (lat == 0 || lng == 0) {
+                    Timber.e("定位失败！");
+
                 } else {
                     if (marker == null) {
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(new LatLng(lat, lng));
                         markerOptions.draggable(true);
                         marker = mMap.addMarker(markerOptions);
+                    } else {
+                        marker.setPosition(new LatLng(lat, lng));
                     }
-                    marker.setPosition(new LatLng(lat, lng));
                 }
             }
 
@@ -203,6 +245,7 @@ public class MapActivity extends AppCompatActivity {
                 CmccLocation loc = mClient.locCapability();
                 lat = loc.getLatitude();
                 lng = loc.getLongitude();
+                Timber.e("经度=：" + lat + "纬度=：" + lng);
                 if (handler != null)
                     handler.sendMessage(msg);
             } catch (SAXException e) {
@@ -273,5 +316,90 @@ public class MapActivity extends AppCompatActivity {
         handler = null;
         locParam = null;
     }
+
+    /**
+     * 添加网格员显示区域
+     */
+    private void initPolylineOptions(List<GridBorder> gridBorderList){
+        if(gridBorderList!=null && gridBorderList.size()>0){
+            PolylineOptions polylineOptions = new PolylineOptions();
+            for (int i=0;i<gridBorderList.size();i++){
+                LatLng latLng = new LatLng(gridBorderList.get(i).getLat(),gridBorderList.get(i).getLng());
+                polylineOptions.add(latLng);
+            }
+//            polylineOptions.width(55);
+//            polylineOptions.color(getResources().getColor(R.color.blue));
+            mMap.addPolyline(polylineOptions);
+
+
+//            // 绘制一条虚线
+//            mMap.addPolyline(new PolylineOptions()
+//                    .add(new LatLng(40.001106, 116.487254), new LatLng(39.999783, 116.485666))
+//                    .width(10).color(Color.CYAN)
+//                    .setDottedLine(true));
+//
+//            mMap.addCircle(new CircleOptions()
+//                    .center(new LatLng(40.000399, 116.487232))
+//                    .radius(300).strokeWidth(3)
+//                    .strokeColor(0xff00aa00)
+//                    .fillColor(0xff00aaaa));
+//
+//            MarkerOptions markerOptions = new MarkerOptions();
+//            markerOptions.position(new LatLng(40.000399, 116.487232));
+//            markerOptions.draggable(true);
+//            mMap.addMarker(markerOptions);
+        }
+    }
+
+    /**
+     * 上传位置信息
+
+     */
+    private void httpFindCoordinateListByGridId(int gridId) {
+
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("gridId", gridId+"")
+                .build();
+        Request request = new Request.Builder().url(Api.BASE_URL + "/grid/findCoordinateListByGridId.json").post(formBody).build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Log.i(this.getClass().getName(), "11111111111111111111111获取网格员所在地区网格边界" + result);
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    int code = jsonObject.getInt("result");
+                    if(code==0){
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        if(jsonArray!=null){
+                            Gson gson = new Gson();
+                            List<GridBorder> appList = gson.fromJson(jsonArray.toString(), new TypeToken<List<GridBorder>>() {
+                            }.getType());
+                            if(appList!=null){
+                                MapActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        initPolylineOptions(appList);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
 
 }

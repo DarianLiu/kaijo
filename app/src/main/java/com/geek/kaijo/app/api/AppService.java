@@ -95,7 +95,7 @@ public interface AppService {
 
     @NonNull
     @Headers({DOMAIN_NAME_HEADER + Api.USER_DOMAIN_NAME})
-    @POST("/case/findCaseInfoList")
+    @POST("/case/findCaseInfoList.json")
     Observable<BaseResult<BaseArrayResult<CaseInfo>>> findCaseInfoList(@Body RequestBody body);
 
     /**
@@ -245,7 +245,16 @@ public interface AppService {
      * @param userId 用户ID
      */
     @NonNull
-//    @POST("/user/addUserCoordinate.json")
     @POST("/user/addUserCoordinate.json")
     Observable<BaseResult<UserInfo>> addUserCoordinate(@Query("userId") String userId,@Query("lat") double lat,@Query("lng") double lng);
+
+
+//    /**
+//     * 查询网格边界坐标
+//     *
+//     */
+//    @NonNull
+//    @POST("/grid/findCoordinateListByGridId.json")
+//    Observable<BaseResult<UserInfo>> findCoordinateListByGridId(@Query("gridId") String gridId);
+
 }

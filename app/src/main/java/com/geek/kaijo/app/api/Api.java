@@ -10,7 +10,7 @@ public interface Api {
     /**
      * 测试环境与生产环境切换
      **/
-    boolean RELEASE_VERSION = false;
+    boolean RELEASE_VERSION = true;
 
     /**
      * 服务器IP地址

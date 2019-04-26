@@ -1,7 +1,6 @@
 package com.geek.kaijo.app.service;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cmcc.api.fpp.bean.CmccLocation;
 import com.cmcc.api.fpp.bean.LocationParam;
@@ -25,22 +25,16 @@ import com.cmcc.api.fpp.login.SecurityLogin;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.api.Api;
-import com.geek.kaijo.mvp.ui.activity.MainActivity;
-import com.geek.kaijo.mvp.ui.activity.ReportActivity;
 import com.jess.arms.utils.DataHelper;
-import com.jess.arms.utils.LogUtils;
-import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -83,6 +77,12 @@ public class LocalService extends Service {
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mClient.stop();
+    }
+
     private void initLocation() {
         locParam = new LocationParam();
         locParam.setServiceId(Constant.MobileAppId);//此ID仅对应本网站下载的SDK，作为测试账号使用。
@@ -93,24 +93,6 @@ public class LocalService extends Service {
         mClient.setLocationParam(locParam);
     }
 
-//    @SuppressLint("CheckResult")
-//    private void checkPermissionAndAction() {
-//        if (rxPermissions == null) {
-//            rxPermissions = new RxPermissions(this);
-//        }
-//        //同时申请多个权限
-//        rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION,
-//                Manifest.permission.READ_PHONE_STATE,
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(granted -> {
-//            if (granted) {           // All requested permissions are granted
-//                startLocation();
-//            } else {
-//                showPermissionsDialog();
-//            }
-//        });
-//    }
-
     private void startLocation() {
         new Thread(() -> {
             Message msg = Message.obtain();
@@ -119,12 +101,12 @@ public class LocalService extends Service {
                 CmccLocation loc = mClient.locCapability();
                 latitude = loc.getLatitude();
                 longitude = loc.getLongitude();
-                Log.i(this.getClass().getName(),"11111111111111111111111latitude======"+loc.getLatitude());
-                Log.i(this.getClass().getName(),"11111111111111111111111longitude======"+longitude);
+                Log.i(this.getClass().getName(), "11111111111111111111111latitude======" + loc.getLatitude());
+                Log.i(this.getClass().getName(), "11111111111111111111111longitude======" + longitude);
                 if (userId != null && latitude > 0 && longitude > 0) {
                     httpUploadGpsLocation(userId, latitude, longitude);
                 }
-//                myHandler.sendMessage(msg);
+                myHandler.sendMessage(msg);
             } catch (SAXException e) {
                 e.printStackTrace();
             } catch (ParserConfigurationException e) {
@@ -135,19 +117,20 @@ public class LocalService extends Service {
 
     /**
      * 上传位置信息
+     *
      * @param userId
      * @param lat
      * @param lng
      */
-    private void httpUploadGpsLocation(String userId,double lat,double lng){
+    private void httpUploadGpsLocation(String userId, double lat, double lng) {
 
         OkHttpClient client = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()
-                .add("userId",userId)
-                .add("lat",lat+"")
-                .add("lng",lng+"")
+                .add("userId", userId)
+                .add("lat", lat + "")
+                .add("lng", lng + "")
                 .build();
-        Request request = new Request.Builder().url(Api.BASE_URL+"/user/addUserCoordinate.json").post(formBody).build();
+        Request request = new Request.Builder().url(Api.BASE_URL + "/user/addUserCoordinate.json").post(formBody).build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -157,37 +140,12 @@ public class LocalService extends Service {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(this.getClass().getName(),"11111111111111111111111上传位置信息的返回"+response.body().string());
+                Log.i(this.getClass().getName(), "11111111111111111111111上传位置信息的返回" + response.body().string());
             }
         });
     }
 
-    /*private void initGpsLocation() {
-        if (rxPermissions == null) {
-            rxPermissions = new RxPermissions(this);
-        }
-        rxPermissions.requestEach(Manifest.permission.ACCESS_FINE_LOCATION) //gps定位
-                .subscribe(new Consumer<Permission>() {
-                    @Override
-                    public void accept(Permission permission) throws Exception {
-                        if (permission.granted) {
-                            // 用户已经同意该权限
-                            getGpsLocation();
-                        } else if (permission.shouldShowRequestPermissionRationale) {
-                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
-//                            Log.d(TAG, permission.name + " is denied. More info should be provided.");
-                        } else {
-                            // 用户拒绝了该权限，并且选中『不再询问』
-//                            Log.d(TAG, permission.name + " is denied.");
-//                            showDialog();
-
-                        }
-                    }
-                });
-
-    }
-*/
-    private void getGpsLocation(){
+    private void getGpsLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -197,7 +155,7 @@ public class LocalService extends Service {
             if (location != null) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-            }else {
+            } else {
                 Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if (locationNet != null) {
                     latitude = locationNet.getLatitude(); //经度
@@ -270,30 +228,12 @@ public class LocalService extends Service {
 //                    }
                     sendEmptyMessageDelayed(1, 60000); //1分钟 上传一次经纬度
                     break;
+                case 0x1233:
+                    Toast.makeText(weakActivity.getApplicationContext(),"上传位置信息：经度="+weakActivity.longitude+"纬度="+weakActivity.latitude,Toast.LENGTH_LONG).show();
 
+                    break;
             }
         }
     }
 
-    /**
-     * 提示需要权限 AlertDialog
-     */
-    private void showPermissionsDialog() {
-        /*
-         * 这里使用了 android.support.v7.app.AlertDialog.Builder
-         * 可以直接在头部写 import android.support.v7.app.AlertDialog
-         * 那么下面就可以写成 AlertDialog.Builder
-         */
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("权限提醒");
-        builder.setMessage("获取坐标需要位置权限");
-        builder.setNegativeButton("取消", null);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                PermissionUtils.permissionSkipSetting(getApplicationContext());
-            }
-        });
-        builder.show();
-    }
 }
