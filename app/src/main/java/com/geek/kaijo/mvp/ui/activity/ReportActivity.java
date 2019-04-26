@@ -43,6 +43,7 @@ import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.Street;
 import com.geek.kaijo.mvp.model.entity.UploadCaseFile;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.model.event.LocationEvent;
 import com.geek.kaijo.mvp.presenter.ReportPresenter;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
@@ -52,6 +53,7 @@ import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.widget.CustomPopupWindow;
 import com.luck.picture.lib.PictureSelector;
@@ -183,6 +185,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private UploadPhotoAdapter adapter1;
     private UploadVideoAdapter adapterVideo;
     private List<UploadCaseFile> caseFileList;
+    UserInfo userInfo;
 
     @Override
     protected void onStart() {
@@ -246,6 +249,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     public void initData(@Nullable Bundle savedInstanceState) {
         entry_type = getIntent().getIntExtra("entry_type", 0);
         tvToolbarTitle.setText(entry_type == 0 ? "自行处理" : "案件上报");
+
+        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
 
         switch (entry_type) {
             case 0:
@@ -533,6 +538,17 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 if (position > 0) {
                     mStreetId = mStreetList.get(position).getId();
                     mCommunityList.addAll(mStreetList.get(position).getChildList());
+
+                    if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
+                        if(mCommunityList!=null){
+                            for(int i=0;i<mCommunityList.size();i++){
+                                if(userInfo.getCommunityName().equals(mCommunityList.get(i).getName())){
+                                    spinnerCaseCommunity.setSelection(i,true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 } else {
                     mStreetId = "";
                 }
@@ -866,6 +882,16 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         mStreetList.clear();
         mStreetList.add(mStreet);
         mStreetList.addAll(list.get(0).getChildList());
+        if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
+            if(mStreetList!=null){
+                for(int i=0;i<mStreetList.size();i++){
+                    if(userInfo.getStreetName().equals(mStreetList.get(i).getName())){
+                        spinnerCaseStreet.setSelection(i,true);
+                        break;
+                    }
+                }
+            }
+        }
         mStreetAdapter.notifyDataSetChanged();
     }
 
@@ -879,6 +905,16 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         mGridList.clear();
         mGridList.add(mGrid);
         mGridList.addAll(list);
+        if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
+            if(mGridList!=null){
+                for(int i=0;i<mGridList.size();i++){
+                    if(userInfo.getGridName().equals(mGridList.get(i).getName())){
+                        spinnerCaseGrid.setSelection(i,true);
+                        break;
+                    }
+                }
+            }
+        }
         mGridAdapter.notifyDataSetChanged();
     }
 
