@@ -81,7 +81,7 @@ public class MapActivity extends AppCompatActivity {
     private SecurityLogin mClient;
     private MessageHandler handler;
     private UserInfo userInfo;
-    private double lngDefault = 40.000565, latDefaut = 116.486073;  //定位失败 默认显示点
+    private double lngDefault = 116.486073, latDefaut = 40.000565;  //定位失败 默认显示点
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,8 +107,9 @@ public class MapActivity extends AppCompatActivity {
 
         lng = getIntent().getDoubleExtra("lng", 0);
         lat = getIntent().getDoubleExtra("lat", 0);
+
         if (lng == 0 || lat == 0) {  //定位失败  显示默认位置
-//            checkPermissionAndAction();
+            checkPermissionAndAction();
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(latDefaut, lngDefault));
             markerOptions.draggable(true);
