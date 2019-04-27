@@ -11,15 +11,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerHandleComponent;
 import com.geek.kaijo.di.module.HandleModule;
 import com.geek.kaijo.mvp.contract.HandleContract;
 import com.geek.kaijo.mvp.model.entity.Case;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.HandlePresenter;
 import com.geek.kaijo.mvp.ui.adapter.CaseAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DataHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -51,6 +54,18 @@ public class HandleActivity extends BaseActivity<HandlePresenter> implements Han
     private CaseAdapter mAdapter;
     private List<Case> mCaseList;
 
+    private boolean isCaseSearch; //是否是条件查询
+    private String caseCode;  //案件编号
+    private String caseAttribute;  //案件属性
+    private String casePrimaryCategory;  //案件大类
+    private String caseSecondaryCategory; //案件小类
+    private String caseChildCategory;  //案件子类
+
+    private UserInfo userInfo;
+    int curNode;  //12: 案件处理13: 案件核实14: 案件核查
+    int handleType = 2; //1： 自行处理 2：非自行处理
+
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerHandleComponent //如找不到该类,请编译一下项目
@@ -68,27 +83,51 @@ public class HandleActivity extends BaseActivity<HandlePresenter> implements Han
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        int entry_type = getIntent().getIntExtra("entry_type", 0);
-        tvToolbarTitle.setText(entry_type == 0 ? "处理列表" : "处理列表");
-        initRefreshLayout(entry_type);
+        curNode = getIntent().getIntExtra("curNode", 0);
+        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        isCaseSearch = getIntent().getBooleanExtra("isCaseSearch",false);
+        if(isCaseSearch){ //条件查询
+            caseCode = getIntent().getStringExtra("caseCode");
+            caseAttribute = getIntent().getStringExtra("mCaseAttributeId");
+            casePrimaryCategory = getIntent().getStringExtra("mCasePrimaryCategory");
+            caseSecondaryCategory = getIntent().getStringExtra("mCaseSecondaryCategory");
+            caseChildCategory = getIntent().getStringExtra("mCaseChildCategory");
+            handleType = getIntent().getIntExtra("handleType",0);
+        }
+
+
+
+        if(curNode==12){
+            tvToolbarTitle.setText("处理列表");
+        }else if(curNode==13){
+            tvToolbarTitle.setText("核实列表");
+        }else if(curNode==14){
+            tvToolbarTitle.setText("核查列表");
+        }
+        initRefreshLayout();
     }
 
     /**
      * 初始化刷新
      */
-    private void initRefreshLayout(int entry_type) {
+    private void initRefreshLayout() {
         smartRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 if (mPresenter != null) {
-                    mPresenter.findCaseInfoPageList(false, entry_type);
+                    if(userInfo!=null){
+                        mPresenter.findCaseInfoPageList(false,userInfo.getUserId(),handleType,curNode,caseCode,caseAttribute,casePrimaryCategory,caseSecondaryCategory,caseChildCategory);
+                    }
                 }
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 if (mPresenter != null) {
-                    mPresenter.findCaseInfoPageList(true, entry_type);
+//                    mPresenter.findCaseInfoPageList(true, entry_type,caseCode,caseAttribute,casePrimaryCategory,caseSecondaryCategory,caseChildCategory);
+                    if(userInfo!=null){
+                        mPresenter.findCaseInfoPageList(true,userInfo.getUserId(),handleType,curNode,caseCode,caseAttribute,casePrimaryCategory,caseSecondaryCategory,caseChildCategory);
+                    }
                 }
             }
         });
@@ -100,11 +139,16 @@ public class HandleActivity extends BaseActivity<HandlePresenter> implements Han
         mCaseList = new ArrayList<>();
         mAdapter = new CaseAdapter(mCaseList);
         mAdapter.setOnItemClickListener((view, viewType, data, position) -> {
-            Intent intent = new Intent(HandleActivity.this, HandleDetailActivity.class);
-            intent.putExtra("entry_type", entry_type);
-            intent.putExtra("case_id", mCaseList.get(position).getCaseId());
-            intent.putExtra("case_attribute", mCaseList.get(position).getCaseAttribute());
-            launchActivity(intent);
+            if(isCaseSearch){  //案件查询
+
+            }else {
+                Intent intent = new Intent(HandleActivity.this, HandleDetailActivity.class);
+                intent.putExtra("curNode", curNode);
+                intent.putExtra("case_id", mCaseList.get(position).getCaseId());
+                intent.putExtra("case_attribute", mCaseList.get(position).getCaseAttribute());
+                launchActivity(intent);
+            }
+
         });
         recyclerView.setAdapter(mAdapter);
     }

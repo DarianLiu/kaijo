@@ -2,6 +2,7 @@ package com.geek.kaijo.mvp.contract;
 
 import com.geek.kaijo.mvp.model.entity.BaseArrayResult;
 import com.geek.kaijo.mvp.model.entity.BaseResult;
+import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.jess.arms.mvp.IView;
@@ -18,7 +19,7 @@ public interface CaseSearchContract {
     interface View extends IView {
         void setCaseAttributeList(List<CaseAttribute> attributeList);
 
-        void setCaseSearchResult(List<CaseInfo> result);
+        void setCaseSearchResult(List<Case> result);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
@@ -26,5 +27,7 @@ public interface CaseSearchContract {
         Observable<BaseResult<List<CaseAttribute>>> findCaseCategoryListByAttribute(String caseCategory);
 
         Observable<BaseResult<BaseArrayResult<CaseInfo>>> findCaseInfoList(RequestBody body);
+
+        Observable<BaseResult<BaseArrayResult<Case>>> findCaseInfoPageList(RequestBody body);
     }
 }

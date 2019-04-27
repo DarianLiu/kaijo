@@ -5,6 +5,7 @@ import android.app.Application;
 import com.geek.kaijo.app.api.RequestParamUtils;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.model.entity.BaseArrayResult;
+import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.jess.arms.integration.AppManager;
@@ -33,6 +34,8 @@ public class CaseSearchPresenter extends BasePresenter<CaseSearchContract.Model,
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
+
+    private int currPage = 1;
 
     @Inject
     public CaseSearchPresenter(CaseSearchContract.Model model, CaseSearchContract.View rootView) {
@@ -65,15 +68,18 @@ public class CaseSearchPresenter extends BasePresenter<CaseSearchContract.Model,
      * @param caseSecondaryCategory 案件小类：必须项
      * @param caseChildCategory     案件子类：必须项
      */
+
+
     public void findCaseInfoList(String caseCode, String caseAttribute, String casePrimaryCategory,
-                                 String caseSecondaryCategory, String caseChildCategory) {
-        RequestBody body = RequestParamUtils.findCaseInfoList(caseCode, caseAttribute, casePrimaryCategory, caseSecondaryCategory, caseChildCategory);
-        mModel.findCaseInfoList(body)
+                                 String caseSecondaryCategory, String caseChildCategory,String userId,int handleType) {
+        RequestBody body = RequestParamUtils.findCaseInfoList(caseCode, caseAttribute, casePrimaryCategory, caseSecondaryCategory, caseChildCategory,userId,handleType,currPage,10);
+//        mModel.findCaseInfoList(body)
+        mModel.findCaseInfoPageList(body)
                 .compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
-                .subscribeWith(new ErrorHandleSubscriber<BaseArrayResult<CaseInfo>>(mErrorHandler) {
+                .subscribeWith(new ErrorHandleSubscriber<BaseArrayResult<Case>>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseArrayResult<CaseInfo> arrayResult) {
+                    public void onNext(BaseArrayResult<Case> arrayResult) {
                         mRootView.setCaseSearchResult(arrayResult.getRecords());
                     }
                 });

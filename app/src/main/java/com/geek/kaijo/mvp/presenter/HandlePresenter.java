@@ -39,9 +39,10 @@ public class HandlePresenter extends BasePresenter<HandleContract.Model, HandleC
     }
 
     private int currPage = 1;
-
-    public void findCaseInfoPageList(boolean isRefresh, int caseListStatus) {
-        RequestBody body = RequestParamUtils.findCaseInfoPageList(isRefresh ? 1 : currPage + 1, 10, caseListStatus);
+//    public void findCaseInfoPageList(boolean isRefresh, int caseListStatus,String caseCode,String caseAttribute,String casePrimaryCategory,String caseSecondaryCategory,String caseChildCategory) {
+    public void findCaseInfoPageList(boolean isRefresh,String userId,int handleType,int curNode,String caseCode,String caseAttribute,String casePrimaryCategory,String caseSecondaryCategory,String caseChildCategory) {
+//        RequestBody body = RequestParamUtils.findCaseInfoPageList(isRefresh ? 1 : currPage + 1, 10, caseListStatus,caseCode,caseAttribute,casePrimaryCategory,caseSecondaryCategory,caseChildCategory);
+        RequestBody body = RequestParamUtils.findCaseInfoPageList(isRefresh ? 1 : currPage + 1, 10,userId,handleType,curNode,caseCode,caseAttribute,casePrimaryCategory,caseSecondaryCategory,caseChildCategory);
         mModel.findCaseInfoPageList(body).subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())

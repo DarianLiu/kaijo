@@ -48,11 +48,25 @@ public class RequestParamUtils {
     /**
      * 查询案件信息列表
      */
-    public static RequestBody findCaseInfoPageList(int currPage, int pageSize, int caseListStatus) {
+//    public static RequestBody findCaseInfoPageList(int currPage, int pageSize, int caseListStatus,String caseCode,String caseAttribute,String casePrimaryCategory,String caseSecondaryCategory,String caseChildCategory) {
+    public static RequestBody findCaseInfoPageList(int currPage, int pageSize,String userId,int handleType,int curNode,String caseCode,String caseAttribute,String casePrimaryCategory,String caseSecondaryCategory,String caseChildCategory) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("currPage", currPage);
         jsonObject.addProperty("pageSize", pageSize);
-        jsonObject.addProperty("caseListStatus", caseListStatus);
+//        jsonObject.addProperty("caseListStatus", caseListStatus);
+
+        jsonObject.addProperty("userId", userId);
+        jsonObject.addProperty("handleType", handleType);  // 案件处理类型  1： 自行处理  2：非自行处理
+        if(curNode>0){
+            jsonObject.addProperty("curNode", curNode);  //12: 案件处理
+        }
+
+        jsonObject.addProperty("caseCode", caseCode);
+        jsonObject.addProperty("caseAttribute", caseAttribute);
+        jsonObject.addProperty("casePrimaryCategory", casePrimaryCategory);
+        jsonObject.addProperty("caseSecondaryCategory", caseSecondaryCategory);
+        jsonObject.addProperty("caseChildCategory", caseChildCategory);
+
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
     }
@@ -67,13 +81,18 @@ public class RequestParamUtils {
      * @param caseChildCategory     案件子类
      */
     public static RequestBody findCaseInfoList(String caseCode, String caseAttribute, String casePrimaryCategory,
-                                               String caseSecondaryCategory, String caseChildCategory) {
+                                               String caseSecondaryCategory, String caseChildCategory,String userId,int handleType,int currPage, int pageSize ) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("caseCode", caseCode);
         jsonObject.addProperty("caseAttribute", caseAttribute);
         jsonObject.addProperty("casePrimaryCategory", casePrimaryCategory);
         jsonObject.addProperty("caseSecondaryCategory", caseSecondaryCategory);
         jsonObject.addProperty("caseChildCategory", caseChildCategory);
+
+        jsonObject.addProperty("userId", userId);
+        jsonObject.addProperty("handleType", handleType);  // 案件处理类型  1： 自行处理  2：非自行处理
+        jsonObject.addProperty("currPage", currPage);
+        jsonObject.addProperty("pageSize", pageSize);
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
     }

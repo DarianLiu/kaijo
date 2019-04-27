@@ -13,16 +13,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerCaseSearchComponent;
 import com.geek.kaijo.di.module.CaseSearchModule;
 import com.geek.kaijo.mvp.contract.CaseSearchContract;
+import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.CaseSearchPresenter;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DataHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +60,7 @@ public class CaseSearchActivity extends BaseActivity<CaseSearchPresenter> implem
     @BindView(R.id.tv_cancel)
     TextView tvCancel;
 
-    private int entry_type;//入口类型（自行：0/非自行：1）
+    private int handleType;//入口类型（自行：1/非自行：2）
 
     private CaseAttribute mCaseAttribute;//占位数据
     private List<CaseAttribute> mCategoryLarge;//大类
@@ -67,6 +71,7 @@ public class CaseSearchActivity extends BaseActivity<CaseSearchPresenter> implem
 
     private MySpinnerAdapter<CaseAttribute> mCategorySubAdapter;//子类
     private List<CaseAttribute> mCategorySub;//子类
+    private UserInfo userInfo;
 
     //相关参数全局变量
     private String mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory, mCaseChildCategory;
@@ -88,7 +93,8 @@ public class CaseSearchActivity extends BaseActivity<CaseSearchPresenter> implem
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        entry_type = getIntent().getIntExtra("entry_type", 0);
+        handleType = getIntent().getIntExtra("handleType", 0);
+        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
 
         tvToolbarTitle.setText("案件查询");
 
@@ -111,7 +117,14 @@ public class CaseSearchActivity extends BaseActivity<CaseSearchPresenter> implem
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Timber.d("=======position" + position);
-                mCaseAttributeId = String.valueOf(position);
+//                mCaseAttributeId = String.valueOf(position);
+                if(position==1){
+                    mCaseAttributeId = "2"; //部件2
+                }else if(position==2){
+                    mCaseAttributeId = "1"; //事件1
+                }else {
+                    mCaseAttributeId = "0";
+                }
 
                 spinnerCategoryLarge.setSelection(0);
                 mCategoryLarge.clear();
@@ -129,7 +142,7 @@ public class CaseSearchActivity extends BaseActivity<CaseSearchPresenter> implem
                 mCategorySubAdapter.notifyDataSetChanged();
 
                 if (position != 0 && mPresenter != null) {
-                    mPresenter.findCaseCategoryListByAttribute(position);
+                    mPresenter.findCaseCategoryListByAttribute(Integer.parseInt(mCaseAttributeId));
                 }
             }
 
@@ -232,13 +245,13 @@ public class CaseSearchActivity extends BaseActivity<CaseSearchPresenter> implem
         mCategoryLarge.addAll(attributeList);
         mCategoryLargeAdapter.notifyDataSetChanged();
 
-        if (attributeList.size() > 0) {
-            spinnerCaseAttribute.setSelection(1, true);
-        }
+//        if (attributeList.size() > 0) {
+//            spinnerCaseAttribute.setSelection(1, true);
+//        }
     }
 
     @Override
-    public void setCaseSearchResult(List<CaseInfo> result) {
+    public void setCaseSearchResult(List<Case> result) {
 
     }
 
@@ -273,13 +286,25 @@ public class CaseSearchActivity extends BaseActivity<CaseSearchPresenter> implem
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_query://查询
-                if (checkParams()) {
-                    if (mPresenter != null) {
-                        String caseCode = etCaseCode.getText().toString();
-                        mPresenter.findCaseInfoList(caseCode, mCaseAttributeId, mCasePrimaryCategory,
-                                mCaseSecondaryCategory, mCaseChildCategory);
-                    }
-                }
+                String caseCode = etCaseCode.getText().toString();
+                Intent intent = new Intent(this,HandleActivity.class);
+                intent.putExtra("caseCode",caseCode);
+                intent.putExtra("mCaseAttributeId",mCaseAttributeId);
+                intent.putExtra("mCasePrimaryCategory",mCasePrimaryCategory);
+                intent.putExtra("mCaseSecondaryCategory",mCaseSecondaryCategory);
+                intent.putExtra("mCaseChildCategory",mCaseChildCategory);
+
+                intent.putExtra("handleType",handleType);
+                intent.putExtra("isCaseSearch",true);
+                startActivity(intent);
+//                if (checkParams()) {
+//                    if (mPresenter != null) {
+//                        if(userInfo!=null){
+//                            mPresenter.findCaseInfoList(caseCode, mCaseAttributeId, mCasePrimaryCategory,
+//                                    mCaseSecondaryCategory, mCaseChildCategory,userInfo.getUserId(),handleType);
+//                        }
+//                    }
+//                }
                 break;
             case R.id.tv_cancel://取消
                 spinnerCaseAttribute.setSelection(0);

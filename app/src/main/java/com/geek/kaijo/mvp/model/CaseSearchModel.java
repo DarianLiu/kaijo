@@ -5,6 +5,7 @@ import android.app.Application;
 import com.geek.kaijo.app.api.AppService;
 import com.geek.kaijo.mvp.model.entity.BaseArrayResult;
 import com.geek.kaijo.mvp.model.entity.BaseResult;
+import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.google.gson.Gson;
@@ -43,6 +44,11 @@ public class CaseSearchModel extends BaseModel implements CaseSearchContract.Mod
     @Override
     public Observable<BaseResult<BaseArrayResult<CaseInfo>>> findCaseInfoList(RequestBody body) {
         return mRepositoryManager.obtainRetrofitService(AppService.class).findCaseInfoList(body);
+    }
+
+    @Override
+    public Observable<BaseResult<BaseArrayResult<Case>>> findCaseInfoPageList(RequestBody body) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).findCaseInfoPageList(body);
     }
 
     @Override

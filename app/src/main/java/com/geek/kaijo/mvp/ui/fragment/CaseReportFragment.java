@@ -67,15 +67,21 @@ public class CaseReportFragment extends Fragment {
                 break;
             case R.id.tv_handle://处理页面
                 intent = new Intent(getActivity(), HandleActivity.class);
-                intent.putExtra("entry_type", 1);
+                intent.putExtra("curNode", 12);
                 launchActivity(intent);
                 break;
             case R.id.tv_verify://案件核实
-                intent = new Intent(getActivity(), VerifyActivity.class);
+//                intent = new Intent(getActivity(), VerifyActivity.class);
+//                launchActivity(intent);
+                intent = new Intent(getActivity(), HandleActivity.class);
+                intent.putExtra("curNode", 13);
                 launchActivity(intent);
                 break;
             case R.id.tv_check://案件核查
-                intent = new Intent(getActivity(), CheckActivity.class);
+//                intent = new Intent(getActivity(), CheckActivity.class);
+//                launchActivity(intent);
+                intent = new Intent(getActivity(), HandleActivity.class);
+                intent.putExtra("curNode", 14);
                 launchActivity(intent);
                 break;
             case R.id.tv_inquiry://案件查询

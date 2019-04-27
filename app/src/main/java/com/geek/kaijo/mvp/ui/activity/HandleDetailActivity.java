@@ -69,6 +69,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     TextView tvCancel;
 
     private TextView tvImageList;//图片列表提示文字
+    int curNode;  //12: 案件处理13: 案件核实14: 案件核查
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -87,14 +88,19 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        int entry_type = getIntent().getIntExtra("entry_type", 0);
+        curNode = getIntent().getIntExtra("curNode", 0);
         String caseId = getIntent().getStringExtra("case_id");
         String caseAttribute = getIntent().getStringExtra("case_attribute");
         if (mPresenter != null) {
             mPresenter.findCaseInfoByMap(caseId, caseAttribute);
         }
-
-        tvToolbarTitle.setText("处理详情页");
+        if(curNode==12){
+            tvToolbarTitle.setText("处理详情页");
+        }else if(curNode==13){
+            tvToolbarTitle.setText("核实详情页");
+        }else if(curNode==14){
+            tvToolbarTitle.setText("核查详情页");
+        }
 
         tvImageList = new TextView(this);
         tvImageList.setText("照片列表");
