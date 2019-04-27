@@ -1,8 +1,15 @@
 package com.geek.kaijo.app.api;
 
+import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -17,13 +24,14 @@ public class RequestParamUtils {
     /**
      * 保存案件信息
      */
-    public static RequestBody addOrUpdateCaseInfo(String acceptDate, String streetId, String communityId,
+    public static RequestBody addOrUpdateCaseInfo(String userId,String acceptDate, String streetId, String communityId,
                                                   String gridId, String lat, String lng, String source,
                                                   String address, String description, String caseAttribute,
                                                   String casePrimaryCategory, String caseSecondaryCategory,
                                                   String caseChildCategory, String handleType, String whenType,
-                                                  String caseProcessRecordID) {
+                                                  String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userId", userId);
         jsonObject.addProperty("acceptDate", acceptDate + ":00");
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
@@ -40,7 +48,12 @@ public class RequestParamUtils {
         jsonObject.addProperty("handleType", handleType);
         jsonObject.addProperty("whenType", whenType);
         jsonObject.addProperty("caseProcessRecordID", caseProcessRecordID);
-        jsonObject.add("attachList", new JsonArray());
+//        for(int i=0;i<uploadPhotoList.size();i++){
+//            uploadPhotoList.get(i).whenType = Integer.parseInt(whenType);
+//            uploadPhotoList.get(i).fileType = Integer.parseInt(whenType);
+//        }
+        jsonObject.add("attachList", new Gson().toJsonTree(uploadPhotoList));
+
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
     }

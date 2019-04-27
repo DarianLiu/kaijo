@@ -61,15 +61,15 @@ public class ReportModel extends BaseModel implements ReportContract.Model {
     }
 
     @Override
-    public Observable<BaseResult<CaseInfo>> addOrUpdateCaseInfo(String acceptDate, String streetId, String communityId,
+    public Observable<BaseResult<CaseInfo>> addOrUpdateCaseInfo(String userId,String acceptDate, String streetId, String communityId,
                                                                 String gridId, String lat, String lng, String source,
                                                                 String address, String description, String caseAttribute,
                                                                 String casePrimaryCategory, String caseSecondaryCategory,
                                                                 String caseChildCategory, String handleType, String whenType,
-                                                                String caseProcessRecordID) {
-        RequestBody requestBody = RequestParamUtils.addOrUpdateCaseInfo(acceptDate, streetId,
+                                                                String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
+        RequestBody requestBody = RequestParamUtils.addOrUpdateCaseInfo(userId,acceptDate, streetId,
                 communityId, gridId, lat, lng, source, address, description, caseAttribute,
-                casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID);
+                casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList);
         return mRepositoryManager.obtainRetrofitService(AppService.class).addOrUpdateCaseInfo(requestBody);
     }
 

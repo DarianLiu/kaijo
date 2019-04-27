@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
+import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.ui.activity.UploadActivity;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
@@ -18,6 +19,8 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import javax.inject.Inject;
 
 import com.geek.kaijo.mvp.contract.HandleDetailContract;
+
+import java.util.List;
 
 
 @ActivityScope
@@ -70,15 +73,15 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
      * @param caseSecondaryCategory 案件小类
      * @param caseChildCategory     案件子类
      */
-    public void addOrUpdateCaseInfo(String acceptDate, String streetId, String communityId,
+    public void addOrUpdateCaseInfo(String userId,String acceptDate, String streetId, String communityId,
                                     String gridId, String lat, String lng, String source,
                                     String address, String description, String caseAttribute,
                                     String casePrimaryCategory, String caseSecondaryCategory,
                                     String caseChildCategory, String handleType, String whenType,
-                                    String caseProcessRecordID) {
-        mModel.addOrUpdateCaseInfo(acceptDate, streetId, communityId, gridId, lat, lng, source,
+                                    String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
+        mModel.addOrUpdateCaseInfo(userId,acceptDate, streetId, communityId, gridId, lat, lng, source,
                 address, description, caseAttribute, casePrimaryCategory, caseSecondaryCategory,
-                caseChildCategory, handleType, whenType, caseProcessRecordID)
+                caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList)
                 .compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {

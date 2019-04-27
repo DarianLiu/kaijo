@@ -130,15 +130,15 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
      * @param whenType              直接处理( 整改前的写1  整改后写2),  非直接处理 whenType 1
      * @param caseProcessRecordID   直接处理 caseProcessRecordID  19,  非直接处理 caseProcessRecordID  11
      */
-    public void addOrUpdateCaseInfo(String acceptDate, String streetId, String communityId,
+    public void addOrUpdateCaseInfo(String userId,String acceptDate, String streetId, String communityId,
                                     String gridId, String lat, String lng, String source,
                                     String address, String description, String caseAttribute,
                                     String casePrimaryCategory, String caseSecondaryCategory,
                                     String caseChildCategory, String handleType, String whenType,
-                                    String caseProcessRecordID) {
-        mModel.addOrUpdateCaseInfo(acceptDate, streetId, communityId, gridId, lat, lng, source,
+                                    String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
+        mModel.addOrUpdateCaseInfo(userId,acceptDate, streetId, communityId, gridId, lat, lng, source,
                 address, description, caseAttribute, casePrimaryCategory, caseSecondaryCategory,
-                caseChildCategory, handleType, whenType, caseProcessRecordID)
+                caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList)
                 .compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {

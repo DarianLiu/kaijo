@@ -41,12 +41,12 @@ public interface ReportContract {
 
         Observable<BaseResult<List<Grid>>> findGridListByCommunityId(String communityId);
 
-        Observable<BaseResult<CaseInfo>> addOrUpdateCaseInfo(String acceptDate, String streetId, String communityId,
+        Observable<BaseResult<CaseInfo>> addOrUpdateCaseInfo(String userId,String acceptDate, String streetId, String communityId,
                                                              String gridId, String lat, String lng, String source,
                                                              String address, String description, String caseAttribute,
                                                              String casePrimaryCategory, String caseSecondaryCategory,
                                                              String caseChildCategory, String handleType, String whenType,
-                                                             String caseProcessRecordID);
+                                                             String caseProcessRecordID,List<UploadFile> uploadPhotoList);
 
 
         Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);

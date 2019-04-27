@@ -330,7 +330,9 @@ public class MapActivity extends AppCompatActivity {
             }
 //            polylineOptions.width(55);
 //            polylineOptions.color(getResources().getColor(R.color.blue));
-            mMap.addPolyline(polylineOptions);
+            if(mMap!=null){
+                mMap.addPolyline(polylineOptions);
+            }
 
 
 //            // 绘制一条虚线

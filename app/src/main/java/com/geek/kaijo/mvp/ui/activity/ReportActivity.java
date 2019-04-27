@@ -771,10 +771,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
                 if (type.equals(next)) {//下一步
                     if (checkParams(caseTime, address, description) && mPresenter != null) {
-                        mPresenter.addOrUpdateCaseInfo(caseTime, mStreetId, mCommunityId, mGridId,
+                        mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(),caseTime, mStreetId, mCommunityId, mGridId,
                                 String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
                                 mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
-                                mCaseChildCategory, handleType, whenType, caseProcessRecordID);
+                                mCaseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList);
                     }
                 } else if (type.equals(submit)) {//提交
 
@@ -804,12 +804,15 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                         }
                     }
                     if (mPresenter != null) {
-                        mPresenter.addCaseAttach(caseFileList);
-                        if (checkParams(caseTime, address, description) && mPresenter != null) {
-                            mPresenter.addOrUpdateCaseInfo(caseTime, mStreetId, mCommunityId, mGridId,
+//                        mPresenter.addCaseAttach(caseFileList);
+                        List<UploadFile> uploadFileList = new ArrayList<>();
+                        uploadFileList.addAll(uploadPhotoList);
+                        uploadFileList.addAll(uploadVideoList);
+                        if (checkParams(caseTime, address, description) && mPresenter != null && userInfo!=null) {
+                            mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(),caseTime, mStreetId, mCommunityId, mGridId,
                                     String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
                                     mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
-                                    mCaseChildCategory, handleType, whenType, caseProcessRecordID);
+                                    mCaseChildCategory, handleType, whenType, caseProcessRecordID,uploadFileList);
                         }
                     }
                 }
@@ -1085,22 +1088,32 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     public void uploadSuccess(UploadFile uploadPhoto) {
         if (uploadPhoto != null) {
             switch (isWhich) {
-                case 1:
+                case 1: //上传图片
                     for (int i = 0; i < uploadPhotoList.size(); i++) {
                         if (uploadPhotoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
                             uploadPhotoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
                             uploadPhotoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
                             uploadPhotoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            if (entry_type == 0) {
+                                //自行处理
+                                uploadPhotoList.get(i).whenType = 1;
+                            } else if (entry_type == 1) {
+                                //非自行处理
+                                uploadPhotoList.get(i).whenType = 1;
+                            }
+                            uploadPhotoList.get(i).fileType = 0;
                             adapter1.notifyItemChanged(i);
                         }
                     }
                     break;
-                case 2:
+                case 2: //上传视频
                     for (int i = 0; i < uploadVideoList.size(); i++) {
                         if (uploadVideoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
                             uploadVideoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
                             uploadVideoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
                             uploadVideoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            uploadVideoList.get(i).whenType = 1;
+                            uploadVideoList.get(i).fileType = 1;
                             adapterVideo.notifyItemChanged(i);
                         }
                     }
@@ -1125,9 +1138,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 launchActivity(intent);
                 break;
             case 1:
-                if (mPresenter != null) {
-                    mPresenter.addCaseAttach(caseFileList);
-                }
+//                if (mPresenter != null) {
+//                    mPresenter.addCaseAttach(caseFileList);
+//                }
+                finish();
                 break;
             default:
                 break;

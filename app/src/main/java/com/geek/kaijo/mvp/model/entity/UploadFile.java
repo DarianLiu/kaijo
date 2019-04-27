@@ -8,11 +8,14 @@ public class UploadFile implements Parcelable{
     public static final int height = 600;
     private String fileName;   //文件本地路径
     private String fileRelativePath;
+    private String url;
     private String fileDomain;
     private String fileSize;
     private int isSuccess; // 1 上传成功
     public int selectStatus;//是否选中  0未选择 1选择
-
+    public int caseProcessRecordId = 11;  //节点ID
+    public int whenType = 1;    // 1整改前  2整改后
+    public int fileType = 0;   //0 图片  视频 1
 
     public UploadFile(){}
 
@@ -51,6 +54,7 @@ public class UploadFile implements Parcelable{
 
     public void setFileRelativePath(String fileRelativePath) {
         this.fileRelativePath = fileRelativePath;
+        this.url = fileRelativePath;
     }
 
     public String getFileDomain() {
@@ -79,6 +83,14 @@ public class UploadFile implements Parcelable{
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override

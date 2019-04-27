@@ -3,8 +3,11 @@ package com.geek.kaijo.mvp.contract;
 import com.geek.kaijo.mvp.model.entity.BaseResult;
 import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
+import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -19,11 +22,11 @@ public interface HandleDetailContract {
     interface Model extends IModel {
         Observable<BaseResult<Case>> findCaseInfoByMap(String caseId, String caseAttribute);
 
-        Observable<BaseResult<CaseInfo>> addOrUpdateCaseInfo(String acceptDate, String streetId, String communityId,
+        Observable<BaseResult<CaseInfo>> addOrUpdateCaseInfo(String userId,String acceptDate, String streetId, String communityId,
                                                              String gridId, String lat, String lng, String source,
                                                              String address, String description, String caseAttribute,
                                                              String casePrimaryCategory, String caseSecondaryCategory,
                                                              String caseChildCategory, String handleType, String whenType,
-                                                             String caseProcessRecordID);
+                                                             String caseProcessRecordID,List<UploadFile> uploadPhotoList);
     }
 }
