@@ -171,17 +171,19 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:background="@color/color_comment_background"
-                android:visibility="gone">
+                >
                 <RadioButton
                     android:id="@+id/ok_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="核查通过（下一步：结案审批）"/>
+                    android:text="核查通过（下一步：结案审批）"
+                    android:visibility="gone"/>
                 <RadioButton
                     android:id="@+id/no_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="核查不通过（下一步：处理）"/>
+                    android:text="核查不通过（下一步：处理）"
+                    android:visibility="gone"/>
             </RadioGroup>
 
             <!-- 核实-->
@@ -243,12 +245,19 @@
                 android:textSize="@dimen/t14"
                 android:maxLength="500"/>
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/la_ratinbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="给处理人员评分"
+                android:orientation="vertical"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"/>
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="给处理人员评分"
+
+                    android:paddingLeft="10dp"/>
 
                 <RatingBar
                     android:layout_width="wrap_content"
@@ -256,6 +265,8 @@
                     android:layout_marginTop="10dp"
                     android:paddingLeft="10dp"
                     />
+            </LinearLayout>
+
 
             <!--<TextView
                 android:id="@+id/tv_upload_image"

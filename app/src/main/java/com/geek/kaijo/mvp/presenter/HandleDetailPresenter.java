@@ -117,11 +117,13 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
 //                        intent.putExtra("case_id", caseInfoEntity.getCaseId());
 //                        mRootView.launchActivity(intent);
 //                        mRootView.killMyself();
+                        mRootView.httpCommitSuccess();
                     }
 
                     @Override
                     public void onComplete() {
                         super.onComplete();
+
                         mRootView.killMyself();
                     }
                 });

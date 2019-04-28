@@ -146,7 +146,8 @@ public class HandleActivity extends BaseActivity<HandlePresenter> implements Han
                 intent.putExtra("curNode", curNode);
                 intent.putExtra("case_id", mCaseList.get(position).getCaseId());
                 intent.putExtra("case_attribute", mCaseList.get(position).getCaseAttribute());
-                launchActivity(intent);
+//                launchActivity(intent);
+                startActivityForResult(intent,1);
             }
 
         });
@@ -208,6 +209,14 @@ public class HandleActivity extends BaseActivity<HandlePresenter> implements Han
             int index = mCaseList.size();
             mCaseList.addAll(caseList);
             mAdapter.notifyItemRangeInserted(index + 1, caseList.size());
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==1){ //处理 核实  核查 成功
+            smartRefresh.autoRefresh();
         }
     }
 }

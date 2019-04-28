@@ -29,6 +29,7 @@ public class Case {
     private String processId;
     private String userId;
     private String firstWorkunit;
+    private List<ButtonLabel> buttonList;
 
     public String getCaseId() {
         return caseId;
@@ -180,5 +181,13 @@ public class Case {
 
     public void setFirstWorkunit(String firstWorkunit) {
         this.firstWorkunit = firstWorkunit;
+    }
+
+    public List<ButtonLabel> getButtonList() {
+        return buttonList;
+    }
+
+    public void setButtonList(List<ButtonLabel> buttonList) {
+        this.buttonList = buttonList;
     }
 }

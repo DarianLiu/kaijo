@@ -25,6 +25,7 @@ import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerHandleDetailComponent;
 import com.geek.kaijo.di.module.HandleDetailModule;
 import com.geek.kaijo.mvp.contract.HandleDetailContract;
+import com.geek.kaijo.mvp.model.entity.ButtonLabel;
 import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
@@ -111,6 +112,12 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     @BindView(R.id.handle_back_radio)
     RadioButton handle_back_radio;
 
+    /*评分*/
+    @BindView(R.id.la_ratinbar)
+    LinearLayout la_ratinbar;
+
+
+
     private List<UploadFile> uploadPhotoList;
     private List<UploadFile> uploadVideoList;
     private UploadPhotoAdapter adapter1;
@@ -122,6 +129,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     private Case aCase;
     private UserInfo userInfo;
     private LoadingProgressDialog loadingDialog;
+    private int radioCheckedPosition;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -149,13 +157,14 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         }
         if(curNode==12){
             tvToolbarTitle.setText("处理详情页");
-            handle_radioGroup.setVisibility(View.VISIBLE);
+//            handle_radioGroup.setVisibility(View.VISIBLE);
         }else if(curNode==13){
             tvToolbarTitle.setText("核实详情页");
-            true_radio.setVisibility(View.VISIBLE);
+//            true_radio.setVisibility(View.VISIBLE);
         }else if(curNode==14){
             tvToolbarTitle.setText("核查详情页");
-            radioGroup.setVisibility(View.VISIBLE);
+//            radioGroup.setVisibility(View.VISIBLE);
+            la_ratinbar.setVisibility(View.VISIBLE);
         }
 
         /*tvImageList = new TextView(this);
@@ -178,6 +187,22 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 
         uploadVideoList = new ArrayList<>();
 
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                RadioButton radiobutton = (RadioButton)HandleDetailActivity.this.findViewById(radioGroup.getCheckedRadioButtonId());
+                for(int i=0;i<aCase.getButtonList().size();i++){
+                    if(aCase.getButtonList().get(i).getLabel().equals(radiobutton.getText().toString())){
+                        radioCheckedPosition = i;
+                        break;
+                    }
+                }
+
+
+            }
+        });
+
+
     }
 
     @Override
@@ -191,6 +216,14 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 
         tvCaseAddress.setText(Html.fromHtml("<b>地址：</b>" + data.getAddress()));
         tvCaseDescribe.setText(Html.fromHtml("<b>描述：</b>" + data.getDescription()));
+        if(aCase!=null && aCase.getButtonList()!=null){
+            for(int i=0;i<aCase.getButtonList().size();i++){
+                RadioButton radioButton = new RadioButton(this);
+//                radioButton.setId(i);
+                radioButton.setText(aCase.getButtonList().get(i).getLabel());
+                radioGroup.addView(radioButton);
+            }
+        }
     }
 
     @Override
@@ -227,6 +260,12 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                     break;
             }
         }
+    }
+
+    @Override
+    public void httpCommitSuccess() {
+        setResult(1);
+        finish();
     }
 
     @Override
@@ -299,19 +338,23 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                         List<UploadFile> uploadFileList = new ArrayList<>();
                         uploadFileList.addAll(uploadPhotoList);
                         uploadFileList.addAll(uploadVideoList);
-                        String label="";
-                        if(radioGroup.getCheckedRadioButtonId()==ok_radio.getId()){ //审核通过
-                            label = ok_radio.getText().toString();
-                        }else if(radioGroup.getCheckedRadioButtonId()==no_radio.getId()) { //审核不通过
-                            label = no_radio.getText().toString();
-                        }else if(handle_radioGroup.getCheckedRadioButtonId()==handle_true_radio.getId()){ //处理（下一步：核查）
-                            label = handle_true_radio.getText().toString();
-                        }else if(handle_radioGroup.getCheckedRadioButtonId()==handle_back_radio.getId()){
-                            label = handle_back_radio.getText().toString();
-                        }else if(true_radio.isChecked()){ //核实
-                            label = true_radio.getText().toString();
+                        ButtonLabel buttonLabel = aCase.getButtonList().get(radioCheckedPosition);
+                        if(buttonLabel!=null){
+
                         }
-                        mPresenter.addOperate(userInfo.getUserId(),label,etSituationDescription.getText().toString(),aCase.getCaseId(),aCase.getProcessId(),curNode+"","",aCase.getFirstWorkunit(),uploadFileList);
+//                        String label="";
+//                        if(radioGroup.getCheckedRadioButtonId()==ok_radio.getId()){ //审核通过
+//                            label = ok_radio.getText().toString();
+//                        }else if(radioGroup.getCheckedRadioButtonId()==no_radio.getId()) { //审核不通过
+//                            label = no_radio.getText().toString();
+//                        }else if(handle_radioGroup.getCheckedRadioButtonId()==handle_true_radio.getId()){ //处理（下一步：核查）
+//                            label = handle_true_radio.getText().toString();
+//                        }else if(handle_radioGroup.getCheckedRadioButtonId()==handle_back_radio.getId()){
+//                            label = handle_back_radio.getText().toString();
+//                        }else if(true_radio.isChecked()){ //核实
+//                            label = true_radio.getText().toString();
+//                        }
+                        mPresenter.addOperate(userInfo.getUserId(),buttonLabel.getLabel(),etSituationDescription.getText().toString(),aCase.getCaseId(),aCase.getProcessId(),buttonLabel.getState()+"","",aCase.getFirstWorkunit(),uploadFileList);
                     }
                 }
 
