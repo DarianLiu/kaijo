@@ -46,7 +46,7 @@ public interface HandleDetailContract {
          * @param uploadPhotoList
          * @return
          */
-        Observable<BaseResult<CaseInfo>> addOperate(String userId,String label, String content, String formId,
+        Observable<BaseResult<String>> addOperate(String userId,String label, String content, String formId,
                                                              String processId, String curNode, String nextUserId, String firstWorkunit,
                                                             List<UploadFile> uploadPhotoList);
         Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);

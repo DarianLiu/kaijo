@@ -262,5 +262,5 @@ public interface AppService {
      */
     @NonNull
     @POST("/case/addOperate.json")
-    Observable<BaseResult<CaseInfo>> addOperate(@Body RequestBody body);
+    Observable<BaseResult<String>> addOperate(@Body RequestBody body);
 }

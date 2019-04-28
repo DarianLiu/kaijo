@@ -110,9 +110,9 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
                 uploadPhotoList)
                 .compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
-                .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {
+                .subscribeWith(new ErrorHandleSubscriber<String>(mErrorHandler) {
                     @Override
-                    public void onNext(CaseInfo caseInfoEntity) {
+                    public void onNext(String str) {
 //                        Intent intent = new Intent(mAppManager.getTopActivity(), UploadActivity.class);
 //                        intent.putExtra("case_id", caseInfoEntity.getCaseId());
 //                        mRootView.launchActivity(intent);
