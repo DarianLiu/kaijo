@@ -203,6 +203,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                             uploadPhotoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
                             uploadPhotoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
                             uploadPhotoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            uploadVideoList.get(i).caseProcessRecordId = curNode;
                             uploadPhotoList.get(i).whenType = 2;
                             uploadPhotoList.get(i).fileType = 0;
                             adapter1.notifyItemChanged(i);
@@ -215,6 +216,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                             uploadVideoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
                             uploadVideoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
                             uploadVideoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            uploadVideoList.get(i).caseProcessRecordId = curNode;
                             uploadVideoList.get(i).whenType = 2;
                             uploadVideoList.get(i).fileType = 1;
                             adapterVideo.notifyItemChanged(i);
@@ -302,8 +304,14 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                             label = ok_radio.getText().toString();
                         }else if(radioGroup.getCheckedRadioButtonId()==no_radio.getId()) { //审核不通过
                             label = no_radio.getText().toString();
+                        }else if(handle_radioGroup.getCheckedRadioButtonId()==handle_true_radio.getId()){ //处理（下一步：核查）
+                            label = handle_true_radio.getText().toString();
+                        }else if(handle_radioGroup.getCheckedRadioButtonId()==handle_back_radio.getId()){
+                            label = handle_back_radio.getText().toString();
+                        }else if(true_radio.isChecked()){ //核实
+                            label = true_radio.getText().toString();
                         }
-                        mPresenter.addOperate(userInfo.getUserId(),label,etSituationDescription.getText().toString(),aCase.getCaseId(),aCase.getProcessId(),curNode+"",aCase.getUserId(),aCase.getFirstWorkunit(),uploadFileList);
+                        mPresenter.addOperate(userInfo.getUserId(),label,etSituationDescription.getText().toString(),aCase.getCaseId(),aCase.getProcessId(),curNode+"","",aCase.getFirstWorkunit(),uploadFileList);
                     }
                 }
 
