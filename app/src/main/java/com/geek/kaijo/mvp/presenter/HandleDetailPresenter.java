@@ -15,11 +15,15 @@ import com.jess.arms.http.imageloader.ImageLoader;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import javax.inject.Inject;
 
 import com.geek.kaijo.mvp.contract.HandleDetailContract;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -92,6 +96,32 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
                         mRootView.launchActivity(intent);
 //                        mRootView.killMyself();
                     }
+                });
+    }
+
+    /**
+     * 上传图片 单张图片
+     */
+    public void uploadFile(String filePath) {
+//        File file = new File(pathUrl);
+//        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", "test.txt", file);
+        File file = new File(filePath);//filePath 图片地址
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)//表单类型
+                .addFormDataPart("fileName", file.getPath());//
+        RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        builder.addFormDataPart("file", file.getName(), imageBody);//imgfile 后台接收图片流的参数名
+
+        List<MultipartBody.Part> parts = builder.build().parts();
+
+        mModel.uploadFile(parts).compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.handleBaseResultResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<UploadFile>(mErrorHandler) {
+                    @Override
+                    public void onNext(UploadFile uploadPhoto) {
+                        mRootView.uploadSuccess(uploadPhoto);
+                    }
+
                 });
     }
 

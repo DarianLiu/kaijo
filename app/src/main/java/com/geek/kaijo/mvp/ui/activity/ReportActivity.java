@@ -682,8 +682,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
                     mCaseChildCategory = mCategorySub.get(position).getCategoryId();
-                } else {
-                    mCaseChildCategory = "1";
+                }else {
+                    mCaseChildCategory = "";
                 }
             }
 

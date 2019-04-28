@@ -21,6 +21,7 @@ import com.geek.kaijo.mvp.contract.HandleDetailContract;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 
@@ -59,5 +60,10 @@ public class HandleDetailModel extends BaseModel implements HandleDetailContract
                 communityId, gridId, lat, lng, source, address, description, caseAttribute,
                 casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList);
         return mRepositoryManager.obtainRetrofitService(AppService.class).addOrUpdateCaseInfo(requestBody);
+    }
+
+    @Override
+    public Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).uploadFile(parts);
     }
 }

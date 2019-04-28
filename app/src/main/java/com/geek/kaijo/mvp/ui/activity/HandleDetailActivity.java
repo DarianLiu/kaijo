@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Gravity;
@@ -13,14 +15,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.Utils.FileSizeUtil;
 import com.geek.kaijo.di.component.DaggerHandleDetailComponent;
 import com.geek.kaijo.di.module.HandleDetailModule;
 import com.geek.kaijo.mvp.contract.HandleDetailContract;
 import com.geek.kaijo.mvp.model.entity.Case;
+import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.presenter.HandleDetailPresenter;
+import com.geek.kaijo.mvp.ui.adapter.UploadPhotoAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,9 +79,15 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     TextView tvSubmit;
     @BindView(R.id.tv_cancel)
     TextView tvCancel;
+    @BindView(R.id.ra_picture_list)
+    RecyclerView raPictureList;
+    private List<UploadFile> uploadPhotoList;
+    private UploadPhotoAdapter adapter1;
 
     private TextView tvImageList;//图片列表提示文字
     int curNode;  //12: 案件处理13: 案件核实14: 案件核查
+    private int isWhich = 0;//1 上传图片  2 上传视频
+
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -108,6 +126,11 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         tvImageList.setTextColor(getResources().getColor(R.color.color_text_black));
         tvImageList.setGravity(Gravity.CENTER);
         llImgList.addView(tvImageList);
+
+        //照片列表
+        raPictureList.setLayoutManager(new LinearLayoutManager(this));
+        raPictureList.setHasFixedSize(true);
+        uploadPhotoList = new ArrayList<>();
     }
 
     @Override
@@ -120,6 +143,40 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 
         tvCaseAddress.setText(Html.fromHtml("<b>地址：</b>" + data.getAddress()));
         tvCaseDescribe.setText(Html.fromHtml("<b>描述：</b>" + data.getDescription()));
+    }
+
+    @Override
+    public void uploadSuccess(UploadFile uploadPhoto) {
+        if (uploadPhoto != null) {
+            switch (isWhich) {
+                case 1: //上传图片
+                    for (int i = 0; i < uploadPhotoList.size(); i++) {
+                        if (uploadPhotoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+                            uploadPhotoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
+                            uploadPhotoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+                            uploadPhotoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            uploadPhotoList.get(i).whenType = 2;
+                            uploadPhotoList.get(i).fileType = 0;
+                            adapter1.notifyItemChanged(i);
+                        }
+                    }
+                    break;
+                case 2: //上传视频
+//                    for (int i = 0; i < uploadVideoList.size(); i++) {
+//                        if (uploadVideoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+//                            uploadVideoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
+//                            uploadVideoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+//                            uploadVideoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+//                            uploadVideoList.get(i).whenType = 1;
+//                            uploadVideoList.get(i).fileType = 1;
+//                            adapterVideo.notifyItemChanged(i);
+//                        }
+//                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
@@ -164,6 +221,8 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
             case R.id.tv_View_handle_process://查看处理过程
                 break;
             case R.id.tv_upload_image://上传照片
+                isWhich = 1;
+                pictureSelector();
                 break;
             case R.id.tv_sign_in://签收
                 break;
@@ -171,6 +230,103 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                 break;
             case R.id.tv_cancel://取消
                 break;
+        }
+    }
+
+    /**
+     * 头像选择 PictureSelector
+     */
+    private void pictureSelector() {
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .imageSpanCount(4)
+                .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
+                .previewImage(false)
+                .isCamera(true)
+                .enableCrop(false)
+                .compress(true)
+                .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
+                .minimumCompressSize(100)
+                .withAspectRatio(1, 1)
+                .showCropFrame(true)
+                .rotateEnabled(true)
+                .isDragFrame(true)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
+    }
+
+    //图片列表
+    private void recyclerViewAdapter1() {
+        if (adapter1 == null) {
+            adapter1 = new UploadPhotoAdapter(this, uploadPhotoList);
+            raPictureList.setAdapter(adapter1);
+        } else {
+            adapter1.notifyChanged(uploadPhotoList);
+        }
+        adapter1.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
+            @Override
+            public void onItemDeleteClick(View v, int position) {
+                if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
+                    uploadPhotoList.remove(position);
+                    adapter1.notifyDataSetChanged();
+                } else if (uploadPhotoList.get(position).getIsSuccess() == 0) {
+
+                } else { //上传失败 重新上传
+                    if (mPresenter != null) {
+                        mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == 1) {
+            finish();
+        }
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    for (LocalMedia media : selectList) {
+                        // 1.media.getPath(); 为原图path
+                        // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
+                        // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
+                        switch (isWhich) {
+                            case 1:
+                                String compressedPath = media.getCompressPath();
+                                UploadFile uploadPhoto1 = new UploadFile();
+                                uploadPhoto1.setFileName(compressedPath);
+                                String size1 = FileSizeUtil.getAutoFileOrFilesSize(uploadPhoto1.getFileName());
+                                uploadPhoto1.setFileSize(size1);
+                                uploadPhotoList.add(uploadPhoto1);
+                                recyclerViewAdapter1();
+                                if (mPresenter != null) {
+                                    mPresenter.uploadFile(compressedPath);
+                                }
+                                break;
+                            case 2:
+//                                String path = media.getPath();
+//                                UploadFile uploadFile5 = new UploadFile();
+//                                uploadFile5.setFileName(path);
+//                                String size5 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile5.getFileName());
+//                                uploadFile5.setFileSize(size5);
+//                                uploadVideoList.add(uploadFile5);
+//                                recyclerViewAdapter_video();
+//                                if (mPresenter != null) {
+//                                    mPresenter.uploadFile(path);
+//                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
