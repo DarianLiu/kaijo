@@ -45,8 +45,8 @@ public class HandleDetailModel extends BaseModel implements HandleDetailContract
     }
 
     @Override
-    public Observable<BaseResult<Case>> findCaseInfoByMap(String caseId, String caseAttribute) {
-        return mRepositoryManager.obtainRetrofitService(AppService.class).findCaseInfoByMap(caseId, caseAttribute);
+    public Observable<BaseResult<Case>> findCaseInfoByMap(String caseId, String caseAttribute, String userId) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).findCaseInfoByMap(caseId, caseAttribute,userId);
     }
 
     @Override
@@ -60,6 +60,13 @@ public class HandleDetailModel extends BaseModel implements HandleDetailContract
                 communityId, gridId, lat, lng, source, address, description, caseAttribute,
                 casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList);
         return mRepositoryManager.obtainRetrofitService(AppService.class).addOrUpdateCaseInfo(requestBody);
+    }
+
+    @Override
+    public Observable<BaseResult<CaseInfo>> addOperate(String userId, String label, String content, String formId, String processId, String curNode, String nextUserId, String firstWorkunit, List<UploadFile> uploadPhotoList) {
+        RequestBody requestBody = RequestParamUtils.addOperate(userId,label, content,
+                formId, processId, curNode, nextUserId, firstWorkunit,uploadPhotoList);
+        return mRepositoryManager.obtainRetrofitService(AppService.class).addOperate(requestBody);
     }
 
     @Override

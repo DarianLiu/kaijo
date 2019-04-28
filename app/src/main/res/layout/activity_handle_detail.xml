@@ -164,8 +164,55 @@
                 android:text="@string/btn_view_handle_process"
                 android:textColor="@color/color_text_title"
                 android:textSize="@dimen/t16" />
+            <!-- 核查-->
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:background="@color/color_comment_background"
+                android:visibility="gone">
+                <RadioButton
+                    android:id="@+id/ok_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="核查通过（下一步：结案审批）"/>
+                <RadioButton
+                    android:id="@+id/no_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="核查不通过（下一步：处理）"/>
+            </RadioGroup>
 
-            <TextView
+            <!-- 核实-->
+            <RadioButton
+                android:id="@+id/true_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已核实（下一步：区下发）"
+                android:visibility="gone"/>
+
+            <!-- 处理-->
+            <RadioGroup
+                android:id="@+id/handle_radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:background="@color/color_comment_background"
+                android:visibility="gone">
+                <RadioButton
+                    android:id="@+id/handle_true_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="处理（下一步：核查）"/>
+                <RadioButton
+                    android:id="@+id/handle_back_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="处理退回"/>
+            </RadioGroup>
+
+            <!--<TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/color_comment_background"
@@ -173,9 +220,9 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="10dp"
-                android:text="处理（下一步：结案审批）"
+                android:text="已核实（下一步：区下发）"
                 android:textColor="@color/color_text_title"
-                android:textSize="@dimen/t14" />
+                android:textSize="@dimen/t14" />-->
 
             <EditText
                 android:id="@+id/et_situation_description"
@@ -193,9 +240,24 @@
                 android:paddingTop="10dp"
                 android:textColor="@color/color_text_title"
                 android:textColorHint="@color/color_text_hint"
-                android:textSize="@dimen/t14" />
+                android:textSize="@dimen/t14"
+                android:maxLength="500"/>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="给处理人员评分"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"/>
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    />
+
+            <!--<TextView
                 android:id="@+id/tv_upload_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -215,12 +277,90 @@
                 android:gravity="center"
                 android:background="@color/color_comment_background"
                 android:orientation="vertical"
-                android:padding="15dp" />
+                android:padding="15dp" />-->
+            <!--上传图片-->
+            <TextView
+                android:id="@+id/tv_upload_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/shape_btn_bg_blue"
+                android:paddingLeft="10dp"
+                android:paddingTop="8dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="8dp"
+                android:text="@string/btn_submit_pic"
+                android:textColor="@color/color_title_text"
+                android:textSize="@dimen/t14" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_text_tip" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="照片列表"
+                android:textColor="@color/color_text_black"
+                android:textSize="@dimen/t14" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ra_picture_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_text_tip" />
+            <!--上传视频-->
+            <TextView
+                android:id="@+id/ra_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/shape_btn_bg_blue"
+                android:paddingLeft="10dp"
+                android:paddingTop="8dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="8dp"
+                android:text="@string/btn_submit_video"
+                android:textColor="@color/color_title_text"
+                android:textSize="@dimen/t14" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_text_tip" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="视频列表"
+                android:textColor="@color/color_text_black"
+                android:textSize="@dimen/t14" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ra_video_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_text_tip" />
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -241,7 +381,8 @@
                     android:paddingTop="8dp"
                     android:text="@string/btn_sign_in"
                     android:textColor="@color/color_title_text"
-                    android:textSize="@dimen/t16" />
+                    android:textSize="@dimen/t16"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tv_submit"

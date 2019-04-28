@@ -48,10 +48,6 @@ public class RequestParamUtils {
         jsonObject.addProperty("handleType", handleType);
         jsonObject.addProperty("whenType", whenType);
         jsonObject.addProperty("caseProcessRecordID", caseProcessRecordID);
-//        for(int i=0;i<uploadPhotoList.size();i++){
-//            uploadPhotoList.get(i).whenType = Integer.parseInt(whenType);
-//            uploadPhotoList.get(i).fileType = Integer.parseInt(whenType);
-//        }
         jsonObject.add("attachList", new Gson().toJsonTree(uploadPhotoList));
 
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
@@ -133,6 +129,26 @@ public class RequestParamUtils {
         jsonObject.addProperty("categoryId", categoryId);
         jsonObject.addProperty("currPage", currPage);
         jsonObject.addProperty("pageSize", pageSize);
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+
+    /**
+     * 案件处理提交
+     */
+    public static RequestBody addOperate(String userId, String label, String content, String formId, String processId, String curNode, String nextUserId, String firstWorkunit, List<UploadFile> uploadPhotoList) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userId", userId);
+        jsonObject.addProperty("label", label);
+        jsonObject.addProperty("content", content);
+        jsonObject.addProperty("formId", formId);
+        jsonObject.addProperty("processId", processId);
+        jsonObject.addProperty("curNode", curNode);
+        jsonObject.addProperty("nextUserId", nextUserId);
+        jsonObject.addProperty("firstWorkunit", firstWorkunit);
+        jsonObject.add("attachList", new Gson().toJsonTree(uploadPhotoList));
+
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
     }

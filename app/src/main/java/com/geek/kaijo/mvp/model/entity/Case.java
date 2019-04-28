@@ -26,6 +26,10 @@ public class Case {
     private String caseCode;
     private List<Attach> attachList;
 
+    private String processId;
+    private String userId;
+    private String firstWorkunit;
+
     public String getCaseId() {
         return caseId;
     }
@@ -152,5 +156,29 @@ public class Case {
 
     public List<Attach> getAttachList() {
         return attachList;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getFirstWorkunit() {
+        return firstWorkunit;
+    }
+
+    public void setFirstWorkunit(String firstWorkunit) {
+        this.firstWorkunit = firstWorkunit;
     }
 }

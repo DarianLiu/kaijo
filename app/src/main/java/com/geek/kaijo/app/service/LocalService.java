@@ -61,13 +61,11 @@ public class LocalService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
 //        getGpsLocation();
         initLocation();
         mClient.start();
         myHandler = new MyHandler(this);
         myHandler.sendEmptyMessageDelayed(1, 3000);
-
     }
 
     @Override
@@ -229,7 +227,7 @@ public class LocalService extends Service {
                     sendEmptyMessageDelayed(1, 60000); //1分钟 上传一次经纬度
                     break;
                 case 0x1233:
-//                    Toast.makeText(weakActivity.getApplicationContext(),"上传位置信息：经度="+weakActivity.longitude+"纬度="+weakActivity.latitude,Toast.LENGTH_LONG).show();
+                    Toast.makeText(weakActivity.getApplicationContext(),"上传位置信息：经度="+weakActivity.longitude+"纬度="+weakActivity.latitude,Toast.LENGTH_LONG).show();
 
                     break;
             }

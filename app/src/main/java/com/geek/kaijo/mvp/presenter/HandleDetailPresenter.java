@@ -49,8 +49,8 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
      * @param caseId        案件ID
      * @param caseAttribute 案件类型
      */
-    public void findCaseInfoByMap(String caseId, String caseAttribute) {
-        mModel.findCaseInfoByMap(caseId, caseAttribute).compose(RxUtils.applySchedulers(mRootView))
+    public void findCaseInfoByMap(String caseId, String caseAttribute,String userId) {
+        mModel.findCaseInfoByMap(caseId, caseAttribute,userId).compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<Case>(mErrorHandler) {
                     @Override
@@ -98,6 +98,35 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
                     }
                 });
     }
+
+
+    /**
+     * 提交案件信息
+     */
+    public void addOperate(String userId,String label, String content, String formId,
+                                    String processId, String curNode, String nextUserId, String firstWorkunit,
+                                    List<UploadFile> uploadPhotoList) {
+        mModel.addOperate(userId,label, content, formId, processId, curNode, nextUserId, firstWorkunit,
+                uploadPhotoList)
+                .compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.handleBaseResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {
+                    @Override
+                    public void onNext(CaseInfo caseInfoEntity) {
+//                        Intent intent = new Intent(mAppManager.getTopActivity(), UploadActivity.class);
+//                        intent.putExtra("case_id", caseInfoEntity.getCaseId());
+//                        mRootView.launchActivity(intent);
+//                        mRootView.killMyself();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        mRootView.killMyself();
+                    }
+                });
+    }
+
 
     /**
      * 上传图片 单张图片

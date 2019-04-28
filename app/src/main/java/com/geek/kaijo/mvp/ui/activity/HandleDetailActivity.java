@@ -4,28 +4,38 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.FileSizeUtil;
+import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerHandleDetailComponent;
 import com.geek.kaijo.di.module.HandleDetailModule;
 import com.geek.kaijo.mvp.contract.HandleDetailContract;
 import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.HandleDetailPresenter;
 import com.geek.kaijo.mvp.ui.adapter.UploadPhotoAdapter;
+import com.geek.kaijo.mvp.ui.adapter.UploadVideoAdapter;
+import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DataHelper;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -71,8 +81,8 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     EditText etSituationDescription;
     @BindView(R.id.tv_upload_image)
     TextView tvUploadImage;
-    @BindView(R.id.ll_img_list)
-    LinearLayout llImgList;
+//    @BindView(R.id.ll_img_list)
+//    LinearLayout llImgList;
     @BindView(R.id.tv_sign_in)
     TextView tvSignIn;
     @BindView(R.id.tv_submit)
@@ -81,13 +91,37 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     TextView tvCancel;
     @BindView(R.id.ra_picture_list)
     RecyclerView raPictureList;
+    @BindView(R.id.ra_video_list)
+    RecyclerView raVideoList;
+    /*核查*/
+    @BindView(R.id.radioGroup)
+    RadioGroup radioGroup;
+    @BindView(R.id.ok_radio)
+    RadioButton ok_radio;
+    @BindView(R.id.no_radio)
+    RadioButton no_radio;
+    /*核实*/
+    @BindView(R.id.true_radio)
+    RadioButton true_radio;
+    /*处理*/
+    @BindView(R.id.handle_radioGroup)
+    RadioGroup handle_radioGroup;
+    @BindView(R.id.handle_true_radio)
+    RadioButton handle_true_radio;
+    @BindView(R.id.handle_back_radio)
+    RadioButton handle_back_radio;
+
     private List<UploadFile> uploadPhotoList;
+    private List<UploadFile> uploadVideoList;
     private UploadPhotoAdapter adapter1;
+    private UploadVideoAdapter adapterVideo;
 
     private TextView tvImageList;//图片列表提示文字
     int curNode;  //12: 案件处理13: 案件核实14: 案件核查
     private int isWhich = 0;//1 上传图片  2 上传视频
-
+    private Case aCase;
+    private UserInfo userInfo;
+    private LoadingProgressDialog loadingDialog;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -109,32 +143,46 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         curNode = getIntent().getIntExtra("curNode", 0);
         String caseId = getIntent().getStringExtra("case_id");
         String caseAttribute = getIntent().getStringExtra("case_attribute");
-        if (mPresenter != null) {
-            mPresenter.findCaseInfoByMap(caseId, caseAttribute);
+        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        if (mPresenter != null && userInfo!=null) {
+            mPresenter.findCaseInfoByMap(caseId, caseAttribute,userInfo.getUserId());
         }
         if(curNode==12){
             tvToolbarTitle.setText("处理详情页");
+            handle_radioGroup.setVisibility(View.VISIBLE);
         }else if(curNode==13){
             tvToolbarTitle.setText("核实详情页");
+            true_radio.setVisibility(View.VISIBLE);
         }else if(curNode==14){
             tvToolbarTitle.setText("核查详情页");
+            radioGroup.setVisibility(View.VISIBLE);
         }
 
-        tvImageList = new TextView(this);
+        /*tvImageList = new TextView(this);
         tvImageList.setText("照片列表");
         tvImageList.setTextSize(18);
         tvImageList.setTextColor(getResources().getColor(R.color.color_text_black));
         tvImageList.setGravity(Gravity.CENTER);
-        llImgList.addView(tvImageList);
+        llImgList.addView(tvImageList);*/
 
         //照片列表
         raPictureList.setLayoutManager(new LinearLayoutManager(this));
         raPictureList.setHasFixedSize(true);
         uploadPhotoList = new ArrayList<>();
+
+        //视频列表
+        DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        LinearLayoutManager layoutManager_video_later = new LinearLayoutManager(this);
+        raVideoList.addItemDecoration(divider);
+        raVideoList.setLayoutManager(layoutManager_video_later);
+
+        uploadVideoList = new ArrayList<>();
+
     }
 
     @Override
     public void updateView(Case data) {
+        this.aCase = data;
         tvCaseAttribute.setText(Html.fromHtml("<b>案件属性：</b>" + data.getCasePrimaryCategory()));
         tvCategoryLarge.setText(Html.fromHtml("<b>大类：</b>" + data.getCasePrimaryCategory()));
         tvCategorySmall.setText(Html.fromHtml("<b>小类：</b>" + data.getCaseSecondaryCategory()));
@@ -162,16 +210,16 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                     }
                     break;
                 case 2: //上传视频
-//                    for (int i = 0; i < uploadVideoList.size(); i++) {
-//                        if (uploadVideoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
-//                            uploadVideoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
-//                            uploadVideoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
-//                            uploadVideoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
-//                            uploadVideoList.get(i).whenType = 1;
-//                            uploadVideoList.get(i).fileType = 1;
-//                            adapterVideo.notifyItemChanged(i);
-//                        }
-//                    }
+                    for (int i = 0; i < uploadVideoList.size(); i++) {
+                        if (uploadVideoList.get(i).getFileName().equals(uploadPhoto.getFileName())) {
+                            uploadVideoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
+                            uploadVideoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
+                            uploadVideoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
+                            uploadVideoList.get(i).whenType = 2;
+                            uploadVideoList.get(i).fileType = 1;
+                            adapterVideo.notifyItemChanged(i);
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -181,12 +229,18 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 
     @Override
     public void showLoading() {
-
+        if (loadingDialog == null)
+            loadingDialog = new LoadingProgressDialog.Builder(this)
+                    .setCancelable(true)
+                    .setCancelOutside(true).create();
+        if (!loadingDialog.isShowing())
+            loadingDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (loadingDialog != null && loadingDialog.isShowing())
+            loadingDialog.dismiss();
     }
 
     @Override
@@ -203,7 +257,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 
     @Override
     protected void onDestroy() {
-        llImgList.removeAllViews();
+//        llImgList.removeAllViews();
         super.onDestroy();
         tvImageList = null;
     }
@@ -213,10 +267,14 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         finish();
     }
 
-    @OnClick({R.id.tv_view_location, R.id.tv_View_handle_process, R.id.tv_upload_image, R.id.tv_sign_in, R.id.tv_submit, R.id.tv_cancel})
+    @OnClick({R.id.tv_view_location, R.id.tv_View_handle_process, R.id.tv_upload_image, R.id.tv_sign_in, R.id.tv_submit, R.id.tv_cancel,R.id.ra_video})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_view_location://查看坐标
+                Intent intent = new Intent(this, MapActivity.class);
+//                intent.putExtra("lat", aCase.);
+//                intent.putExtra("lng", mLng);
+                launchActivity(intent);
                 break;
             case R.id.tv_View_handle_process://查看处理过程
                 break;
@@ -224,11 +282,34 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                 isWhich = 1;
                 pictureSelector();
                 break;
+            case R.id.ra_video://上传视频
+                isWhich = 2;
+                videoSelector();
+                break;
             case R.id.tv_sign_in://签收
                 break;
             case R.id.tv_submit://提交
+                if(TextUtils.isEmpty(etSituationDescription.getText().toString())){
+                    Toast.makeText(this,"描述情况不能为空",Toast.LENGTH_LONG).show();
+                    return;
+                }else{
+                    if(userInfo!=null && aCase!=null){
+                        List<UploadFile> uploadFileList = new ArrayList<>();
+                        uploadFileList.addAll(uploadPhotoList);
+                        uploadFileList.addAll(uploadVideoList);
+                        String label="";
+                        if(radioGroup.getCheckedRadioButtonId()==ok_radio.getId()){ //审核通过
+                            label = ok_radio.getText().toString();
+                        }else if(radioGroup.getCheckedRadioButtonId()==no_radio.getId()) { //审核不通过
+                            label = no_radio.getText().toString();
+                        }
+                        mPresenter.addOperate(userInfo.getUserId(),label,etSituationDescription.getText().toString(),aCase.getCaseId(),aCase.getProcessId(),curNode+"",aCase.getUserId(),aCase.getFirstWorkunit(),uploadFileList);
+                    }
+                }
+
                 break;
             case R.id.tv_cancel://取消
+                this.finish();
                 break;
         }
     }
@@ -253,6 +334,20 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                 .isDragFrame(true)
                 .forResult(PictureConfig.CHOOSE_REQUEST);
     }
+    /**
+     * 视频选择
+     */
+    private void videoSelector() {
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofVideo())
+                .selectionMode(PictureConfig.SINGLE)
+                .previewVideo(true)
+                .compress(true)
+                .videoQuality(0)
+                .videoMaxSecond(60)
+                .videoMinSecond(1)
+                .forResult(PictureConfig.CHOOSE_REQUEST);
+    }
 
     //图片列表
     private void recyclerViewAdapter1() {
@@ -273,6 +368,31 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                 } else { //上传失败 重新上传
                     if (mPresenter != null) {
                         mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    }
+                }
+            }
+        });
+    }
+
+    //视频
+    private void recyclerViewAdapter_video() {
+        if (adapterVideo == null) {
+            adapterVideo = new UploadVideoAdapter(this, uploadVideoList);
+            raVideoList.setAdapter(adapterVideo);
+        } else {
+            adapterVideo.notifyDataSetChanged();
+        }
+        adapterVideo.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
+            @Override
+            public void onItemDeleteClick(View v, int position) {
+                if (uploadVideoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
+                    uploadVideoList.remove(position);
+                    adapterVideo.notifyDataSetChanged();
+                } else if (uploadVideoList.get(position).getIsSuccess() == 0) {
+
+                } else { //上传失败 重新上传
+                    if (mPresenter != null) {
+                        mPresenter.uploadFile(uploadVideoList.get(position).getFileName());
                     }
                 }
             }
@@ -308,16 +428,16 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                                 }
                                 break;
                             case 2:
-//                                String path = media.getPath();
-//                                UploadFile uploadFile5 = new UploadFile();
-//                                uploadFile5.setFileName(path);
-//                                String size5 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile5.getFileName());
-//                                uploadFile5.setFileSize(size5);
-//                                uploadVideoList.add(uploadFile5);
-//                                recyclerViewAdapter_video();
-//                                if (mPresenter != null) {
-//                                    mPresenter.uploadFile(path);
-//                                }
+                                String path = media.getPath();
+                                UploadFile uploadFile5 = new UploadFile();
+                                uploadFile5.setFileName(path);
+                                String size5 = FileSizeUtil.getAutoFileOrFilesSize(uploadFile5.getFileName());
+                                uploadFile5.setFileSize(size5);
+                                uploadVideoList.add(uploadFile5);
+                                recyclerViewAdapter_video();
+                                if (mPresenter != null) {
+                                    mPresenter.uploadFile(path);
+                                }
                                 break;
                             default:
                                 break;

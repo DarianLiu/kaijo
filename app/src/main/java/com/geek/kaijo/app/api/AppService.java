@@ -144,7 +144,7 @@ public interface AppService {
     @NonNull
     @Headers({DOMAIN_NAME_HEADER + Api.USER_DOMAIN_NAME})
     @POST(" /case/findCaseInfoByMap.json")
-    Observable<BaseResult<Case>> findCaseInfoByMap(@Query("caseId") String caseId, @Query("caseAttribute") String caseAttribute);
+    Observable<BaseResult<Case>> findCaseInfoByMap(@Query("caseId") String caseId, @Query("caseAttribute") String caseAttribute,@Query("userId")String userId);
 
     /**
      * 文件上传(8088端口)
@@ -257,4 +257,10 @@ public interface AppService {
 //    @POST("/grid/findCoordinateListByGridId.json")
 //    Observable<BaseResult<UserInfo>> findCoordinateListByGridId(@Query("gridId") String gridId);
 
+    /**
+        提交
+     */
+    @NonNull
+    @POST("/case/addOperate.json")
+    Observable<BaseResult<CaseInfo>> addOperate(@Body RequestBody body);
 }

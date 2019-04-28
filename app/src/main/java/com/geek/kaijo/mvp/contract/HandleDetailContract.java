@@ -22,7 +22,7 @@ public interface HandleDetailContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<BaseResult<Case>> findCaseInfoByMap(String caseId, String caseAttribute);
+        Observable<BaseResult<Case>> findCaseInfoByMap(String caseId, String caseAttribute,String userId);
 
         Observable<BaseResult<CaseInfo>> addOrUpdateCaseInfo(String userId,String acceptDate, String streetId, String communityId,
                                                              String gridId, String lat, String lng, String source,
@@ -30,6 +30,24 @@ public interface HandleDetailContract {
                                                              String casePrimaryCategory, String caseSecondaryCategory,
                                                              String caseChildCategory, String handleType, String whenType,
                                                              String caseProcessRecordID,List<UploadFile> uploadPhotoList);
+
+
+        /**
+         * 案件处理提交
+         * @param userId
+         * @param label
+         * @param content
+         * @param formId
+         * @param processId
+         * @param curNode
+         * @param nextUserId
+         * @param firstWorkunit
+         * @param uploadPhotoList
+         * @return
+         */
+        Observable<BaseResult<CaseInfo>> addOperate(String userId,String label, String content, String formId,
+                                                             String processId, String curNode, String nextUserId, String firstWorkunit,
+                                                            List<UploadFile> uploadPhotoList);
         Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);
     }
 }

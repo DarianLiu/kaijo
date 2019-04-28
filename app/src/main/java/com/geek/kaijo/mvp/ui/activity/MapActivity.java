@@ -328,8 +328,8 @@ public class MapActivity extends AppCompatActivity {
                 LatLng latLng = new LatLng(gridBorderList.get(i).getLat(),gridBorderList.get(i).getLng());
                 polylineOptions.add(latLng);
             }
-//            polylineOptions.width(55);
-//            polylineOptions.color(getResources().getColor(R.color.blue));
+            polylineOptions.width(5);
+            polylineOptions.color(getResources().getColor(R.color.blue));
             if(mMap!=null){
                 mMap.addPolyline(polylineOptions);
             }
