@@ -119,13 +119,6 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
 //                        mRootView.killMyself();
                         mRootView.httpCommitSuccess();
                     }
-
-                    @Override
-                    public void onComplete() {
-                        super.onComplete();
-
-                        mRootView.killMyself();
-                    }
                 });
     }
 

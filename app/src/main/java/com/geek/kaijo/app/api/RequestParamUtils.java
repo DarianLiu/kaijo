@@ -1,5 +1,7 @@
 package com.geek.kaijo.app.api;
 
+import android.text.TextUtils;
+
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -69,12 +71,21 @@ public class RequestParamUtils {
         if(curNode>0){
             jsonObject.addProperty("curNode", curNode);  //12: 案件处理
         }
-
-        jsonObject.addProperty("caseCode", caseCode);
-        jsonObject.addProperty("caseAttribute", caseAttribute);
-        jsonObject.addProperty("casePrimaryCategory", casePrimaryCategory);
-        jsonObject.addProperty("caseSecondaryCategory", caseSecondaryCategory);
-        jsonObject.addProperty("caseChildCategory", caseChildCategory);
+        if(!TextUtils.isEmpty(caseCode)){
+            jsonObject.addProperty("caseCode", caseCode);
+        }
+        if(!TextUtils.isEmpty(caseAttribute) && !"0".equals(caseAttribute)){
+            jsonObject.addProperty("caseAttribute", caseAttribute);
+        }
+        if(!TextUtils.isEmpty(casePrimaryCategory)){
+            jsonObject.addProperty("casePrimaryCategory", casePrimaryCategory);
+        }
+        if(!TextUtils.isEmpty(caseSecondaryCategory)){
+            jsonObject.addProperty("caseSecondaryCategory", caseSecondaryCategory);
+        }
+        if(!TextUtils.isEmpty(caseChildCategory)){
+            jsonObject.addProperty("caseChildCategory", caseChildCategory);
+        }
 
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));

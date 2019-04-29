@@ -30,6 +30,10 @@ public class InspectionAddPresenter extends BasePresenter<InspectionAddContract.
         super(model, rootView);
     }
 
+    public void findThingListBy(){
+
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

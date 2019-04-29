@@ -1,7 +1,14 @@
 package com.geek.kaijo.mvp.contract;
 
+import com.geek.kaijo.mvp.model.entity.BaseResult;
+import com.geek.kaijo.mvp.model.entity.Case;
+import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.jess.arms.mvp.IView;
 import com.jess.arms.mvp.IModel;
+
+import java.util.List;
+
+import io.reactivex.Observable;
 
 
 public interface InspectionAddContract {
@@ -13,5 +20,7 @@ public interface InspectionAddContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
 
+
+        Observable<BaseResult<List<Inspection>>> findThingListBy(String assortId);
     }
 }

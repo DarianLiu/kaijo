@@ -9,6 +9,7 @@ import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.Grid;
+import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.ServiceBean;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.Street;
@@ -263,4 +264,16 @@ public interface AppService {
     @NonNull
     @POST("/case/addOperate.json")
     Observable<BaseResult<String>> addOperate(@Body RequestBody body);
+
+
+
+    /**
+     * 查询巡查项列表
+     *
+     * @param assortId assortId：巡查项所属分类id, 默认10
+     */
+    @NonNull
+    @POST("/thing/findThingListBy.json")
+    Observable<BaseResult<List<Inspection>>> findThingListBy(@Query("assortId") String assortId);
+
 }
