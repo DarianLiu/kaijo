@@ -7,9 +7,9 @@ public class Inspection {
     private int currPage;
     private int pageSize;
     private int thingId;
-    private String createTime;
+    private long createTime;
     private int createUser;
-    private int modifyTime;
+    private long modifyTime;
     private int modifyUser;
     private int delFlag;
     private double lat;
@@ -50,11 +50,11 @@ public class Inspection {
         this.thingId = thingId;
     }
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(int createTime) {
         this.createTime = createTime;
     }
 
@@ -66,7 +66,7 @@ public class Inspection {
         this.createUser = createUser;
     }
 
-    public int getModifyTime() {
+    public long getModifyTime() {
         return modifyTime;
     }
 

@@ -311,10 +311,14 @@ public class MapActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
-        mMap.clear();
-        mMap = null;
-        handler.removeCallbacksAndMessages(null);
-        handler = null;
+        if(mMap!=null){
+            mMap.clear();
+            mMap = null;
+        }
+        if(handler!=null){
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
+        }
         locParam = null;
     }
 

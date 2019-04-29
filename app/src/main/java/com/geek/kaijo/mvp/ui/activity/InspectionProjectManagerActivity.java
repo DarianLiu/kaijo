@@ -74,7 +74,8 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
         int id = item.getItemId();
 
         if (id == R.id.action_add) {
-            launchActivity(new Intent(this, InspectionAddActivity.class));
+//            launchActivity(new Intent(this, InspectionAddActivity.class));
+            startActivityForResult(new Intent(this, InspectionAddActivity.class),1);
             return true;
         }
 
@@ -205,5 +206,13 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
     public void finishLoadMore() {
         if (smartRefresh != null)
             smartRefresh.finishLoadMore();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==1){
+            smartRefresh.autoRefresh();
+        }
     }
 }

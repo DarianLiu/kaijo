@@ -276,4 +276,25 @@ public interface AppService {
     @POST("/thing/findThingListBy.json")
     Observable<BaseResult<List<Inspection>>> findThingListBy(@Query("assortId") String assortId);
 
+
+    /*@NonNull
+    @POST("/thing/addOrUpdateThingPosition.json")
+    Observable<BaseResult<Inspection>> addOrUpdateThingPosition(@Query("thingId") int thingId,
+                                                                      @Query("name") String name,
+                                                                      @Query("lat") Double lat,
+                                                                      @Query("lng") Double lng,
+                                                                      @Query("streetId") int streetId,
+                                                                      @Query("communityId") int communityId,
+                                                                      @Query("gridId") int gridId,
+                                                                      @Query("createUser") String createUser);
+    */
+    /**
+     * 添加巡查项
+     *
+     *
+     */
+    @NonNull
+    @POST("/thing/addOrUpdateThingPosition.json")
+    Observable<BaseResult<Inspection>> addOrUpdateThingPosition(@Body RequestBody body);
+
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,36 +9,42 @@
     android:background="@color/color_main_background"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <include layout="@layout/include_toolbar" />
+    <include layout="@layout/include_toolbar" />
 
-        <TextView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="巡查选择项"
-            android:textColor="@color/black"
-            android:padding="15dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_color"/>
+            android:orientation="vertical">
 
-        <!--<include layout="@layout/include_refresh_recycler" />-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="巡查选择项"
+                android:textColor="@color/black"
+                android:padding="15dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/line_color"/>
 
-        <com.geek.kaijo.view.FlowRadioGroup
-            android:id="@+id/flowRadioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            >
+            <!--<include layout="@layout/include_refresh_recycler" />-->
 
-        </com.geek.kaijo.view.FlowRadioGroup>
+            <com.geek.kaijo.view.FlowRadioGroup
+                android:id="@+id/flowRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                >
 
-    </LinearLayout>
+            </com.geek.kaijo.view.FlowRadioGroup>
+
+        </LinearLayout>
+    </ScrollView>
 
 
 
-</ScrollView>
+
+</LinearLayout>

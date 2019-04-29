@@ -30,6 +30,8 @@ public class Case {
     private String userId;
     private String firstWorkunit;
     private List<ButtonLabel> buttonList;
+    private Double lat;
+    private Double lng;
 
     public String getCaseId() {
         return caseId;
@@ -189,5 +191,21 @@ public class Case {
 
     public void setButtonList(List<ButtonLabel> buttonList) {
         this.buttonList = buttonList;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 }

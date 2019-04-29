@@ -213,7 +213,9 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             mTimePickerPopupWindow = null;
         }
         super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
+        if(handler!=null){
+            handler.removeCallbacksAndMessages(null);
+        }
         handler = null;
         locParam = null;
     }
