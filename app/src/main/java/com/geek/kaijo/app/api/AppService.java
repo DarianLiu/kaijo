@@ -186,6 +186,13 @@ public interface AppService {
     Observable<BaseResult<BaseArrayResult<Thing>>> findAllThingList(@Query("currPage") int currPage, @Query("pageSize") int pageSize);
 
     /**
+     * 查询所有的巡查项目(8763端口)
+     */
+    @NonNull
+    @POST("/thing/findThingPositionPage.json")
+    Observable<BaseResult<BaseArrayResult<Inspection>>> findThingPositionListPage(@Query("thingType") int thingType,@Query("name") String name);
+
+    /**
      * 添加或修改巡查项目(8763端口)
      */
     @NonNull
@@ -197,10 +204,8 @@ public interface AppService {
      * 删除巡查项目(8763端口)
      */
     @NonNull
-    @Headers({DOMAIN_NAME_HEADER + Api.USER_DOMAIN_NAME})
-    @POST("/thing/delThing.json")
-    Observable<BaseResult<Thing>> delThings(@Query("thingIds") String thingIds);
-
+    @POST("/thing/delThingPosition.json")
+    Observable<BaseResult<Thing>> delThings(@Query("thingPositionIds") String thingIds);
 
     /**
      * 惠民服务 -获取文章列表接口(8766端口)

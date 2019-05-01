@@ -236,7 +236,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                             uploadPhotoList.get(i).setFileDomain(uploadPhoto.getFileDomain());
                             uploadPhotoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
                             uploadPhotoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
-                            uploadVideoList.get(i).caseProcessRecordId = curNode;
+                            uploadPhotoList.get(i).caseProcessRecordId = curNode;
                             uploadPhotoList.get(i).whenType = 2;
                             uploadPhotoList.get(i).fileType = 0;
                             adapter1.notifyItemChanged(i);

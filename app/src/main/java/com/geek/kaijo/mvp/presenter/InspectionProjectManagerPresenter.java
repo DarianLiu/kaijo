@@ -5,6 +5,7 @@ import android.app.Application;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.InspectionProjectManagerContract;
 import com.geek.kaijo.mvp.model.entity.BaseArrayResult;
+import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.Thing;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -46,7 +47,7 @@ public class InspectionProjectManagerPresenter extends BasePresenter<InspectionP
      * @param isRefresh 是否刷新
      */
     public void getInspectionProjectList(boolean isRefresh) {
-        mModel.findAllThingList(currPage + 1, pageSize)
+        mModel.findThingPositionListPage(1,"")
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -58,9 +59,9 @@ public class InspectionProjectManagerPresenter extends BasePresenter<InspectionP
                     }
                 }).compose(RxLifecycleUtils.bindToLifecycle(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
-                .subscribeWith(new ErrorHandleSubscriber<BaseArrayResult<Thing>>(mErrorHandler) {
+                .subscribeWith(new ErrorHandleSubscriber<BaseArrayResult<Inspection>>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseArrayResult<Thing> arrayResult) {
+                    public void onNext(BaseArrayResult<Inspection> arrayResult) {
                         if (arrayResult.getRecords().size() > 0) {
                             currPage = isRefresh ? 0 : currPage++;
                         }
@@ -80,6 +81,12 @@ public class InspectionProjectManagerPresenter extends BasePresenter<InspectionP
                 .subscribeWith(new ErrorHandleSubscriber<Thing>(mErrorHandler) {
                     @Override
                     public void onNext(Thing thing) {
+//                        mRootView.delThings(positions);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
                         mRootView.delThings(positions);
                     }
                 });

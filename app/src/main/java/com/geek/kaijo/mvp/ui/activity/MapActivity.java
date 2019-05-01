@@ -3,6 +3,7 @@ package com.geek.kaijo.mvp.ui.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +11,9 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.json.JSONArray;
@@ -82,6 +86,7 @@ public class MapActivity extends AppCompatActivity {
     private MessageHandler handler;
     private UserInfo userInfo;
     private double lngDefault = 116.486073, latDefaut = 40.000565;  //定位失败 默认显示点
+    private String MAP_LOOK;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,22 +96,28 @@ public class MapActivity extends AppCompatActivity {
         mMapView.onCreate(savedInstanceState);
         btnSure = findViewById(R.id.btn_sure);
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        lng = getIntent().getDoubleExtra("lng", 0);
+        lat = getIntent().getDoubleExtra("lat", 0);
+        MAP_LOOK = getIntent().getStringExtra(Constant.MAP_LOOK);
 
+        if(!TextUtils.isEmpty(MAP_LOOK)){
+            btnSure.setVisibility(View.GONE);
+        }
 
         initLocation();
         initMap();
         handler = new MessageHandler();
         btnSure.setOnClickListener(v -> {
-            LocationEvent event = new LocationEvent();
-            event.setLat(lat);
-            event.setLng(lng);
-            EventBus.getDefault().post(event, "location");
+//            LocationEvent event = new LocationEvent();
+//            event.setLat(lat);
+//            event.setLng(lng);
+//            EventBus.getDefault().post(event, "location");
+            Intent intent = new Intent();
+            intent.putExtra("lng",lng);
+            intent.putExtra("lat",lat);
+            setResult(Constant.MAP_REQUEST_CODE,intent);
             finish();
         });
-
-
-        lng = getIntent().getDoubleExtra("lng", 0);
-        lat = getIntent().getDoubleExtra("lat", 0);
 
         if (lng == 0 || lat == 0) {  //定位失败  显示默认位置
             checkPermissionAndAction();
@@ -149,7 +160,9 @@ public class MapActivity extends AppCompatActivity {
         mMap.setOnMapClickListener(new Map.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                Timber.d("=====onMapClick " + "lat: " + latLng.latitude + "lng: " + latLng.longitude);
+//                Timber.d("=====onMapClick " + "lat: " + latLng.latitude + "lng: " + latLng.longitude);
+                lng = latLng.longitude;
+                lat = latLng.latitude;
                 if(marker!=null){
                     marker.setPosition(new LatLng(latLng.latitude, latLng.longitude));
                 }
@@ -170,6 +183,7 @@ public class MapActivity extends AppCompatActivity {
             public void onMarkerDragEnd(Marker marker) {
                 lng = marker.getPosition().longitude;
                 lat = marker.getPosition().latitude;
+                Log.i(this.getClass().getName(),"地图移动位置得到经纬度：lng=="+lng+"lat=="+lat);
             }
         });
     }
@@ -320,6 +334,7 @@ public class MapActivity extends AppCompatActivity {
             handler = null;
         }
         locParam = null;
+//        EventBus.getDefault().unregister(this);
     }
 
     /**

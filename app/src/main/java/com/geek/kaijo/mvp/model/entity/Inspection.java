@@ -1,9 +1,11 @@
 package com.geek.kaijo.mvp.model.entity;
 
+import java.io.Serializable;
+
 /**
  * 巡查项
  */
-public class Inspection {
+public class Inspection implements Serializable{
     private int currPage;
     private int pageSize;
     private int thingId;
@@ -25,6 +27,7 @@ public class Inspection {
     private String checkScheme;
     private String checkSchemeUrl;
     private String totalCount;
+    public int radioState;
 
     public int getCurrPage() {
         return currPage;

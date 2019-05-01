@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.Thing;
 import com.geek.kaijo.mvp.model.event.ThingEvent;
 import com.jess.arms.base.BaseHolder;
@@ -18,7 +19,7 @@ import butterknife.ButterKnife;
  * Created by LiuLi on 2018/11/6.
  */
 
-public class ThingManagerItemHolder extends BaseHolder<Thing> {
+public class ThingManagerItemHolder extends BaseHolder<Inspection> {
 
     @BindView(R.id.tv_thing_name)
     TextView tvThingName;
@@ -42,7 +43,7 @@ public class ThingManagerItemHolder extends BaseHolder<Thing> {
 
 
     @Override
-    public void setData(Thing data, int position) {
+    public void setData(Inspection data, int position) {
         tvThingName.setText(data.getName());
         tvThingRemark.setText(data.getRemark());
         tvThingLng.setText(String.valueOf(data.getLng()));

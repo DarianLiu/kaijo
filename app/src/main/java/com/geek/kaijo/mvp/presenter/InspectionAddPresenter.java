@@ -51,8 +51,8 @@ public class InspectionAddPresenter extends BasePresenter<InspectionAddContract.
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<Inspection>(mErrorHandler) {
                     @Override
-                    public void onNext(Inspection inspectionList) {
-//                        mRootView.httpInspectionSuccess(inspectionList);
+                    public void onNext(Inspection inspection) {
+                        mRootView.httpAddInspectionSuccess(inspection);
                     }
                 });
     }

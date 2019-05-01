@@ -115,6 +115,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
     private int caseId;
     private int entry_type;
     private CaseInfo caseInfo;
+    private boolean pauseCase; //暂存
 
 
     @Override
@@ -135,6 +136,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         entry_type = getIntent().getIntExtra("entry_type", 0);
+        pauseCase = getIntent().getBooleanExtra("pauseCase",false);
 
         //屏蔽7.0中 拍照使用 Uri.fromFile爆出的FileUriExposureException
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -469,6 +471,11 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 }
                 break;
             case R.id.tv_previous_step:
+                if(pauseCase){ //从暂存跳转过来
+                    Intent intent = new Intent(this,ReportActivity.class);
+                    intent.putExtra("caseInfo",caseInfo);
+                    startActivity(intent);
+                }
                 finish();
                 break;
             case R.id.tv_cancel:

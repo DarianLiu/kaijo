@@ -57,7 +57,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FBFFFF"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"
@@ -90,7 +91,8 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@color/color_tab_line" />
+        android:background="@color/color_tab_line"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -212,7 +214,8 @@
                 android:paddingTop="5dp"
                 android:text="编辑"
                 android:textColor="@color/color_text_black"
-                android:textSize="@dimen/t14" />
+                android:textSize="@dimen/t14"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_thing_delete"

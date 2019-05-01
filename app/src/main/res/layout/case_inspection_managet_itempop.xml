@@ -6,40 +6,91 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:background="@color/color_main_background"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp">
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    >
     <include layout="@layout/include_toolbar" />
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/color_main_background">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="巡查选择项"
                 android:textColor="@color/black"
-                android:padding="15dp"/>
+                android:textSize="@dimen/t12"
+                android:paddingLeft="15dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:visibility="visible"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/line_color"/>
+                android:background="@color/line_color"
+                android:visibility="visible"/>
 
-            <!--<include layout="@layout/include_refresh_recycler" />-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:paddingBottom="5dp"/>
 
             <com.geek.kaijo.view.FlowRadioGroup
                 android:id="@+id/flowRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
+                android:visibility="visible"
                 >
 
             </com.geek.kaijo.view.FlowRadioGroup>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp">
+
+                <TextView
+                    android:id="@+id/btn_ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/btn_cancel"
+                    android:layout_toStartOf="@+id/btn_cancel"
+                    android:background="@drawable/shape_btn_bg_blue"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="8dp"
+                    android:text="确定"
+                    android:textColor="@color/color_title_text"
+                    android:textSize="@dimen/t16" />
+
+                <TextView
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/shape_corner_bg_gray"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="8dp"
+                    android:text="取消"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t16" />
+
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>

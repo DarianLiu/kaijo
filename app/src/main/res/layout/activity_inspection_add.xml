@@ -45,7 +45,8 @@
         android:text="备注"
         android:textColor="@color/color_text_black"
         android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/et_thing_remark"
@@ -56,6 +57,7 @@
         android:background="@drawable/selector_frame_background"
         android:gravity="start"
         android:hint="长度少于20字"
+        android:maxLength="20"
         android:inputType="text"
         android:maxLines="3"
         android:minHeight="60dp"
@@ -66,7 +68,8 @@
         android:spinnerMode="dialog"
         android:textColor="@color/color_text_title"
         android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        android:textSize="@dimen/t14"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"

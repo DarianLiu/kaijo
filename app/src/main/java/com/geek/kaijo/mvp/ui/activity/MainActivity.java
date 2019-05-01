@@ -300,7 +300,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
      */
     public void updateUserInfo(UserInfo userInfo) {
         tvUserName.setText(String.format("登录名称：%s", userInfo.getUsername()));
-        tvGridName.setText(String.format("网格名称：%s", userInfo.getGridName()));
+        tvGridName.setText(String.format("网格名称：%s", userInfo.getCommunityName()+" "+userInfo.getGridName()));
     }
 
 //    /**

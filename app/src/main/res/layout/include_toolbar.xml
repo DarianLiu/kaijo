@@ -36,6 +36,7 @@
         android:layout_gravity="end|center_vertical"
         android:maxLines="1"
         android:paddingRight="12dp"
+        android:gravity="center"
         android:textColor="@color/white"
         android:visibility="gone" />
 

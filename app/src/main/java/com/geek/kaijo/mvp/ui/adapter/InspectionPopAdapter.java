@@ -13,7 +13,7 @@ import com.jess.arms.base.DefaultAdapter;
 import java.util.List;
 
 /**
- * 案件适配器
+ * 巡查点适配器
  * Created by LiuLi on 2018/9/8.
  */
 

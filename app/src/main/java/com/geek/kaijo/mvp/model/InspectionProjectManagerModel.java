@@ -5,6 +5,7 @@ import android.app.Application;
 import com.geek.kaijo.app.api.AppService;
 import com.geek.kaijo.mvp.model.entity.BaseArrayResult;
 import com.geek.kaijo.mvp.model.entity.BaseResult;
+import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.Thing;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
@@ -41,6 +42,11 @@ public class InspectionProjectManagerModel extends BaseModel implements Inspecti
     @Override
     public Observable<BaseResult<BaseArrayResult<Thing>>> findAllThingList(int currPage,int pageSize) {
         return mRepositoryManager.obtainRetrofitService(AppService.class).findAllThingList(currPage, pageSize);
+    }
+
+    @Override
+    public Observable<BaseResult<BaseArrayResult<Inspection>>> findThingPositionListPage(int thingType, String name) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).findThingPositionListPage(thingType,name);
     }
 
     @Override

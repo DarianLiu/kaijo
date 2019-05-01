@@ -51,6 +51,7 @@ public class LocalService extends Service {
     private LocationParam locParam = null;//移动定位
     private SecurityLogin mClient;
     private RxPermissions rxPermissions;
+    CmccLocation loc;
 
     @Nullable
     @Override
@@ -89,6 +90,7 @@ public class LocalService extends Service {
         locParam.setOffSet(false);// It should be set in onCreate() func
         mClient = new SecurityLogin(this);
         mClient.setLocationParam(locParam);
+
     }
 
     private void startLocation() {
@@ -96,7 +98,7 @@ public class LocalService extends Service {
             Message msg = Message.obtain();
             msg.what = 0x1233;
             try {
-                CmccLocation loc = mClient.locCapability();
+                loc = mClient.locCapability();
                 latitude = loc.getLatitude();
                 longitude = loc.getLongitude();
                 Log.i(this.getClass().getName(), "11111111111111111111111latitude======" + loc.getLatitude());

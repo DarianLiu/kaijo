@@ -19,16 +19,12 @@ import butterknife.ButterKnife;
 
 public class InspectionPopItemHolder extends BaseHolder<Inspection> {
 
-    @BindView(R.id.tv_case_time)
-    TextView tvCaseTime;
-    @BindView(R.id.tv_case_source)
-    TextView tvCaseSource;
-    @BindView(R.id.tv_case_flag)
-    TextView tvCaseFlag;
-    @BindView(R.id.tv_case_describe)
-    TextView tvCaseDescribe;
-    @BindView(R.id.tv_case_address)
-    TextView tvCaseAddress;
+    @BindView(R.id.img_radio)
+    TextView img_radio;
+    @BindView(R.id.tv_name)
+    TextView tv_name;
+
+
 
     public InspectionPopItemHolder(View itemView) {
         super(itemView);
@@ -37,7 +33,7 @@ public class InspectionPopItemHolder extends BaseHolder<Inspection> {
 
     @Override
     public void setData(Inspection data, int position) {
-//        tvCaseTime.setText(TextUtils.isEmpty(data.getAcceptDate()) ? "" : data.getAcceptDate());
+        tv_name.setText(data.getName());
 //        tvCaseSource.setText(TextUtils.isEmpty(data.getSource()) ? "" : data.getSource());
 //        tvCaseFlag.setText(TextUtils.isEmpty(data.getCaseCode()) ? "暂无" : data.getCaseCode());
 //        tvCaseDescribe.setText(TextUtils.isEmpty(data.getDescription()) ? "暂无" : data.getDescription());

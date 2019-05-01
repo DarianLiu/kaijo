@@ -3,6 +3,7 @@ package com.geek.kaijo.mvp.presenter;
 import android.app.Application;
 import android.content.Intent;
 
+import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.ReportContract;
 import com.geek.kaijo.mvp.model.entity.CaseAttribute;
@@ -25,6 +26,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dao.CaseInfoDao;
+import dao.DaoSession;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
@@ -89,6 +92,10 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                     @Override
                     public void onNext(List<Street> streetList) {
                         mRootView.setAllStreetCommunity(streetList);
+//                        DaoSession daoSession1 = MyApplication.get().getDaoSession();
+//                        daoSession1.getCaseInfoDao()
+//                        CaseInfoDao caseInfoDao = daoSession1.getCaseInfoDao();
+//                        caseInfoDao.insertOrReplaceInTx(streetList);
                     }
                 });
     }

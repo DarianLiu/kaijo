@@ -2,6 +2,7 @@ package com.geek.kaijo.mvp.contract;
 
 import com.geek.kaijo.mvp.model.entity.BaseArrayResult;
 import com.geek.kaijo.mvp.model.entity.BaseResult;
+import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.Thing;
 import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IView;
@@ -18,7 +19,7 @@ public interface InspectionProjectManagerContract {
 
         void finishLoadMore();
 
-        void updateInspectionProjectList(boolean isRefresh, List<Thing> list);
+        void updateInspectionProjectList(boolean isRefresh, List<Inspection> list);
 
         void delThings(int[] positions);
     }
@@ -26,6 +27,7 @@ public interface InspectionProjectManagerContract {
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<BaseResult<BaseArrayResult<Thing>>> findAllThingList(int currPage,int pageSize);
+        Observable<BaseResult<BaseArrayResult<Inspection>>> findThingPositionListPage(int thingType, String name);
 
         Observable<BaseResult<Thing>> delThings(String thingIds);
     }

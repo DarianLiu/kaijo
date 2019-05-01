@@ -6,7 +6,8 @@ package com.geek.kaijo.app;
  */
 
 public class Constant {
-    public final static String MobileAppId = "gi246fecptjs201yhq5qys43073yxrs3";
+//    public final static String MobileAppId = "gi246fecptjs201yhq5qys43073yxrs3";
+    public final static String MobileAppId = "fk5p83vnvtop4kz8alu4927y9nfh29a2";
 
     //    sp key
     public final static String SP_KEY_USER_ID = "userId";
@@ -21,4 +22,7 @@ public class Constant {
      * 数据库名称
      */
     public static final String DB_NAME = "kaijo_db";
+
+    public final static int MAP_REQUEST_CODE = 10011;
+    public final static String MAP_LOOK = "MAP_LOOK";
 }

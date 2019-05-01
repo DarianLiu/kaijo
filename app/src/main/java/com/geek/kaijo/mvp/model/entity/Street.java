@@ -53,7 +53,7 @@ public class Street {
         this.childList = childList;
     }
 
-    public String toString(){
+    public String toString() {
         return getName();
     }
 

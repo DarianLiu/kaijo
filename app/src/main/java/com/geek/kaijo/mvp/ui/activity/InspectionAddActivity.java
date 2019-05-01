@@ -10,8 +10,10 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.cmcc.api.fpp.bean.CmccLocation;
 import com.cmcc.api.fpp.bean.LocationParam;
 import com.cmcc.api.fpp.login.SecurityLogin;
 import com.geek.kaijo.R;
+import com.geek.kaijo.Utils.GridSpacingItemDecoration;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerInspectionAddComponent;
 import com.geek.kaijo.di.module.InspectionAddModule;
@@ -34,6 +37,7 @@ import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.InspectionAddPresenter;
 import com.geek.kaijo.mvp.ui.adapter.CaseAdapter;
+import com.geek.kaijo.mvp.ui.adapter.InspectionAdapter;
 import com.geek.kaijo.mvp.ui.adapter.InspectionPopAdapter;
 import com.geek.kaijo.view.FlowRadioGroup;
 import com.geek.kaijo.view.LoadingProgressDialog;
@@ -69,6 +73,9 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
     TextView tv_location_lat;
     @BindView(R.id.btn_save_back)
     TextView btn_save_back;
+    @BindView(R.id.et_thing_remark)
+    TextView et_thing_remark;
+
     View popView;
     private PopupUtils popupUtils;
     private List<Inspection> inspectionList;
@@ -81,6 +88,9 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
 
     private double mLat, mLng;
     private UserInfo userInfo;
+    private InspectionAdapter adapter;
+    private Inspection inspection;
+
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -104,6 +114,13 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         handler = new MessageHandler();
         initLocation();
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        inspection = (Inspection) getIntent().getSerializableExtra("Inspection");
+        if(inspection!=null){
+            tv_thing_name.setText(inspection.getName());
+            tv_location_lng.setText(inspection.getLng()+"");
+            tv_location_lat.setText(inspection.getLat()+"");
+            et_thing_remark.setText(inspection.getRemark());
+        }
     }
     @Override
     protected void onStart() {
@@ -171,6 +188,7 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
                     mPresenter.addOrUpdateThingPosition(inspection.getThingId(),inspection.getName(),mLat,mLng,userInfo.getStreetId(),userInfo.getCommunityId(),userInfo.getGridId(),userInfo.getUserId());
                 }
                 break;
+
         }
     }
     FlowRadioGroup flowRadioGroup;
@@ -206,9 +224,47 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         public <T> void onInitView(View view, final T t) {
             TextView tv_toolbar_title = view.findViewById(R.id.tv_toolbar_title);
             tv_toolbar_title.setText("巡查项选择");
-//            RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+
+            RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 //            recyclerView.setLayoutManager(new LinearLayoutManager(InspectionAddActivity.this));
 //            recyclerView.setHasFixedSize(true);
+
+            recyclerView.setLayoutManager(new GridLayoutManager(InspectionAddActivity.this, 10));
+//            recyclerView.addItemDecoration(new GridSpacingItemDecoration(10, 4, false));
+            adapter = new InspectionAdapter(InspectionAddActivity.this,inspectionList);
+//            adapter.setHasStableIds(true);  //edit 焦点错乱
+            recyclerView.setAdapter(adapter);
+            adapter.setOnItemOnClilcklisten(new InspectionAdapter.OnItemOnClicklisten() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    for(int i=0;i<inspectionList.size();i++){
+                        if(i==position){
+                            inspectionList.get(i).radioState = 1;
+                        } else {
+                            inspectionList.get(i).radioState = 0;
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            TextView tv_toolbar_title_right_text = view.findViewById(R.id.tv_toolbar_title_right_text);
+            tv_toolbar_title_right_text.setText("确定");
+            tv_toolbar_title_right_text.setVisibility(View.GONE);
+            tv_toolbar_title_right_text.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    for(int i=0;i<inspectionList.size();i++){
+                        if(inspectionList.get(i).radioState==1){
+                            popupUtils.dismiss();
+                            tv_thing_name.setText(inspectionList.get(i).getName() );
+                            break;
+                        }
+                    }
+
+//                    tv_thing_name.setText(inspectionList.get(radioCheckedPosition).getName() );
+                }
+            });
 
 //            mAdapter = new InspectionPopAdapter(mCaseList);
 //            mAdapter.setOnItemClickListener((view, viewType, data, position) -> {
@@ -243,7 +299,8 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
 //                radioButton.setPadding(10,10,10,10);
 //@android:drawable/btn_radio
 //                radioButton.setCompoundDrawablesWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.book),null,null);
-                radioButton.setCompoundDrawablesWithIntrinsicBounds(null,getResources().getDrawable(android.R.drawable.btn_radio),null,null);
+//                radioButton.setCompoundDrawablesWithIntrinsicBounds(null,getResources().getDrawable(android.R.drawable.btn_radio),null,null);
+                radioButton.setCompoundDrawablesWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.selector_radio_button),null,null);
 //                radioButton.setCompoundDrawablePadding(10);
 //                radioButton.setLayoutDirection(RadioButton.LAYOUT_DIRECTION_INHERIT);
 //                radioButton.setTextDirection(RadioButton.TEXT_DIRECTION_INHERIT);
@@ -264,8 +321,23 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
                             break;
                         }
                     }
+
+                }
+            });
+
+            TextView btn_ok = view.findViewById(R.id.btn_ok);
+            btn_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     popupUtils.dismiss();
                     tv_thing_name.setText(inspectionList.get(radioCheckedPosition).getName() );
+                }
+            });
+            TextView btn_cancel = view.findViewById(R.id.btn_cancel);
+            btn_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popupUtils.dismiss();
                 }
             });
 
@@ -306,25 +378,35 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         public void handleMessage(Message msg) {
             if (msg.what == 0x1233) {
                 mClient.pause();
-
-
-                tv_location_lng.setText(String.valueOf(mLat));
-                tv_location_lat.setText(String.valueOf(mLng));
-
+                tv_location_lng.setText(String.valueOf(mLng));
+                tv_location_lat.setText(String.valueOf(mLat));
 //                if (mLat == 0 || mLng == 0) {
 //                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
 //                } else {
                 Intent intent = new Intent(InspectionAddActivity.this, MapActivity.class);
                 intent.putExtra("lat", mLat);
                 intent.putExtra("lng", mLng);
-                launchActivity(intent);
+//                launchActivity(intent);
+                startActivityForResult(intent,Constant.MAP_REQUEST_CODE);
 //                }
-
             }
             super.handleMessage(msg);
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==Constant.MAP_REQUEST_CODE && resultCode==Constant.MAP_REQUEST_CODE){
+            if(data!=null){
+                mLng = data.getDoubleExtra("lng",0);
+                mLat = data.getDoubleExtra("lat",0);
+
+                tv_location_lng.setText(String.valueOf(mLng));
+                tv_location_lat.setText(String.valueOf(mLat));
+            }
+        }
+    }
 
     @Override
     public void launchActivity(@NonNull Intent intent) {

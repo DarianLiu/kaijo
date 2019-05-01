@@ -250,6 +250,12 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         entry_type = getIntent().getIntExtra("entry_type", 0);
+
+        CaseInfo caseInfo = (CaseInfo) getIntent().getSerializableExtra("caseInfo");
+        if(caseInfo!=null){
+
+        }
+
         tvToolbarTitle.setText(entry_type == 0 ? "自行处理" : "案件上报");
 
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
@@ -944,7 +950,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 Intent intent = new Intent(ReportActivity.this, MapActivity.class);
                 intent.putExtra("lat", mLat);
                 intent.putExtra("lng", mLng);
-                launchActivity(intent);
+//                launchActivity(intent);
+                ReportActivity.this.startActivityForResult(intent,Constant.MAP_REQUEST_CODE);
 //                }
 
             }
@@ -1030,6 +1037,14 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     break;
                 default:
                     break;
+            }
+        }else if(requestCode==Constant.MAP_REQUEST_CODE && resultCode==Constant.MAP_REQUEST_CODE){
+            if(data!=null){
+                mLng = data.getDoubleExtra("lng",0);
+                mLat = data.getDoubleExtra("lat",0);
+
+                tvLocationLatitude.setText(String.valueOf(mLat));
+                tvLocationLongitude.setText(String.valueOf(mLng));
             }
         }
     }

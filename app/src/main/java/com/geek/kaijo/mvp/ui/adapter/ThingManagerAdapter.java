@@ -3,6 +3,7 @@ package com.geek.kaijo.mvp.ui.adapter;
 import android.view.View;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.Thing;
 import com.geek.kaijo.mvp.ui.adapter.holder.ThingManagerItemHolder;
 import com.jess.arms.base.BaseHolder;
@@ -15,14 +16,14 @@ import java.util.List;
  * Created by LiuLi on 2018/11/6.
  */
 
-public class ThingManagerAdapter extends DefaultAdapter<Thing> {
+public class ThingManagerAdapter extends DefaultAdapter<Inspection> {
 
-    public ThingManagerAdapter(List<Thing> infos) {
+    public ThingManagerAdapter(List<Inspection> infos) {
         super(infos);
     }
 
     @Override
-    public BaseHolder<Thing> getHolder(View v, int viewType) {
+    public BaseHolder<Inspection> getHolder(View v, int viewType) {
         return new ThingManagerItemHolder(v);
     }
 

@@ -54,7 +54,7 @@ public class PopupUtils {
             popupWindow.dismiss();
         }
         if (popupWindow == null) {
-            popupWindow = new PopupWindow(layout, RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+            popupWindow = new PopupWindow(layout, RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
             // 重置PopupWindow高度
             popupWindow.getContentView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
 //            int screenHeigh = context.getResources().getDisplayMetrics().heightPixels;

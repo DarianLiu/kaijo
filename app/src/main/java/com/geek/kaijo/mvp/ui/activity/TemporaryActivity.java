@@ -142,13 +142,18 @@ public class TemporaryActivity extends BaseActivity<TemporaryPresenter> implemen
         recyclerView.setHasFixedSize(true);
 
         mAdapter = new TemporaryAdapter(list);
-//        mAdapter.setOnItemClickListener((view, viewType, data, position) -> {
+        mAdapter.setOnItemClickListener((view, viewType, data, position) -> {
 //            Intent intent = new Intent(getApplicationContext(), HandleDetailActivity.class);
 //            intent.putExtra("entry_type", entry_type);
 //            intent.putExtra("case_id", this.mCaseList.get(position).getCaseId());
 //            intent.putExtra("case_attribute", this.mCaseList.get(position).getCaseAttribute());
 //            launchActivity(intent);
-//        });
+
+            Intent intent = new Intent(this, UploadActivity.class);
+            intent.putExtra("caseInfo", list.get(position));
+            intent.putExtra("pauseCase",true);
+            launchActivity(intent);
+        });
         recyclerView.setAdapter(mAdapter);
     }
 
