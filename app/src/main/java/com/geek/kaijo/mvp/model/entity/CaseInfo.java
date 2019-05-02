@@ -17,8 +17,9 @@ import org.greenrobot.greendao.annotation.Generated;
 public class CaseInfo implements Serializable {
 
     static final long serialVersionUID = 536871008;
-    @Id(autoincrement = true)
-    private Long id;
+
+    @Id
+    private String id; //本地数据库ID
     private int currPage;
     private int pageSize;
     private String caseId;
@@ -86,9 +87,12 @@ public class CaseInfo implements Serializable {
     private String redLightStartTime;
     private String yellowLightStartTime;
     private String queryFlag;
+    @Transient
+    private List<UploadCaseFile> uploadCaseFileList;
+    private String fileListGson;  // 暂存 待上传的文件list
 
-    @Generated(hash = 4215126)
-    public CaseInfo(Long id, int currPage, int pageSize, String caseId,
+    @Generated(hash = 1025839969)
+    public CaseInfo(String id, int currPage, int pageSize, String caseId,
             long createTime, String createUser, long modifyTime, String modifyUser,
             String acceptDate, String address, String streetId,
             String caseChildCategory, String caseNumber, String casePrimaryCategory,
@@ -107,7 +111,7 @@ public class CaseInfo implements Serializable {
             String userId, int processId, String caseListStatus, int caseType,
             String roleId, String district, String firstWorkunit,
             String secondWorkunit, String cityWorkunit, String redLightStartTime,
-            String yellowLightStartTime, String queryFlag) {
+            String yellowLightStartTime, String queryFlag, String fileListGson) {
         this.id = id;
         this.currPage = currPage;
         this.pageSize = pageSize;
@@ -172,114 +176,15 @@ public class CaseInfo implements Serializable {
         this.redLightStartTime = redLightStartTime;
         this.yellowLightStartTime = yellowLightStartTime;
         this.queryFlag = queryFlag;
+        this.fileListGson = fileListGson;
     }
 
     @Generated(hash = 1752644044)
     public CaseInfo() {
     }
 
-    public void setHandleType(int handleType) {
-        this.handleType = handleType;
-    }
-
-    public int getHandleType() {
-        return handleType;
-    }
-
-    public void setCaseCode(String caseCode) {
-        this.caseCode = caseCode;
-    }
-
-    public String getCaseListStatus() {
-        return caseListStatus;
-    }
-
-    public void setCaseListStatus(String caseListStatus) {
-        this.caseListStatus = caseListStatus;
-    }
-
-    public void setCaseStatus(String caseStatus) {
-        this.caseStatus = caseStatus;
-    }
-
-    public String getCaseStatus() {
-        return caseStatus;
-    }
-
-    public void setCityWorkunit(String cityWorkunit) {
-        this.cityWorkunit = cityWorkunit;
-    }
-
-    public String getCityWorkunit() {
-        return cityWorkunit;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setFirstWorkunit(String firstWorkunit) {
-        this.firstWorkunit = firstWorkunit;
-    }
-
-    public String getFirstWorkunit() {
-        return firstWorkunit;
-    }
-
-    public void setQueryFlag(String queryFlag) {
-        this.queryFlag = queryFlag;
-    }
-
-    public String getQueryFlag() {
-        return queryFlag;
-    }
-
-    public void setRedLightStartTime(String redLightStartTime) {
-        this.redLightStartTime = redLightStartTime;
-    }
-
-    public String getRedLightStartTime() {
-        return redLightStartTime;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public void setSecondWorkunit(String secondWorkunit) {
-        this.secondWorkunit = secondWorkunit;
-    }
-
-    public String getSecondWorkunit() {
-        return secondWorkunit;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setYellowLightStartTime(String yellowLightStartTime) {
-        this.yellowLightStartTime = yellowLightStartTime;
-    }
-
-    public String getYellowLightStartTime() {
-        return yellowLightStartTime;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public int getCurrPage() {
@@ -658,9 +563,12 @@ public class CaseInfo implements Serializable {
         this.attachList = attachList;
     }
 
-
     public String getCaseCode() {
         return caseCode;
+    }
+
+    public void setCaseCode(String caseCode) {
+        this.caseCode = caseCode;
     }
 
     public int getCurNode() {
@@ -679,12 +587,52 @@ public class CaseInfo implements Serializable {
         this.curNodeList = curNodeList;
     }
 
+    public String getCaseStatus() {
+        return caseStatus;
+    }
+
+    public void setCaseStatus(String caseStatus) {
+        this.caseStatus = caseStatus;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public int getHandleType() {
+        return handleType;
+    }
+
+    public void setHandleType(int handleType) {
+        this.handleType = handleType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public int getProcessId() {
         return processId;
     }
 
     public void setProcessId(int processId) {
         this.processId = processId;
+    }
+
+    public String getCaseListStatus() {
+        return caseListStatus;
+    }
+
+    public void setCaseListStatus(String caseListStatus) {
+        this.caseListStatus = caseListStatus;
     }
 
     public int getCaseType() {
@@ -699,12 +647,87 @@ public class CaseInfo implements Serializable {
         return roleId;
     }
 
-    public Long getId() {
-        return this.id;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
-    public void setId(Long id) {
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getFirstWorkunit() {
+        return firstWorkunit;
+    }
+
+    public void setFirstWorkunit(String firstWorkunit) {
+        this.firstWorkunit = firstWorkunit;
+    }
+
+    public String getSecondWorkunit() {
+        return secondWorkunit;
+    }
+
+    public void setSecondWorkunit(String secondWorkunit) {
+        this.secondWorkunit = secondWorkunit;
+    }
+
+    public String getCityWorkunit() {
+        return cityWorkunit;
+    }
+
+    public void setCityWorkunit(String cityWorkunit) {
+        this.cityWorkunit = cityWorkunit;
+    }
+
+    public String getRedLightStartTime() {
+        return redLightStartTime;
+    }
+
+    public void setRedLightStartTime(String redLightStartTime) {
+        this.redLightStartTime = redLightStartTime;
+    }
+
+    public String getYellowLightStartTime() {
+        return yellowLightStartTime;
+    }
+
+    public void setYellowLightStartTime(String yellowLightStartTime) {
+        this.yellowLightStartTime = yellowLightStartTime;
+    }
+
+    public String getQueryFlag() {
+        return queryFlag;
+    }
+
+    public void setQueryFlag(String queryFlag) {
+        this.queryFlag = queryFlag;
+    }
+
+    public List<UploadCaseFile> getUploadCaseFileList() {
+        return uploadCaseFileList;
+    }
+
+    public void setUploadCaseFileList(List<UploadCaseFile> uploadCaseFileList) {
+        this.uploadCaseFileList = uploadCaseFileList;
+    }
+
+    public String getFileListGson() {
+        return fileListGson;
+    }
+
+    public void setFileListGson(String fileListGson) {
+        this.fileListGson = fileListGson;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
-
 }

@@ -41,6 +41,8 @@ import com.geek.kaijo.mvp.ui.adapter.UploadPhotoAdapter;
 import com.geek.kaijo.mvp.ui.adapter.UploadVideoAdapter;
 import com.geek.kaijo.view.CommProgressDailog;
 import com.geek.kaijo.view.SelectDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -144,10 +146,6 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         if (Build.VERSION.SDK_INT >= 24) {
             builder.detectFileUriExposure();
         }
-        caseInfo = (CaseInfo) getIntent().getSerializableExtra("caseInfo");
-        if (caseInfo != null && !TextUtils.isEmpty(caseInfo.getCaseId())) {
-            caseId = Integer.parseInt(caseInfo.getCaseId());
-        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
@@ -164,6 +162,73 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         LinearLayoutManager layoutManager_video_later = new LinearLayoutManager(this);
         recyclerView_video_later.addItemDecoration(divider);
         recyclerView_video_later.setLayoutManager(layoutManager_video_later);
+
+        caseInfo = (CaseInfo) getIntent().getSerializableExtra("caseInfo");
+        if (caseInfo != null && !TextUtils.isEmpty(caseInfo.getCaseId())) {
+            caseId = Integer.parseInt(caseInfo.getCaseId());
+            String fileListGson = caseInfo.getFileListGson();
+            if(!TextUtils.isEmpty(fileListGson)){
+                Gson gson = new Gson();
+                List<UploadCaseFile> uploadCaseFileList = gson.fromJson(fileListGson, new TypeToken<List<UploadCaseFile>>() {}.getType());
+                if(uploadCaseFileList!=null && uploadCaseFileList.size()>0){
+                    for(int i=0;i<uploadCaseFileList.size();i++){
+                        if(uploadCaseFileList.get(i).getFileType()==0){ //照片
+                            if(uploadCaseFileList.get(i).getWhenType()==1){ //整改前
+                                if(uploadPhotoList==null){
+                                    uploadPhotoList = new ArrayList<>();
+                                }
+                                UploadFile uploadFile = new UploadFile();
+                                uploadFile.whenType = uploadCaseFileList.get(i).getWhenType();
+                                uploadFile.caseProcessRecordId = uploadCaseFileList.get(i).getCaseProcessRecordId();
+                                uploadFile.fileType = uploadCaseFileList.get(i).getFileType();
+                                uploadFile.setFileName(uploadCaseFileList.get(i).getFileName());
+                                uploadFile.setUrl(uploadCaseFileList.get(i).getUrl());
+                                uploadPhotoList.add(uploadFile);
+                            }else if(uploadCaseFileList.get(i).getWhenType()==2){ //整改后
+                                if(uploadPhotoList_later==null){
+                                    uploadPhotoList_later = new ArrayList<>();
+                                }
+                                UploadFile uploadFile = new UploadFile();
+                                uploadFile.whenType = uploadCaseFileList.get(i).getWhenType();
+                                uploadFile.caseProcessRecordId = uploadCaseFileList.get(i).getCaseProcessRecordId();
+                                uploadFile.fileType = uploadCaseFileList.get(i).getFileType();
+                                uploadFile.setUrl(uploadCaseFileList.get(i).getUrl());
+                                uploadFile.setFileName(uploadCaseFileList.get(i).getFileName());
+                                uploadPhotoList_later.add(uploadFile);
+                            }
+                        }else if(uploadCaseFileList.get(i).getFileType()==1){ //视频
+                            if(uploadCaseFileList.get(i).getWhenType()==1){ //整改前
+                                if(videoList==null){
+                                    videoList = new ArrayList<>();
+                                }
+                                UploadFile uploadFile = new UploadFile();
+                                uploadFile.whenType = uploadCaseFileList.get(i).getWhenType();
+                                uploadFile.caseProcessRecordId = uploadCaseFileList.get(i).getCaseProcessRecordId();
+                                uploadFile.fileType = uploadCaseFileList.get(i).getFileType();
+                                uploadFile.setUrl(uploadCaseFileList.get(i).getUrl());
+                                uploadFile.setFileName(uploadCaseFileList.get(i).getFileName());
+                                videoList.add(uploadFile);
+                            }else if(uploadCaseFileList.get(i).getWhenType()==2){ //整改后
+                                if(videoList_later==null){
+                                    videoList_later = new ArrayList<>();
+                                }
+                                UploadFile uploadFile = new UploadFile();
+                                uploadFile.whenType = uploadCaseFileList.get(i).getWhenType();
+                                uploadFile.caseProcessRecordId = uploadCaseFileList.get(i).getCaseProcessRecordId();
+                                uploadFile.fileType = uploadCaseFileList.get(i).getFileType();
+                                uploadFile.setUrl(uploadCaseFileList.get(i).getUrl());
+                                uploadFile.setFileName(uploadCaseFileList.get(i).getFileName());
+                                videoList_later.add(uploadFile);
+                            }
+                        }
+                    }
+                    recyclerViewAdapter();
+                    recyclerViewAdapter_later();
+                    recyclerViewAdapter_video();
+                    recyclerViewAdapter_video_later();
+                }
+            }
+        }
     }
 
 
@@ -403,71 +468,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 checkPermissionAndVideo();
                 break;
             case R.id.tv_ok:
-                List<UploadCaseFile> caseFileList = new ArrayList<>();
-
-                int handleType = 1;//直接处理传1 ，非直接处理传2
-//                int whenType = 1;//直接处理( 整改前的写1  整改后写2),  非直接处理 whenType 1
-                int caseProcessRecordID = 19;// 直接处理 caseProcessRecordID  19,  非直接处理 caseProcessRecordID  11
-                if (entry_type == 0) {
-                    //自行处理
-                    handleType = 1;
-                    caseProcessRecordID = 19;
-                } else if (entry_type == 1) {
-                    //非自行处理
-                    handleType = 2;
-                    caseProcessRecordID = 11;
-                }
-
-                if (uploadPhotoList != null) { //照片整改前
-                    for (int i = 0; i < uploadPhotoList.size(); i++) {
-                        UploadCaseFile caseFile = new UploadCaseFile();
-                        caseFile.setCaseId(caseId);
-                        caseFile.setUrl(uploadPhotoList.get(i).getFileRelativePath());
-                        caseFile.setCaseProcessRecordId(caseProcessRecordID);
-                        caseFile.setFileType(0); //照片
-                        caseFile.setWhenType(1); //整改前
-                        caseFile.setHandleType(handleType);
-                        caseFileList.add(caseFile);
-                    }
-                }
-                if (uploadPhotoList_later != null) { //照片整改前
-                    for (int i = 0; i < uploadPhotoList_later.size(); i++) {
-                        UploadCaseFile caseFile = new UploadCaseFile();
-                        caseFile.setCaseId(caseId);
-                        caseFile.setUrl(uploadPhotoList_later.get(i).getFileRelativePath());
-                        caseFile.setCaseProcessRecordId(caseProcessRecordID);
-                        caseFile.setFileType(0); //照片
-                        caseFile.setWhenType(2);//整改后
-                        caseFile.setHandleType(handleType);
-                        caseFileList.add(caseFile);
-                    }
-                }
-                if (videoList != null) { //照片整改前
-                    for (int i = 0; i < videoList.size(); i++) {
-                        UploadCaseFile caseFile = new UploadCaseFile();
-                        caseFile.setCaseId(caseId);
-                        caseFile.setUrl(videoList.get(i).getFileRelativePath());
-                        caseFile.setCaseProcessRecordId(0);
-                        caseFile.setFileType(1); //视频
-                        caseFile.setWhenType(1);//整改后
-                        caseFile.setHandleType(handleType);
-                        caseFileList.add(caseFile);
-                    }
-                }
-                if (videoList_later != null) { //照片整改前
-                    for (int i = 0; i < videoList_later.size(); i++) {
-                        UploadCaseFile caseFile = new UploadCaseFile();
-                        caseFile.setCaseId(caseId);
-                        caseFile.setUrl(videoList_later.get(i).getFileRelativePath());
-                        caseFile.setCaseProcessRecordId(caseProcessRecordID);
-                        caseFile.setFileType(1); //视频
-                        caseFile.setWhenType(2);//整改后
-                        caseFile.setHandleType(handleType);
-                        caseFileList.add(caseFile);
-                    }
-                }
                 if (mPresenter != null) {
-                    mPresenter.addCaseAttach(caseFileList);
+                    mPresenter.addCaseAttach(getUploadCaseFile());
                 }
                 break;
             case R.id.tv_previous_step:
@@ -482,13 +484,92 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 finish();
                 break;
             case R.id.tv_pause_save:
+                List<UploadCaseFile> uploadCaseFileList = getUploadCaseFile();
+                if(uploadCaseFileList!=null){
+                    Gson gson = new Gson();
+                    String uploadCaseFileGson = gson.toJsonTree(uploadCaseFileList).getAsJsonArray().toString();
+                    caseInfo.setFileListGson(uploadCaseFileGson);
+                }
                 DaoSession daoSession1 = MyApplication.get().getDaoSession();
                 CaseInfoDao caseInfoDao = daoSession1.getCaseInfoDao();
                 caseInfoDao.insertOrReplaceInTx(caseInfo);
-                Intent intent3 = new Intent(UploadActivity.this, TemporaryActivity.class);
-                launchActivity(intent3);
+//                Intent intent3 = new Intent(UploadActivity.this, TemporaryActivity.class);
+//                launchActivity(intent3);
+                setResult(1);
+                this.finish();
                 break;
         }
+    }
+
+    private List<UploadCaseFile> getUploadCaseFile(){
+        List<UploadCaseFile> caseFileList = new ArrayList<>();
+
+        int handleType = 1;//直接处理传1 ，非直接处理传2
+//                int whenType = 1;//直接处理( 整改前的写1  整改后写2),  非直接处理 whenType 1
+        int caseProcessRecordID = 19;// 直接处理 caseProcessRecordID  19,  非直接处理 caseProcessRecordID  11
+        if (entry_type == 0) {
+            //自行处理
+            handleType = 1;
+            caseProcessRecordID = 19;
+        } else if (entry_type == 1) {
+            //非自行处理
+            handleType = 2;
+            caseProcessRecordID = 11;
+        }
+
+        if (uploadPhotoList != null) { //照片整改前
+            for (int i = 0; i < uploadPhotoList.size(); i++) {
+                UploadCaseFile caseFile = new UploadCaseFile();
+                caseFile.setCaseId(caseId);
+                caseFile.setUrl(uploadPhotoList.get(i).getFileRelativePath());
+                caseFile.setCaseProcessRecordId(caseProcessRecordID);
+                caseFile.setFileType(0); //照片
+                caseFile.setWhenType(1); //整改前
+                caseFile.setHandleType(handleType);
+//                caseFile.setFileName(uploadPhotoList.get(i).getFileName());
+                caseFileList.add(caseFile);
+            }
+        }
+        if (uploadPhotoList_later != null) { //照片整改前
+            for (int i = 0; i < uploadPhotoList_later.size(); i++) {
+                UploadCaseFile caseFile = new UploadCaseFile();
+                caseFile.setCaseId(caseId);
+                caseFile.setUrl(uploadPhotoList_later.get(i).getFileRelativePath());
+                caseFile.setCaseProcessRecordId(caseProcessRecordID);
+                caseFile.setFileType(0); //照片
+                caseFile.setWhenType(2);//整改后
+                caseFile.setHandleType(handleType);
+//                caseFile.setFileName(uploadPhotoList_later.get(i).getFileName());
+                caseFileList.add(caseFile);
+            }
+        }
+        if (videoList != null) { //照片整改前
+            for (int i = 0; i < videoList.size(); i++) {
+                UploadCaseFile caseFile = new UploadCaseFile();
+                caseFile.setCaseId(caseId);
+                caseFile.setUrl(videoList.get(i).getFileRelativePath());
+                caseFile.setCaseProcessRecordId(0);
+                caseFile.setFileType(1); //视频
+                caseFile.setWhenType(1);//整改后
+                caseFile.setHandleType(handleType);
+//                caseFile.setFileName(videoList.get(i).getFileName());
+                caseFileList.add(caseFile);
+            }
+        }
+        if (videoList_later != null) { //照片整改前
+            for (int i = 0; i < videoList_later.size(); i++) {
+                UploadCaseFile caseFile = new UploadCaseFile();
+                caseFile.setCaseId(caseId);
+                caseFile.setUrl(videoList_later.get(i).getFileRelativePath());
+                caseFile.setCaseProcessRecordId(caseProcessRecordID);
+                caseFile.setFileType(1); //视频
+                caseFile.setWhenType(2);//整改后
+                caseFile.setHandleType(handleType);
+//                caseFile.setFileName(videoList_later.get(i).getFileName());
+                caseFileList.add(caseFile);
+            }
+        }
+        return caseFileList;
     }
 
     /**

@@ -187,6 +187,9 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private List<UploadCaseFile> caseFileList;
     private UserInfo userInfo;
 
+    private List<Street> streetList;
+    private CaseInfo caseInfo;
+
     @Override
     protected void onStart() {
         mClient.start();
@@ -251,10 +254,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     public void initData(@Nullable Bundle savedInstanceState) {
         entry_type = getIntent().getIntExtra("entry_type", 0);
 
-        CaseInfo caseInfo = (CaseInfo) getIntent().getSerializableExtra("caseInfo");
-        if(caseInfo!=null){
 
-        }
 
         tvToolbarTitle.setText(entry_type == 0 ? "自行处理" : "案件上报");
 
@@ -276,11 +276,9 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         handler = new MessageHandler();
         initLocation();
 
-        initRefreshLayout();
 
-        if (mPresenter != null) {
-            mPresenter.findAllStreetCommunity(0);
-        }
+
+
 
         //更新案发时间
         mTimePickerListener = time -> tvCaseTime.setText(time);
@@ -314,6 +312,32 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         raVideoList.setLayoutManager(layoutManager_video_later);
 
         uploadVideoList = new ArrayList<>();
+
+        initRefreshLayout();
+
+        caseInfo = (CaseInfo) getIntent().getSerializableExtra("caseInfo");   //从暂存跳转
+        if(caseInfo!=null){
+            etCaseAddress.setText(caseInfo.getAddress());
+            etCaseProblemDescription.setText(caseInfo.getDescription());
+            mLat = Double.parseDouble(caseInfo.getLat());
+            mLng = Double.parseDouble(caseInfo.getLng());
+            tvLocationLongitude.setText(mLng+"");
+            tvLocationLatitude.setText(mLat+"");
+
+            if(caseInfo.getCaseAttribute().equals("1")){ //事件
+                spinnerCaseAttribute.setSelection(2,true);
+            }else if(caseInfo.getCaseAttribute().equals("2")){ //部件
+                spinnerCaseAttribute.setSelection(1,true);
+            }
+        }
+
+//         streetList = DataHelper.getDeviceData(this,Constant.SP_KEY_STREETLIST);
+//        if(streetList!=null && streetList.size()>0){
+//            showStreet(streetList);
+//        }
+        if (mPresenter != null) {
+            mPresenter.findAllStreetCommunity(0);
+        }
 
     }
 
@@ -538,7 +562,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         spinnerCaseStreet.setAdapter(mStreetAdapter);
         spinnerCaseStreet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long checkId) {
 
                 spinnerCaseCommunity.setSelection(0);
                 mCommunityList.clear();
@@ -549,12 +573,23 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
                     if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
                         if(mCommunityList!=null){
-                            for(int i=0;i<mCommunityList.size();i++){
-                                if(userInfo.getCommunityName().equals(mCommunityList.get(i).getName())){
-                                    spinnerCaseCommunity.setSelection(i,true);
-                                    break;
+                            if(caseInfo!=null){ //从暂存跳转
+                                String  id = String.valueOf(caseInfo.getCommunityId());
+                                for(int i=0;i<mCommunityList.size();i++){
+                                    if(id.equals(mCommunityList.get(i).getId())){
+                                        spinnerCaseCommunity.setSelection(i,true);
+                                        break;
+                                    }
+                                }
+                            }else {
+                                for(int i=0;i<mCommunityList.size();i++){
+                                    if(userInfo.getCommunityName().equals(mCommunityList.get(i).getName())){
+                                        spinnerCaseCommunity.setSelection(i,true);
+                                        break;
+                                    }
                                 }
                             }
+
                         }
                     }
                 } else {
@@ -632,7 +667,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         spinnerCategoryLarge.setAdapter(mCategoryLargeAdapter);
         spinnerCategoryLarge.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long checkId) {
                 spinnerCategorySmall.setSelection(0);
                 mCategorySmall.clear();
                 mCategorySmall.add(mCaseAttribute);
@@ -641,6 +676,16 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     mCategorySmall.addAll(mCategoryLarge.get(position).getChildList());
                 } else {
                     mCasePrimaryCategory = "";
+                }
+
+                if(caseInfo!=null){ //从暂存跳转
+                    String  id = String.valueOf(caseInfo.getCaseSecondaryCategory());
+                    for(int i=0;i<mCategorySmall.size();i++){
+                        if(id.equals(mCategorySmall.get(i).getCategoryId())){
+                            spinnerCategorySmall.setSelection(i,true);
+                            break;
+                        }
+                    }
                 }
                 mCategorySmallAdapter.notifyDataSetChanged();
 
@@ -662,7 +707,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         spinnerCategorySmall.setAdapter(mCategorySmallAdapter);
         spinnerCategorySmall.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long checkId) {
                 spinnerCategorySub.setSelection(0);
                 mCategorySub.clear();
                 mCategorySub.add(mCaseAttribute);
@@ -671,6 +716,16 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     mCategorySub.addAll(mCategorySmall.get(position).getChildList());
                 } else {
                     mCaseSecondaryCategory = "";
+                }
+
+                if(caseInfo!=null){ //从暂存跳转
+                    String  id = String.valueOf(caseInfo.getCaseChildCategory());
+                    for(int i=0;i<mCategorySub.size();i++){
+                        if(id.equals(mCategorySub.get(i).getCategoryId())){
+                            spinnerCategorySub.setSelection(i,true);
+                            break;
+                        }
+                    }
                 }
                 mCategorySubAdapter.notifyDataSetChanged();
             }
@@ -880,6 +935,15 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         mCategoryLarge.clear();
         mCategoryLarge.add(mCaseAttribute);
         mCategoryLarge.addAll(attributeList);
+        if(caseInfo!=null){ //从暂存跳转
+            String  id = String.valueOf(caseInfo.getCasePrimaryCategory());
+            for(int i=0;i<mCategoryLarge.size();i++){
+                if(id.equals(mCategoryLarge.get(i).getCategoryId())){
+                    spinnerCategoryLarge.setSelection(i,true);
+                    break;
+                }
+            }
+        }
         mCategoryLargeAdapter.notifyDataSetChanged();
     }
 
@@ -890,17 +954,34 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
      */
     @Override
     public void setAllStreetCommunity(List<Street> list) {
+//        if(streetList==null || streetList.size()==0){  //如果有缓存 就不更新UI
+            showStreet(list);
+//        }
+    }
+
+    private void showStreet(List<Street> list){
         mStreetList.clear();
         mStreetList.add(mStreet);
         mStreetList.addAll(list.get(0).getChildList());
         if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
             if(mStreetList!=null){
-                for(int i=0;i<mStreetList.size();i++){
-                    if(userInfo.getStreetName().equals(mStreetList.get(i).getName())){
-                        spinnerCaseStreet.setSelection(i,true);
-                        break;
+                if(caseInfo!=null){ //从暂存跳转
+                    String  id = String.valueOf(caseInfo.getStreetId());
+                    for(int i=0;i<mStreetList.size();i++){
+                        if(id.equals(mStreetList.get(i).getId())){
+                            spinnerCaseStreet.setSelection(i,true);
+                            break;
+                        }
+                    }
+                }else {
+                    for(int i=0;i<mStreetList.size();i++){
+                        if(userInfo.getStreetName().equals(mStreetList.get(i).getName())){
+                            spinnerCaseStreet.setSelection(i,true);
+                            break;
+                        }
                     }
                 }
+
             }
         }
         mStreetAdapter.notifyDataSetChanged();
@@ -918,12 +999,23 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         mGridList.addAll(list);
         if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
             if(mGridList!=null){
-                for(int i=0;i<mGridList.size();i++){
-                    if(userInfo.getGridName().equals(mGridList.get(i).getName())){
-                        spinnerCaseGrid.setSelection(i,true);
-                        break;
+                if(caseInfo!=null){ //从暂存跳转
+                    String  id = String.valueOf(caseInfo.getGridId());
+                    for(int i=0;i<mGridList.size();i++){
+                        if(id.equals(mGridList.get(i).getId())){
+                            spinnerCaseGrid.setSelection(i,true);
+                            break;
+                        }
+                    }
+                }else {
+                    for(int i=0;i<mGridList.size();i++){
+                        if(userInfo.getGridName().equals(mGridList.get(i).getName())){
+                            spinnerCaseGrid.setSelection(i,true);
+                            break;
+                        }
                     }
                 }
+
             }
         }
         mGridAdapter.notifyDataSetChanged();
@@ -994,10 +1086,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == 1) {
+            if(caseInfo!=null){  //暂存 回暂存界面刷新
+                setResult(1);
+            }
             finish();
-        }
-
-        if (resultCode == RESULT_OK) {
+        }else if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
                     List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
@@ -1150,6 +1243,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     public void uploadCaseInfoSuccess(CaseInfo caseInfoEntity) {
         switch (entry_type) {
             case 0:
+                if(caseInfo!=null){
+                    caseInfoEntity.setId(caseInfo.getId());
+                }else {
+                    caseInfoEntity.setId(caseInfoEntity.getCaseId());
+                }
                 Intent intent = new Intent(this, UploadActivity.class);
                 intent.putExtra("caseInfo", caseInfoEntity);
                 launchActivity(intent);

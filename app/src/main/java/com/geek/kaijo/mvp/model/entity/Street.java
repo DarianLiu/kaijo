@@ -1,5 +1,6 @@
 package com.geek.kaijo.mvp.model.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by LiuLi on 2018/9/5.
  */
 
-public class Street {
+public class Street implements Serializable{
 
     /**
      * id : 1

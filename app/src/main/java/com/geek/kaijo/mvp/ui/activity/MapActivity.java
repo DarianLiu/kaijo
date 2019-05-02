@@ -120,7 +120,9 @@ public class MapActivity extends AppCompatActivity {
         });
 
         if (lng == 0 || lat == 0) {  //定位失败  显示默认位置
-            checkPermissionAndAction();
+            lng = lngDefault;
+            lat = latDefaut;
+//            checkPermissionAndAction();
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(latDefaut, lngDefault));
             markerOptions.draggable(true);

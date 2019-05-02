@@ -15,7 +15,7 @@ import com.geek.kaijo.mvp.model.entity.CaseInfo;
 /** 
  * DAO for table "CASE_INFO".
 */
-public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
+public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
 
     public static final String TABLENAME = "CASE_INFO";
 
@@ -24,7 +24,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, String.class, "id", true, "ID");
         public final static Property CurrPage = new Property(1, int.class, "currPage", false, "CURR_PAGE");
         public final static Property PageSize = new Property(2, int.class, "pageSize", false, "PAGE_SIZE");
         public final static Property CaseId = new Property(3, String.class, "caseId", false, "CASE_ID");
@@ -88,6 +88,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
         public final static Property RedLightStartTime = new Property(61, String.class, "redLightStartTime", false, "RED_LIGHT_START_TIME");
         public final static Property YellowLightStartTime = new Property(62, String.class, "yellowLightStartTime", false, "YELLOW_LIGHT_START_TIME");
         public final static Property QueryFlag = new Property(63, String.class, "queryFlag", false, "QUERY_FLAG");
+        public final static Property FileListGson = new Property(64, String.class, "fileListGson", false, "FILE_LIST_GSON");
     }
 
 
@@ -103,7 +104,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CASE_INFO\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: id
                 "\"CURR_PAGE\" INTEGER NOT NULL ," + // 1: currPage
                 "\"PAGE_SIZE\" INTEGER NOT NULL ," + // 2: pageSize
                 "\"CASE_ID\" TEXT," + // 3: caseId
@@ -166,7 +167,8 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
                 "\"CITY_WORKUNIT\" TEXT," + // 60: cityWorkunit
                 "\"RED_LIGHT_START_TIME\" TEXT," + // 61: redLightStartTime
                 "\"YELLOW_LIGHT_START_TIME\" TEXT," + // 62: yellowLightStartTime
-                "\"QUERY_FLAG\" TEXT);"); // 63: queryFlag
+                "\"QUERY_FLAG\" TEXT," + // 63: queryFlag
+                "\"FILE_LIST_GSON\" TEXT);"); // 64: fileListGson
     }
 
     /** Drops the underlying database table. */
@@ -179,9 +181,9 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
     protected final void bindValues(DatabaseStatement stmt, CaseInfo entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
+        String id = entity.getId();
         if (id != null) {
-            stmt.bindLong(1, id);
+            stmt.bindString(1, id);
         }
         stmt.bindLong(2, entity.getCurrPage());
         stmt.bindLong(3, entity.getPageSize());
@@ -465,6 +467,11 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
         String queryFlag = entity.getQueryFlag();
         if (queryFlag != null) {
             stmt.bindString(64, queryFlag);
+        }
+ 
+        String fileListGson = entity.getFileListGson();
+        if (fileListGson != null) {
+            stmt.bindString(65, fileListGson);
         }
     }
 
@@ -472,9 +479,9 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
     protected final void bindValues(SQLiteStatement stmt, CaseInfo entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
+        String id = entity.getId();
         if (id != null) {
-            stmt.bindLong(1, id);
+            stmt.bindString(1, id);
         }
         stmt.bindLong(2, entity.getCurrPage());
         stmt.bindLong(3, entity.getPageSize());
@@ -759,17 +766,22 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
         if (queryFlag != null) {
             stmt.bindString(64, queryFlag);
         }
+ 
+        String fileListGson = entity.getFileListGson();
+        if (fileListGson != null) {
+            stmt.bindString(65, fileListGson);
+        }
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
 
     @Override
     public CaseInfo readEntity(Cursor cursor, int offset) {
         CaseInfo entity = new CaseInfo( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // id
             cursor.getInt(offset + 1), // currPage
             cursor.getInt(offset + 2), // pageSize
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // caseId
@@ -832,14 +844,15 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
             cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60), // cityWorkunit
             cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61), // redLightStartTime
             cursor.isNull(offset + 62) ? null : cursor.getString(offset + 62), // yellowLightStartTime
-            cursor.isNull(offset + 63) ? null : cursor.getString(offset + 63) // queryFlag
+            cursor.isNull(offset + 63) ? null : cursor.getString(offset + 63), // queryFlag
+            cursor.isNull(offset + 64) ? null : cursor.getString(offset + 64) // fileListGson
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, CaseInfo entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setCurrPage(cursor.getInt(offset + 1));
         entity.setPageSize(cursor.getInt(offset + 2));
         entity.setCaseId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -903,16 +916,16 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
         entity.setRedLightStartTime(cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61));
         entity.setYellowLightStartTime(cursor.isNull(offset + 62) ? null : cursor.getString(offset + 62));
         entity.setQueryFlag(cursor.isNull(offset + 63) ? null : cursor.getString(offset + 63));
+        entity.setFileListGson(cursor.isNull(offset + 64) ? null : cursor.getString(offset + 64));
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(CaseInfo entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final String updateKeyAfterInsert(CaseInfo entity, long rowId) {
+        return entity.getId();
     }
     
     @Override
-    public Long getKey(CaseInfo entity) {
+    public String getKey(CaseInfo entity) {
         if(entity != null) {
             return entity.getId();
         } else {

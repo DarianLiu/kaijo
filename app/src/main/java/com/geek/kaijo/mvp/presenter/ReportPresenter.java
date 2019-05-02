@@ -3,6 +3,7 @@ package com.geek.kaijo.mvp.presenter;
 import android.app.Application;
 import android.content.Intent;
 
+import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.ReportContract;
@@ -19,6 +20,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import java.io.File;
@@ -92,6 +94,8 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                     @Override
                     public void onNext(List<Street> streetList) {
                         mRootView.setAllStreetCommunity(streetList);
+//                        DataHelper.saveDeviceData(mApplication, Constant.SP_KEY_STREETLIST, streetList);
+
 //                        DaoSession daoSession1 = MyApplication.get().getDaoSession();
 //                        daoSession1.getCaseInfoDao()
 //                        CaseInfoDao caseInfoDao = daoSession1.getCaseInfoDao();

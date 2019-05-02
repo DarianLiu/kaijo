@@ -13,15 +13,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.di.component.DaggerInspectionProjectRegisterComponent;
 import com.geek.kaijo.di.module.InspectionProjectRegisterModule;
 import com.geek.kaijo.mvp.contract.InspectionProjectRegisterContract;
 import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
+import com.geek.kaijo.mvp.model.entity.Inspection;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.InspectionProjectRegisterPresenter;
 import com.geek.kaijo.mvp.ui.adapter.IPRegisterAdapter;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DataHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -62,6 +66,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
 
     private List<IPRegisterBean> mList;
     private IPRegisterAdapter mAdapter;
+    private UserInfo userInfo;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -86,8 +91,8 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         iprComplete.setEnabled(false);
         iprCancel.setEnabled(false);
 
-
-//        initView();
+        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        initView();
     }
 
     /**
@@ -102,13 +107,15 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                if (smartRefresh != null)
-                    smartRefresh.setNoMoreData(false);
-                for (int i = 0; i < 10; i++) {
-                    mList.add(new IPRegisterBean("电线干" + i, "正常" + i, false));
+//                if (smartRefresh != null)
+//                    smartRefresh.setNoMoreData(false);
+//                for (int i = 0; i < 10; i++) {
+//                    mList.add(new IPRegisterBean("电线干" + i, "正常" + i, false));
+//                }
+                if(userInfo!=null){
+                    mPresenter.findThingPositionListBy(String.valueOf(userInfo.getStreetId()),String.valueOf(userInfo.getCommunityId()),String.valueOf(userInfo.getUserId()));
                 }
 
-                smartRefresh.finishRefresh();
             }
         });
         smartRefresh.autoRefresh();
@@ -168,5 +175,19 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
                 iprStart.setEnabled(true);
                 break;
         }
+    }
+
+    @Override
+    public void httpGetThingListSuccess(List<IPRegisterBean> inspectionList) {
+        if(inspectionList!=null){
+            mList.clear();
+            mList.addAll(inspectionList);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void finishRefresh() {
+        smartRefresh.finishRefresh();
     }
 }

@@ -18,6 +18,8 @@ public class Constant {
 
     public final static String SP_KEY_USER_INFO= "userInfo";
 
+    public final static String SP_KEY_STREETLIST= "streetList";  //街道社区数据
+
     /**
      * 数据库名称
      */

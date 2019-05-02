@@ -84,78 +84,46 @@ public class TemporaryActivity extends BaseActivity<TemporaryPresenter> implemen
         tvToolbarTitle.setText("暂存列表");
 
         mCaseList = new ArrayList<>();
-//        caseInfo = DataHelper.getDeviceData(getApplicationContext(), "caseInfo");
-//        if (caseInfo != null) {
-//            mCaseList.add(caseInfo);
-//        }
-
-        List<CaseInfo> caseInfos = MyApplication.get().getDaoSession().getCaseInfoDao().loadAll();
-        if (caseInfos != null) {
-            initRefreshLayout(caseInfos);
-        }
-
+        initRefreshLayout();
 
     }
 
     /**
      * 初始化刷新
-     *
-     * @param list
      */
-    private void initRefreshLayout(List<CaseInfo> list) {
+    private void initRefreshLayout() {
         smartRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                if (mPresenter != null) {
-//                    mPresenter.findCaseInfoPageList(false, entry_type);
-                }
-
-//                if (list != null && smartRefresh != null && list.size() == 0) {
-//                    smartRefresh.finishLoadMoreWithNoMoreData();
-//                    return;
-//                }
-//
-//                if (list != null) {
-//                    int index = mCaseList.size();
-//                    mCaseList.addAll(list);
-//                    mAdapter.notifyItemRangeInserted(index + 1, list.size());
-//                }
-
-                mAdapter.notifyDataSetChanged();
-                smartRefresh.finishLoadMore();
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 if (mPresenter != null) {
-//                    mPresenter.findCaseInfoPageList(true, entry_type);
+                    mPresenter.dbGetCaseList();
                 }
-//                mCaseList.addAll(list);
-                mAdapter.notifyDataSetChanged();
-
-                smartRefresh.finishRefresh();
             }
         });
-        smartRefresh.autoRefresh();
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-
-        mAdapter = new TemporaryAdapter(list);
+        mAdapter = new TemporaryAdapter(mCaseList);
         mAdapter.setOnItemClickListener((view, viewType, data, position) -> {
-//            Intent intent = new Intent(getApplicationContext(), HandleDetailActivity.class);
-//            intent.putExtra("entry_type", entry_type);
-//            intent.putExtra("case_id", this.mCaseList.get(position).getCaseId());
-//            intent.putExtra("case_attribute", this.mCaseList.get(position).getCaseAttribute());
-//            launchActivity(intent);
-
-            Intent intent = new Intent(this, UploadActivity.class);
-            intent.putExtra("caseInfo", list.get(position));
+            Intent intent = new Intent(this, ReportActivity.class);
+            intent.putExtra("caseInfo", mCaseList.get(position));
             intent.putExtra("pauseCase",true);
-            launchActivity(intent);
+//            launchActivity(intent);
+            startActivityForResult(intent,1);
         });
         recyclerView.setAdapter(mAdapter);
+
+        smartRefresh.autoRefresh();
+        smartRefresh.setEnableLoadMore(false);
+
     }
+
+
 
     @Override
     public void showLoading() {
@@ -184,4 +152,24 @@ public class TemporaryActivity extends BaseActivity<TemporaryPresenter> implemen
         finish();
     }
 
+    @Override
+    public void dbDataSuccess(List<CaseInfo> caseInfos) {
+        if(this.isFinishing())return;
+        if(caseInfos!=null){
+            mCaseList.clear();
+            mCaseList.addAll(caseInfos);
+            mAdapter.notifyDataSetChanged();
+        }
+
+        smartRefresh.finishLoadMore();
+        smartRefresh.finishRefresh();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==1){
+            smartRefresh.autoRefresh();
+        }
+    }
 }

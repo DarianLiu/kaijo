@@ -2,6 +2,7 @@ package com.geek.kaijo.mvp.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.geek.kaijo.R;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.ui.activity.UploadActivity;
@@ -60,23 +62,33 @@ public class UploadPhotoAdapter extends RecyclerView.Adapter {
 
 //        Glide.with(context).load(list.get(position).getUrl()).into(mHolder.img_upload_phto);
 //        Picasso.get().load(new File(list.get(position).getFileName())).resize(170, 300).centerCrop().into(mHolder.img_upload_phto);
-        Picasso.get().load(new File(list.get(position).getFileName())).resize(UploadActivity.imag_width, UploadActivity.imag_height).centerCrop().into(mHolder.img_upload_phto);
-
-        if(list.get(position).getIsSuccess()==1){
-            mHolder.tv_status.setVisibility(View.VISIBLE);
-            mHolder.progress.setVisibility(View.GONE);
-            mHolder.tv_status.setText("上传成功");
-            mHolder.tv_upload_delete.setText("删除");
-        }else if(list.get(position).getIsSuccess()==0) {
-            mHolder.tv_status.setVisibility(View.GONE);
+        if(!TextUtils.isEmpty(list.get(position).getFileName())){
+            File file = new File(list.get(position).getFileName());
+            if(file.exists()){
+                Picasso.get().load(new File(list.get(position).getFileName())).resize(UploadActivity.imag_width, UploadActivity.imag_height).centerCrop().into(mHolder.img_upload_phto);
+                if(list.get(position).getIsSuccess()==1){
+                    mHolder.tv_status.setVisibility(View.VISIBLE);
+                    mHolder.progress.setVisibility(View.GONE);
+                    mHolder.tv_status.setText("上传成功");
+                    mHolder.tv_upload_delete.setText("删除");
+                }else if(list.get(position).getIsSuccess()==0) {
+                    mHolder.tv_status.setVisibility(View.GONE);
 //            mHolder.progress.setVisibility(View.VISIBLE);
-            mHolder.tv_status.setText("上传中");
-            mHolder.tv_upload_delete.setText("上传中");
+                    mHolder.tv_status.setText("上传中");
+                    mHolder.tv_upload_delete.setText("上传中");
+                }else {
+                    mHolder.tv_status.setVisibility(View.VISIBLE);
+                    mHolder.progress.setVisibility(View.GONE);
+                    mHolder.tv_status.setText("上传失败");
+                    mHolder.tv_upload_delete.setText("重新上传");
+                }
+            }else {
+                Glide.with(context).load(list.get(position).getUrl()).into(mHolder.img_upload_phto);
+            }
         }else {
-            mHolder.tv_status.setVisibility(View.VISIBLE);
-            mHolder.progress.setVisibility(View.GONE);
-            mHolder.tv_status.setText("上传失败");
-            mHolder.tv_upload_delete.setText("重新上传");
+            if(TextUtils.isEmpty(list.get(position).getUrl())){
+                Glide.with(context).load(list.get(position).getUrl()).into(mHolder.img_upload_phto);
+            }
         }
 
         mHolder.tv_size.setText(list.get(position).getFileSize());

@@ -3,6 +3,7 @@ package com.geek.kaijo.mvp.ui.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,22 +65,25 @@ public class UploadVideoAdapter extends RecyclerView.Adapter {
         Bitmap bitmap = VideoUtil.getVideoThumbnail(list.get(position).getFileName(), UploadActivity.imag_width, UploadActivity.imag_height,-1);
         mHolder.img_upload_phto.setImageBitmap(bitmap);
 
-        if(list.get(position).getIsSuccess()==1){
-            mHolder.tv_status.setVisibility(View.VISIBLE);
-            mHolder.progress.setVisibility(View.GONE);
-            mHolder.tv_status.setText("上传成功");
-            mHolder.tv_upload_delete.setText("删除");
-        }else if(list.get(position).getIsSuccess()==0) {
-            mHolder.tv_status.setVisibility(View.GONE);
-            mHolder.progress.setVisibility(View.VISIBLE);
-            mHolder.tv_status.setText("上传中");
-            mHolder.tv_upload_delete.setText("上传中");
-        }else {
-            mHolder.tv_status.setVisibility(View.VISIBLE);
-            mHolder.progress.setVisibility(View.GONE);
-            mHolder.tv_status.setText("上传失败");
-            mHolder.tv_upload_delete.setText("重新上传");
+        if(TextUtils.isEmpty(list.get(position).getUrl())){
+            if(list.get(position).getIsSuccess()==1){
+                mHolder.tv_status.setVisibility(View.VISIBLE);
+                mHolder.progress.setVisibility(View.GONE);
+                mHolder.tv_status.setText("上传成功");
+                mHolder.tv_upload_delete.setText("删除");
+            }else if(list.get(position).getIsSuccess()==0) {
+                mHolder.tv_status.setVisibility(View.GONE);
+                mHolder.progress.setVisibility(View.VISIBLE);
+                mHolder.tv_status.setText("上传中");
+                mHolder.tv_upload_delete.setText("上传中");
+            }else {
+                mHolder.tv_status.setVisibility(View.VISIBLE);
+                mHolder.progress.setVisibility(View.GONE);
+                mHolder.tv_status.setText("上传失败");
+                mHolder.tv_upload_delete.setText("重新上传");
+            }
         }
+
 
         mHolder.tv_size.setText(list.get(position).getFileSize());
 
