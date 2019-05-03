@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:background="@color/component_bg"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="20dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawableRight="@drawable/icon_required"
+        android:drawablePadding="5dp"
+        android:text="特种设备种类"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="请输入特种设备种类"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawableRight="@drawable/icon_required"
+        android:drawablePadding="5dp"
+        android:text="特种设备名称"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="请输入特种设备名称"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:drawablePadding="5dp"
+            android:text="注册代码"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/selector_frame_background"
+            android:hint="请输入注册代码"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:spinnerMode="dialog"
+            android:textColor="@color/color_text_title"
+            android:textColorHint="@color/color_text_hint"
+            android:textSize="@dimen/t14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="年检是否合格有效"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
+
+
+        <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/cancel"
+        android:background="@drawable/shape_btn_bg_red"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="8dp"
+        android:text="删除特种设备"
+        android:textColor="@color/color_title_text"
+        android:textSize="@dimen/t14" />
+    </LinearLayout>
+</LinearLayout>

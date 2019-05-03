@@ -17,8 +17,8 @@ public interface Api {
      */
 //    String IP = "192.168.0.16";
 //    String IP = RELEASE_VERSION ? "192.168.0.252" : "221.180.255.15";
-    String IP = RELEASE_VERSION ? "192.168.0.16" : "221.180.255.15";
-//    String IP = RELEASE_VERSION ? "192.168.1.7" : "192.168.1.7";
+//    String IP = RELEASE_VERSION ? "192.168.0.16" : "221.180.255.15";
+    String IP = RELEASE_VERSION ? "192.168.0.29" : "221.180.255.15";
 
     /**
      * 端口号(用户/网格相关)

@@ -64,4 +64,9 @@ public class SocialProductFragment extends Fragment {
         }
         startActivity(intent);
     }
+
+    private void httpListInfoMenu(){
+
+
+    }
 }

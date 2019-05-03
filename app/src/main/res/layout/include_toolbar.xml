@@ -28,6 +28,7 @@
         android:layout_gravity="end"
         android:maxLines="1"
         android:paddingRight="12dp"
+        android:paddingLeft="12dp"
         android:visibility="gone" />
     <TextView
         android:id="@+id/tv_toolbar_title_right_text"
@@ -36,6 +37,7 @@
         android:layout_gravity="end|center_vertical"
         android:maxLines="1"
         android:paddingRight="12dp"
+        android:paddingLeft="12dp"
         android:gravity="center"
         android:textColor="@color/white"
         android:visibility="gone" />

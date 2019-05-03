@@ -11,10 +11,12 @@ import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
 import com.geek.kaijo.mvp.model.entity.Inspection;
+import com.geek.kaijo.mvp.model.entity.Menu;
 import com.geek.kaijo.mvp.model.entity.ServiceBean;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.Street;
 import com.geek.kaijo.mvp.model.entity.Thing;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.model.entity.UploadTest;
 import com.geek.kaijo.mvp.model.entity.User;
@@ -296,8 +298,6 @@ public interface AppService {
     */
     /**
      * 添加巡查项
-     *
-     *
      */
     @NonNull
     @POST("/thing/addOrUpdateThingPosition.json")
@@ -312,6 +312,21 @@ public interface AppService {
     @NonNull
     @POST("/thing/findThingPositionListBy.json")
     Observable<BaseResult<List<IPRegisterBean>>> findThingPositionListBy(@Query("assortId") String assortId, @Query("communityId") String communityId, @Query("gridId") String gridId);
+
+
+    /**
+     * 部件采集菜单
+     */
+    @NonNull
+    @GET("/thingPositionInfo/listInfoMenu")
+    Observable<BaseResult<List<Menu>>> listInfoMenu();
+
+    /**
+     * 部件采集新增
+     */
+    @NonNull
+    @POST("/thingPositionInfo/insertInfo")
+    Observable<BaseResult<ThingPositionInfo>> insertInfo(@Body RequestBody body);
 
 
 }

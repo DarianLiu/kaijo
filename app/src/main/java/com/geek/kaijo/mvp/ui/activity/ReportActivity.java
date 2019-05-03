@@ -254,8 +254,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     public void initData(@Nullable Bundle savedInstanceState) {
         entry_type = getIntent().getIntExtra("entry_type", 0);
 
-
-
         tvToolbarTitle.setText(entry_type == 0 ? "自行处理" : "案件上报");
 
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
@@ -275,10 +273,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
         handler = new MessageHandler();
         initLocation();
-
-
-
-
 
         //更新案发时间
         mTimePickerListener = time -> tvCaseTime.setText(time);

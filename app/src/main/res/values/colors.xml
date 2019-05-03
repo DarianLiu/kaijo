@@ -4,6 +4,7 @@
     <color name="colorPrimary">#083B7C</color>
     <color name="colorPrimaryDark">#083B7C</color>
     <color name="default_background">#F2F2F2</color>
+    <color name="component_bg">#ebeaea</color>
 
     <color name="color_main_background">#ffffff</color>
 

@@ -129,6 +129,14 @@
                     android:text="@string/add_special"
                     android:textSize="@dimen/t14" />
 
+                <LinearLayout
+                    android:id="@+id/ly_addView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
                 <include layout="@layout/addtail_layout" />
 
             </LinearLayout>

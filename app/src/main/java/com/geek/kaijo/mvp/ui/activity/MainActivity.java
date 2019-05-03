@@ -40,6 +40,7 @@ import com.geek.kaijo.mvp.model.entity.Banner;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.MainPresenter;
 import com.geek.kaijo.mvp.ui.fragment.CaseManagerFragment;
+import com.geek.kaijo.mvp.ui.fragment.ComponentFragment;
 import com.geek.kaijo.mvp.ui.fragment.MyMessageFragment;
 import com.geek.kaijo.mvp.ui.fragment.SocialManageFragment;
 import com.geek.kaijo.view.FragmentTabHost;
@@ -191,7 +192,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 case 1:
                     tabSpec = tabHost.newTabSpec(str_tab_social)
                             .setIndicator(getTabView(str_tab_social, selector_tab_social));
-                    tabHost.addTab(tabSpec, SocialManageFragment.class, null);
+//                    tabHost.addTab(tabSpec, SocialManageFragment.class, null);
+                    tabHost.addTab(tabSpec, ComponentFragment.class, null);
                     break;
 //                case 2:
 //                    tabSpec = tabHost.newTabSpec(str_tab_business)

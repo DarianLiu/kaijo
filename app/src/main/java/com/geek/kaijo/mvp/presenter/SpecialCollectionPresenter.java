@@ -2,15 +2,25 @@ package com.geek.kaijo.mvp.presenter;
 
 import android.app.Application;
 
+import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.SpecialCollectionContract;
+import com.geek.kaijo.mvp.model.entity.Case;
+import com.geek.kaijo.mvp.model.entity.Street;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxLifecycleUtils;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 
 /**
@@ -48,5 +58,27 @@ public class SpecialCollectionPresenter extends BasePresenter<SpecialCollectionC
         this.mAppManager = null;
         this.mImageLoader = null;
         this.mApplication = null;
+    }
+
+    /**
+     * 获取案件信息
+     *
+     */
+    public void findAllStreetCommunity(int type) {
+        mModel.findAllStreetCommunity(type).compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.handleBaseResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<List<Street>>(mErrorHandler) {
+                    @Override
+                    public void onNext(List<Street> streetList) {
+                        mRootView.httpStreetCommunitySuccess(streetList);
+                    }
+                });
+    }
+
+    /**
+     * 部件采集 添加
+     */
+    public void insertInfo(){
+
     }
 }

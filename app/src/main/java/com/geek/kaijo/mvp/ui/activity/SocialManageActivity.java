@@ -17,6 +17,7 @@ import com.geek.kaijo.di.component.DaggerSocialManageComponent;
 import com.geek.kaijo.di.module.SocialManageModule;
 import com.geek.kaijo.mvp.contract.SocialManageContract;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
+import com.geek.kaijo.mvp.model.entity.GridItemContent;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.SocialManagePresenter;
 import com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity;
@@ -53,6 +54,9 @@ import butterknife.BindView;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
+/**
+ * 配件采集
+ */
 public class SocialManageActivity extends BaseActivity<SocialManagePresenter> implements SocialManageContract.View {
 
     @BindView(R.id.tv_toolbar_title)
@@ -70,6 +74,7 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
     private UserInfo userInfo;
     private List<SocialThing> mDatas;
     private SocialThingAdapter mAdapter;
+    private GridItemContent subMenu;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -88,9 +93,13 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        assortId = getIntent().getIntExtra("assortId", 0);
-        thingType = getIntent().getIntExtra("thingType", 0);
+//        assortId = getIntent().getIntExtra("assortId", 0);
+//        thingType = getIntent().getIntExtra("thingType", 0);
 
+        subMenu = (GridItemContent) getIntent().getSerializableExtra("Submenu");
+        if(subMenu!=null){
+            tvToolbarTitle.setText(subMenu.getName());
+        }
 
         ivAdd.setImageDrawable(getResources().getDrawable(R.drawable.icon_add));
         ivAdd.setVisibility(View.VISIBLE);
@@ -154,6 +163,8 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
                     intents.putExtra("title", "娱乐场所");
                     break;
                 default:
+                    intents.setClass(this, SpecialCollectionActivity.class);
+                    intents.putExtra("Submenu", subMenu);
                     break;
             }
 //            Intent intent = new Intent(SocialManageActivity.this, SocialProductDangerActivity.class);
