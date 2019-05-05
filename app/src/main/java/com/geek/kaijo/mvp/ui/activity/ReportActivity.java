@@ -808,7 +808,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 videoSelector();
                 break;
             case R.id.btn_location_obtain://获取坐标
-                checkPermissionAndAction();
+//                checkPermissionAndAction();
+                mPresenter.httpUploadGpsLocation(116.486073,40.000565);
                 break;
             case R.id.btn_next://下一步
                 String type = btnNext.getText().toString();
