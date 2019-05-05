@@ -2,14 +2,21 @@ package com.geek.kaijo.mvp.ui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.DividerItemDecoration;
@@ -25,6 +32,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.cmcc.api.fpp.bean.CmccLocation;
 import com.cmcc.api.fpp.bean.LocationParam;
@@ -34,6 +42,7 @@ import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.Utils.FileSizeUtil;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
+import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.di.component.DaggerReportComponent;
 import com.geek.kaijo.di.module.ReportModule;
 import com.geek.kaijo.mvp.contract.ReportContract;
@@ -216,7 +225,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             mTimePickerPopupWindow = null;
         }
         super.onDestroy();
-        if(handler!=null){
+        if (handler != null) {
             handler.removeCallbacksAndMessages(null);
         }
         handler = null;
@@ -310,18 +319,18 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         initRefreshLayout();
 
         caseInfo = (CaseInfo) getIntent().getSerializableExtra("caseInfo");   //从暂存跳转
-        if(caseInfo!=null){
+        if (caseInfo != null) {
             etCaseAddress.setText(caseInfo.getAddress());
             etCaseProblemDescription.setText(caseInfo.getDescription());
             mLat = Double.parseDouble(caseInfo.getLat());
             mLng = Double.parseDouble(caseInfo.getLng());
-            tvLocationLongitude.setText(mLng+"");
-            tvLocationLatitude.setText(mLat+"");
+            tvLocationLongitude.setText(mLng + "");
+            tvLocationLatitude.setText(mLat + "");
 
-            if(caseInfo.getCaseAttribute().equals("1")){ //事件
-                spinnerCaseAttribute.setSelection(2,true);
-            }else if(caseInfo.getCaseAttribute().equals("2")){ //部件
-                spinnerCaseAttribute.setSelection(1,true);
+            if (caseInfo.getCaseAttribute().equals("1")) { //事件
+                spinnerCaseAttribute.setSelection(2, true);
+            } else if (caseInfo.getCaseAttribute().equals("2")) { //部件
+                spinnerCaseAttribute.setSelection(1, true);
             }
         }
 
@@ -395,12 +404,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             rxPermissions = new RxPermissions(this);
         }
         //同时申请多个权限
-        rxPermissions.request(Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(granted -> {
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION).subscribe(granted -> {
             if (granted) {           // All requested permissions are granted
-                startLocation();
+//                startLocation();
+                getGpsLocation();
             } else {
                 showPermissionsDialog();
             }
@@ -425,6 +432,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             }
         }).start();
     }
+
 
     /**
      * 初始化时间选择弹出框
@@ -510,11 +518,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         spinnerCaseAttribute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position==1){
+                if (position == 1) {
                     mCaseAttributeId = "2"; //部件2
-                }else if(position==2){
+                } else if (position == 2) {
                     mCaseAttributeId = "1"; //事件1
-                }else {
+                } else {
                     mCaseAttributeId = "0";
                 }
 //                mCaseAttributeId = String.valueOf(position);
@@ -565,20 +573,20 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     mStreetId = mStreetList.get(position).getId();
                     mCommunityList.addAll(mStreetList.get(position).getChildList());
 
-                    if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
-                        if(mCommunityList!=null){
-                            if(caseInfo!=null){ //从暂存跳转
-                                String  id = String.valueOf(caseInfo.getCommunityId());
-                                for(int i=0;i<mCommunityList.size();i++){
-                                    if(id.equals(mCommunityList.get(i).getId())){
-                                        spinnerCaseCommunity.setSelection(i,true);
+                    if (userInfo != null && !TextUtils.isEmpty(userInfo.getStreetName())) {
+                        if (mCommunityList != null) {
+                            if (caseInfo != null) { //从暂存跳转
+                                String id = String.valueOf(caseInfo.getCommunityId());
+                                for (int i = 0; i < mCommunityList.size(); i++) {
+                                    if (id.equals(mCommunityList.get(i).getId())) {
+                                        spinnerCaseCommunity.setSelection(i, true);
                                         break;
                                     }
                                 }
-                            }else {
-                                for(int i=0;i<mCommunityList.size();i++){
-                                    if(userInfo.getCommunityName().equals(mCommunityList.get(i).getName())){
-                                        spinnerCaseCommunity.setSelection(i,true);
+                            } else {
+                                for (int i = 0; i < mCommunityList.size(); i++) {
+                                    if (userInfo.getCommunityName().equals(mCommunityList.get(i).getName())) {
+                                        spinnerCaseCommunity.setSelection(i, true);
                                         break;
                                     }
                                 }
@@ -672,11 +680,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     mCasePrimaryCategory = "";
                 }
 
-                if(caseInfo!=null){ //从暂存跳转
-                    String  id = String.valueOf(caseInfo.getCaseSecondaryCategory());
-                    for(int i=0;i<mCategorySmall.size();i++){
-                        if(id.equals(mCategorySmall.get(i).getCategoryId())){
-                            spinnerCategorySmall.setSelection(i,true);
+                if (caseInfo != null) { //从暂存跳转
+                    String id = String.valueOf(caseInfo.getCaseSecondaryCategory());
+                    for (int i = 0; i < mCategorySmall.size(); i++) {
+                        if (id.equals(mCategorySmall.get(i).getCategoryId())) {
+                            spinnerCategorySmall.setSelection(i, true);
                             break;
                         }
                     }
@@ -712,11 +720,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     mCaseSecondaryCategory = "";
                 }
 
-                if(caseInfo!=null){ //从暂存跳转
-                    String  id = String.valueOf(caseInfo.getCaseChildCategory());
-                    for(int i=0;i<mCategorySub.size();i++){
-                        if(id.equals(mCategorySub.get(i).getCategoryId())){
-                            spinnerCategorySub.setSelection(i,true);
+                if (caseInfo != null) { //从暂存跳转
+                    String id = String.valueOf(caseInfo.getCaseChildCategory());
+                    for (int i = 0; i < mCategorySub.size(); i++) {
+                        if (id.equals(mCategorySub.get(i).getCategoryId())) {
+                            spinnerCategorySub.setSelection(i, true);
                             break;
                         }
                     }
@@ -739,7 +747,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
                     mCaseChildCategory = mCategorySub.get(position).getCategoryId();
-                }else {
+                } else {
                     mCaseChildCategory = "";
                 }
             }
@@ -828,10 +836,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
                 if (type.equals(next)) {//下一步
                     if (checkParams(caseTime, address, description) && mPresenter != null) {
-                        mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(),caseTime, mStreetId, mCommunityId, mGridId,
+                        mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(), caseTime, mStreetId, mCommunityId, mGridId,
                                 String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
                                 mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
-                                mCaseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList);
+                                mCaseChildCategory, handleType, whenType, caseProcessRecordID, uploadPhotoList);
                     }
                 } else if (type.equals(submit)) {//提交
 
@@ -865,11 +873,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                         List<UploadFile> uploadFileList = new ArrayList<>();
                         uploadFileList.addAll(uploadPhotoList);
                         uploadFileList.addAll(uploadVideoList);
-                        if (checkParams(caseTime, address, description) && mPresenter != null && userInfo!=null) {
-                            mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(),caseTime, mStreetId, mCommunityId, mGridId,
+                        if (checkParams(caseTime, address, description) && mPresenter != null && userInfo != null) {
+                            mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(), caseTime, mStreetId, mCommunityId, mGridId,
                                     String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
                                     mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
-                                    mCaseChildCategory, handleType, whenType, caseProcessRecordID,uploadFileList);
+                                    mCaseChildCategory, handleType, whenType, caseProcessRecordID, uploadFileList);
                         }
                     }
                 }
@@ -929,11 +937,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         mCategoryLarge.clear();
         mCategoryLarge.add(mCaseAttribute);
         mCategoryLarge.addAll(attributeList);
-        if(caseInfo!=null){ //从暂存跳转
-            String  id = String.valueOf(caseInfo.getCasePrimaryCategory());
-            for(int i=0;i<mCategoryLarge.size();i++){
-                if(id.equals(mCategoryLarge.get(i).getCategoryId())){
-                    spinnerCategoryLarge.setSelection(i,true);
+        if (caseInfo != null) { //从暂存跳转
+            String id = String.valueOf(caseInfo.getCasePrimaryCategory());
+            for (int i = 0; i < mCategoryLarge.size(); i++) {
+                if (id.equals(mCategoryLarge.get(i).getCategoryId())) {
+                    spinnerCategoryLarge.setSelection(i, true);
                     break;
                 }
             }
@@ -949,28 +957,28 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     @Override
     public void setAllStreetCommunity(List<Street> list) {
 //        if(streetList==null || streetList.size()==0){  //如果有缓存 就不更新UI
-            showStreet(list);
+        showStreet(list);
 //        }
     }
 
-    private void showStreet(List<Street> list){
+    private void showStreet(List<Street> list) {
         mStreetList.clear();
         mStreetList.add(mStreet);
         mStreetList.addAll(list.get(0).getChildList());
-        if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
-            if(mStreetList!=null){
-                if(caseInfo!=null){ //从暂存跳转
-                    String  id = String.valueOf(caseInfo.getStreetId());
-                    for(int i=0;i<mStreetList.size();i++){
-                        if(id.equals(mStreetList.get(i).getId())){
-                            spinnerCaseStreet.setSelection(i,true);
+        if (userInfo != null && !TextUtils.isEmpty(userInfo.getStreetName())) {
+            if (mStreetList != null) {
+                if (caseInfo != null) { //从暂存跳转
+                    String id = String.valueOf(caseInfo.getStreetId());
+                    for (int i = 0; i < mStreetList.size(); i++) {
+                        if (id.equals(mStreetList.get(i).getId())) {
+                            spinnerCaseStreet.setSelection(i, true);
                             break;
                         }
                     }
-                }else {
-                    for(int i=0;i<mStreetList.size();i++){
-                        if(userInfo.getStreetName().equals(mStreetList.get(i).getName())){
-                            spinnerCaseStreet.setSelection(i,true);
+                } else {
+                    for (int i = 0; i < mStreetList.size(); i++) {
+                        if (userInfo.getStreetName().equals(mStreetList.get(i).getName())) {
+                            spinnerCaseStreet.setSelection(i, true);
                             break;
                         }
                     }
@@ -991,20 +999,20 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         mGridList.clear();
         mGridList.add(mGrid);
         mGridList.addAll(list);
-        if(userInfo!=null && !TextUtils.isEmpty(userInfo.getStreetName())){
-            if(mGridList!=null){
-                if(caseInfo!=null){ //从暂存跳转
-                    String  id = String.valueOf(caseInfo.getGridId());
-                    for(int i=0;i<mGridList.size();i++){
-                        if(id.equals(mGridList.get(i).getId())){
-                            spinnerCaseGrid.setSelection(i,true);
+        if (userInfo != null && !TextUtils.isEmpty(userInfo.getStreetName())) {
+            if (mGridList != null) {
+                if (caseInfo != null) { //从暂存跳转
+                    String id = String.valueOf(caseInfo.getGridId());
+                    for (int i = 0; i < mGridList.size(); i++) {
+                        if (id.equals(mGridList.get(i).getId())) {
+                            spinnerCaseGrid.setSelection(i, true);
                             break;
                         }
                     }
-                }else {
-                    for(int i=0;i<mGridList.size();i++){
-                        if(userInfo.getGridName().equals(mGridList.get(i).getName())){
-                            spinnerCaseGrid.setSelection(i,true);
+                } else {
+                    for (int i = 0; i < mGridList.size(); i++) {
+                        if (userInfo.getGridName().equals(mGridList.get(i).getName())) {
+                            spinnerCaseGrid.setSelection(i, true);
                             break;
                         }
                     }
@@ -1037,7 +1045,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 intent.putExtra("lat", mLat);
                 intent.putExtra("lng", mLng);
 //                launchActivity(intent);
-                ReportActivity.this.startActivityForResult(intent,Constant.MAP_REQUEST_CODE);
+                ReportActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
 //                }
 
             }
@@ -1080,11 +1088,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == 1) {
-            if(caseInfo!=null){  //暂存 回暂存界面刷新
+            if (caseInfo != null) {  //暂存 回暂存界面刷新
                 setResult(1);
             }
             finish();
-        }else if (resultCode == RESULT_OK) {
+        } else if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
                     List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
@@ -1125,10 +1133,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 default:
                     break;
             }
-        }else if(requestCode==Constant.MAP_REQUEST_CODE && resultCode==Constant.MAP_REQUEST_CODE){
-            if(data!=null){
-                mLng = data.getDoubleExtra("lng",0);
-                mLat = data.getDoubleExtra("lat",0);
+        } else if (requestCode == Constant.MAP_REQUEST_CODE && resultCode == Constant.MAP_REQUEST_CODE) {
+            if (data != null) {
+                mLng = data.getDoubleExtra("lng", 0);
+                mLat = data.getDoubleExtra("lat", 0);
 
                 tvLocationLatitude.setText(String.valueOf(mLat));
                 tvLocationLongitude.setText(String.valueOf(mLng));
@@ -1237,9 +1245,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     public void uploadCaseInfoSuccess(CaseInfo caseInfoEntity) {
         switch (entry_type) {
             case 0:
-                if(caseInfo!=null){
+                if (caseInfo != null) {
                     caseInfoEntity.setId(caseInfo.getId());
-                }else {
+                    caseInfoEntity.setFileListGson(caseInfo.getFileListGson());
+                    caseInfoEntity.setHandleResult(caseInfo.getHandleResult());
+                } else {
                     caseInfoEntity.setId(caseInfoEntity.getCaseId());
                 }
                 Intent intent = new Intent(this, UploadActivity.class);
@@ -1255,5 +1265,90 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             default:
                 break;
         }
+    }
+
+
+    private void getGpsLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            mLat = location.getLatitude();
+            mLng = location.getLongitude();
+            showLocationAndSkipMap();
+        } else {
+            // 绑定监听，有4个参数
+            // 参数1，设备：有GPS_PROVIDER和NETWORK_PROVIDER两种
+            // 参数2，位置信息更新周期，单位毫秒
+            // 参数3，位置变化最小距离：当位置距离变化超过此值时，将更新位置信息
+            // 参数4，监听
+            // 备注：参数2和3，如果参数3不为0，则以参数3为准；参数3为0，则通过时间来定时更新；两者为0，则随时刷新
+
+            // 1秒更新一次，或最小位移变化超过1米更新一次；
+            // 注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+
+        }
+
+    }
+
+    // 位置监听
+    private static LocationListener locationListener = new LocationListener() {
+
+        //位置信息变化时触发
+        public void onLocationChanged(Location location) {
+            Toast.makeText(MyApplication.get(),"位置发生变化:"+location.getLongitude(),Toast.LENGTH_LONG).show();
+//            lat = location.getLatitude();
+//            mLocation = location;
+//            Log.i(TAG, "时间：" + location.getTime());
+//            Log.i(TAG, "经度：" + location.getLongitude());
+//            Log.i(TAG, "纬度：" + location.getLatitude());
+//            Log.i(TAG, "海拔：" + location.getAltitude());
+        }
+
+        //GPS状态变化时触发
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            switch (status) {
+                // GPS状态为可见时
+                case LocationProvider.AVAILABLE:
+//                    Log.i(TAG, "当前GPS状态为可见状态");
+                    break;
+                // GPS状态为服务区外时
+                case LocationProvider.OUT_OF_SERVICE:
+//                    Log.i(TAG, "当前GPS状态为服务区外状态");
+                    break;
+                // GPS状态为暂停服务时
+                case LocationProvider.TEMPORARILY_UNAVAILABLE:
+//                    Log.i(TAG, "当前GPS状态为暂停服务状态");
+                    break;
+            }
+        }
+
+        //GPS开启时触发
+        public void onProviderEnabled(String provider) {
+//            Location location = mLocationManager.getLastKnownLocation(provider);
+//            mLocation = location;
+        }
+
+        //GPS禁用时触发
+        public void onProviderDisabled(String provider) {
+//            mLocation = null;
+        }
+    };
+
+    private void showLocationAndSkipMap(){
+        tvLocationLatitude.setText(String.valueOf(mLat));
+        tvLocationLongitude.setText(String.valueOf(mLng));
+
+//                if (mLat == 0 || mLng == 0) {
+//                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
+//                } else {
+        Intent intent = new Intent(ReportActivity.this, MapActivity.class);
+        intent.putExtra("lat", mLat);
+        intent.putExtra("lng", mLng);
+//                launchActivity(intent);
+        ReportActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
     }
 }

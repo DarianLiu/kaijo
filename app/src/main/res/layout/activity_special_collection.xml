@@ -72,12 +72,12 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/et_address"
+                    android:id="@+id/et_farenName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/selector_frame_background"
-                    android:hint="@string/hint_address"
+                    android:hint="请输入法定代表人"
                     android:inputType="text"
                     android:maxLines="1"
                     android:paddingLeft="15dp"
@@ -101,12 +101,12 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/et_other"
+                    android:id="@+id/et_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/selector_frame_background"
-                    android:hint="@string/hint_other"
+                    android:hint="@string/hint_address"
                     android:inputType="text"
                     android:maxLines="1"
                     android:paddingLeft="15dp"
@@ -119,7 +119,7 @@
                     android:textSize="@dimen/t14" />
 
                 <TextView
-                    android:id="@+id/btn_location_obtain"
+                    android:id="@+id/tv_add_equipment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"

@@ -65,7 +65,7 @@ public class UploadVideoAdapter extends RecyclerView.Adapter {
         Bitmap bitmap = VideoUtil.getVideoThumbnail(list.get(position).getFileName(), UploadActivity.imag_width, UploadActivity.imag_height,-1);
         mHolder.img_upload_phto.setImageBitmap(bitmap);
 
-        if(TextUtils.isEmpty(list.get(position).getUrl())){
+        if(!TextUtils.isEmpty(list.get(position).getUrl())){
             if(list.get(position).getIsSuccess()==1){
                 mHolder.tv_status.setVisibility(View.VISIBLE);
                 mHolder.progress.setVisibility(View.GONE);

@@ -164,4 +164,32 @@ public class RequestParamUtils {
                 new Gson().toJson(jsonObject));
     }
 
+
+    /**
+     * 特种设备采集
+     */
+    public static RequestBody thingInsertInfo(String streetId,String communityId,String gridId,String lat,String lng,String photos,
+                                              String checkRecord,String danweiName,String tezhongshebei,String farenName,String address) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("danweiName", danweiName);
+        jsonObject.addProperty("tezhongshebei", tezhongshebei);
+        jsonObject.addProperty("farenName", farenName);
+        jsonObject.addProperty("address", address);
+//        jsonObject.addProperty("caseProcessRecordID", caseProcessRecordID);
+//        jsonObject.add("attachList", new Gson().toJsonTree(uploadPhotoList));
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+
 }

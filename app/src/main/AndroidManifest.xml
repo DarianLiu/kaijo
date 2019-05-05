@@ -97,6 +97,8 @@
             android:name=".mvp.ui.activity.MapActivity"
             android:screenOrientation="portrait" />
 
+        <!--<service android:name="com.cmmap.api.service.CmccService"></service>-->
+
         <!-- 定位服务(HTTP) -->
         <service android:name="com.geek.kaijo.app.service.LocalService">
             <!--<intent-filter>-->

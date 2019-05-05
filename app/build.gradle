@@ -117,7 +117,6 @@ dependencies {
     //    implementation rootProject.ext.dependencies["paginate"]
     //arms
     //    compile project(':arms')
-
     implementation rootProject.ext.dependencies["androideventbus"]
     implementation('me.jessyan:arms:2.5.0') {
         exclude module: 'support-annotations'
@@ -125,10 +124,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
     }
-
     implementation 'me.jessyan:arms-imageloader-glide:2.5.0'
     implementation rootProject.ext.dependencies["androideventbus"]
-
     //权限
     //    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
     implementation rootProject.ext.dependencies["rxpermissions2"]
@@ -145,6 +142,6 @@ dependencies {
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
     //    implementation files('libs/LoginLib.jar')
     //    implementation files('libs/cmmap.jar')
-
-    implementation 'org.greenrobot:greendao:3.2.2' // add library
+    implementation 'org.greenrobot:greendao:3.2.2'
+    // add library
 }

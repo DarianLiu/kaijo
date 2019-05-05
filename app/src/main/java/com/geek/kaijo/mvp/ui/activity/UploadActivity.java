@@ -93,6 +93,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
     TextView tv_video_list;
     @BindView(R.id.tv_video_list_later)
     TextView tv_video_list_later;
+    @BindView(R.id.et_result)
+    TextView et_result;
 
     private RxPermissions rxPermissions;
     private UploadPhotoAdapter adapter; //照片整改前
@@ -165,6 +167,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
 
         caseInfo = (CaseInfo) getIntent().getSerializableExtra("caseInfo");
         if (caseInfo != null && !TextUtils.isEmpty(caseInfo.getCaseId())) {
+            et_result.setText(caseInfo.getHandleResult());
             caseId = Integer.parseInt(caseInfo.getCaseId());
             String fileListGson = caseInfo.getFileListGson();
             if(!TextUtils.isEmpty(fileListGson)){
@@ -183,6 +186,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                                 uploadFile.fileType = uploadCaseFileList.get(i).getFileType();
                                 uploadFile.setFileName(uploadCaseFileList.get(i).getFileName());
                                 uploadFile.setUrl(uploadCaseFileList.get(i).getUrl());
+                                uploadFile.setIsSuccess(uploadCaseFileList.get(i).getIsSuccess());
                                 uploadPhotoList.add(uploadFile);
                             }else if(uploadCaseFileList.get(i).getWhenType()==2){ //整改后
                                 if(uploadPhotoList_later==null){
@@ -194,6 +198,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                                 uploadFile.fileType = uploadCaseFileList.get(i).getFileType();
                                 uploadFile.setUrl(uploadCaseFileList.get(i).getUrl());
                                 uploadFile.setFileName(uploadCaseFileList.get(i).getFileName());
+                                uploadFile.setIsSuccess(uploadCaseFileList.get(i).getIsSuccess());
                                 uploadPhotoList_later.add(uploadFile);
                             }
                         }else if(uploadCaseFileList.get(i).getFileType()==1){ //视频
@@ -207,6 +212,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                                 uploadFile.fileType = uploadCaseFileList.get(i).getFileType();
                                 uploadFile.setUrl(uploadCaseFileList.get(i).getUrl());
                                 uploadFile.setFileName(uploadCaseFileList.get(i).getFileName());
+                                uploadFile.setIsSuccess(uploadCaseFileList.get(i).getIsSuccess());
                                 videoList.add(uploadFile);
                             }else if(uploadCaseFileList.get(i).getWhenType()==2){ //整改后
                                 if(videoList_later==null){
@@ -218,6 +224,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                                 uploadFile.fileType = uploadCaseFileList.get(i).getFileType();
                                 uploadFile.setUrl(uploadCaseFileList.get(i).getUrl());
                                 uploadFile.setFileName(uploadCaseFileList.get(i).getFileName());
+                                uploadFile.setIsSuccess(uploadCaseFileList.get(i).getIsSuccess());
                                 videoList_later.add(uploadFile);
                             }
                         }
@@ -259,7 +266,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
             adapter = new UploadPhotoAdapter(this, uploadPhotoList);
             recyclerView.setAdapter(adapter);
         } else {
-            adapter.notifyDataSetChanged();
+            adapter.notifyChanged(uploadPhotoList);
         }
         adapter.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
@@ -296,7 +303,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
             adapter_later = new UploadPhotoAdapter(this, uploadPhotoList_later);
             recyclerView_later.setAdapter(adapter_later);
         } else {
-            adapter_later.notifyDataSetChanged();
+            adapter_later.notifyChanged(uploadPhotoList_later);
         }
         adapter_later.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
@@ -333,7 +340,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
             adapter_video = new UploadVideoAdapter(this, videoList);
             recyclerView_video.setAdapter(adapter_video);
         } else {
-            adapter_video.notifyDataSetChanged();
+            adapter_video.notifyChanged(videoList);
         }
         adapter_video.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
             @Override
@@ -348,7 +355,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                         mPresenter.uploadFile(videoList.get(position).getFileName());
                     }
                 }
-                if (adapter.getItemCount() != 0) {
+                if (adapter_video.getItemCount() != 0) {
                     tv_photo_list.setVisibility(View.GONE);
                 } else {
                     tv_photo_list.setVisibility(View.VISIBLE);
@@ -370,7 +377,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
             adapter_video_later = new UploadVideoAdapter(this, videoList_later);
             recyclerView_video_later.setAdapter(adapter_video_later);
         } else {
-            adapter_video_later.notifyDataSetChanged();
+            adapter_video_later.notifyChanged(videoList_later);
         }
         adapter_video_later.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
             @Override
@@ -385,7 +392,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                         mPresenter.uploadFile(videoList_later.get(position).getFileName());
                     }
                 }
-                if (adapter.getItemCount() != 0) {
+                if (adapter_video_later.getItemCount() != 0) {
                     tv_photo_list.setVisibility(View.GONE);
                 } else {
                     tv_photo_list.setVisibility(View.VISIBLE);
@@ -490,6 +497,9 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                     String uploadCaseFileGson = gson.toJsonTree(uploadCaseFileList).getAsJsonArray().toString();
                     caseInfo.setFileListGson(uploadCaseFileGson);
                 }
+                if(!TextUtils.isEmpty(et_result.getText().toString())){
+                    caseInfo.setHandleResult(et_result.getText().toString().trim());
+                }
                 DaoSession daoSession1 = MyApplication.get().getDaoSession();
                 CaseInfoDao caseInfoDao = daoSession1.getCaseInfoDao();
                 caseInfoDao.insertOrReplaceInTx(caseInfo);
@@ -526,7 +536,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 caseFile.setFileType(0); //照片
                 caseFile.setWhenType(1); //整改前
                 caseFile.setHandleType(handleType);
-//                caseFile.setFileName(uploadPhotoList.get(i).getFileName());
+                caseFile.setFileName(uploadPhotoList.get(i).getFileName());
+                caseFile.setIsSuccess(uploadPhotoList.get(i).getIsSuccess());
                 caseFileList.add(caseFile);
             }
         }
@@ -539,7 +550,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 caseFile.setFileType(0); //照片
                 caseFile.setWhenType(2);//整改后
                 caseFile.setHandleType(handleType);
-//                caseFile.setFileName(uploadPhotoList_later.get(i).getFileName());
+                caseFile.setFileName(uploadPhotoList_later.get(i).getFileName());
+                caseFile.setIsSuccess(uploadPhotoList_later.get(i).getIsSuccess());
                 caseFileList.add(caseFile);
             }
         }
@@ -552,7 +564,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 caseFile.setFileType(1); //视频
                 caseFile.setWhenType(1);//整改后
                 caseFile.setHandleType(handleType);
-//                caseFile.setFileName(videoList.get(i).getFileName());
+                caseFile.setFileName(videoList.get(i).getFileName());
+                caseFile.setIsSuccess(videoList.get(i).getIsSuccess());
                 caseFileList.add(caseFile);
             }
         }
@@ -565,7 +578,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                 caseFile.setFileType(1); //视频
                 caseFile.setWhenType(2);//整改后
                 caseFile.setHandleType(handleType);
-//                caseFile.setFileName(videoList_later.get(i).getFileName());
+                caseFile.setFileName(videoList_later.get(i).getFileName());
+                caseFile.setIsSuccess(videoList_later.get(i).getIsSuccess());
                 caseFileList.add(caseFile);
             }
         }
@@ -883,9 +897,21 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         }
         if (isBeforePhoto) {  //整改前
             uploadPhotoList = uploadList;
+//            if(uploadPhotoList==null){
+//                uploadPhotoList = new ArrayList<>();
+//            }
+//            uploadPhotoList.clear();
+//            uploadPhotoList.addAll(uploadList);
+
             recyclerViewAdapter();
         } else {//整改后
             uploadPhotoList_later = uploadList;
+//            if(uploadPhotoList_later==null){
+//                uploadPhotoList_later = new ArrayList<>();
+//            }
+//            uploadPhotoList_later.clear();
+//            uploadPhotoList_later.addAll(uploadList);
+
             recyclerViewAdapter_later();
         }
 
@@ -989,8 +1015,10 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
                             videoList.get(i).setFileRelativePath(uploadPhoto.getFileRelativePath());
                             videoList.get(i).setIsSuccess(uploadPhoto.getIsSuccess());
                             adapter_video.notifyItemChanged(i);
+                            break;
                         }
                     }
+//                    adapter_video.notifyChanged(videoList);
                     break;
                 case 2:
                     for (int i = 0; i < videoList_later.size(); i++) {

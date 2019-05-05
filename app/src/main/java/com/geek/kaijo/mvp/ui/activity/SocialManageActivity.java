@@ -171,7 +171,8 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
 //            intent.putExtra("entry_type", assortId);
 //            intent.putExtra("title", ((ServiceBean) data).getTitle());
 //            intent.putExtra("content", ((ServiceBean) data).getContent());
-            launchActivity(intents);
+            startActivityForResult(intents,1);
+//            launchActivity(intents);
         });
 
 
@@ -360,4 +361,11 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==1){
+            smartRefresh.autoRefresh();
+        }
+    }
 }

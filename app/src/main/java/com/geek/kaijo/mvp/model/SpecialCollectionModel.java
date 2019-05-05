@@ -3,8 +3,11 @@ package com.geek.kaijo.mvp.model;
 import android.app.Application;
 
 import com.geek.kaijo.app.api.AppService;
+import com.geek.kaijo.app.api.RequestParamUtils;
 import com.geek.kaijo.mvp.model.entity.BaseResult;
 import com.geek.kaijo.mvp.model.entity.Street;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
+import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.google.gson.Gson;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.BaseModel;
@@ -18,6 +21,8 @@ import com.geek.kaijo.mvp.contract.SpecialCollectionContract;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 
 /**
@@ -54,5 +59,16 @@ public class SpecialCollectionModel extends BaseModel implements SpecialCollecti
     @Override
     public Observable<BaseResult<List<Street>>> findAllStreetCommunity(int type) {
         return mRepositoryManager.obtainRetrofitService(AppService.class).dfindAllStreetCommunity(type);
+    }
+
+    @Override
+    public Observable<BaseResult<ThingPositionInfo>> insertInfo(RequestBody body) {
+
+        return mRepositoryManager.obtainRetrofitService(AppService.class).insertInfo(body);
+    }
+
+    @Override
+    public Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).uploadFile(parts);
     }
 }
