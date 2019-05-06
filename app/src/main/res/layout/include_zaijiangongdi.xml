@@ -17,7 +17,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_mark"
+        android:id="@+id/gd_et_mark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -46,7 +46,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_name"
+        android:id="@+id/gd_et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -69,13 +69,43 @@
         android:layout_marginTop="12dp"
         android:drawableRight="@drawable/icon_required"
         android:drawablePadding="5dp"
+        android:text="工程地址"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/gd_et_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="请输入工程地址"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawableRight="@drawable/icon_required"
+        android:drawablePadding="5dp"
         android:text="施工单位"
         android:textColor="@color/color_text_black"
         android:textSize="@dimen/t12"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_shigongdanwei"
+        android:id="@+id/gd_et_shigongdanwei"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -104,7 +134,7 @@
         android:textStyle="bold" />
 
     <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/spinner_check"
+        android:id="@+id/gd_spinner_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" />
@@ -121,7 +151,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_farenName"
+        android:id="@+id/gd_et_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -149,7 +179,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_jingduzhuangtai"
+        android:id="@+id/gd_et_jingduzhuangtai"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -177,7 +207,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/jianzhumianji"
+        android:id="@+id/gd_jianzhumianji"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -204,8 +234,8 @@
         android:textSize="@dimen/t12"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/et_kaigongnriqi"
+    <TextView
+        android:id="@+id/gd_et_kaigongnriqi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -232,8 +262,8 @@
         android:textSize="@dimen/t12"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/et_jungongriqi"
+    <TextView
+        android:id="@+id/gd_et_jungongriqi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -261,7 +291,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_jianshedanwei"
+        android:id="@+id/gd_et_jianshedanwei"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -289,7 +319,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_jianlidanwei"
+        android:id="@+id/gd_et_jianlidanwei"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

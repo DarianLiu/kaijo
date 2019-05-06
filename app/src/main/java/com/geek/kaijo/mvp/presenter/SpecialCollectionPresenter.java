@@ -88,10 +88,7 @@ public class SpecialCollectionPresenter extends BasePresenter<SpecialCollectionC
     /**
      * 部件采集 添加
      */
-    public void insertInfo(String streetId,String communityId,String gridId,String lat,String lng,String photos,
-                           String checkRecord,String danweiName,String tezhongshebei,String farenName,String address){
-        RequestBody requestBody = RequestParamUtils.thingInsertInfo(streetId,communityId, gridId, lat, lng, photos, checkRecord, danweiName,
-                tezhongshebei, farenName, address);
+    public void insertInfo(RequestBody requestBody){
         mModel.insertInfo(requestBody)
                 .compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
@@ -103,6 +100,24 @@ public class SpecialCollectionPresenter extends BasePresenter<SpecialCollectionC
                 });
 
     }
+//    /**
+//     * 部件采集 添加
+//     */
+//    public void insertInfo(String streetId,String communityId,String gridId,String lat,String lng,String photos,
+//                           String checkRecord,String danweiName,String tezhongshebei,String farenName,String address){
+//        RequestBody requestBody = RequestParamUtils.thingInsertInfo(streetId,communityId, gridId, lat, lng, photos, checkRecord, danweiName,
+//                tezhongshebei, farenName, address);
+//        mModel.insertInfo(requestBody)
+//                .compose(RxUtils.applySchedulers(mRootView))
+//                .compose(RxUtils.handleBaseResult(mApplication))
+//                .subscribeWith(new ErrorHandleSubscriber<ThingPositionInfo>(mErrorHandler) {
+//                    @Override
+//                    public void onNext(ThingPositionInfo caseInfoEntity) {
+//                        mRootView.httpInsertInfoSuccess();
+//                    }
+//                });
+//
+//    }
 
     /**
      * 上传图片 单张图片

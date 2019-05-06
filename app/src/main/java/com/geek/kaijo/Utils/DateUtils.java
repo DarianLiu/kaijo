@@ -82,12 +82,25 @@ public class DateUtils {
      */
     public static long getCurrentYearTimeStamp() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(getCurrentTimeMillis());
+        calendar.set(1970,1,1);
+//        calendar.setTimeInMillis(getCurrentTimeMillis());
         int year = calendar.get(Calendar.YEAR);
         String dateStr = year + "年01月01日";
         return getStringToDate(dateStr, "yyyy年MM月dd日");
     }
 
+    /**
+     * 获取当前1970年份的时间戳
+     *
+     * @return YearTimeStamp：当前年份的时间戳
+     */
+    public static long get1970YearTimeStamp() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1970,1,1);
+        int year = calendar.get(Calendar.YEAR);
+        String dateStr = year + "年01月01日";
+        return getStringToDate(dateStr, "yyyy年MM月dd日");
+    }
     /**
      * 字符串转为时间戳
      *

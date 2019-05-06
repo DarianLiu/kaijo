@@ -174,8 +174,6 @@ public class RequestParamUtils {
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
-        jsonObject.addProperty("communityId", communityId);
-        jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
         jsonObject.addProperty("photos", photos);
@@ -186,6 +184,37 @@ public class RequestParamUtils {
         jsonObject.addProperty("address", address);
 //        jsonObject.addProperty("caseProcessRecordID", caseProcessRecordID);
 //        jsonObject.add("attachList", new Gson().toJsonTree(uploadPhotoList));
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+    /**
+     * 在建工地
+     */
+    public static RequestBody thingInsertInfo_gd(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                 String shoulishuNo,String name,String address,String danweiName,String isXukezheng,String zongzaojiaSum,String status,
+                                                 String jianzhuSum,String startTime,String endTime,String jianshedanweiName,String jianlidanweiName) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("shoulishuNo", shoulishuNo);
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("danweiName", danweiName);
+        jsonObject.addProperty("isXukezheng", isXukezheng);
+        jsonObject.addProperty("zongzaojiaSum", zongzaojiaSum);
+        jsonObject.addProperty("status", status);
+        jsonObject.addProperty("jianzhuSum", jianzhuSum);
+        jsonObject.addProperty("startTime", startTime);
+        jsonObject.addProperty("endTime", endTime);
+        jsonObject.addProperty("jianshedanweiName", jianshedanweiName);
+        jsonObject.addProperty("jianlidanweiName", jianlidanweiName);
 
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
