@@ -90,6 +90,11 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     @BindView(R.id.smartRefresh)
     SmartRefreshLayout smartRefresh;
 
+    @BindView(R.id.include_tezhongshebei)
+    LinearLayout include_tezhongshebei;
+    @BindView(R.id.include_zaijiangongdi)
+    LinearLayout include_zaijiangongdi;
+
 
     //上传图片
     @BindView(R.id.upload_picture_list)
@@ -132,6 +137,12 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         subMenu = (GridItemContent) getIntent().getSerializableExtra("Submenu");
         if (subMenu != null) {
             tvToolbarTitle.setText(subMenu.getName() + "采集");
+            if("特种设备".equals(subMenu.getName())){
+                include_tezhongshebei.setVisibility(View.VISIBLE);
+            }else if("在建工地".equals(subMenu.getName())){
+                include_zaijiangongdi.setVisibility(View.VISIBLE);
+            }
+
         }
 
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
@@ -157,20 +168,38 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         photoAdapter.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
+                if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
+                    uploadPhotoList.remove(position);
+                    photoAdapter.notifyDataSetChanged();
+                } else if (uploadPhotoList.get(position).getIsSuccess() == 0) {
 
+                } else { //上传失败 重新上传
+                    if (mPresenter != null) {
+                        mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    }
+                }
             }
         });
 
         //上传检查记录
         fileList = new ArrayList<>();
-        fileAdapter = new UploadPhotoAdapter(this, uploadPhotoList);
+        fileAdapter = new UploadPhotoAdapter(this, fileList);
         check_record_list.setLayoutManager(new LinearLayoutManager(this));
         check_record_list.setHasFixedSize(true);
         check_record_list.setAdapter(fileAdapter);
         fileAdapter.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
+                if (fileList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
+                    fileList.remove(position);
+                    fileAdapter.notifyDataSetChanged();
+                } else if (fileList.get(position).getIsSuccess() == 0) {
 
+                } else { //上传失败 重新上传
+                    if (mPresenter != null) {
+                        mPresenter.uploadFile(fileList.get(position).getFileName());
+                    }
+                }
             }
         });
     }
@@ -390,7 +419,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ly_addView.removeView((View) view.getParent());
+                ly_addView.removeView((View) view.getParent().getParent());
             }
         });
         ly_addView.addView(view);
@@ -453,7 +482,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                         uploadPhotoList.add(uploadPhoto1);
                         photoAdapter.notifyDataSetChanged();
                         if (mPresenter != null) {
-                            mPresenter.uploadFile(compressedPath);
+                            mPresenter.uploadPhotoFile(compressedPath);
                         }
                     }
                     break;

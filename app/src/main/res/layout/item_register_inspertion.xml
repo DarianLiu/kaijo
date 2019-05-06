@@ -2,14 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/ipr_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="电线干" />
+        android:text="电线干"
+        android:layout_marginLeft="5dp"/>
 
     <TextView
         android:id="@+id/ipr_status"
@@ -18,12 +21,14 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/ipr_select"
-        android:text="状态" />
+        android:text="正常" />
 
     <CheckBox
         android:id="@+id/ipr_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:enabled="false"/>
 
 </RelativeLayout>

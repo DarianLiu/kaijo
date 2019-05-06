@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.InspectionProjectRegisterPresenter;
 import com.geek.kaijo.mvp.ui.adapter.IPRegisterAdapter;
+import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -67,6 +69,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     private List<IPRegisterBean> mList;
     private IPRegisterAdapter mAdapter;
     private UserInfo userInfo;
+    private LoadingProgressDialog loadingDialog;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -122,6 +125,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
         mList = new ArrayList<>();
         mAdapter = new IPRegisterAdapter(mList);
@@ -133,12 +137,18 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
 
     @Override
     public void showLoading() {
-
+        if (loadingDialog == null)
+            loadingDialog = new LoadingProgressDialog.Builder(this)
+                    .setCancelable(true)
+                    .setCancelOutside(true).create();
+        if (!loadingDialog.isShowing())
+            loadingDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (loadingDialog != null && loadingDialog.isShowing())
+            loadingDialog.dismiss();
     }
 
     @Override
@@ -163,11 +173,15 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ipr_start://开始巡查
-                iprComplete.setEnabled(true);
-                iprCancel.setEnabled(true);
-                iprStart.setEnabled(false);
+                if(mPresenter!=null && userInfo!=null){
+                    mPresenter.startPath(userInfo.getUserId(),1);
+                }
+
                 break;
             case R.id.ipr_complete://完成巡查
+                if(mPresenter!=null && userInfo!=null){
+                    mPresenter.endPath(userInfo.getUserId(),1);
+                }
                 break;
             case R.id.ipr_cancel://取消巡查
                 iprComplete.setEnabled(false);
@@ -184,6 +198,18 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
             mList.addAll(inspectionList);
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void httpStartSuccess() {
+        iprComplete.setEnabled(true);
+        iprCancel.setEnabled(true);
+        iprStart.setEnabled(false);
+    }
+
+    @Override
+    public void httpEndSuccess() {
+
     }
 
     @Override

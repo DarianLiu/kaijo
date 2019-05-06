@@ -285,19 +285,143 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
      * 经纬度偏移换算
      */
     public void httpUploadGpsLocation(double lng, double lat){
+
         Observable<Location> observable = Observable.create(new ObservableOnSubscribe<Location>() {
             @Override
             public void subscribe(ObservableEmitter<Location> emitter) throws Exception {
-                Location location = new Location();
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+
+                        Log.i(this.getClass().getName(),"rx_call==========线程名======="+Thread.currentThread().getName());
+                        Location location = new Location();
+                        String xml = gettRequest(1,1);
+                        try {
+                            byte[] xmlbyte = xml.toString().getBytes("UTF-8");
+
+                            System.out.println(xml);
+                            URL url = new URL("http://211.137.35.35:9213/GeService");
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setConnectTimeout(5000);
+                            conn.setDoOutput(true);// 允许输出
+                            conn.setDoInput(true);
+                            conn.setUseCaches(false);// 不使用缓存
+                            conn.setRequestMethod("POST");
+//                    conn.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
+                            conn.setRequestProperty("Charset", "UTF-8");
+                            conn.setRequestProperty("Content-Length",
+                                    String.valueOf(xmlbyte.length));
+                            conn.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
+//                    conn.setRequestProperty("X-ClientType", "2");//发送自定义的头信息
+
+                            conn.getOutputStream().write(xmlbyte);
+                            conn.getOutputStream().flush();
+                            conn.getOutputStream().close();
+
+
+                            if (conn.getResponseCode() != 200)
+                                throw new RuntimeException("请求url失败");
+
+                            InputStream is = conn.getInputStream();// 获取返回数据
+
+                            // 使用输出流来输出字符(可选)
+                            ByteArrayOutputStream out = new ByteArrayOutputStream();
+                            byte[] buf = new byte[1024];
+                            int len;
+                            while ((len = is.read(buf)) != -1) {
+                                out.write(buf, 0, len);
+                            }
+                            String string = out.toString("UTF-8");
+                            System.out.println("1111111111111111111111经纬度换算===="+string);
+                            out.close();
+
+                            // xml解析
+                            String version = null;
+                            String seqID = null;
+                            XmlPullParser parser = Xml.newPullParser();
+                            try {
+                                parser.setInput(new ByteArrayInputStream(string.substring(1)
+                                        .getBytes("UTF-8")), "UTF-8");
+                                parser.setInput(is, "UTF-8");
+                                int eventType = parser.getEventType();
+                                while (eventType != XmlPullParser.END_DOCUMENT) {
+                                    if (eventType == XmlPullParser.START_TAG) {
+                                        if ("Envelope".equals(parser.getName())) {
+                                            version = parser.getAttributeValue(0);
+                                        } else if ("SeqID".equals(parser.getName())) {
+                                            seqID = parser.nextText();
+                                        } else if ("ResultCode".equals(parser.getName())) {
+//                                    resultCode = parser.nextText();
+                                        }
+                                    }
+                                    eventType = parser.next();
+                                }
+                            } catch (XmlPullParserException e) {
+                                e.printStackTrace();
+                                System.out.println(e);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                System.out.println(e);
+                            }
+                            System.out.println("version = " + version);
+                            System.out.println("seqID = " + seqID);
+//                    System.out.println("resultCode = " + resultCode);
+
+                            location.setLng(1);
+                            location.setLat(1);
+
+                            emitter.onNext(location);
+
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                            System.out.println(e);
+                            e.printStackTrace();
+                        }
+
+                        emitter.onComplete();
+
+                    }
+                }.start();
+
+            }
+        });
+        //创建一个下游 Observer
+        Observer<Location> observer = new Observer<Location>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(Location menuList) {
+//                mRootView.preListInfoMenuSuccess(menuList);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+//                mRootView.preError();
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+        //建立连接
+        observable.subscribe(observer);
+
+    }
+
+    public void httpXmlRequest(double lng, double lat){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
                 String xml = gettRequest(1,1);
                 try {
                     byte[] xmlbyte = xml.toString().getBytes("UTF-8");
 
                     System.out.println(xml);
-
-                    URL url = new URL("http://host:port/GeService");
-
-
+                    URL url = new URL("http://211.137.35.35:9213/GeService");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setConnectTimeout(5000);
                     conn.setDoOutput(true);// 允许输出
@@ -332,7 +456,6 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                     System.out.println("1111111111111111111111经纬度换算===="+string);
                     out.close();
 
-
                     // xml解析
                     String version = null;
                     String seqID = null;
@@ -365,41 +488,19 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                     System.out.println("seqID = " + seqID);
 //                    System.out.println("resultCode = " + resultCode);
 
-                    location.setLng(1);
-                    location.setLat(1);
-
-                    emitter.onNext(location);
+//            location.setLng(1);
+//            location.setLat(1);
+//
+//            emitter.onNext(location);
 
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
-                    System.out.println(e);
+                    e.printStackTrace();
+//            System.out.println(e);
                 }
 
-                emitter.onComplete();
             }
-        });
-        //创建一个下游 Observer
-        Observer<Location> observer = new Observer<Location>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-            }
-
-            @Override
-            public void onNext(Location menuList) {
-//                mRootView.preListInfoMenuSuccess(menuList);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-//                mRootView.preError();
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-        //建立连接
-        observable.subscribe(observer);
+        }.start();
 
     }
 

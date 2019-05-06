@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.jess.arms.base.BaseHolder;
 
 import butterknife.BindString;
@@ -17,7 +18,7 @@ import butterknife.ButterKnife;
  * Created by LiuLi on 2019/1/24.
  */
 
-public class SocialItemHolder extends BaseHolder<SocialThing> {
+public class SocialItemHolder extends BaseHolder<ThingPositionInfo> {
 
     @BindView(R.id.tv_service_title)
     TextView tvServiceTitle;
@@ -33,8 +34,8 @@ public class SocialItemHolder extends BaseHolder<SocialThing> {
     }
 
     @Override
-    public void setData(SocialThing data, int position) {
-        tvServiceTitle.setText(data.getIntroTitle());
+    public void setData(ThingPositionInfo data, int position) {
+        tvServiceTitle.setText(data.getName());
 
         tvServiceCreateTime.setText(String.format("%s%s", createTime,
                 DateUtils.timeStamp2Date(data.getCreateTime(), "yyy-MM-dd")));

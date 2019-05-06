@@ -18,6 +18,7 @@ import com.geek.kaijo.di.module.SocialManageModule;
 import com.geek.kaijo.mvp.contract.SocialManageContract;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.GridItemContent;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.SocialManagePresenter;
 import com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity;
@@ -55,7 +56,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 /**
- * 配件采集
+ * 配件
  */
 public class SocialManageActivity extends BaseActivity<SocialManagePresenter> implements SocialManageContract.View {
 
@@ -72,7 +73,7 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
     private long assortId;
     private int thingType;
     private UserInfo userInfo;
-    private List<SocialThing> mDatas;
+    private List<ThingPositionInfo> mDatas;
     private SocialThingAdapter mAdapter;
     private GridItemContent subMenu;
 
@@ -175,20 +176,21 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
 //            launchActivity(intents);
         });
 
+        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
 
         initTitle();
         initRecycleView();
         initRefreshLayout();
+        smartRefresh.autoRefresh();
 
-        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
-        if (mPresenter != null) {
-            if (userInfo == null) {
-                launchActivity(new Intent(this, LoginActivity.class));
-            } else {
-                mPresenter.findThingPositionList(true, assortId, userInfo.getStreetId(),
-                        userInfo.getCommunityId(), userInfo.getGridId(), thingType, "");
-            }
-        }
+//        if (mPresenter != null) {
+//            if (userInfo == null) {
+//                launchActivity(new Intent(this, LoginActivity.class));
+//            } else {
+////                mPresenter.findThingPositionList(true, assortId, userInfo.getStreetId(),
+////                        userInfo.getCommunityId(), userInfo.getGridId(), thingType, "");
+//            }
+//        }
     }
 
     /**
@@ -200,15 +202,15 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 if (mPresenter != null)
-                    mPresenter.findThingPositionList(false, assortId, userInfo.getStreetId(),
-                            userInfo.getCommunityId(), userInfo.getGridId(), thingType, "");
+                    mPresenter.findThingPositionList(false, subMenu.getName(), "","",
+                            "", "");
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 if (mPresenter != null)
-                    mPresenter.findThingPositionList(true, assortId, userInfo.getStreetId(),
-                            userInfo.getCommunityId(), userInfo.getGridId(), thingType, "");
+                    mPresenter.findThingPositionList(true, subMenu.getName(), "","",
+                            "", "");
             }
         });
     }
@@ -290,8 +292,8 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
     @Subscriber(tag = EventBusTags.TAG_SOCIAL_SEARCH)
     public void receiveSearchKey(String searchKey) {
         if (mPresenter != null)
-            mPresenter.findThingPositionList(true, assortId, userInfo.getStreetId(),
-                    userInfo.getCommunityId(), userInfo.getGridId(), thingType, searchKey);
+            mPresenter.findThingPositionList(true, subMenu.getName(), "",
+                    "", "", "");
     }
 
     @Override
@@ -341,14 +343,14 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
     }
 
     @Override
-    public void refreshData(List<SocialThing> datas) {
+    public void refreshData(List<ThingPositionInfo> datas) {
         mDatas.clear();
         mDatas.addAll(datas);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void loadMoreData(List<SocialThing> datas) {
+    public void loadMoreData(List<ThingPositionInfo> datas) {
         if (datas != null && smartRefresh != null && datas.size() == 0) {
             smartRefresh.finishLoadMoreWithNoMoreData();
             return;

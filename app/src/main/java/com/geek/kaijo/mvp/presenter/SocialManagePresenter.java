@@ -3,7 +3,11 @@ package com.geek.kaijo.mvp.presenter;
 import android.app.Application;
 
 import com.geek.kaijo.app.api.RxUtils;
+import com.geek.kaijo.mvp.model.entity.BaseArrayResult;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -13,6 +17,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 import javax.inject.Inject;
 
@@ -43,16 +49,21 @@ public class SocialManagePresenter extends BasePresenter<SocialManageContract.Mo
     /**
      * 物件点位列表
      *
-     * @param assortId    是	Long	分类ID
-     * @param streetId    否	Long	所属街道
-     * @param communityId 否	Long	所属社区
-     * @param gridId      否	Long	所属网格
-     * @param thingType   是	Integer	物件类型
-     * @param name        否	String	物件商店名称
      */
-    public void findThingPositionList(boolean isRefresh, long assortId, long streetId, long communityId, long gridId, int thingType, String name) {
+    public void findThingPositionList(boolean isRefresh,String assortType,String name,String danweiName,String jingyingzheName,String address) {
         currPage = isRefresh ? 1 : currPage + 1;
-        mModel.findThingPositionList(currPage, 10, assortId, streetId, communityId, gridId, thingType, name)
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("current", currPage);
+        jsonObject.addProperty("size", 10);
+        jsonObject.addProperty("assortType", assortType);
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("danweiName", danweiName);
+        jsonObject.addProperty("jingyingzheName", jingyingzheName);
+        jsonObject.addProperty("address", address);
+        RequestBody requestBody =  RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+
+        mModel.findThingPositionList(requestBody)
                 .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -64,13 +75,13 @@ public class SocialManagePresenter extends BasePresenter<SocialManageContract.Mo
                     }
                 }).compose(RxLifecycleUtils.bindToLifecycle(mRootView))
                 .compose(RxUtils.handleBaseResult(mAppManager.getTopActivity()))
-                .subscribe(new ErrorHandleSubscriber<List<SocialThing>>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<BaseArrayResult<ThingPositionInfo>>(mErrorHandler) {
                     @Override
-                    public void onNext(List<SocialThing> datas) {
+                    public void onNext(BaseArrayResult<ThingPositionInfo> datas) {
                         if (isRefresh) {
-                            mRootView.refreshData(datas);
+                            mRootView.refreshData(datas.getRecords());
                         } else {
-                            mRootView.loadMoreData(datas);
+                            mRootView.loadMoreData(datas.getRecords());
                         }
                     }
                 });

@@ -11,6 +11,7 @@ import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.Grid;
 import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
 import com.geek.kaijo.mvp.model.entity.Inspection;
+import com.geek.kaijo.mvp.model.entity.InspentionResult;
 import com.geek.kaijo.mvp.model.entity.Menu;
 import com.geek.kaijo.mvp.model.entity.ServiceBean;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
@@ -236,16 +237,10 @@ public interface AppService {
     /**
      * 物件点位列表
      *
-     * @param assortId    是	Long	分类ID
-     * @param streetId    否	Long	所属街道
-     * @param communityId 否	Long	所属社区
-     * @param gridId      否	Long	所属网格
-     * @param thingType   是	Integer	物件类型
-     * @param name        否	String	物件商店名称
      */
     @NonNull
-    @POST("/thing/findThingPositionList.json")
-    Observable<BaseResult<List<SocialThing>>> findThingPositionList(@Query("currPage") int currPage, @Query("pageSize") int pageSize, @Query("assortId") long assortId, @Query("streetId") long streetId, @Query("communityId") long communityId, @Query("gridId") long gridId, @Query("thingType") int thingType, @Query("name") String name);
+    @POST("/thingPositionInfo/listInfoPage")
+    Observable<BaseResult<BaseArrayResult<ThingPositionInfo>>> findThingPositionList(@Body RequestBody body);
 
 
     /**
@@ -304,14 +299,22 @@ public interface AppService {
     Observable<BaseResult<Inspection>> addOrUpdateThingPosition(@Body RequestBody body);
 
 
+//    /**
+//     * 巡查项列表
+//     *
+//     * @param assortId assortId：巡查项所属分类id, 默认10
+//     */
+//    @NonNull
+//    @POST("/thing/findThingPositionListBy.json")
+//    Observable<BaseResult<List<IPRegisterBean>>> findThingPositionListBy(@Query("streetId") String assortId, @Query("communityId") String communityId, @Query("gridId") String gridId);
+
     /**
      * 巡查项列表
      *
-     * @param assortId assortId：巡查项所属分类id, 默认10
      */
     @NonNull
     @POST("/thing/findThingPositionListBy.json")
-    Observable<BaseResult<List<IPRegisterBean>>> findThingPositionListBy(@Query("assortId") String assortId, @Query("communityId") String communityId, @Query("gridId") String gridId);
+    Observable<BaseResult<List<IPRegisterBean>>> findThingPositionListBy(@Body RequestBody body);
 
 
     /**
@@ -328,5 +331,21 @@ public interface AppService {
     @POST("/thingPositionInfo/insertInfo")
     Observable<BaseResult<ThingPositionInfo>> insertInfo(@Body RequestBody body);
 
+
+    /**
+     * 开始巡查
+     *
+     */
+    @NonNull
+    @POST("/path/startPath")
+    Observable<BaseResult<InspentionResult>> startPath(@Body RequestBody body);
+
+    /**
+     * 结束巡查
+     *
+     */
+    @NonNull
+    @POST("/path/endPath")
+    Observable<BaseResult<InspentionResult>> endPath(@Body RequestBody body);
 
 }

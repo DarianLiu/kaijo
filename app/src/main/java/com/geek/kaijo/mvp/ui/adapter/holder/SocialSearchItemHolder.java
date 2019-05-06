@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.geek.kaijo.R;
 import com.geek.kaijo.app.EventBusTags;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.model.event.ServiceEvent;
 import com.geek.kaijo.mvp.ui.activity.society.safety.SocialProductDangerActivity;
 import com.jess.arms.base.BaseHolder;
@@ -23,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by LiuLi on 2019/1/24.
  */
 
-public class SocialSearchItemHolder extends BaseHolder<SocialThing> {
+public class SocialSearchItemHolder extends BaseHolder<ThingPositionInfo> {
 
     @BindView(R.id.et_search)
     EditText etSearch;
@@ -39,7 +40,7 @@ public class SocialSearchItemHolder extends BaseHolder<SocialThing> {
     }
 
     @Override
-    public void setData(SocialThing data, int position) {
+    public void setData(ThingPositionInfo data, int position) {
         switch (entryType) {
             case 1://计划生育
             case 2://结婚登记

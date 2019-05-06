@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.ui.adapter.holder.SocialItemHolder;
 import com.geek.kaijo.mvp.ui.adapter.holder.SocialSearchItemHolder;
 import com.jess.arms.base.BaseHolder;
@@ -16,11 +17,11 @@ import java.util.List;
  * Created by LiuLi on 2019/1/24.
  */
 
-public class SocialThingAdapter extends DefaultAdapter<SocialThing> {
+public class SocialThingAdapter extends DefaultAdapter<ThingPositionInfo> {
 
     private int entryType;
 
-    public SocialThingAdapter(List<SocialThing> infos, int entryType) {
+    public SocialThingAdapter(List<ThingPositionInfo> infos, int entryType) {
         super(infos);
         this.entryType = entryType;
     }
@@ -31,7 +32,7 @@ public class SocialThingAdapter extends DefaultAdapter<SocialThing> {
     }
 
     @Override
-    public BaseHolder<SocialThing> getHolder(View v, int viewType) {
+    public BaseHolder<ThingPositionInfo> getHolder(View v, int viewType) {
         if (viewType == 0) {
             return new SocialSearchItemHolder(v, entryType);
         } else {
@@ -45,7 +46,7 @@ public class SocialThingAdapter extends DefaultAdapter<SocialThing> {
     }
 
     @Override
-    public void onBindViewHolder(BaseHolder<SocialThing> holder, int position) {
+    public void onBindViewHolder(BaseHolder<ThingPositionInfo> holder, int position) {
         if (position == 0) {
             holder.setData(null, position);
         } else {
