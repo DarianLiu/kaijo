@@ -31,11 +31,244 @@
                 android:paddingBottom="10dp">
 
                 <include layout="@layout/addtop_layout" />
-                <!--特种设备-->
-                <include android:id="@+id/include_tezhongshebei" layout="@layout/include_tezhongshebei" android:visibility="gone"/>
-                <!--在建工地-->
-                <include android:id="@+id/include_zaijiangongdi" layout="@layout/include_zaijiangongdi" android:visibility="gone"/>
+                <LinearLayout
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
+                </LinearLayout>
+                <!--森林防火-->
+                <LinearLayout
+                    android:id="@+id/ly_senlinfanhuo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="5dp"
+                        android:text="点位名称"
+                        android:drawableRight="@drawable/icon_required"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t12"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/senl_et_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/selector_frame_background"
+                        android:hint="请输入点位名称"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/color_text_title"
+                        android:textColorHint="@color/color_text_hint"
+                        android:textSize="@dimen/t14" />
+
+                </LinearLayout>
+                <!--冬季除雪-->
+                <LinearLayout
+                    android:id="@+id/ly_dongjichuxue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="5dp"
+                        android:text="具体地址"
+                        android:drawableRight="@drawable/icon_required"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t12"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/dongjichuxue_et_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/selector_frame_background"
+                        android:hint="请输入具体地址"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/color_text_title"
+                        android:textColorHint="@color/color_text_hint"
+                        android:textSize="@dimen/t14" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="5dp"
+                        android:text="是否为破路"
+                        android:drawableRight="@drawable/icon_required"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t12"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/dongjichuxue_et_isPodao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/selector_frame_background"
+                        android:hint="请输入内容"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/color_text_title"
+                        android:textColorHint="@color/color_text_hint"
+                        android:textSize="@dimen/t14" />
+
+                </LinearLayout>
+                <!--文明祭祀-->
+                <LinearLayout
+                    android:id="@+id/ly_wenmingjisi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="5dp"
+                        android:text="祭扫地点"
+                        android:drawableRight="@drawable/icon_required"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t12"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/jisi_et_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/selector_frame_background"
+                        android:hint="请输入祭扫地点"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/color_text_title"
+                        android:textColorHint="@color/color_text_hint"
+                        android:textSize="@dimen/t14" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="5dp"
+                        android:text="责任人"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t12"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/jisi_farenName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/selector_frame_background"
+                        android:hint="请输入负责人"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/color_text_title"
+                        android:textColorHint="@color/color_text_hint"
+                        android:textSize="@dimen/t14" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="5dp"
+                        android:text="联系电话"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t12"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/jisi_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/selector_frame_background"
+                        android:hint="请输入联系电话"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/color_text_title"
+                        android:textColorHint="@color/color_text_hint"
+                        android:textSize="@dimen/t14" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:drawablePadding="5dp"
+                        android:text="责任区扫描"
+                        android:textColor="@color/color_text_black"
+                        android:textSize="@dimen/t12"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/jisi_zerenquRemark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/selector_frame_background"
+                        android:hint="请输入责任区扫描"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/color_text_title"
+                        android:textColorHint="@color/color_text_hint"
+                        android:textSize="@dimen/t14" />
+
+                </LinearLayout>
+
+                <!--&lt;!&ndash;特种设备&ndash;&gt;-->
+                <!--<include android:id="@+id/include_tezhongshebei" layout="@layout/include_tezhongshebei" android:visibility="gone"/>-->
+                <!--&lt;!&ndash;在建工地&ndash;&gt;-->
+                <!--<include android:id="@+id/include_zaijiangongdi" layout="@layout/include_zaijiangongdi" android:visibility="gone"/>-->
+                <!--&lt;!&ndash;危化品&ndash;&gt;-->
+                <!--<include android:id="@+id/include_weihuapin" layout="@layout/include_weihuapin" android:visibility="gone"/>-->
 
                 <include layout="@layout/addtail_layout" />
 

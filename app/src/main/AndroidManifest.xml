@@ -43,11 +43,6 @@
             android:name="com.geek.kaijo.app.GlobalConfiguration"
             android:value="ConfigModule" />
 
-        <!-- 地图配置 old 6bvqf2740y279a1j2bwga4ob69c5x22x -->
-        <meta-data
-            android:name="com.cmmap.api.apikey"
-            android:value="gi246fecptjs201yhq5qys43073yxrs3" />
-
         <activity
             android:name=".mvp.ui.activity.MainActivity"
             android:label="@string/app_name"
@@ -74,49 +69,48 @@
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
             android:screenOrientation="portrait">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".mvp.ui.activity.UploadActivity"
             android:screenOrientation="portrait">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".mvp.ui.activity.MapActivity"
             android:screenOrientation="portrait" />
 
+        <!--实时发送位置-->
+        <service android:name=".app.service.LocalService"/>
+
         <!--<service android:name="com.cmmap.api.service.CmccService"></service>-->
 
         <!-- 定位服务(HTTP) -->
-        <service android:name="com.geek.kaijo.app.service.LocalService">
+        <!--<service android:name="com.geek.kaijo.app.service.LocalService">-->
+            <!--&lt;!&ndash;<intent-filter>&ndash;&gt;-->
+                <!--&lt;!&ndash;<action android:name="com.cmcc.api.fpp.server" />&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<category android:name="android.intent.category.DEFAULT" />&ndash;&gt;-->
+            <!--&lt;!&ndash;</intent-filter>&ndash;&gt;-->
+        <!--</service>-->
+
+        <!--&lt;!&ndash; 定位服务(HTTP) &ndash;&gt;-->
+        <!--<service android:name="com.cmcc.api.fpp.server.LocationService">-->
             <!--<intent-filter>-->
                 <!--<action android:name="com.cmcc.api.fpp.server" />-->
 
                 <!--<category android:name="android.intent.category.DEFAULT" />-->
             <!--</intent-filter>-->
-        </service>
+        <!--</service>-->
 
-        <!-- 定位服务(HTTP) -->
-        <service android:name="com.cmcc.api.fpp.server.LocationService">
-            <intent-filter>
-                <action android:name="com.cmcc.api.fpp.server" />
+        <!--定位服务-->
+        <service android:name="com.cmmap.api.service.CmccService"></service>
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
+        <!--开发者申请的key-->
+        <meta-data android:name="com.cmmap.api.v2.apikey" android:value="c3514f6b1052o9423ja11pjo09354b70"/>
 
+        <!-- 地图配置 old 6bvqf2740y279a1j2bwga4ob69c5x22x -->
+        <meta-data
+            android:name="com.cmmap.api.apikey"
+            android:value="gi246fecptjs201yhq5qys43073yxrs3" />
         <!-- 地图服务 -->
         <service
             android:name="com.cmmap.internal.driver.service.HttpService"

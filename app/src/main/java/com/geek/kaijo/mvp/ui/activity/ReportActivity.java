@@ -34,12 +34,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.cmcc.api.fpp.bean.CmccLocation;
-import com.cmcc.api.fpp.bean.LocationParam;
-import com.cmcc.api.fpp.login.SecurityLogin;
+import com.cmmap.api.location.CmccLocation;
+import com.cmmap.api.location.CmccLocationClient;
+import com.cmmap.api.location.CmccLocationClientOption;
+import com.cmmap.api.location.CmccLocationListener;
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.Utils.FileSizeUtil;
+import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.MyApplication;
@@ -145,8 +147,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private int entry_type;
 
     private MessageHandler handler;
-    private LocationParam locParam = null;//移动定位
-    private SecurityLogin mClient;
 
     private CustomPopupWindow mTimePickerPopupWindow;//时间选择弹出框
 
@@ -199,27 +199,24 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private List<Street> streetList;
     private CaseInfo caseInfo;
 
+
     @Override
     protected void onStart() {
-        mClient.start();
         super.onStart();
     }
 
     @Override
     protected void onPause() {
-        mClient.pause();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        mClient.restart();
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        mClient.stop();
         if (mTimePickerPopupWindow != null && mTimePickerPopupWindow.isShowing()) {
             mTimePickerPopupWindow.dismiss();
             mTimePickerPopupWindow = null;
@@ -229,7 +226,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             handler.removeCallbacksAndMessages(null);
         }
         handler = null;
-        locParam = null;
+        GPSUtils.getInstance().removeLocationListener(locationListener);
     }
 
 
@@ -281,7 +278,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         }
 
         handler = new MessageHandler();
-        initLocation();
 
         //更新案发时间
         mTimePickerListener = time -> tvCaseTime.setText(time);
@@ -344,6 +340,8 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     }
 
+
+
     /**
      * 头像选择 PictureSelector
      */
@@ -388,48 +386,50 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         });
     }
 
-    private void initLocation() {
-        locParam = new LocationParam();
-        locParam.setServiceId(Constant.MobileAppId);//此ID仅对应本网站下载的SDK，作为测试账号使用。
-        locParam.setLocType("1");
-//        locParam.setForceUseWifi(true);
-        locParam.setOffSet(false);// It should be set in onCreate() func
-        mClient = new SecurityLogin(this);
-        mClient.setLocationParam(locParam);
-    }
-
     @SuppressLint("CheckResult")
     private void checkPermissionAndAction() {
         if (rxPermissions == null) {
             rxPermissions = new RxPermissions(this);
         }
         //同时申请多个权限
-        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION).subscribe(granted -> {
-            if (granted) {           // All requested permissions are granted
-//                startLocation();
-                getGpsLocation();
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) {
+                //启动定位
+                GPSUtils.getInstance().startLocation(locationListener);
             } else {
                 showPermissionsDialog();
             }
         });
     }
 
+    private GPSUtils.LocationListener locationListener = new GPSUtils.LocationListener() {
+        @Override
+        public void onLocationChanged(CmccLocation cmccLocation) {
+            if(ReportActivity.this.isFinishing())return;
+            mLat = cmccLocation.getLatitude();
+            mLng = cmccLocation.getLongitude();
+            tvLocationLatitude.setText(String.valueOf(mLat));
+            tvLocationLongitude.setText(String.valueOf(mLng));
+            Intent intent = new Intent(ReportActivity.this, MapActivity.class);
+            intent.putExtra("lat", mLat);
+            intent.putExtra("lng", mLng);
+            ReportActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+
+            GPSUtils.getInstance().removeLocationListener(locationListener);
+        }
+    };
+
 
     private void startLocation() {
         new Thread(() -> {
             Message msg = Message.obtain();
             msg.what = 0x1233;
-            try {
-                CmccLocation loc = mClient.locCapability();
-                mLat = loc.getLatitude();
-                mLng = loc.getLongitude();
-                if (handler != null)
-                    handler.sendMessage(msg);
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            }
+
         }).start();
     }
 
@@ -1034,7 +1034,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x1233) {
-                mClient.pause();
 
 
                 tvLocationLatitude.setText(String.valueOf(mLat));
@@ -1269,88 +1268,4 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         }
     }
 
-
-    private void getGpsLocation() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location != null) {
-            mLat = location.getLatitude();
-            mLng = location.getLongitude();
-            showLocationAndSkipMap();
-        } else {
-            // 绑定监听，有4个参数
-            // 参数1，设备：有GPS_PROVIDER和NETWORK_PROVIDER两种
-            // 参数2，位置信息更新周期，单位毫秒
-            // 参数3，位置变化最小距离：当位置距离变化超过此值时，将更新位置信息
-            // 参数4，监听
-            // 备注：参数2和3，如果参数3不为0，则以参数3为准；参数3为0，则通过时间来定时更新；两者为0，则随时刷新
-
-            // 1秒更新一次，或最小位移变化超过1米更新一次；
-            // 注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
-
-        }
-
-    }
-
-    // 位置监听
-    private static LocationListener locationListener = new LocationListener() {
-
-        //位置信息变化时触发
-        public void onLocationChanged(Location location) {
-            Toast.makeText(MyApplication.get(),"位置发生变化:"+location.getLongitude(),Toast.LENGTH_LONG).show();
-//            lat = location.getLatitude();
-//            mLocation = location;
-//            Log.i(TAG, "时间：" + location.getTime());
-//            Log.i(TAG, "经度：" + location.getLongitude());
-//            Log.i(TAG, "纬度：" + location.getLatitude());
-//            Log.i(TAG, "海拔：" + location.getAltitude());
-        }
-
-        //GPS状态变化时触发
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            switch (status) {
-                // GPS状态为可见时
-                case LocationProvider.AVAILABLE:
-//                    Log.i(TAG, "当前GPS状态为可见状态");
-                    break;
-                // GPS状态为服务区外时
-                case LocationProvider.OUT_OF_SERVICE:
-//                    Log.i(TAG, "当前GPS状态为服务区外状态");
-                    break;
-                // GPS状态为暂停服务时
-                case LocationProvider.TEMPORARILY_UNAVAILABLE:
-//                    Log.i(TAG, "当前GPS状态为暂停服务状态");
-                    break;
-            }
-        }
-
-        //GPS开启时触发
-        public void onProviderEnabled(String provider) {
-//            Location location = mLocationManager.getLastKnownLocation(provider);
-//            mLocation = location;
-        }
-
-        //GPS禁用时触发
-        public void onProviderDisabled(String provider) {
-//            mLocation = null;
-        }
-    };
-
-    private void showLocationAndSkipMap(){
-        tvLocationLatitude.setText(String.valueOf(mLat));
-        tvLocationLongitude.setText(String.valueOf(mLng));
-
-//                if (mLat == 0 || mLng == 0) {
-//                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
-//                } else {
-        Intent intent = new Intent(ReportActivity.this, MapActivity.class);
-        intent.putExtra("lat", mLat);
-        intent.putExtra("lng", mLng);
-//                launchActivity(intent);
-        ReportActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
-    }
 }

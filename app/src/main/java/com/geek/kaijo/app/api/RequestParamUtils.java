@@ -220,5 +220,186 @@ public class RequestParamUtils {
                 new Gson().toJson(jsonObject));
     }
 
+    /**
+     * 危化品
+     */
+    public static RequestBody thingInsertInfo_whp(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                 String name,String address,String qita,String type) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("qita", qita);
+        jsonObject.addProperty("type", type);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+    /**
+     * 食品
+     */
+    public static RequestBody thingInsertInfo_food(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                  String jingyingzheName,String farenName,String jingjixingzhiName,String address,String xukezhengNo,String zhutiyetai,
+                                                   String isNetwork,String youxiaoTime,String type,String jianguanjigouName,String fengxiandengjiName,String contact,String mobile) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("jingyingzheName", jingyingzheName);
+        jsonObject.addProperty("farenName", farenName);
+        jsonObject.addProperty("jingjixingzhiName", jingjixingzhiName);
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("xukezhengNo", xukezhengNo);
+        jsonObject.addProperty("zhutiyetai", zhutiyetai);
+        jsonObject.addProperty("isNetwork", isNetwork);
+        jsonObject.addProperty("youxiaoTime", youxiaoTime);
+        jsonObject.addProperty("type", type);
+        jsonObject.addProperty("jianguanjigouName", jianguanjigouName);
+        jsonObject.addProperty("fengxiandengjiName", fengxiandengjiName);
+        jsonObject.addProperty("contact", contact);
+        jsonObject.addProperty("mobile", mobile);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+    /**
+     * 药品
+     */
+    public static RequestBody thingInsertInfo_drug(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                   String name,String address,String farenName,String zhudianyaoshiName,String xukezhengNo,String xukezhengTime,
+                                                   String youxiaoTime,String jingyingfangshiName,String jingyingfanweiName,String contact,String mobile) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("farenName", farenName);
+        jsonObject.addProperty("zhudianyaoshiName", zhudianyaoshiName);
+        jsonObject.addProperty("xukezhengNo", xukezhengNo);
+        jsonObject.addProperty("xukezhengTime", xukezhengTime);
+        jsonObject.addProperty("youxiaoTime", youxiaoTime);
+        jsonObject.addProperty("jingyingfangshiName", jingyingfangshiName);
+        jsonObject.addProperty("jingyingfanweiName", jingyingfanweiName);
+        jsonObject.addProperty("contact", contact);
+        jsonObject.addProperty("mobile", mobile);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+
+    /**
+     * 森林防火
+     */
+    public static RequestBody thingInsertInfo_senl(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                   String name) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("name", name);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+    /**
+     * 防台防汛
+     */
+    public static RequestBody thingInsertInfo_ftfx(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                   String type,String status,String address,String danweiName,String farenName,String contact,
+                                                   String mobile,String jiedaozerenName,String jiedaozerenMobile) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("type", type);
+        jsonObject.addProperty("status", status);
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("danweiName", danweiName);
+        jsonObject.addProperty("farenName", farenName);
+        jsonObject.addProperty("contact", contact);
+        jsonObject.addProperty("mobile", mobile);
+        jsonObject.addProperty("jiedaozerenName", jiedaozerenName);
+        jsonObject.addProperty("jiedaozerenMobile", jiedaozerenMobile);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+    /**
+     * 冬季除雪
+     */
+    public static RequestBody thingInsertInfo_dongjichuxue(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                   String address,String isPodao) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("isPodao", isPodao);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+    /**
+     * 文明祭祀
+     */
+    public static RequestBody thingInsertInfo_jisi(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                           String address,String farenName,String contact,String zerenquRemark) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("farenName", farenName);
+        jsonObject.addProperty("contact", contact);
+        jsonObject.addProperty("zerenquRemark", zerenquRemark);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
 
 }

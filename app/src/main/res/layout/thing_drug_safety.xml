@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:text="企业名称"
+        android:drawableRight="@drawable/icon_required"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_companyName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_address"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawableRight="@drawable/icon_required"
+        android:drawablePadding="5dp"
+        android:text="注册地址"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_register_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_name"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="企业法定代表人"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_farenName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_name"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:text="住店药师"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+
+    <EditText
+        android:id="@+id/et_yaoshi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_other"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawableRight="@drawable/icon_required"
+        android:drawablePadding="5dp"
+        android:text="许可证号"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+
+    <EditText
+        android:id="@+id/et_xukezhanghao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_other"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="许可证颁发时间"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/et_xukezhengTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_other"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_required"
+        android:text="有效期至"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/et_youxiaoqiTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_address"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:text="经营方式"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_jingyinfanshi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_address"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:text="经营范围"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_jingyinfanwei"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_address"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:text="联系电话"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_Telephone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_address"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:drawablePadding="5dp"
+        android:text="手机号码"
+        android:textColor="@color/color_text_black"
+        android:textSize="@dimen/t12"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_frame_background"
+        android:hint="@string/hint_address"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dialog"
+        android:textColor="@color/color_text_title"
+        android:textColorHint="@color/color_text_hint"
+        android:textSize="@dimen/t14" />
+
+</LinearLayout>

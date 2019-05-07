@@ -104,6 +104,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     //tools
+    implementation 'com.android.support:support-v4:28.0.0'
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
@@ -144,4 +145,5 @@ dependencies {
     //    implementation files('libs/cmmap.jar')
     implementation 'org.greenrobot:greendao:3.2.2'
     // add library
+    implementation files('libs/cmcc_locaion_sdk.jar')
 }

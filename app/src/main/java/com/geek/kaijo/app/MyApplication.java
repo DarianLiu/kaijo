@@ -111,7 +111,6 @@ public class MyApplication extends BaseApplication {
         daoSession = daoMaster.newSession();
     }
 
-
     public DaoSession getDaoSession() {
         return daoSession;
     }

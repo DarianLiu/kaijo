@@ -17,9 +17,6 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.cmcc.api.fpp.bean.CmccLocation;
-import com.cmcc.api.fpp.bean.LocationParam;
-import com.cmcc.api.fpp.login.SecurityLogin;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.api.Api;
 import com.jess.arms.utils.DataHelper;
@@ -45,10 +42,8 @@ public class LocalService2 extends Service {
     private double longitude = 0.0;
     private MyHandler myHandler;
     private String userId;
-    private LocationParam locParam = null;//移动定位
-    private SecurityLogin mClient;
+
     private RxPermissions rxPermissions;
-    CmccLocation loc;
 
     @Nullable
     @Override
@@ -76,41 +71,11 @@ public class LocalService2 extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mClient.stop();
-    }
-
-    private void initLocation() {
-
-        locParam = new LocationParam();
-        locParam.setServiceId(Constant.MobileAppId);//此ID仅对应本网站下载的SDK，作为测试账号使用。
-        locParam.setLocType("1");
-//        locParam.setForceUseWifi(true);
-        locParam.setOffSet(false);// It should be set in onCreate() func
-        mClient = new SecurityLogin(this);
-        mClient.setLocationParam(locParam);
 
     }
 
     private void startLocation() {
-        new Thread(() -> {
-            Message msg = Message.obtain();
-            msg.what = 0x1233;
-            try {
-                loc = mClient.locCapability();
-                latitude = loc.getLatitude();
-                longitude = loc.getLongitude();
-                Log.i(this.getClass().getName(), "11111111111111111111111latitude======" + loc.getLatitude());
-                Log.i(this.getClass().getName(), "11111111111111111111111longitude======" + longitude);
-                if (userId != null && latitude > 0 && longitude > 0) {
-                    httpUploadGpsLocation(userId, latitude, longitude);
-                }
-                myHandler.sendMessage(msg);
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            }
-        }).start();
+
     }
 
     /**

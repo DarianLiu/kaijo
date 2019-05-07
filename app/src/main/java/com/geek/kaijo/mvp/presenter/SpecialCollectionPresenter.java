@@ -95,6 +95,12 @@ public class SpecialCollectionPresenter extends BasePresenter<SpecialCollectionC
                 .subscribeWith(new ErrorHandleSubscriber<ThingPositionInfo>(mErrorHandler) {
                     @Override
                     public void onNext(ThingPositionInfo caseInfoEntity) {
+//                        mRootView.httpInsertInfoSuccess();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
                         mRootView.httpInsertInfoSuccess();
                     }
                 });

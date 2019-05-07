@@ -151,7 +151,8 @@ public class DateUtils {
     @SuppressLint("SimpleDateFormat")
     public static String timeStamp2Date(long time, String format) {
         if (format == null || format.isEmpty()) {
-            format = "yyyy-MM-dd HH:mm:ss";
+//            format = "yyyy-MM-dd HH:mm:ss";
+            format = "yyyy-MM-dd";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(new Date(time));

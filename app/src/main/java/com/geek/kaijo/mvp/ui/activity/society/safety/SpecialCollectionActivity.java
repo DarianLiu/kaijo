@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,12 @@ import com.geek.kaijo.mvp.ui.activity.MapActivity;
 import com.geek.kaijo.mvp.ui.activity.ReportActivity;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
 import com.geek.kaijo.mvp.ui.adapter.UploadPhotoAdapter;
+import com.geek.kaijo.mvp.ui.fragment.society.fooddrug.DrugSafteFragment;
+import com.geek.kaijo.mvp.ui.fragment.society.fooddrug.FoodSafteFragment;
+import com.geek.kaijo.mvp.ui.fragment.society.safety.SpecialCollectionFragment;
+import com.geek.kaijo.mvp.ui.fragment.society.safety.TyphoonFloodFragment;
+import com.geek.kaijo.mvp.ui.fragment.society.safety.WHPFragment;
+import com.geek.kaijo.mvp.ui.fragment.society.safety.ZaiJianGongDi;
 import com.geek.kaijo.view.LoadingProgressDialog;
 import com.google.gson.Gson;
 import com.jess.arms.base.BaseActivity;
@@ -78,18 +85,8 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
 
     @BindView(R.id.btn_location_obtain)
     TextView btn_location_obtain;
-    @BindView(R.id.tv_add_equipment)
-    TextView tv_add_equipment;
-    @BindView(R.id.ly_addView)
-    LinearLayout ly_addView;
     @BindView(R.id.submit)
     TextView submit;
-    @BindView(R.id.et_name)
-    EditText et_name;
-    @BindView(R.id.et_farenName)
-    EditText et_farenName;
-    @BindView(R.id.et_address)
-    EditText et_address;
     @BindView(R.id.tv_location_longitude)
     TextView tvLocationLongitude;
     @BindView(R.id.tv_location_latitude)
@@ -97,10 +94,10 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     @BindView(R.id.smartRefresh)
     SmartRefreshLayout smartRefresh;
 
-    @BindView(R.id.include_tezhongshebei)
-    LinearLayout include_tezhongshebei;
-    @BindView(R.id.include_zaijiangongdi)
-    LinearLayout include_zaijiangongdi;
+//    @BindView(R.id.include_tezhongshebei)
+//    LinearLayout include_tezhongshebei;
+//    @BindView(R.id.include_zaijiangongdi)
+//    LinearLayout include_zaijiangongdi;
 
 
     //上传图片
@@ -119,39 +116,29 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     private double lat;
     private double lng;
 
-    private List<String> checkList;
+
     private LoadingProgressDialog loadingDialog;
 
-    //在建工地
-    @BindView(R.id.gd_et_mark)
-    EditText gd_et_mark; //受理书标号
-    @BindView(R.id.gd_et_name)
-    EditText gd_et_name; //工程名称
-    @BindView(R.id.gd_et_address)
-    EditText gd_et_address; //工程地址
-    @BindView(R.id.gd_et_shigongdanwei)
-    EditText gd_et_shigongdanwei; //施工单位
-    @BindView(R.id.gd_spinner_check)
-    AppCompatSpinner gd_spinner_check; //是否有施工许可证
-    @BindView(R.id.gd_et_price)
-    EditText gd_et_price; //工程总造价
-    @BindView(R.id.gd_et_jingduzhuangtai)
-    EditText gd_et_jingduzhuangtai; //形象进度/状态
-    @BindView(R.id.gd_jianzhumianji)
-    EditText gd_jianzhumianji; //建筑面积（万平）
-    @BindView(R.id.gd_et_kaigongnriqi)
-    TextView gd_et_kaigongnriqi; //开工日期
-    @BindView(R.id.gd_et_jungongriqi)
-    TextView gd_et_jungongriqi; //竣工日期
-    @BindView(R.id.gd_et_jianshedanwei)
-    EditText gd_et_jianshedanwei; //建设单位
-    @BindView(R.id.gd_et_jianlidanwei)
-    EditText gd_et_jianlidanwei; //监理单位
+//    @BindView(R.id.ly_parentView)
+//    LinearLayout ly_parentView;
+    Fragment fragment;
 
-//    private int isWhich = 0;//1 上传图片  2 上传视频
-    private CustomPopupWindow mTimePickerPopupWindow;//时间选择弹出框
-    private CustomPopupWindow mTimePickerPopupWindow_jungong;//时间选择弹出框
-    private TimePickerListener mTimePickerListener;
+    /*森林防火*/
+    private LinearLayout ly_senlinfanhuo;
+    private EditText senl_et_name;
+
+    /*冬季除雪*/
+    private LinearLayout ly_dongjichuxue;
+    private EditText dongjichuxue_et_address; //具体地址
+    private EditText dongjichuxue_et_isPodao; //是否为破路
+
+    /*文明祭祀*/
+    private LinearLayout ly_wenmingjisi;
+    private EditText jisi_et_address; //祭扫地点
+    private EditText jisi_farenName; //责任人
+    private EditText jisi_phone; //联系电话
+    private EditText jisi_zerenquRemark; //请输入责任区扫描
+
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -173,24 +160,40 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         subMenu = (GridItemContent) getIntent().getSerializableExtra("Submenu");
         if (subMenu != null) {
             tvToolbarTitle.setText(subMenu.getName() + "采集");
+//            Fragment fragment = new SpecialCollectionFragment();;
             if("特种设备".equals(subMenu.getName())){
-                include_tezhongshebei.setVisibility(View.VISIBLE);
+                fragment = new SpecialCollectionFragment();
             }else if("在建工地".equals(subMenu.getName())){
-                include_zaijiangongdi.setVisibility(View.VISIBLE);
-                checkList = new ArrayList<>();
-                checkList.add("否");
-                checkList.add("是");
-                MySpinnerAdapter<String> mStreetAdapter = new MySpinnerAdapter<>(this, checkList);
-                gd_spinner_check.setAdapter(mStreetAdapter);
-
-                //更新开工时间
-                mTimePickerListener = time -> gd_et_kaigongnriqi.setText(time);
-                initTimePopupWindow();
-                //更新开工时间
-                mTimePickerListener = time -> gd_et_jungongriqi.setText(time);
-                initTimePopupWindow_gungong();
+                fragment = new ZaiJianGongDi();
+            }else if("危化品".equals(subMenu.getName())){
+                fragment = new WHPFragment();
+            }else if("食品".equals(subMenu.getName()) || "餐饮".equals(subMenu.getName())){
+                fragment = new FoodSafteFragment();
+            }else if("药品".equals(subMenu.getName())){
+                fragment = new DrugSafteFragment();
+            }else if("森林防火".equals(subMenu.getName())){
+//                fragment = new DrugSafteFragment();
+                ly_senlinfanhuo = findViewById(R.id.ly_senlinfanhuo);
+                ly_senlinfanhuo.setVisibility(View.VISIBLE);
+                senl_et_name = findViewById(R.id.senl_et_name);
+            }else if("防台防汛".equals(subMenu.getName())){
+                fragment = new TyphoonFloodFragment();
+            }else if("冬季除雪".equals(subMenu.getName())){
+                ly_dongjichuxue = findViewById(R.id.ly_dongjichuxue);
+                ly_dongjichuxue.setVisibility(View.VISIBLE);
+                dongjichuxue_et_address = findViewById(R.id.dongjichuxue_et_address);
+                dongjichuxue_et_isPodao = findViewById(R.id.dongjichuxue_et_isPodao);
+            }else if("文明祭祀".equals(subMenu.getName())){
+                ly_wenmingjisi = findViewById(R.id.ly_wenmingjisi);
+                ly_wenmingjisi.setVisibility(View.VISIBLE);
+                jisi_et_address = findViewById(R.id.jisi_et_address);
+                jisi_farenName = findViewById(R.id.jisi_farenName);
+                jisi_phone = findViewById(R.id.jisi_phone);
+                jisi_zerenquRemark = findViewById(R.id.jisi_zerenquRemark);
             }
-
+            if(fragment!=null){
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
+            }
         }
 
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
@@ -206,9 +209,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         }
     }
 
-    private interface TimePickerListener {
-        void updateTime(String time);
-    }
+
 
     private void initRecyclerView() {
         //上传图片
@@ -397,7 +398,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     }
 
 
-    @OnClick({R.id.btn_location_obtain,R.id.tv_add_equipment, R.id.btn_submit_pic, R.id.btn_submit_check_record, R.id.submit,R.id.gd_et_kaigongnriqi,R.id.gd_et_jungongriqi})
+    @OnClick({R.id.btn_location_obtain, R.id.btn_submit_pic, R.id.btn_submit_check_record, R.id.submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_location_obtain:  //定位
@@ -406,16 +407,6 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 intent.putExtra("lng", lng);
                 this.startActivityForResult(intent,Constant.MAP_REQUEST_CODE);
                 break;
-            case R.id.tv_add_equipment:  //删除
-                addComponentView();
-                break;
-            case R.id.gd_et_kaigongnriqi:
-                mTimePickerPopupWindow.show();
-                break;
-                case R.id.gd_et_jungongriqi:
-                    mTimePickerPopupWindow_jungong.show();
-                break;
-
             case R.id.btn_submit_pic:
 //                isWhich = 1;
                 pictureSelector(phot_requestCode);
@@ -433,40 +424,112 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                         String checkRecord = new Gson().toJsonTree(fileList).toString();
                         RequestBody requestBody = null;
                         if("特种设备".equals(subMenu.getName())){
-                            List<Equipment> equipmentList = new ArrayList<>();
-                            for (int i = 0; i < ly_addView.getChildCount(); i++) {
-                                View equipmentView = ly_addView.getChildAt(0);
-                                EditText et_category = equipmentView.findViewById(R.id.et_category);
-                                EditText et_name = equipmentView.findViewById(R.id.et_name);
-                                EditText et_code = equipmentView.findViewById(R.id.et_code);
-                                AppCompatSpinner spinner_check = equipmentView.findViewById(R.id.spinner_check);
-                                if (TextUtils.isEmpty(et_category.getText().toString())) {
-                                    showMessage("请输入特种设备种类");
-                                    return;
-                                } else if (TextUtils.isEmpty(et_name.getText().toString())) {
-                                    showMessage("请输入特种设备名称");
+                            if(fragment instanceof SpecialCollectionFragment){
+                                SpecialCollectionFragment equipmentFragment = (SpecialCollectionFragment)fragment;
+                                if(!equipmentFragment.checkParams()){
                                     return;
                                 }
-                                Equipment equipment = new Equipment();
-                                equipment.setCategory(et_category.getText().toString());
-                                equipment.setName(et_name.getText().toString());
-                                equipment.setRegisterCode(et_code.getText().toString());
-                                equipment.setCheckIsValid(checkList.get(spinner_check.getSelectedItemPosition()));
-                                equipmentList.add(equipment);
-                            }
-                            String tezhongshebei = new Gson().toJsonTree(equipmentList).toString();
-                            requestBody = RequestParamUtils.thingInsertInfo(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord, et_name.getText().toString(),
-                                    tezhongshebei, et_farenName.getText().toString(), et_address.getText().toString());
+                                List<Equipment> equipmentList = new ArrayList<>();
+                                for (int i = 0; i < equipmentFragment.ly_addView.getChildCount(); i++) {
+                                    View equipmentView = equipmentFragment.ly_addView.getChildAt(0);
+                                    EditText et_category = equipmentView.findViewById(R.id.et_category);
+                                    EditText et_name = equipmentView.findViewById(R.id.et_name);
+                                    EditText et_code = equipmentView.findViewById(R.id.et_code);
+                                    AppCompatSpinner spinner_check = equipmentView.findViewById(R.id.spinner_check);
+                                    if (TextUtils.isEmpty(et_category.getText().toString())) {
+                                        showMessage("请输入特种设备种类");
+                                        return;
+                                    } else if (TextUtils.isEmpty(et_name.getText().toString())) {
+                                        showMessage("请输入特种设备名称");
+                                        return;
+                                    }
+                                    Equipment equipment = new Equipment();
+                                    equipment.setCategory(et_category.getText().toString());
+                                    equipment.setName(et_name.getText().toString());
+                                    equipment.setRegisterCode(et_code.getText().toString());
+                                    equipment.setCheckIsValid(equipmentFragment.checkList.get(spinner_check.getSelectedItemPosition()));
+                                    equipmentList.add(equipment);
+                                }
+                                String tezhongshebei = new Gson().toJsonTree(equipmentList).toString();
+                                requestBody = RequestParamUtils.thingInsertInfo(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord, equipmentFragment.et_name.getText().toString(),
+                                        tezhongshebei, equipmentFragment.et_farenName.getText().toString(), equipmentFragment.et_address.getText().toString());
 
-                            mPresenter.insertInfo(requestBody);
+                            }
+
                         }else if("在建工地".equals(subMenu.getName())){
-                            requestBody = RequestParamUtils.thingInsertInfo_gd(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
-                                    gd_et_mark.getText().toString(),gd_et_name.getText().toString(),gd_et_address.getText().toString(),gd_et_shigongdanwei.getText().toString(),
-                                    checkList.get(gd_spinner_check.getSelectedItemPosition()), gd_et_price.getText().toString(), gd_et_jingduzhuangtai.getText().toString(),
-                                    gd_jianzhumianji.getText().toString(),gd_et_kaigongnriqi.getText().toString(),gd_et_jungongriqi.getText().toString(),gd_et_jianshedanwei.getText().toString(),
-                                    gd_et_jianlidanwei.getText().toString());
-                            mPresenter.insertInfo(requestBody);
+                            if(fragment instanceof ZaiJianGongDi) {
+                                ZaiJianGongDi mfragment = (ZaiJianGongDi) fragment;
+                                if(!mfragment.checkParams()){
+                                    return;
+                                }
+                                requestBody = RequestParamUtils.thingInsertInfo_gd(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                        mfragment.gd_et_mark.getText().toString(),mfragment.gd_et_name.getText().toString(),mfragment.gd_et_address.getText().toString(),mfragment.gd_et_shigongdanwei.getText().toString(),
+                                        mfragment.checkList.get(mfragment.gd_spinner_check.getSelectedItemPosition()), mfragment.gd_et_price.getText().toString(), mfragment.gd_et_jingduzhuangtai.getText().toString(),
+                                        mfragment.gd_jianzhumianji.getText().toString(),mfragment.gd_et_kaigongnriqi.getText().toString(),mfragment.gd_et_jungongriqi.getText().toString(),mfragment.gd_et_jianshedanwei.getText().toString(),
+                                        mfragment.gd_et_jianlidanwei.getText().toString());
+                            }
+                        }else if(fragment instanceof WHPFragment) { //危化品
+                            WHPFragment mfragment = (WHPFragment) fragment;
+                            if(!mfragment.checkParams()){
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_whp(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    mfragment.et_name.getText().toString(),mfragment.et_address.getText().toString(),mfragment.et_other.getText().toString(),mfragment.et_category.getText().toString());
+                        }else if(fragment instanceof FoodSafteFragment) { //食品
+                            FoodSafteFragment mfragment = (FoodSafteFragment) fragment;
+                            if(!mfragment.checkParams()){
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_food(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    mfragment.et_name.getText().toString(),mfragment.et_farenName.getText().toString(),mfragment.et_jjxz.getText().toString(),mfragment.et_jycs.getText().toString(),
+                                    mfragment.et_xkzh.getText().toString(),mfragment.et_ztyt.getText().toString(),mfragment.checkList.get(mfragment.spinner_street.getSelectedItemPosition()),mfragment.tv_time.getText().toString(),
+                                    mfragment.et_category.getText().toString(), mfragment.et_jgjg.getText().toString(),mfragment.et_fxdj.getText().toString(),mfragment.et_Telephone.getText().toString(),mfragment.et_phone.getText().toString());
+                        }else if(fragment instanceof DrugSafteFragment) { //药品
+                            DrugSafteFragment mfragment = (DrugSafteFragment) fragment;
+                            if(!mfragment.checkParams()){
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_drug(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    mfragment.et_companyName.getText().toString(),mfragment.et_register_name.getText().toString(),mfragment.et_farenName.getText().toString(),mfragment.et_yaoshi.getText().toString(),
+                                    mfragment.et_xukezhanghao.getText().toString(),mfragment.et_xukezhengTime.getText().toString(),mfragment.et_youxiaoqiTime.getText().toString(),mfragment.et_jingyinfanshi.getText().toString(),
+                                    mfragment.et_jingyinfanwei.getText().toString(), mfragment.et_Telephone.getText().toString(),mfragment.et_phone.getText().toString());
+
+                        }else if("森林防火".equals(subMenu.getName())){
+                            if(TextUtils.isEmpty(senl_et_name.getText().toString())){
+                                showMessage("请输入点位名称");
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_senl(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    senl_et_name.getText().toString().trim());
+
+                        }else if(fragment instanceof TyphoonFloodFragment){ //防台防汛
+                            TyphoonFloodFragment mfragment = (TyphoonFloodFragment) fragment;
+                            if(!mfragment.checkParams()){
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_ftfx(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    mfragment.checkList.get(mfragment.spinner_category.getSelectedItemPosition()),mfragment.et_state.getText().toString(),mfragment.et_address.getText().toString(),mfragment.et_danweiName.getText().toString(),
+                                    mfragment.et_farenName.getText().toString(),mfragment.et_leading_TlPhone.getText().toString(),mfragment.et_leading_phone.getText().toString(),mfragment.et_jiedaozerenName.getText().toString(),
+                                    mfragment.jiedaozerenMobile.getText().toString());
+
+                        }else if("冬季除雪".equals(subMenu.getName())){
+                            if(TextUtils.isEmpty(dongjichuxue_et_address.getText().toString())){
+                                showMessage("请输入具体地址");
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_dongjichuxue(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    dongjichuxue_et_address.getText().toString().trim(),dongjichuxue_et_isPodao.getText().toString().trim());
+
+                        }else if("文明祭祀".equals(subMenu.getName())){
+                            if(TextUtils.isEmpty(jisi_et_address.getText().toString())){
+                                showMessage("请输入祭祀地点");
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_jisi(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    jisi_et_address.getText().toString().trim(),jisi_farenName.getText().toString().trim(),jisi_phone.getText().toString().trim(),jisi_zerenquRemark.getText().toString().trim());
+
                         }
+
                         if(requestBody!=null){
                             mPresenter.insertInfo(requestBody);
                         }
@@ -477,28 +540,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         }
     }
 
-    private void addComponentView() {
-        if (checkList == null) {
-            checkList = new ArrayList<>();
-            checkList.add("否");
-            checkList.add("是");
-        }
 
-        View view = getLayoutInflater().inflate(R.layout.component_include_add, null);
-        AppCompatSpinner spinner_check = view.findViewById(R.id.spinner_check);
-        MySpinnerAdapter<String> mStreetAdapter = new MySpinnerAdapter<>(this, checkList);
-        spinner_check.setAdapter(mStreetAdapter);
-
-
-        TextView tv_delete = view.findViewById(R.id.tv_delete);
-        tv_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ly_addView.removeView((View) view.getParent().getParent());
-            }
-        });
-        ly_addView.addView(view);
-    }
 
 
     /**
@@ -523,39 +565,12 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     }
 
     private boolean checkParams() {
-        if (subMenu != null) {
-            if("特种设备".equals(subMenu.getName())){
-                if (TextUtils.isEmpty(et_name.getText().toString())) {
-                    showMessage("请输入单位名称");
-                    return false;
-                } else if (TextUtils.isEmpty(et_address.getText().toString())) {
-                    showMessage("请输入地址");
-                    return false;
-                } else if (lat == 0 || lng == 0) {
-                    showMessage("请定位位置");
-                    return false;
-                } else {
-                    return true;
-                }
-            }else if("在建工地".equals(subMenu.getName())){
-                if (TextUtils.isEmpty(gd_et_name.getText().toString())) {
-                    showMessage("请输入工程名称");
-                    return false;
-                } else if (TextUtils.isEmpty(gd_et_address.getText().toString())) {
-                    showMessage("请输入工程地址");
-                    return false;
-                } else if (TextUtils.isEmpty(gd_et_shigongdanwei.getText().toString())) {
-                    showMessage("请输入施工单位");
-                    return false;
-                } else if (lat == 0 || lng == 0) {
-                    showMessage("请定位位置");
-                    return false;
-                } else {
-                    return true;
-                }
-            }
+        if (lat == 0 || lng == 0) {
+            showMessage("请定位位置");
+            return false;
+        } else {
+            return true;
         }
-        return false;
     }
 
 
@@ -611,162 +626,11 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         }
     }
 
-    /**
-     * 初始化时间选择弹出框
-     * 开工日期
-     */
-    private void initTimePopupWindow() {
-        gd_et_kaigongnriqi.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
 
-        View timePickerView = View.inflate(this, R.layout.view_pop_time_picker, null);
-
-        mTimePickerPopupWindow = CustomPopupWindow.builder()
-                .parentView(gd_et_kaigongnriqi).contentView(timePickerView)
-                .isOutsideTouch(false)
-                .isWrap(false)
-                .customListener(contentView -> {
-                    String[] mYear = new String[1];
-                    String[] mMonth = new String[1];
-                    String[] mDay = new String[1];
-                    String[] mHour = new String[1];
-                    String[] mMinute = new String[1];
-                    mYear[0] = String.valueOf(DateUtils.getCurrentYear());
-                    mMonth[0] = String.valueOf(DateUtils.getCurrentMonth());
-                    mDay[0] = String.valueOf(DateUtils.getCurrentDate());
-                    mHour[0] = String.valueOf(DateUtils.getCurrentDateHour());
-                    mMinute[0] = String.valueOf(DateUtils.getCurrentDateMinute());
-
-                    TextView tvCurrentDate = contentView.findViewById(R.id.tv_current_time);
-                    tvCurrentDate.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
-
-                    DatePicker datePicker = contentView.findViewById(R.id.datePicker);
-                    datePicker.setMinDate(DateUtils.get1970YearTimeStamp());
-                    datePicker.updateDate(Integer.parseInt(mYear[0]), Integer.parseInt(mMonth[0]), Integer.parseInt(mDay[0]));
-                    datePicker.init(DateUtils.getCurrentYear(), DateUtils.getCurrentMonth(),
-                            DateUtils.getCurrentDate(), (view, year, monthOfYear, dayOfMonth) -> {
-                                mYear[0] = String.valueOf(year);
-                                mMonth[0] = monthOfYear < 9 ? "0" + (monthOfYear + 1) : String.valueOf(monthOfYear + 1);
-                                mDay[0] = dayOfMonth < 10 ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
-
-                                tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2} {3}:{4}",
-                                        mYear[0], mMonth[0], mDay[0], mHour[0], mMinute[0]));
-                            }
-                    );
-
-                    TimePicker timePicker = contentView.findViewById(R.id.timePicker);
-                    timePicker.setIs24HourView(true);
-                    timePicker.setCurrentHour(Integer.parseInt(mHour[0]));
-                    timePicker.setCurrentMinute(Integer.parseInt(mMinute[0]));
-                    timePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> {
-                        mHour[0] = hourOfDay < 10 ? "0" + hourOfDay : String.valueOf(hourOfDay);
-                        mMinute[0] = minute < 10 ? "0" + minute : String.valueOf(minute);
-
-                        tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2} {3}:{4}", mYear[0], mMonth[0], mDay[0], mHour[0], mMinute[0]));
-                    });
-
-                    TextView tvSure = contentView.findViewById(R.id.tv_sure);
-                    TextView tvToday = contentView.findViewById(R.id.tv_today);
-                    TextView tvCancel = contentView.findViewById(R.id.tv_cancel);
-
-                    tvSure.setOnClickListener(v -> {
-                        if (mTimePickerListener != null) {
-                            mTimePickerListener.updateTime(tvCurrentDate.getText().toString());
-                        }
-                        mTimePickerPopupWindow.dismiss();
-                    });
-
-                    tvToday.setOnClickListener(v ->
-                            datePicker.updateDate(DateUtils.getCurrentYear(), DateUtils.getCurrentMonth(), DateUtils.getCurrentDate()));
-
-                    tvCancel.setOnClickListener(v -> mTimePickerPopupWindow.dismiss());
-
-                })
-                .isWrap(true).build();
-    }
-
-    /**
-     * 初始化时间选择弹出框
-     * 开工日期
-     */
-    private void initTimePopupWindow_gungong() {
-        gd_et_jungongriqi.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
-
-        View timePickerView = View.inflate(this, R.layout.view_pop_time_picker, null);
-
-        mTimePickerPopupWindow_jungong = CustomPopupWindow.builder()
-                .parentView(gd_et_kaigongnriqi).contentView(timePickerView)
-                .isOutsideTouch(false)
-                .isWrap(false)
-                .customListener(contentView -> {
-                    String[] mYear = new String[1];
-                    String[] mMonth = new String[1];
-                    String[] mDay = new String[1];
-                    String[] mHour = new String[1];
-                    String[] mMinute = new String[1];
-                    mYear[0] = String.valueOf(DateUtils.getCurrentYear());
-                    mMonth[0] = String.valueOf(DateUtils.getCurrentMonth());
-                    mDay[0] = String.valueOf(DateUtils.getCurrentDate());
-                    mHour[0] = String.valueOf(DateUtils.getCurrentDateHour());
-                    mMinute[0] = String.valueOf(DateUtils.getCurrentDateMinute());
-
-                    TextView tvCurrentDate = contentView.findViewById(R.id.tv_current_time);
-                    tvCurrentDate.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
-
-                    DatePicker datePicker = contentView.findViewById(R.id.datePicker);
-                    datePicker.setMinDate(DateUtils.get1970YearTimeStamp());
-                    datePicker.updateDate(Integer.parseInt(mYear[0]), Integer.parseInt(mMonth[0]), Integer.parseInt(mDay[0]));
-                    datePicker.init(DateUtils.getCurrentYear(), DateUtils.getCurrentMonth(),
-                            DateUtils.getCurrentDate(), (view, year, monthOfYear, dayOfMonth) -> {
-                                mYear[0] = String.valueOf(year);
-                                mMonth[0] = monthOfYear < 9 ? "0" + (monthOfYear + 1) : String.valueOf(monthOfYear + 1);
-                                mDay[0] = dayOfMonth < 10 ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
-
-                                tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2} {3}:{4}",
-                                        mYear[0], mMonth[0], mDay[0], mHour[0], mMinute[0]));
-                            }
-                    );
-
-                    TimePicker timePicker = contentView.findViewById(R.id.timePicker);
-                    timePicker.setIs24HourView(true);
-                    timePicker.setCurrentHour(Integer.parseInt(mHour[0]));
-                    timePicker.setCurrentMinute(Integer.parseInt(mMinute[0]));
-                    timePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> {
-                        mHour[0] = hourOfDay < 10 ? "0" + hourOfDay : String.valueOf(hourOfDay);
-                        mMinute[0] = minute < 10 ? "0" + minute : String.valueOf(minute);
-
-                        tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2} {3}:{4}", mYear[0], mMonth[0], mDay[0], mHour[0], mMinute[0]));
-                    });
-
-                    TextView tvSure = contentView.findViewById(R.id.tv_sure);
-                    TextView tvToday = contentView.findViewById(R.id.tv_today);
-                    TextView tvCancel = contentView.findViewById(R.id.tv_cancel);
-
-                    tvSure.setOnClickListener(v -> {
-                        if (mTimePickerListener != null) {
-                            mTimePickerListener.updateTime(tvCurrentDate.getText().toString());
-                        }
-                        mTimePickerPopupWindow_jungong.dismiss();
-                    });
-
-                    tvToday.setOnClickListener(v ->
-                            datePicker.updateDate(DateUtils.getCurrentYear(), DateUtils.getCurrentMonth(), DateUtils.getCurrentDate()));
-
-                    tvCancel.setOnClickListener(v -> mTimePickerPopupWindow_jungong.dismiss());
-
-                })
-                .isWrap(true).build();
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mTimePickerPopupWindow != null && mTimePickerPopupWindow.isShowing()) {
-            mTimePickerPopupWindow.dismiss();
-            mTimePickerPopupWindow = null;
-        }
-        if (mTimePickerPopupWindow_jungong != null && mTimePickerPopupWindow_jungong.isShowing()) {
-            mTimePickerPopupWindow_jungong.dismiss();
-            mTimePickerPopupWindow_jungong = null;
-        }
+
     }
 }

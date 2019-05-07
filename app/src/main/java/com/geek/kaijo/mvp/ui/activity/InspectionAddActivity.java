@@ -24,9 +24,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.cmcc.api.fpp.bean.CmccLocation;
-import com.cmcc.api.fpp.bean.LocationParam;
-import com.cmcc.api.fpp.login.SecurityLogin;
+import com.cmmap.api.location.CmccLocation;
+import com.cmmap.api.location.CmccLocationClient;
+import com.cmmap.api.location.CmccLocationClientOption;
+import com.cmmap.api.location.CmccLocationListener;
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.GridSpacingItemDecoration;
 import com.geek.kaijo.app.Constant;
@@ -83,13 +84,16 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
     private int radioCheckedPosition;
 
     private MessageHandler handler;
-    private LocationParam locParam = null;//移动定位
-    private SecurityLogin mClient;
 
     private double mLat, mLng;
     private UserInfo userInfo;
     private InspectionAdapter adapter;
     private Inspection inspection;
+
+    //声明CmccLocationClient类对象
+    public CmccLocationClient mLocationClient = null;
+    //声明CmccLocationClientOption对象
+    public CmccLocationClientOption mLocationOption = null;
 
 
     @Override
@@ -124,31 +128,26 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
     }
     @Override
     protected void onStart() {
-        mClient.start();
         super.onStart();
     }
 
     @Override
     protected void onPause() {
-        mClient.pause();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        mClient.restart();
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        mClient.stop();
         super.onDestroy();
         if(handler!=null){
             handler.removeCallbacksAndMessages(null);
         }
         handler = null;
-        locParam = null;
     }
 
     @Override
@@ -344,30 +343,54 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         }
     }
     private void initLocation() {
-        locParam = new LocationParam();
-        locParam.setServiceId(Constant.MobileAppId);//此ID仅对应本网站下载的SDK，作为测试账号使用。
-        locParam.setLocType("1");
-//        locParam.setForceUseWifi(true);
-        locParam.setOffSet(false);// It should be set in onCreate() func
-        mClient = new SecurityLogin(this);
-        mClient.setLocationParam(locParam);
-    }
-    private void startLocation() {
-        new Thread(() -> {
-            Message msg = Message.obtain();
-            msg.what = 0x1233;
-            try {
-                CmccLocation loc = mClient.locCapability();
-                mLat = loc.getLatitude();
-                mLng = loc.getLongitude();
-                if (handler != null)
-                    handler.sendMessage(msg);
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
+        //初始化定位
+        mLocationClient = new CmccLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(new CmccLocationListener() {
+            @Override
+            public void onLocationChanged(CmccLocation cmccLocation) {
+                Log.i(this.getClass().getName(),"111111111111111111111"+cmccLocation.getLongitude());
+                Log.i(this.getClass().getName(),"111111111111111111111"+cmccLocation.getLatitude());
+                tv_location_lat.setText(String.valueOf(mLat));
+                tv_location_lng.setText(String.valueOf(mLng));
+
+//                if (mLat == 0 || mLng == 0) {
+//                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
+//                } else {
+                Intent intent = new Intent(InspectionAddActivity.this, MapActivity.class);
+                intent.putExtra("lat", mLat);
+                intent.putExtra("lng", mLng);
+//                launchActivity(intent);
+                InspectionAddActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+//                }
             }
-        }).start();
+        });
+
+        //初始化CmccLocationClientOption对象
+        mLocationOption = new CmccLocationClientOption();
+        //设置定位模式为CmccLocationClientOption.CmccLocationMode.Hight_Accuracy，高精度模式。pgs+网络
+        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode.Hight_Accuracy);
+        //设置定位模式为CmccLocationClientOption.CmccLocationMode.Device_Sensors，仅设备模式GPS。
+//        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode. Device_Sensors);
+
+        //获取一次定位结果：
+        //该方法默认为false。
+        mLocationOption.setOnceLocation(true);
+
+        //SDK默认采用连续定位模式，时间间隔2000ms。如果您需要自定义调用间隔：
+        //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+//        mLocationOption.setInterval(1000);
+
+        //超时时间设置 单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
+        mLocationOption.setHttpTimeOut(20000);
+
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+
+    }
+
+    private void startLocation() {
+        mLocationClient.startLocation();
     }
     private class MessageHandler extends Handler {
         public MessageHandler() {
@@ -377,18 +400,7 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x1233) {
-                mClient.pause();
-                tv_location_lng.setText(String.valueOf(mLng));
-                tv_location_lat.setText(String.valueOf(mLat));
-//                if (mLat == 0 || mLng == 0) {
-//                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
-//                } else {
-                Intent intent = new Intent(InspectionAddActivity.this, MapActivity.class);
-                intent.putExtra("lat", mLat);
-                intent.putExtra("lng", mLng);
-//                launchActivity(intent);
-                startActivityForResult(intent,Constant.MAP_REQUEST_CODE);
-//                }
+
             }
             super.handleMessage(msg);
         }
