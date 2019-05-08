@@ -56,12 +56,12 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
      */
     public void findThingPositionListBy(String streetId,String communityId,String gridId) {
         JsonObject jsonObject = new JsonObject();
-//        jsonObject.addProperty("streetId", streetId);
-//        jsonObject.addProperty("communityId", communityId);
-//        jsonObject.addProperty("gridId", gridId);
-        jsonObject.addProperty("streetId", 120);
-        jsonObject.addProperty("communityId", 151);
-        jsonObject.addProperty("gridId", 276);
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+//        jsonObject.addProperty("streetId", 120);
+//        jsonObject.addProperty("communityId", 151);
+//        jsonObject.addProperty("gridId", 276);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
 

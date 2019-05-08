@@ -54,9 +54,9 @@ public class GPSUtils {
         //初始化CmccLocationClientOption对象
         mLocationOption = new CmccLocationClientOption();
         //设置定位模式为CmccLocationClientOption.CmccLocationMode.Hight_Accuracy，高精度模式。pgs+网络
-        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode.Hight_Accuracy);
+//        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode.Hight_Accuracy);
         //设置定位模式为CmccLocationClientOption.CmccLocationMode.Device_Sensors，仅设备模式GPS。
-//        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode. Device_Sensors);
+        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode. Device_Sensors);
 
         //获取一次定位结果：
         //该方法默认为false。
@@ -69,7 +69,11 @@ public class GPSUtils {
         //超时时间设置 单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
         mLocationOption.setHttpTimeOut(20000);
 
-        //给定位客户端对象设置定位参数
+
+        //关闭缓存机制
+        mLocationOption.setLocationCacheEnable(false);
+
+        //给定位客户端对象设置定位参数 GPS定位结果不会被缓存
         mLocationClient.setLocationOption(mLocationOption);
 
     }
