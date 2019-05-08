@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -151,6 +152,7 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
 
     @Subscriber
     public void receiveThingEvent(ThingEvent event) {
+        Log.i(this.getClass().getName(),"111111111111111111111111111111event.getPosition()==="+event.getPosition());
         Intent intent;
         switch (event.getEventType()) {
             case 1://编辑
@@ -162,7 +164,7 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
             case 2://删除
                 if (mPresenter != null)
                     mPresenter.delThings(new int[]{event.getPosition()},
-                            new String[]{mList.get(event.getPosition()).getThingId()+""});
+                            new String[]{mList.get(event.getPosition()).getThingPositionId()+""});
 //                EventBus.getDefault().clear();
                 break;
             case 3://查看坐标
@@ -218,6 +220,7 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
             mList.remove(i);
             mAdapter.notifyItemRemoved(i);
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

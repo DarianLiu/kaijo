@@ -17,9 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.cmmap.api.location.CmccLocation;
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.Utils.FileSizeUtil;
+import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.api.RequestParamUtils;
 import com.geek.kaijo.di.component.DaggerSpecialCollectionComponent;
@@ -115,7 +117,6 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     private GridItemContent subMenu;
     private double lat;
     private double lng;
-
 
     private LoadingProgressDialog loadingDialog;
 
@@ -402,10 +403,8 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_location_obtain:  //定位
-                Intent intent = new Intent(this, MapActivity.class);
-                intent.putExtra("lat", lat);
-                intent.putExtra("lng", lng);
-                this.startActivityForResult(intent,Constant.MAP_REQUEST_CODE);
+                GPSUtils.getInstance().startLocation(locationListener);
+
                 break;
             case R.id.btn_submit_pic:
 //                isWhich = 1;
@@ -626,7 +625,22 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         }
     }
 
+    private GPSUtils.LocationListener locationListener = new GPSUtils.LocationListener() {
+        @Override
+        public void onLocationChanged(CmccLocation cmccLocation) {
+            if(SpecialCollectionActivity.this.isFinishing())return;
+            lat = cmccLocation.getLatitude();
+            lng = cmccLocation.getLongitude();
+            tvLocationLatitude.setText(String.valueOf(lat));
+            tvLocationLongitude.setText(String.valueOf(lng));
+            Intent intent = new Intent(SpecialCollectionActivity.this, MapActivity.class);
+            intent.putExtra("lat", lat);
+            intent.putExtra("lng", lng);
+            SpecialCollectionActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
 
+            GPSUtils.getInstance().removeLocationListener(locationListener);
+        }
+    };
 
     @Override
     protected void onDestroy() {

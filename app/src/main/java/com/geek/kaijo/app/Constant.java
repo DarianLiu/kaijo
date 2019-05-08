@@ -20,6 +20,11 @@ public class Constant {
 
     public final static String SP_KEY_STREETLIST= "streetList";  //街道社区数据
     public final static String SP_KEY_MENUS= "menus";  //部件采集 菜单数据
+    public final static String SP_KEY_Patrol_state= "Patrol_state";  //巡查状态  0 未巡查 1 开始巡查 2 结束巡查
+    public final static String SP_KEY_Patrol_state_db= "Patrol_state_db";
+
+    public final static String service_patrol= "service_patrol";  //广播 action
+
 
     /**
      * 数据库名称

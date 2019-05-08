@@ -9,6 +9,7 @@ public class Inspection implements Serializable{
     private int currPage;
     private int pageSize;
     private int thingId;
+    private int thingPositionId;
     private long createTime;
     private int createUser;
     private long modifyTime;
@@ -195,5 +196,13 @@ public class Inspection implements Serializable{
 
     public void setTotalCount(String totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public int getThingPositionId() {
+        return thingPositionId;
+    }
+
+    public void setThingPositionId(int thingPositionId) {
+        this.thingPositionId = thingPositionId;
     }
 }

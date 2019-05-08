@@ -27,6 +27,6 @@ public class IPRegisterItemHolder extends BaseHolder<IPRegisterBean> {
     @Override
     public void setData(IPRegisterBean data, int position) {
       iprName.setText(data.getName());
-      iprStatus.setText(data.getStatus());
+      iprStatus.setText(data.getStatus()+"");
     }
 }

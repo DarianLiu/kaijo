@@ -146,8 +146,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     private int entry_type;
 
-    private MessageHandler handler;
-
     private CustomPopupWindow mTimePickerPopupWindow;//时间选择弹出框
 
     private TimePickerListener mTimePickerListener;
@@ -222,10 +220,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             mTimePickerPopupWindow = null;
         }
         super.onDestroy();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
-        handler = null;
         GPSUtils.getInstance().removeLocationListener(locationListener);
     }
 
@@ -276,8 +270,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             default:
                 break;
         }
-
-        handler = new MessageHandler();
 
         //更新案发时间
         mTimePickerListener = time -> tvCaseTime.setText(time);
@@ -1014,35 +1006,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             }
         }
         mGridAdapter.notifyDataSetChanged();
-    }
-
-    @SuppressLint("HandlerLeak")
-    private class MessageHandler extends Handler {
-        public MessageHandler() {
-            super();
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x1233) {
-
-
-                tvLocationLatitude.setText(String.valueOf(mLat));
-                tvLocationLongitude.setText(String.valueOf(mLng));
-
-//                if (mLat == 0 || mLng == 0) {
-//                    launchActivity(new Intent(ReportActivity.this, MapActivity.class));
-//                } else {
-                Intent intent = new Intent(ReportActivity.this, MapActivity.class);
-                intent.putExtra("lat", mLat);
-                intent.putExtra("lng", mLng);
-//                launchActivity(intent);
-                ReportActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
-//                }
-
-            }
-            super.handleMessage(msg);
-        }
     }
 
     /**

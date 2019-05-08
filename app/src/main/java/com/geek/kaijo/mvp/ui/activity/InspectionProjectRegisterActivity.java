@@ -1,6 +1,9 @@
 package com.geek.kaijo.mvp.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,8 +16,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cmmap.api.location.CmccLocation;
 import com.geek.kaijo.R;
+import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.app.Constant;
+import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.di.component.DaggerInspectionProjectRegisterComponent;
 import com.geek.kaijo.di.module.InspectionProjectRegisterModule;
 import com.geek.kaijo.mvp.contract.InspectionProjectRegisterContract;
@@ -32,11 +38,14 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import dao.DaoSession;
+import dao.IPRegisterBeanDao;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -70,6 +79,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     private IPRegisterAdapter mAdapter;
     private UserInfo userInfo;
     private LoadingProgressDialog loadingDialog;
+    LocationReceiver locationReceiver;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -96,32 +106,28 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
 
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         initView();
+
+        int state = DataHelper.getIntergerSF(this,Constant.SP_KEY_Patrol_state);
+        if(state==1){ //开始巡查
+            iprStart.setEnabled(false);
+            iprComplete.setEnabled(true);
+            iprCancel.setEnabled(true);
+        }else {
+            iprStart.setEnabled(true);
+            iprComplete.setEnabled(false);
+            iprCancel.setEnabled(false);
+        }
+        locationReceiver = new LocationReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constant.service_patrol);
+        registerReceiver(locationReceiver, filter);
     }
 
     /**
      * 初始化View
      */
     private void initView() {
-        smartRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
 
-            }
-
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-//                if (smartRefresh != null)
-//                    smartRefresh.setNoMoreData(false);
-//                for (int i = 0; i < 10; i++) {
-//                    mList.add(new IPRegisterBean("电线干" + i, "正常" + i, false));
-//                }
-                if(userInfo!=null){
-                    mPresenter.findThingPositionListBy(String.valueOf(userInfo.getStreetId()),String.valueOf(userInfo.getCommunityId()),String.valueOf(userInfo.getUserId()));
-                }
-
-            }
-        });
-        smartRefresh.autoRefresh();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -133,6 +139,22 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
 
         });
         recyclerView.setAdapter(mAdapter);
+
+        smartRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+
+            }
+
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+
+                mPresenter.dbFindThingList();
+
+            }
+        });
+        smartRefresh.autoRefresh();
+        smartRefresh.setEnableLoadMore(false);
     }
 
     @Override
@@ -187,6 +209,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
                 iprComplete.setEnabled(false);
                 iprCancel.setEnabled(false);
                 iprStart.setEnabled(true);
+                httpEndSuccess();
                 break;
         }
     }
@@ -202,18 +225,135 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
 
     @Override
     public void httpStartSuccess() {
+        if(this.isFinishing())return;
         iprComplete.setEnabled(true);
         iprCancel.setEnabled(true);
         iprStart.setEnabled(false);
+        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 1);
+
+        Intent intent = new Intent();
+        intent.putExtra(Constant.SP_KEY_Patrol_state, 1);
+//        intent.putExtra("resutl", (Serializable) mList);
+        intent.setAction(Constant.SP_KEY_Patrol_state);
+        sendBroadcast(intent);
     }
 
     @Override
     public void httpEndSuccess() {
-
+        if(this.isFinishing())return;
+        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 2);
+        Intent intent = new Intent();
+        intent.putExtra(Constant.SP_KEY_Patrol_state, 2);
+        intent.setAction(Constant.SP_KEY_Patrol_state);
+        sendBroadcast(intent);
     }
 
     @Override
     public void finishRefresh() {
         smartRefresh.finishRefresh();
+        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 0);
+        Intent intent = new Intent();
+        intent.putExtra(Constant.SP_KEY_Patrol_state, 0);
+        intent.setAction(Constant.SP_KEY_Patrol_state);
+        sendBroadcast(intent);
+
     }
+
+    @Override
+    public void dbGetThingListSuccess(List<IPRegisterBean> result) {  //数据库初始化数据
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(result!=null){
+                    mList.clear();
+                    mList.addAll(result);
+                    mAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent();
+                    intent.setAction(Constant.SP_KEY_Patrol_state_db);
+                    sendBroadcast(intent);
+                }
+                if(userInfo!=null){
+                    mPresenter.findThingPositionListBy(String.valueOf(userInfo.getStreetId()),String.valueOf(userInfo.getCommunityId()),String.valueOf(userInfo.getGridId()));
+                }
+
+            }
+        });
+
+    }
+
+    @Override
+    public void dbHttpShowContent(List<IPRegisterBean> result) { //网络获取后 与本地状态合并后的数据
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(result!=null){
+                    mList.clear();
+                    mList.addAll(result);
+                    mAdapter.notifyDataSetChanged();
+
+                    Intent intent = new Intent();
+//                    intent.putExtra("resutl", (Serializable) mList);
+                    intent.setAction(Constant.SP_KEY_Patrol_state_db);
+                    sendBroadcast(intent);
+                }
+
+            }
+        });
+
+    }
+
+
+    private GPSUtils.LocationListener locationListener = new GPSUtils.LocationListener() {
+        @Override
+        public void onLocationChanged(CmccLocation cmccLocation) {
+            if(InspectionProjectRegisterActivity.this.isFinishing())return;
+
+//            mLat = cmccLocation.getLatitude();
+//            mLng = cmccLocation.getLongitude();
+//            tvLocationLatitude.setText(String.valueOf(mLat));
+//            tvLocationLongitude.setText(String.valueOf(mLng));
+
+
+
+        }
+    };
+
+    //内部类，实现BroadcastReceiver
+    public class LocationReceiver extends BroadcastReceiver {
+        //必须要重载的方法，用来监听是否有广播发送
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String intentAction = intent.getAction();
+            if (intentAction.equals(Constant.service_patrol)) {  //service里发送广播 更新UI
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        DaoSession daoSession1 = MyApplication.get().getDaoSession();
+                        IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+                        List<IPRegisterBean> ipRegisterBeanList = ipRegisterBeanDao.loadAll();
+
+                        InspectionProjectRegisterActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mList.clear();
+                                mList.addAll(ipRegisterBeanList);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }.start();
+
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GPSUtils.getInstance().removeLocationListener(locationListener);
+        unregisterReceiver(locationReceiver);
+    }
+
 }
