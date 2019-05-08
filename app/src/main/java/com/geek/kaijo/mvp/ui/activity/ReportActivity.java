@@ -425,15 +425,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     };
 
 
-    private void startLocation() {
-        new Thread(() -> {
-            Message msg = Message.obtain();
-            msg.what = 0x1233;
-
-        }).start();
-    }
-
-
     /**
      * 初始化时间选择弹出框
      */

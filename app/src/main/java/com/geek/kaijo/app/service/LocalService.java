@@ -107,7 +107,7 @@ public class LocalService extends Service {
             switch (msg.what) {
                 case 1:
                     GPSUtils.getInstance().startLocation(weakActivity.locationListener);
-                    sendEmptyMessageDelayed(1, 60000); //1分钟 上传一次经纬度
+//                    sendEmptyMessageDelayed(1, 60000); //1分钟 上传一次经纬度
                     break;
             }
         }

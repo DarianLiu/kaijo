@@ -54,17 +54,17 @@ public class GPSUtils {
         //初始化CmccLocationClientOption对象
         mLocationOption = new CmccLocationClientOption();
         //设置定位模式为CmccLocationClientOption.CmccLocationMode.Hight_Accuracy，高精度模式。pgs+网络
-//        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode.Hight_Accuracy);
+        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode.Hight_Accuracy);
         //设置定位模式为CmccLocationClientOption.CmccLocationMode.Device_Sensors，仅设备模式GPS。
-        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode. Device_Sensors);
+//        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode. Device_Sensors);
 
         //获取一次定位结果：
         //该方法默认为false。
-        mLocationOption.setOnceLocation(true);
+//        mLocationOption.setOnceLocation(true);
 
         //SDK默认采用连续定位模式，时间间隔2000ms。如果您需要自定义调用间隔：
         //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
-//        mLocationOption.setInterval(1000);
+        mLocationOption.setInterval(60000);
 
         //超时时间设置 单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
         mLocationOption.setHttpTimeOut(20000);
