@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,6 +67,9 @@ public class PlanViewActivity extends BaseActivity<PlanViewPresenter> implements
     private List<TreeNode> list;
     private TreeViewAdapter adapter;
 
+    @BindView(R.id.webview)
+    WebView webview;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerPlanViewComponent //如找不到该类,请编译一下项目
@@ -87,6 +91,8 @@ public class PlanViewActivity extends BaseActivity<PlanViewPresenter> implements
         list = new ArrayList<>();
         list.addAll(initRoot());
 //        initAdapter();
+
+        webview.loadUrl("file:////android_asset/tree.html");
 
     }
 

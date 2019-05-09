@@ -1,10 +1,14 @@
 package com.geek.kaijo.mvp.ui.activity.society.safety;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +59,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
+import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,6 +145,8 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     private EditText jisi_phone; //联系电话
     private EditText jisi_zerenquRemark; //请输入责任区扫描
 
+    private MyHandler myHandler;
+
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -208,6 +215,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         if (mPresenter != null) {
             mPresenter.findAllStreetCommunity(0);
         }
+        myHandler = new MyHandler(this);
     }
 
 
@@ -403,8 +411,9 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_location_obtain:  //定位
+                showLoading();
                 GPSUtils.getInstance().startLocation(locationListener);
-
+                myHandler.sendEmptyMessageDelayed(1,5000);
                 break;
             case R.id.btn_submit_pic:
 //                isWhich = 1;
@@ -629,22 +638,91 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
             if(SpecialCollectionActivity.this.isFinishing())return;
-            lat = cmccLocation.getLatitude();
-            lng = cmccLocation.getLongitude();
-            tvLocationLatitude.setText(String.valueOf(lat));
-            tvLocationLongitude.setText(String.valueOf(lng));
-            Intent intent = new Intent(SpecialCollectionActivity.this, MapActivity.class);
-            intent.putExtra("lat", lat);
-            intent.putExtra("lng", lng);
-            SpecialCollectionActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+            if(myHandler!=null){
+                myHandler.removeMessages(1);
+            }
+            hideLoading();
+            if(cmccLocation!=null){
+                lat = cmccLocation.getLatitude();
+                lng = cmccLocation.getLongitude();
+                if(lat>0 &&lng>0){
+                    tvLocationLatitude.setText(String.valueOf(lat));
+                    tvLocationLongitude.setText(String.valueOf(lng));
+                    Intent intent = new Intent(SpecialCollectionActivity.this, MapActivity.class);
+                    intent.putExtra("lat", lat);
+                    intent.putExtra("lng", lng);
+                    SpecialCollectionActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+                }else {
+                    showNormalDialog();
+                }
+            }else {
+                showNormalDialog();
+            }
 
             GPSUtils.getInstance().removeLocationListener(locationListener);
         }
     };
 
+    private static class MyHandler extends Handler {
+        private final WeakReference<SpecialCollectionActivity> weakTrainModelActivity;
+
+        public MyHandler(SpecialCollectionActivity activity) {
+            weakTrainModelActivity = new WeakReference<SpecialCollectionActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            SpecialCollectionActivity weakReference;
+            if (weakTrainModelActivity.get() == null) {
+                return;
+            } else {
+                weakReference = weakTrainModelActivity.get();
+            }
+            switch (msg.what) {
+                case 1:
+                    weakReference.hideLoading();
+                    weakReference.showNormalDialog();
+
+                    break;
+            }
+        }
+    }
+
+    private void showNormalDialog(){
+        if(this.isFinishing())return;
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(this);
+        normalDialog.setTitle("定位");
+        normalDialog.setMessage("手机定位失败，获得中心点坐标");
+        normalDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(SpecialCollectionActivity.this, MapActivity.class);
+                        intent.putExtra("lat", lat);
+                        intent.putExtra("lng", lng);
+                        startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+                    }
+                });
+        normalDialog.setNegativeButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        // 显示
+        normalDialog.show();
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        GPSUtils.getInstance().removeLocationListener(locationListener);
+        if (myHandler != null) {
+            myHandler.removeCallbacksAndMessages(null);
+        }
     }
 }

@@ -25,6 +25,7 @@ public interface InspectionProjectRegisterContract {
         void finishRefresh();
         void dbGetThingListSuccess(List<IPRegisterBean> result);
         void dbHttpShowContent(List<IPRegisterBean> result);
+        void dbEndStateSuccess(); //巡查结束 数据库状态更新成功
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存

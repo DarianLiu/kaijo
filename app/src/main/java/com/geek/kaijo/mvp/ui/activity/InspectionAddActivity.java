@@ -1,12 +1,15 @@
 package com.geek.kaijo.mvp.ui.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,7 +27,9 @@ import com.cmmap.api.location.CmccLocationClientOption;
 import com.cmmap.api.location.CmccLocationListener;
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.GPSUtils;
+import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
+import com.geek.kaijo.app.service.LocalService;
 import com.geek.kaijo.di.component.DaggerInspectionAddComponent;
 import com.geek.kaijo.di.module.InspectionAddModule;
 import com.geek.kaijo.mvp.contract.InspectionAddContract;
@@ -39,7 +44,9 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,12 +82,13 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
     private LoadingProgressDialog loadingDialog;
     private int radioCheckedPosition;
 
-    private MessageHandler handler;
+    private MyHandler myHandler;
 
     private double mLat, mLng;
     private UserInfo userInfo;
     private InspectionAdapter adapter;
     private Inspection inspection;
+    private RxPermissions rxPermissions;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -102,7 +110,7 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         tvToolbarTitle.setText("添加巡查项");
         popupUtils = new PopupUtils();
         inspectionList = new ArrayList<>();
-        handler = new MessageHandler();
+        myHandler = new MyHandler(this);
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         inspection = (Inspection) getIntent().getSerializableExtra("Inspection");
         if (inspection != null) {
@@ -116,6 +124,23 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
     @Override
     protected void onStart() {
         super.onStart();
+        if (rxPermissions == null) {
+            rxPermissions = new RxPermissions(this);
+        }
+        //同时申请多个权限
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) {           // All requested permissions are granted
+                GPSUtils.getInstance().startLocation();
+                startService(new Intent(InspectionAddActivity.this, LocalService.class));
+            } else {
+                showPermissionsDialog();
+            }
+        });
     }
 
     @Override
@@ -131,11 +156,10 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
-        handler = null;
         GPSUtils.getInstance().removeLocationListener(locationListener);
+        if (myHandler != null) {
+            myHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     @Override
@@ -167,7 +191,9 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
                 mPresenter.findThingListBy("10");
                 break;
             case R.id.tv_map:
+                showLoading();
                 GPSUtils.getInstance().startLocation(locationListener);
+                myHandler.sendEmptyMessageDelayed(1,5000);
                 break;
             case R.id.btn_save_back:
                 if (userInfo != null) {
@@ -183,15 +209,27 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
             if(InspectionAddActivity.this.isFinishing())return;
-            mLat = cmccLocation.getLatitude();
-            mLng = cmccLocation.getLongitude();
-            tv_location_lat.setText(String.valueOf(mLat));
-            tv_location_lng.setText(String.valueOf(mLng));
-            Intent intent = new Intent(InspectionAddActivity.this, MapActivity.class);
-            intent.putExtra("lat", mLat);
-            intent.putExtra("lng", mLng);
-            InspectionAddActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+            if(myHandler!=null){
+                myHandler.removeMessages(1);
+            }
+            hideLoading();
+            if(cmccLocation!=null){
+                mLat = cmccLocation.getLatitude();
+                mLng = cmccLocation.getLongitude();
+                if(mLat>0 && mLng>0){
+                    tv_location_lat.setText(String.valueOf(mLat));
+                    tv_location_lng.setText(String.valueOf(mLng));
+                    Intent intent = new Intent(InspectionAddActivity.this, MapActivity.class);
+                    intent.putExtra("lat", mLat);
+                    intent.putExtra("lng", mLng);
+                    InspectionAddActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+                }else {
+                    showNormalDialog();
+                }
 
+            }else {
+                showNormalDialog();
+            }
             GPSUtils.getInstance().removeLocationListener(locationListener);
         }
     };
@@ -349,21 +387,6 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         }
     }
 
-
-    private class MessageHandler extends Handler {
-        public MessageHandler() {
-            super();
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x1233) {
-
-            }
-            super.handleMessage(msg);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -388,4 +411,80 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
     public void killMyself() {
         finish();
     }
+
+    /**
+     * 提示需要权限 AlertDialog
+     */
+    private void showPermissionsDialog() {
+        /*
+         * 这里使用了 android.support.v7.app.AlertDialog.Builder
+         * 可以直接在头部写 import android.support.v7.app.AlertDialog
+         * 那么下面就可以写成 AlertDialog.Builder
+         */
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("权限提醒");
+        builder.setMessage("获取坐标需要位置权限");
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                PermissionUtils.permissionSkipSetting(InspectionAddActivity.this);
+            }
+        });
+        builder.show();
+    }
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<InspectionAddActivity> weakTrainModelActivity;
+
+        public MyHandler(InspectionAddActivity activity) {
+            weakTrainModelActivity = new WeakReference<InspectionAddActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            InspectionAddActivity weakReference;
+            if (weakTrainModelActivity.get() == null) {
+                return;
+            } else {
+                weakReference = weakTrainModelActivity.get();
+            }
+            switch (msg.what) {
+                case 1:
+                    weakReference.hideLoading();
+                    weakReference.showNormalDialog();
+
+                    break;
+            }
+        }
+    }
+
+    private void showNormalDialog(){
+        if(this.isFinishing())return;
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(this);
+        normalDialog.setTitle("定位");
+        normalDialog.setMessage("手机定位失败，获得中心点坐标");
+        normalDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(InspectionAddActivity.this, MapActivity.class);
+                        intent.putExtra("lat", mLat);
+                        intent.putExtra("lng", mLng);
+                        startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+                    }
+                });
+        normalDialog.setNegativeButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        // 显示
+        normalDialog.show();
+    }
+
 }

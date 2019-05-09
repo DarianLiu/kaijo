@@ -7,6 +7,7 @@ import com.cmmap.api.location.CmccLocationClient;
 import com.cmmap.api.location.CmccLocationClientOption;
 import com.cmmap.api.location.CmccLocationListener;
 import com.geek.kaijo.app.MyApplication;
+import com.jess.arms.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,16 +42,20 @@ public class GPSUtils {
         mLocationClient.setLocationListener(new CmccLocationListener() {
             @Override
             public void onLocationChanged(CmccLocation cmccLocation) {
+                if(cmccLocation!=null){
+                    Log.i(this.getClass().getName(), "111111111111111111111getErrorCode==" + cmccLocation.getErrorCode());
+                    Log.i(this.getClass().getName(), "111111111111111111111getLocationDetail==" + cmccLocation.getLocationDetail());
+                    Log.i(this.getClass().getName(), "111111111111111111111getLatitude==" + cmccLocation.getLatitude());
+                }else {
+                    Log.i(this.getClass().getName(), "111111111111111111111cmccLocation==" + cmccLocation);
+                }
+
+                if(locationListenerList==null)return;
                 for(int i=0;i<locationListenerList.size();i++){
                     if(locationListenerList.get(i)!=null){
                         locationListenerList.get(i).onLocationChanged(cmccLocation);
                     }
                 }
-                if(cmccLocation!=null){
-                    Log.i(this.getClass().getName(), "111111111111111111111" + cmccLocation.getLongitude());
-                    Log.i(this.getClass().getName(), "111111111111111111111" + cmccLocation.getLatitude());
-                }
-
             }
         });
 
@@ -60,6 +65,7 @@ public class GPSUtils {
 //        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode.Hight_Accuracy);
         //设置定位模式为CmccLocationClientOption.CmccLocationMode.Device_Sensors，仅设备模式GPS。
         mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode. Device_Sensors);
+
 
         //获取一次定位结果：
         //该方法默认为false。
@@ -79,6 +85,8 @@ public class GPSUtils {
         //给定位客户端对象设置定位参数 GPS定位结果不会被缓存
         mLocationClient.setLocationOption(mLocationOption);
 
+
+
     }
 
     public void startLocation(LocationListener locationListener) {
@@ -95,13 +103,25 @@ public class GPSUtils {
         if(flag){
             locationListenerList.add(locationListener);
         }
-        if (mLocationClient == null) {
+        startLocation();
+
+    }
+
+    public void startLocation(){
+        if (mLocationClient == null || !mLocationClient.isStarted()) {
             initLocation();
         }
         if(!mLocationClient.isStarted()){
             mLocationClient.startLocation();
         }
+    }
 
+    public void onDestroy(){
+        if(mLocationClient!=null){
+            mLocationClient.stopLocation();
+            mLocationClient.destory();
+            mLocationClient = null;
+        }
     }
 
     public void removeLocationListener(LocationListener locationListener){

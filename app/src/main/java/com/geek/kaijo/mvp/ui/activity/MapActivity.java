@@ -191,7 +191,7 @@ public class MapActivity extends AppCompatActivity {
         mMap.setMapType(Map.MAP_TYPE_NORMAL);
         mMap.showMapText(true);//是否显示文字
         mMap.showBuildings(true);//是否显示建筑物
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
     }
 
 
@@ -286,6 +286,7 @@ public class MapActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                if(MapActivity.this.isFinishing())return;
                 String result = response.body().string();
                 Log.i(this.getClass().getName(), "11111111111111111111111获取网格员所在地区网格边界" + result);
                 JSONObject jsonObject = null;

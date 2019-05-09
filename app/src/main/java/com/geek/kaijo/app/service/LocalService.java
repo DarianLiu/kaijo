@@ -40,10 +40,7 @@ import okhttp3.Response;
 
 public class LocalService extends Service {
 
-    private double latitude = 0.0; //经度
-    private double longitude = 0.0;
     private MyHandler myHandler;
-    private String userId;
     private CmccLocation cmccLocation;
     private List<IPRegisterBean> result;
     LocationReceiver locationReceiver;
@@ -58,15 +55,16 @@ public class LocalService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        userId = DataHelper.getStringSF(this, Constant.SP_KEY_USER_ID);
-        GPSUtils.getInstance().startLocation(locationListener);
+
         myHandler = new MyHandler(this);
-        myHandler.sendEmptyMessageDelayed(1, 3000);
+        myHandler.sendEmptyMessageDelayed(1, 60000);
 
         locationReceiver = new LocationReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constant.SP_KEY_Patrol_state);
         registerReceiver(locationReceiver, filter);
+
+        GPSUtils.getInstance().startLocation(locationListener);
     }
 
     @Override
@@ -128,15 +126,17 @@ public class LocalService extends Service {
             }
             switch (msg.what) {
                 case 1:
-//                    GPSUtils.getInstance().startLocation(weakActivity.locationListener);
-
                     if(weakActivity.cmccLocation!=null){
                         Double mLat = weakActivity.cmccLocation.getLatitude();
                         Double mLng = weakActivity.cmccLocation.getLongitude();
+                        Toast.makeText(weakActivity,"经度："+mLng+"纬度："+mLat,Toast.LENGTH_LONG).show();
                         if(mLat>0 && mLng>0){
-                            weakActivity.httpUploadGpsLocation(weakActivity.userId, weakActivity.cmccLocation.getLatitude(), weakActivity.cmccLocation.getLongitude());
+                           String userId = DataHelper.getStringSF(weakActivity, Constant.SP_KEY_USER_ID);
+                            weakActivity.httpUploadGpsLocation(userId, weakActivity.cmccLocation.getLatitude(), weakActivity.cmccLocation.getLongitude());
                             weakActivity.cmccLocation = null;
                         }
+                    }else {
+                        Toast.makeText(weakActivity,"定位获取失败",Toast.LENGTH_LONG).show();
                     }
                     sendEmptyMessageDelayed(1, 60000); //1分钟 上传一次经纬度
 
@@ -149,14 +149,17 @@ public class LocalService extends Service {
     private GPSUtils.LocationListener locationListener = new GPSUtils.LocationListener() {
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
+
+            if(cmccLocation==null)return;
             LocalService.this.cmccLocation = cmccLocation;
             if(cmccLocation!=null && result!=null && state==1){
                 for(int i=0;i<result.size();i++){
                     if(result.get(i).getStatus()==0){
                         double distance = GPSUtils.getInstance().getDistance(cmccLocation.getLongitude(),cmccLocation.getLatitude(),result.get(i).getLng(),result.get(i).getLat());
-                        if(distance<=20){ //误差20
+                        if(distance<=50){ //误差50
                             //点位巡查成功，状态保存到数据库
                             result.get(i).setStatus(1);
+                            Toast.makeText(getApplication(),result.get(i).getName()+"已巡查",Toast.LENGTH_LONG).show();
                             new Thread(){
                                 @Override
                                 public void run() {
@@ -189,15 +192,23 @@ public class LocalService extends Service {
             String intentAction = intent.getAction();
             if (intentAction.equals(Constant.SP_KEY_Patrol_state)) {
                 state = intent.getIntExtra(Constant.SP_KEY_Patrol_state,0);
-//                if(intent.hasExtra("resutl")){
-//                    result = (List<IPRegisterBean>)intent.getSerializableExtra("resutl");
+//                if(state==1){ //开始巡查
+//                    DaoSession daoSession1 = MyApplication.get().getDaoSession();
+//                    IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+//                    result = ipRegisterBeanDao.loadAll();
 //                }
+                if(intent.hasExtra(Constant.SP_KEY_Patrol_state_db)){
+                    DaoSession daoSession1 = MyApplication.get().getDaoSession();
+                    IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+                    result = ipRegisterBeanDao.loadAll();
+                }
                 LogUtils.debugInfo("1111111111111111111111111111111111111111state===="+state);
-            }else if(intentAction.equals(Constant.SP_KEY_Patrol_state_db)){ //数据更新
-                DaoSession daoSession1 = MyApplication.get().getDaoSession();
-                IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
-                result = ipRegisterBeanDao.loadAll();
             }
+//            else if(intentAction.equals(Constant.SP_KEY_Patrol_state_db)){ //数据更新
+//                DaoSession daoSession1 = MyApplication.get().getDaoSession();
+//                IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+//                result = ipRegisterBeanDao.loadAll();
+//            }
         }
     }
 
@@ -206,6 +217,7 @@ public class LocalService extends Service {
     public void onDestroy() {
         super.onDestroy();
         GPSUtils.getInstance().removeLocationListener(locationListener);
+        GPSUtils.getInstance().onDestroy();
         unregisterReceiver(locationReceiver);
     }
 

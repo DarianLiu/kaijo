@@ -45,6 +45,7 @@ import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.MyApplication;
+import com.geek.kaijo.app.service.LocalService;
 import com.geek.kaijo.di.component.DaggerReportComponent;
 import com.geek.kaijo.di.module.ReportModule;
 import com.geek.kaijo.mvp.contract.ReportContract;
@@ -77,6 +78,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import org.simple.eventbus.Subscriber;
 import org.xml.sax.SAXException;
 
+import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -196,6 +198,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
     private List<Street> streetList;
     private CaseInfo caseInfo;
+    private MyHandler myHandler;
 
 
     @Override
@@ -221,6 +224,9 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         }
         super.onDestroy();
         GPSUtils.getInstance().removeLocationListener(locationListener);
+        if (myHandler != null) {
+            myHandler.removeCallbacksAndMessages(null);
+        }
     }
 
 
@@ -253,10 +259,9 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         entry_type = getIntent().getIntExtra("entry_type", 0);
-
         tvToolbarTitle.setText(entry_type == 0 ? "自行处理" : "案件上报");
-
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        myHandler = new MyHandler(this);
 
         switch (entry_type) {
             case 0:
@@ -392,7 +397,9 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
             if (granted) {
                 //启动定位
+                showLoading();
                 GPSUtils.getInstance().startLocation(locationListener);
+                myHandler.sendEmptyMessageDelayed(1,5000);
             } else {
                 showPermissionsDialog();
             }
@@ -403,15 +410,26 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
             if(ReportActivity.this.isFinishing())return;
-            mLat = cmccLocation.getLatitude();
-            mLng = cmccLocation.getLongitude();
-            tvLocationLatitude.setText(String.valueOf(mLat));
-            tvLocationLongitude.setText(String.valueOf(mLng));
-            Intent intent = new Intent(ReportActivity.this, MapActivity.class);
-            intent.putExtra("lat", mLat);
-            intent.putExtra("lng", mLng);
-            ReportActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
-
+            if(myHandler!=null){
+                myHandler.removeMessages(1);
+            }
+            hideLoading();
+            if(cmccLocation!=null){
+                mLat = cmccLocation.getLatitude();
+                mLng = cmccLocation.getLongitude();
+                if(mLat>0 &&mLng>0){
+                    tvLocationLatitude.setText(String.valueOf(mLat));
+                    tvLocationLongitude.setText(String.valueOf(mLng));
+                    Intent intent = new Intent(ReportActivity.this, MapActivity.class);
+                    intent.putExtra("lat", mLat);
+                    intent.putExtra("lng", mLng);
+                    ReportActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+                }else {
+                    showNormalDialog();
+                }
+            }else {
+                showNormalDialog();
+            }
             GPSUtils.getInstance().removeLocationListener(locationListener);
         }
     };
@@ -1221,5 +1239,59 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 break;
         }
     }
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<ReportActivity> weakTrainModelActivity;
+
+        public MyHandler(ReportActivity activity) {
+            weakTrainModelActivity = new WeakReference<ReportActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            ReportActivity weakReference;
+            if (weakTrainModelActivity.get() == null) {
+                return;
+            } else {
+                weakReference = weakTrainModelActivity.get();
+            }
+            switch (msg.what) {
+                case 1:
+                    weakReference.hideLoading();
+                    weakReference.showNormalDialog();
+
+                    break;
+            }
+        }
+    }
+
+    private void showNormalDialog(){
+        if(this.isFinishing())return;
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(this);
+        normalDialog.setTitle("定位");
+        normalDialog.setMessage("手机定位失败，获得中心点坐标");
+        normalDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(ReportActivity.this, MapActivity.class);
+                        intent.putExtra("lat", mLat);
+                        intent.putExtra("lng", mLng);
+                        startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
+                    }
+                });
+        normalDialog.setNegativeButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        // 显示
+        normalDialog.show();
+    }
+
 
 }

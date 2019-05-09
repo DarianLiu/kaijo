@@ -2,39 +2,36 @@ package com.geek.kaijo.mvp.presenter;
 
 import android.app.Application;
 
-import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.InspectionProjectRegisterContract;
-import com.geek.kaijo.mvp.model.entity.Case;
 import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
-import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.InspentionResult;
-import com.geek.kaijo.mvp.model.entity.Menu;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-import com.jess.arms.utils.DataHelper;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.LogUtils;
 
 import java.util.List;
 
-import dao.CaseInfoDao;
+import javax.inject.Inject;
+
 import dao.DaoSession;
 import dao.IPRegisterBeanDao;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-
-import javax.inject.Inject;
 
 
 @ActivityScope
@@ -64,9 +61,8 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
 
     /**
      * http巡查项列表
-     *
      */
-    public void findThingPositionListBy(String streetId,String communityId,String gridId) {
+    public void findThingPositionListBy(String streetId, String communityId, String gridId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
@@ -90,6 +86,7 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                         super.onComplete();
                         mRootView.finishRefresh();
                     }
+
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
@@ -101,36 +98,33 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
 
     /**
      * 获取http数据后需比较本地状态是否已经巡查
+     *
      * @param httpResult
      */
-    public void dbShowContent(List<IPRegisterBean> httpResult){
+    public void dbShowContent(List<IPRegisterBean> httpResult) {
         Observable<List<IPRegisterBean>> observable = Observable.create(new ObservableOnSubscribe<List<IPRegisterBean>>() {
             @Override
             public void subscribe(ObservableEmitter<List<IPRegisterBean>> emitter) throws Exception {
 
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        DaoSession daoSession1 = MyApplication.get().getDaoSession();
-                        IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
-                        List<IPRegisterBean> dbresult = ipRegisterBeanDao.loadAll();
-                        if(httpResult!=null && dbresult!=null){
-                            for (int i=0;i<httpResult.size();i++){
-                                for(int k=0;k<dbresult.size();k++){
-                                    if(httpResult.get(i).getThingPositionId()==dbresult.get(k).getThingPositionId()){
-                                        httpResult.get(i).setStatus(dbresult.get(k).getStatus());
-                                    }
-                                }
+                LogUtils.debugInfo("111111111111111111111线程名："+Thread.currentThread().getName());
+
+                DaoSession daoSession1 = MyApplication.get().getDaoSession();
+                IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+                List<IPRegisterBean> dbresult = ipRegisterBeanDao.loadAll();
+                if (httpResult != null && dbresult != null) {
+                    for (int i = 0; i < httpResult.size(); i++) {
+                        for (int k = 0; k < dbresult.size(); k++) {
+                            if (httpResult.get(i).getThingPositionId() == dbresult.get(k).getThingPositionId()) {
+                                httpResult.get(i).setStatus(dbresult.get(k).getStatus());
                             }
                         }
-
-                        ipRegisterBeanDao.insertOrReplaceInTx(httpResult);
-
-                        emitter.onNext(httpResult);
-                        emitter.onComplete();
                     }
-                }.start();
+                }
+
+                ipRegisterBeanDao.insertOrReplaceInTx(httpResult);
+
+                emitter.onNext(httpResult);
+                emitter.onComplete();
 
             }
         });
@@ -142,6 +136,7 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
 
             @Override
             public void onNext(List<IPRegisterBean> result) {
+                LogUtils.debugInfo("111111111111111111111线程名噶："+Thread.currentThread().getName());
                 mRootView.dbHttpShowContent(result);
             }
 
@@ -154,31 +149,26 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
             public void onComplete() {
             }
         };
-        //建立连接
-        observable.subscribe(observer);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer); //建立连接
     }
 
 
     /**
      * 巡查项数据库获取
      */
-    public void dbFindThingList(){
+    public void dbFindThingList() {
         Observable<List<IPRegisterBean>> observable = Observable.create(new ObservableOnSubscribe<List<IPRegisterBean>>() {
             @Override
             public void subscribe(ObservableEmitter<List<IPRegisterBean>> emitter) throws Exception {
 
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        DaoSession daoSession1 = MyApplication.get().getDaoSession();
-                        IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
-                        List<IPRegisterBean> ipRegisterBeanList = ipRegisterBeanDao.loadAll();
+                DaoSession daoSession1 = MyApplication.get().getDaoSession();
+                IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+                List<IPRegisterBean> ipRegisterBeanList = ipRegisterBeanDao.loadAll();
 
-                        emitter.onNext(ipRegisterBeanList);
-                        emitter.onComplete();
-                    }
-                }.start();
+                emitter.onNext(ipRegisterBeanList);
+                emitter.onComplete();
 
             }
         });
@@ -202,18 +192,65 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
             public void onComplete() {
             }
         };
-        //建立连接
-        observable.subscribe(observer);
+
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer); //建立连接
+
+
+    }
+
+    /**
+     * 巡查结束  更改状态
+     */
+    public void dbEndState( List<IPRegisterBean> list) {
+        Observable<List<IPRegisterBean>> observable = Observable.create(new ObservableOnSubscribe<List<IPRegisterBean>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<IPRegisterBean>> emitter) throws Exception {
+
+                DaoSession daoSession1 = MyApplication.get().getDaoSession();
+                IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+                ipRegisterBeanDao.insertOrReplaceInTx(list);
+
+                emitter.onNext(list);
+                emitter.onComplete();
+
+            }
+        });
+        //创建一个下游 Observer
+        Observer<List<IPRegisterBean>> observer = new Observer<List<IPRegisterBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(List<IPRegisterBean> result) {
+                mRootView.dbEndStateSuccess();
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+//                mRootView.preError();
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer); //建立连接
+
 
     }
 
 
-
     /**
      * 开始巡查
-     *
      */
-    public void startPath(String userId,int state) {
+    public void startPath(String userId, int state) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userId", userId);
         jsonObject.addProperty("state", state);
@@ -233,6 +270,7 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                         super.onComplete();
 //                        mRootView.finishRefresh();
                     }
+
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
@@ -243,9 +281,8 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
 
     /**
      * 结束巡查
-     *
      */
-    public void endPath(String userId,int state) {
+    public void endPath(String userId, int state) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userId", userId);
         jsonObject.addProperty("state", state);
@@ -265,6 +302,7 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                         super.onComplete();
 //                        mRootView.finishRefresh();
                     }
+
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);

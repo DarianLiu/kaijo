@@ -7,13 +7,21 @@
 
     <include layout="@layout/include_toolbar" />
 
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </WebView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/default_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/plan_txt"
