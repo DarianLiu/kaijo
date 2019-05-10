@@ -237,20 +237,13 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
                 break;
             case R.id.ipr_complete://完成巡查
                 if(mPresenter!=null && userInfo!=null){
-                    mPresenter.endPath(userInfo.getUserId(),1);
+                    mPresenter.endPath(userInfo.getUserId(),2,mList);
                 }
                 break;
             case R.id.ipr_cancel://取消巡查
-                iprComplete.setEnabled(false);
-                iprCancel.setEnabled(false);
-                iprStart.setEnabled(true);
-
-                DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 0);
-                sfState = 0;
-                Intent intent = new Intent();
-                intent.putExtra(Constant.SP_KEY_Patrol_state, 0);
-                intent.setAction(Constant.SP_KEY_Patrol_state);
-                sendBroadcast(intent);
+                if(mPresenter!=null && userInfo!=null){
+                    mPresenter.cancelPath(userInfo.getUserId(),3);
+                }
 
                 break;
         }
@@ -284,17 +277,35 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     @Override
     public void httpEndSuccess() {   //结束巡查
         if(this.isFinishing())return;
-        for(int i=0;i<mList.size();i++){
-            mList.get(i).setStatus(0);
+        if(mList!=null){
+            for(int i=0;i<mList.size();i++){
+                mList.get(i).setStatus(0);
+            }
+            mPresenter.dbEndState(mList);
         }
-        mPresenter.dbEndState(mList);
 
     }
 
     @Override
+    public void httpCancelSuccess() {
+        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 0);
+        sfState = 0;
+        refreshState();
+        Intent intent = new Intent();
+        intent.putExtra(Constant.SP_KEY_Patrol_state, 0);
+        intent.setAction(Constant.SP_KEY_Patrol_state);
+        sendBroadcast(intent);
+    }
+
+    @Override
     public void dbEndStateSuccess() { //结束巡查 数据库状态更新成功
+        if(this.isFinishing())return;
+        if(mAdapter!=null){
+            mAdapter.notifyDataSetChanged();
+        }
         DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 2);
         sfState = 2;
+        refreshState();
         Intent intent = new Intent();
         intent.putExtra(Constant.SP_KEY_Patrol_state, sfState);
         intent.setAction(Constant.SP_KEY_Patrol_state);

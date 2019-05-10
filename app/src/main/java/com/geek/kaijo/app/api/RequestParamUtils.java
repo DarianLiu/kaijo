@@ -402,4 +402,82 @@ public class RequestParamUtils {
     }
 
 
+    /**
+     * 网吧
+     */
+    public static RequestBody thingInsertInfo_wangba(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                   String name,String address,String farenName,String contact) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("farenName", farenName);
+        jsonObject.addProperty("contact", contact);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+    /**
+     * 文物保护单位
+     */
+    public static RequestBody thingInsertInfo_wenwu(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                   String name,String danweiName,String farenName,String chanquanDanweiName,String contact,String guanlishiyongDanweiName,
+                                                   String guanlishiyongFarenName,String guanlishiyongLianxiName,String guanlishiyongContact) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("danweiName", danweiName);
+        jsonObject.addProperty("farenName", farenName);
+        jsonObject.addProperty("chanquanDanweiName", chanquanDanweiName);
+        jsonObject.addProperty("contact", contact);
+        jsonObject.addProperty("guanlishiyongDanweiName", guanlishiyongDanweiName);
+        jsonObject.addProperty("guanlishiyongFarenName", guanlishiyongFarenName);
+        jsonObject.addProperty("guanlishiyongLianxiName", guanlishiyongLianxiName);
+        jsonObject.addProperty("guanlishiyongContact", guanlishiyongContact);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+    /**
+     * 演出场所
+     */
+    public static RequestBody thingInsertInfo_yanchu(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+                                                     String name,String address,String jingyingzheName,String contact) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("streetId", streetId);
+        jsonObject.addProperty("communityId", communityId);
+        jsonObject.addProperty("gridId", gridId);
+        jsonObject.addProperty("lat", lat);
+        jsonObject.addProperty("lng", lng);
+        jsonObject.addProperty("photos", photos);
+        jsonObject.addProperty("checkRecord", checkRecord);
+
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("address", address);
+        jsonObject.addProperty("jingyingzheName", jingyingzheName);
+        jsonObject.addProperty("contact", contact);
+
+        return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+    }
+
+
+
+
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.cmmap.api.location.CmccLocation;
 import com.cmmap.api.location.CmccLocationClient;
 import com.cmmap.api.location.CmccLocationClientOption;
+import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.MyApplication;
@@ -153,12 +154,14 @@ public class LocalService extends Service {
             if(cmccLocation==null)return;
             LocalService.this.cmccLocation = cmccLocation;
             if(cmccLocation!=null && result!=null && state==1){
+                LogUtils.debugInfo("1111111111111111111111111111111巡查中");
                 for(int i=0;i<result.size();i++){
                     if(result.get(i).getStatus()==0){
                         double distance = GPSUtils.getInstance().getDistance(cmccLocation.getLongitude(),cmccLocation.getLatitude(),result.get(i).getLng(),result.get(i).getLat());
                         if(distance<=50){ //误差50
                             //点位巡查成功，状态保存到数据库
                             result.get(i).setStatus(1);
+                            result.get(i).setArriveTime(DateUtils.timeStamp2Date(System.currentTimeMillis(),DateUtils.dateString1));
                             Toast.makeText(getApplication(),result.get(i).getName()+"已巡查",Toast.LENGTH_LONG).show();
                             new Thread(){
                                 @Override

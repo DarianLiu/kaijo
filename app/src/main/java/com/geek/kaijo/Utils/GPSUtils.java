@@ -82,6 +82,8 @@ public class GPSUtils {
         //关闭缓存机制
         mLocationOption.setLocationCacheEnable(false);
 
+        mLocationOption.enableLog(true);
+
         //给定位客户端对象设置定位参数 GPS定位结果不会被缓存
         mLocationClient.setLocationOption(mLocationOption);
 

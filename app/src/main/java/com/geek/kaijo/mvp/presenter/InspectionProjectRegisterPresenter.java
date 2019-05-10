@@ -6,8 +6,11 @@ import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.InspectionProjectRegisterContract;
 import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
+import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.InspentionResult;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -71,7 +74,8 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                 new Gson().toJson(jsonObject));
 
         mModel.findThingPositionListBy(requestBody)
-                .compose(RxUtils.applySchedulers(mRootView))
+//                .compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.applySchedulersHide(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<List<IPRegisterBean>>(mErrorHandler) {
                     @Override
@@ -282,10 +286,21 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
     /**
      * 结束巡查
      */
-    public void endPath(String userId, int state) {
+    public void endPath(String userId, int state, List<IPRegisterBean> list) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userId", userId);
         jsonObject.addProperty("state", state);
+        if(list!=null && list.size()>0){
+            JsonArray jsonArray = new JsonArray();
+            for(int i=0;i<list.size();i++){
+                JsonObject object = new JsonObject();
+                object.addProperty("thingPositionId",list.get(i).getThingPositionId());
+                object.addProperty("arriveTime",list.get(i).getArriveTime());
+                jsonArray.add(object);
+            }
+            jsonObject.add("thingPositions",jsonArray);
+        }
+
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
         mModel.endPath(requestBody)
@@ -294,6 +309,7 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                 .subscribeWith(new ErrorHandleSubscriber<InspentionResult>(mErrorHandler) {
                     @Override
                     public void onNext(InspentionResult inspectionList) {
+
                         mRootView.httpEndSuccess();
                     }
 
@@ -310,6 +326,41 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                     }
                 });
     }
+
+    /**
+     * 取消巡查
+     */
+    public void cancelPath(String userId, int state) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userId", userId);
+        jsonObject.addProperty("state", state);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+        mModel.cancelPath(requestBody)
+                .compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.handleBaseResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<InspentionResult>(mErrorHandler) {
+                    @Override
+                    public void onNext(InspentionResult inspectionList) {
+
+                        mRootView.httpCancelSuccess();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+//                        mRootView.finishRefresh();
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+//                        mRootView.finishRefresh();
+                    }
+                });
+    }
+
 
 
 }

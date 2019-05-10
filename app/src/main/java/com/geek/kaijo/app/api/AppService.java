@@ -348,4 +348,12 @@ public interface AppService {
     @POST("/path/endPath")
     Observable<BaseResult<InspentionResult>> endPath(@Body RequestBody body);
 
+    /**
+     * 结束巡查
+     *
+     */
+    @NonNull
+    @POST("/path/cancelPath")
+    Observable<BaseResult<InspentionResult>> cancelPath(@Body RequestBody body);
+
 }

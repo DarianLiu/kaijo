@@ -57,4 +57,9 @@ public class InspectionProjectRegisterModel extends BaseModel implements Inspect
         return mRepositoryManager.obtainRetrofitService(AppService.class).endPath(body);
     }
 
+    @Override
+    public Observable<BaseResult<InspentionResult>> cancelPath(RequestBody body) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).cancelPath(body);
+    }
+
 }

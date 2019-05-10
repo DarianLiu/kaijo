@@ -22,6 +22,7 @@ public interface InspectionProjectRegisterContract {
         void httpGetThingListSuccess(List<IPRegisterBean> inspectionList);
         void httpStartSuccess();
         void httpEndSuccess();
+        void httpCancelSuccess();
         void finishRefresh();
         void dbGetThingListSuccess(List<IPRegisterBean> result);
         void dbHttpShowContent(List<IPRegisterBean> result);
@@ -35,6 +36,7 @@ public interface InspectionProjectRegisterContract {
 
         Observable<BaseResult<InspentionResult>> startPath(RequestBody body);
         Observable<BaseResult<InspentionResult>> endPath(RequestBody body);
+        Observable<BaseResult<InspentionResult>> cancelPath(RequestBody body);
 
     }
 }

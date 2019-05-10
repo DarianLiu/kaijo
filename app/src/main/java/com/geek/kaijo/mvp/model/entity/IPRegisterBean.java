@@ -19,12 +19,13 @@ public class IPRegisterBean{
     private int streetId;
     private int communityId;
     private int gridId;
+    private String arriveTime;
 
 
-    @Generated(hash = 681453242)
+    @Generated(hash = 631059704)
     public IPRegisterBean(String name, int Status, long thingPositionId,
             int thingId, int createUser, double lat, double lng, int streetId,
-            int communityId, int gridId) {
+            int communityId, int gridId, String arriveTime) {
         this.name = name;
         this.Status = Status;
         this.thingPositionId = thingPositionId;
@@ -35,6 +36,7 @@ public class IPRegisterBean{
         this.streetId = streetId;
         this.communityId = communityId;
         this.gridId = gridId;
+        this.arriveTime = arriveTime;
     }
 
     @Generated(hash = 1953884383)
@@ -120,5 +122,13 @@ public class IPRegisterBean{
 
     public void setGridId(int gridId) {
         this.gridId = gridId;
+    }
+
+    public String getArriveTime() {
+        return arriveTime;
+    }
+
+    public void setArriveTime(String arriveTime) {
+        this.arriveTime = arriveTime;
     }
 }

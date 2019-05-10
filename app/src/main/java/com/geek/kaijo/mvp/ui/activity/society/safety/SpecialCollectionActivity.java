@@ -40,6 +40,7 @@ import com.geek.kaijo.mvp.ui.activity.MapActivity;
 import com.geek.kaijo.mvp.ui.activity.ReportActivity;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
 import com.geek.kaijo.mvp.ui.adapter.UploadPhotoAdapter;
+import com.geek.kaijo.mvp.ui.fragment.society.culture.CulturalRelicFragment;
 import com.geek.kaijo.mvp.ui.fragment.society.fooddrug.DrugSafteFragment;
 import com.geek.kaijo.mvp.ui.fragment.society.fooddrug.FoodSafteFragment;
 import com.geek.kaijo.mvp.ui.fragment.society.safety.SpecialCollectionFragment;
@@ -145,6 +146,20 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     private EditText jisi_phone; //联系电话
     private EditText jisi_zerenquRemark; //请输入责任区扫描
 
+    /*网吧*/
+    private LinearLayout ly_wangba;
+    private EditText et_wangba_name; //名称
+    private EditText et_wangba_adress; //地址
+    private EditText wangba_farenName; //法定代表人
+    private EditText wangba__phone; //联系电话
+
+    /*演出场所*/
+    private LinearLayout ly_yanchu;
+    private EditText et_yanchu_name; //名称
+    private EditText et_yanchu_adress; //地址
+    private EditText jingyingzheName; //经营者名称
+    private EditText yanchu__phone; //联系电话
+
     private MyHandler myHandler;
 
 
@@ -198,6 +213,22 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 jisi_farenName = findViewById(R.id.jisi_farenName);
                 jisi_phone = findViewById(R.id.jisi_phone);
                 jisi_zerenquRemark = findViewById(R.id.jisi_zerenquRemark);
+            }else if("网吧".equals(subMenu.getName())){
+                ly_wangba = findViewById(R.id.ly_wangba);
+                ly_wangba.setVisibility(View.VISIBLE);
+                et_wangba_name = findViewById(R.id.et_wangba_name);
+                et_wangba_adress = findViewById(R.id.et_wangba_adress);
+                wangba_farenName = findViewById(R.id.wangba_farenName);
+                wangba__phone = findViewById(R.id.wangba__phone);
+            }else if("文物保护单位".equals(subMenu.getName())){
+                fragment = new CulturalRelicFragment();
+            }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "娱乐场所".equals(subMenu.getName())){
+                ly_yanchu = findViewById(R.id.ly_yanchu);
+                ly_yanchu.setVisibility(View.VISIBLE);
+                et_yanchu_name = findViewById(R.id.et_yanchu_name);
+                et_yanchu_adress = findViewById(R.id.et_yanchu_adress);
+                jingyingzheName = findViewById(R.id.jingyingzheName);
+                yanchu__phone = findViewById(R.id.yanchu__phone);
             }
             if(fragment!=null){
                 getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
@@ -535,6 +566,41 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             }
                             requestBody = RequestParamUtils.thingInsertInfo_jisi(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     jisi_et_address.getText().toString().trim(),jisi_farenName.getText().toString().trim(),jisi_phone.getText().toString().trim(),jisi_zerenquRemark.getText().toString().trim());
+
+                        }else if("网吧".equals(subMenu.getName())){
+                            if(TextUtils.isEmpty(et_wangba_name.getText().toString())){
+                                showMessage("请输入名称");
+                                return;
+                            }else if(TextUtils.isEmpty(et_wangba_adress.getText().toString())){
+                                showMessage("请输入地址");
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_wangba(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    et_wangba_name.getText().toString().trim(),et_wangba_adress.getText().toString().trim(),wangba_farenName.getText().toString().trim(),wangba__phone.getText().toString().trim());
+
+                        }else if(fragment instanceof CulturalRelicFragment){ //文物保护单位
+                            CulturalRelicFragment mfragment = (CulturalRelicFragment) fragment;
+                            if(!mfragment.checkParams()){
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_wenwu(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    mfragment.et_name.getText().toString().trim(),mfragment.et_danweiName.getText().toString().trim(),mfragment.et_farenName.getText().toString().trim(),
+                                    mfragment.et_chanquanDanweiName.getText().toString().trim(),mfragment.et_phone.getText().toString().trim(),mfragment.et_guanlishiyongDanweiName.getText().toString().trim(),
+                                    mfragment.et_guanlishiyongFarenName.getText().toString().trim(), mfragment.et_guanlishiyongLianxiName.getText().toString().trim(),mfragment.et_guanlishiyongContact.getText().toString().trim());
+
+                        }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "娱乐场所".equals(subMenu.getName())){
+                            if(TextUtils.isEmpty(et_yanchu_name.getText().toString())){
+                                showMessage("请输入名称");
+                                return;
+                            }else if(TextUtils.isEmpty(et_yanchu_adress.getText().toString())){
+                                showMessage("请输入地址");
+                                return;
+                            }else if(TextUtils.isEmpty(jingyingzheName.getText().toString())){
+                                showMessage("请输入经营者名称");
+                                return;
+                            }
+                            requestBody = RequestParamUtils.thingInsertInfo_yanchu(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    et_yanchu_name.getText().toString().trim(),et_yanchu_adress.getText().toString().trim(),jingyingzheName.getText().toString().trim(),yanchu__phone.getText().toString().trim());
 
                         }
 

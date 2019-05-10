@@ -55,6 +55,17 @@ public class RxUtils {
                 .doFinally(view::hideLoading).compose(RxLifecycleUtils.bindToLifecycle(view));
     }
 
+    public static <T> ObservableTransformer<T, T> applySchedulersHide(final IView view) {
+        //隐藏进度条
+        return observable -> observable.subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {
+//                    view.showLoading();//显示进度条
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(view::hideLoading).compose(RxLifecycleUtils.bindToLifecycle(view));
+    }
+
     /**
      * 统一返回结果处理
      *
