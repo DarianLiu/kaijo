@@ -137,7 +137,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     /*冬季除雪*/
     private LinearLayout ly_dongjichuxue;
     private EditText dongjichuxue_et_address; //具体地址
-    private EditText dongjichuxue_et_isPodao; //是否为破路
+    private AppCompatSpinner dongjichuxue_et_isPodao; //是否为破路
 
     /*文明祭祀*/
     private LinearLayout ly_wenmingjisi;
@@ -161,7 +161,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     private EditText yanchu__phone; //联系电话
 
     private MyHandler myHandler;
-
+    public List<String> checkList;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -206,6 +206,13 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 ly_dongjichuxue.setVisibility(View.VISIBLE);
                 dongjichuxue_et_address = findViewById(R.id.dongjichuxue_et_address);
                 dongjichuxue_et_isPodao = findViewById(R.id.dongjichuxue_et_isPodao);
+                if (checkList == null) {
+                    checkList = new ArrayList<>();
+                    checkList.add("否");
+                    checkList.add("是");
+                }
+                MySpinnerAdapter<String> mStreetAdapter = new MySpinnerAdapter<>(this, checkList);
+                dongjichuxue_et_isPodao.setAdapter(mStreetAdapter);
             }else if("文明祭祀".equals(subMenu.getName())){
                 ly_wenmingjisi = findViewById(R.id.ly_wenmingjisi);
                 ly_wenmingjisi.setVisibility(View.VISIBLE);
@@ -222,7 +229,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 wangba__phone = findViewById(R.id.wangba__phone);
             }else if("文物保护单位".equals(subMenu.getName())){
                 fragment = new CulturalRelicFragment();
-            }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "娱乐场所".equals(subMenu.getName())){
+            }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "演艺娱乐".equals(subMenu.getName())|| "娱乐场所".equals(subMenu.getName())){
                 ly_yanchu = findViewById(R.id.ly_yanchu);
                 ly_yanchu.setVisibility(View.VISIBLE);
                 et_yanchu_name = findViewById(R.id.et_yanchu_name);
@@ -444,7 +451,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
             case R.id.btn_location_obtain:  //定位
                 showLoading();
                 GPSUtils.getInstance().startLocation(locationListener);
-                myHandler.sendEmptyMessageDelayed(1,5000);
+                myHandler.sendEmptyMessageDelayed(1,Constant.location_loadTime);
                 break;
             case R.id.btn_submit_pic:
 //                isWhich = 1;
@@ -490,7 +497,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                     equipmentList.add(equipment);
                                 }
                                 String tezhongshebei = new Gson().toJsonTree(equipmentList).toString();
-                                requestBody = RequestParamUtils.thingInsertInfo(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord, equipmentFragment.et_name.getText().toString(),
+                                requestBody = RequestParamUtils.thingInsertInfo(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord, equipmentFragment.et_name.getText().toString(),
                                         tezhongshebei, equipmentFragment.et_farenName.getText().toString(), equipmentFragment.et_address.getText().toString());
 
                             }
@@ -501,7 +508,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 if(!mfragment.checkParams()){
                                     return;
                                 }
-                                requestBody = RequestParamUtils.thingInsertInfo_gd(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                requestBody = RequestParamUtils.thingInsertInfo_gd(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                         mfragment.gd_et_mark.getText().toString(),mfragment.gd_et_name.getText().toString(),mfragment.gd_et_address.getText().toString(),mfragment.gd_et_shigongdanwei.getText().toString(),
                                         mfragment.checkList.get(mfragment.gd_spinner_check.getSelectedItemPosition()), mfragment.gd_et_price.getText().toString(), mfragment.gd_et_jingduzhuangtai.getText().toString(),
                                         mfragment.gd_jianzhumianji.getText().toString(),mfragment.gd_et_kaigongnriqi.getText().toString(),mfragment.gd_et_jungongriqi.getText().toString(),mfragment.gd_et_jianshedanwei.getText().toString(),
@@ -512,14 +519,14 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_whp(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_whp(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     mfragment.et_name.getText().toString(),mfragment.et_address.getText().toString(),mfragment.et_other.getText().toString(),mfragment.et_category.getText().toString());
                         }else if(fragment instanceof FoodSafteFragment) { //食品
                             FoodSafteFragment mfragment = (FoodSafteFragment) fragment;
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_food(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_food(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     mfragment.et_name.getText().toString(),mfragment.et_farenName.getText().toString(),mfragment.et_jjxz.getText().toString(),mfragment.et_jycs.getText().toString(),
                                     mfragment.et_xkzh.getText().toString(),mfragment.et_ztyt.getText().toString(),mfragment.checkList.get(mfragment.spinner_street.getSelectedItemPosition()),mfragment.tv_time.getText().toString(),
                                     mfragment.et_category.getText().toString(), mfragment.et_jgjg.getText().toString(),mfragment.et_fxdj.getText().toString(),mfragment.et_Telephone.getText().toString(),mfragment.et_phone.getText().toString());
@@ -528,7 +535,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_drug(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_drug(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     mfragment.et_companyName.getText().toString(),mfragment.et_register_name.getText().toString(),mfragment.et_farenName.getText().toString(),mfragment.et_yaoshi.getText().toString(),
                                     mfragment.et_xukezhanghao.getText().toString(),mfragment.et_xukezhengTime.getText().toString(),mfragment.et_youxiaoqiTime.getText().toString(),mfragment.et_jingyinfanshi.getText().toString(),
                                     mfragment.et_jingyinfanwei.getText().toString(), mfragment.et_Telephone.getText().toString(),mfragment.et_phone.getText().toString());
@@ -538,7 +545,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入点位名称");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_senl(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_senl(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     senl_et_name.getText().toString().trim());
 
                         }else if(fragment instanceof TyphoonFloodFragment){ //防台防汛
@@ -546,7 +553,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_ftfx(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_ftfx(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     mfragment.checkList.get(mfragment.spinner_category.getSelectedItemPosition()),mfragment.et_state.getText().toString(),mfragment.et_address.getText().toString(),mfragment.et_danweiName.getText().toString(),
                                     mfragment.et_farenName.getText().toString(),mfragment.et_leading_TlPhone.getText().toString(),mfragment.et_leading_phone.getText().toString(),mfragment.et_jiedaozerenName.getText().toString(),
                                     mfragment.jiedaozerenMobile.getText().toString());
@@ -556,15 +563,15 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入具体地址");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_dongjichuxue(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
-                                    dongjichuxue_et_address.getText().toString().trim(),dongjichuxue_et_isPodao.getText().toString().trim());
+                            requestBody = RequestParamUtils.thingInsertInfo_dongjichuxue(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                    dongjichuxue_et_address.getText().toString().trim(),checkList.get(dongjichuxue_et_isPodao.getSelectedItemPosition()));
 
                         }else if("文明祭祀".equals(subMenu.getName())){
                             if(TextUtils.isEmpty(jisi_et_address.getText().toString())){
                                 showMessage("请输入祭祀地点");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_jisi(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_jisi(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     jisi_et_address.getText().toString().trim(),jisi_farenName.getText().toString().trim(),jisi_phone.getText().toString().trim(),jisi_zerenquRemark.getText().toString().trim());
 
                         }else if("网吧".equals(subMenu.getName())){
@@ -575,7 +582,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入地址");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_wangba(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_wangba(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     et_wangba_name.getText().toString().trim(),et_wangba_adress.getText().toString().trim(),wangba_farenName.getText().toString().trim(),wangba__phone.getText().toString().trim());
 
                         }else if(fragment instanceof CulturalRelicFragment){ //文物保护单位
@@ -583,12 +590,12 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_wenwu(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_wenwu(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     mfragment.et_name.getText().toString().trim(),mfragment.et_danweiName.getText().toString().trim(),mfragment.et_farenName.getText().toString().trim(),
                                     mfragment.et_chanquanDanweiName.getText().toString().trim(),mfragment.et_phone.getText().toString().trim(),mfragment.et_guanlishiyongDanweiName.getText().toString().trim(),
                                     mfragment.et_guanlishiyongFarenName.getText().toString().trim(), mfragment.et_guanlishiyongLianxiName.getText().toString().trim(),mfragment.et_guanlishiyongContact.getText().toString().trim());
 
-                        }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "娱乐场所".equals(subMenu.getName())){
+                        }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) ||"演艺娱乐".equals(subMenu.getName()) || "娱乐场所".equals(subMenu.getName())){
                             if(TextUtils.isEmpty(et_yanchu_name.getText().toString())){
                                 showMessage("请输入名称");
                                 return;
@@ -599,7 +606,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入经营者名称");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_yanchu(streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_yanchu(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
                                     et_yanchu_name.getText().toString().trim(),et_yanchu_adress.getText().toString().trim(),jingyingzheName.getText().toString().trim(),yanchu__phone.getText().toString().trim());
 
                         }
@@ -749,7 +756,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 case 1:
                     weakReference.hideLoading();
                     weakReference.showNormalDialog();
-
+                    GPSUtils.getInstance().removeLocationListener(weakReference.locationListener);
                     break;
             }
         }

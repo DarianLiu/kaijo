@@ -127,7 +127,7 @@ public class GPSUtils {
     }
 
     public void removeLocationListener(LocationListener locationListener){
-        if(locationListenerList!=null){
+        if(locationListenerList!=null && locationListener!=null){
             locationListenerList.remove(locationListener);
         }
 

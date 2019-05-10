@@ -111,7 +111,8 @@ public class DrugSafteFragment extends Fragment{
      * 初始化时间选择弹出框
      */
     private void initTimePopupWindow() {
-        et_youxiaoqiTime.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
+//        et_youxiaoqiTime.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
+        et_youxiaoqiTime.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
 
         View timePickerView = View.inflate(getActivity(), R.layout.view_pop_time_picker, null);
 
@@ -132,7 +133,8 @@ public class DrugSafteFragment extends Fragment{
                     mMinute[0] = String.valueOf(DateUtils.getCurrentDateMinute());
 
                     TextView tvCurrentDate = contentView.findViewById(R.id.tv_current_time);
-                    tvCurrentDate.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
+//                    tvCurrentDate.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
+                    tvCurrentDate.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
 
                     DatePicker datePicker = contentView.findViewById(R.id.datePicker);
                     datePicker.setMinDate(DateUtils.get1970YearTimeStamp());
@@ -143,8 +145,7 @@ public class DrugSafteFragment extends Fragment{
                                 mMonth[0] = monthOfYear < 9 ? "0" + (monthOfYear + 1) : String.valueOf(monthOfYear + 1);
                                 mDay[0] = dayOfMonth < 10 ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
 
-                                tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2} {3}:{4}",
-                                        mYear[0], mMonth[0], mDay[0], mHour[0], mMinute[0]));
+                                tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2}", mYear[0], mMonth[0], mDay[0]));
                             }
                     );
 
@@ -156,7 +157,7 @@ public class DrugSafteFragment extends Fragment{
                         mHour[0] = hourOfDay < 10 ? "0" + hourOfDay : String.valueOf(hourOfDay);
                         mMinute[0] = minute < 10 ? "0" + minute : String.valueOf(minute);
 
-                        tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2} {3}:{4}", mYear[0], mMonth[0], mDay[0], mHour[0], mMinute[0]));
+                        tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2}", mYear[0], mMonth[0], mDay[0]));
                     });
 
                     TextView tvSure = contentView.findViewById(R.id.tv_sure);
@@ -184,7 +185,8 @@ public class DrugSafteFragment extends Fragment{
      * 许可证颁发时间
      */
     private void initTimePopupWindow_xukezheng() {
-        et_xukezhengTime.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
+//        et_xukezhengTime.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
+        et_xukezhengTime.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
 
         View timePickerView = View.inflate(getActivity(), R.layout.view_pop_time_picker, null);
 
@@ -205,7 +207,9 @@ public class DrugSafteFragment extends Fragment{
                     mMinute[0] = String.valueOf(DateUtils.getCurrentDateMinute());
 
                     TextView tvCurrentDate = contentView.findViewById(R.id.tv_current_time);
-                    tvCurrentDate.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
+//                    tvCurrentDate.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
+                    tvCurrentDate.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+
 
                     DatePicker datePicker = contentView.findViewById(R.id.datePicker);
                     datePicker.setMinDate(DateUtils.get1970YearTimeStamp());
@@ -216,8 +220,7 @@ public class DrugSafteFragment extends Fragment{
                                 mMonth[0] = monthOfYear < 9 ? "0" + (monthOfYear + 1) : String.valueOf(monthOfYear + 1);
                                 mDay[0] = dayOfMonth < 10 ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
 
-                                tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2} {3}:{4}",
-                                        mYear[0], mMonth[0], mDay[0], mHour[0], mMinute[0]));
+                                tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2}", mYear[0], mMonth[0], mDay[0]));
                             }
                     );
 
@@ -229,7 +232,7 @@ public class DrugSafteFragment extends Fragment{
                         mHour[0] = hourOfDay < 10 ? "0" + hourOfDay : String.valueOf(hourOfDay);
                         mMinute[0] = minute < 10 ? "0" + minute : String.valueOf(minute);
 
-                        tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2} {3}:{4}", mYear[0], mMonth[0], mDay[0], mHour[0], mMinute[0]));
+                        tvCurrentDate.setText(MessageFormat.format("{0}-{1}-{2}", mYear[0], mMonth[0], mDay[0]));
                     });
 
                     TextView tvSure = contentView.findViewById(R.id.tv_sure);

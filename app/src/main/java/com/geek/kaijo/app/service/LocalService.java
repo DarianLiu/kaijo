@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class LocalService extends Service {
     private List<IPRegisterBean> result;
     LocationReceiver locationReceiver;
     int state; //0 未巡查 1 开始巡查 2 结束巡查
+    private Vibrator mVibrator;  //震动
 
     @Nullable
     @Override
@@ -163,6 +165,12 @@ public class LocalService extends Service {
                             result.get(i).setStatus(1);
                             result.get(i).setArriveTime(DateUtils.timeStamp2Date(System.currentTimeMillis(),DateUtils.dateString1));
                             Toast.makeText(getApplication(),result.get(i).getName()+"已巡查",Toast.LENGTH_LONG).show();
+                            if(mVibrator==null){
+                                mVibrator=(Vibrator)getApplication().getSystemService(Service.VIBRATOR_SERVICE);
+                            }
+                            //等待100，执行100，等待100，执行1000，-1代表不重复，之执行一次，其他代表会重复，0代表从数组的第0个位置开始
+//                            mVibrator.vibrate(new long[]{100,3000,100,3000},-1);
+                            mVibrator.vibrate(new long[]{100,1000,500,1000,500,1000,500,1000,500,1000},-1);
                             new Thread(){
                                 @Override
                                 public void run() {

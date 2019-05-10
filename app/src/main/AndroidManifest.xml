@@ -29,6 +29,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!--震动-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"

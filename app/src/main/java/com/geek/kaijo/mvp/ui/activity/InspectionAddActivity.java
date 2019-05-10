@@ -454,7 +454,7 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
                 case 1:
                     weakReference.hideLoading();
                     weakReference.showNormalDialog();
-
+                    GPSUtils.getInstance().removeLocationListener(weakReference.locationListener);
                     break;
             }
         }

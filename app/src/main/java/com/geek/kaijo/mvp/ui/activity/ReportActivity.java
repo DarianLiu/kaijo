@@ -399,7 +399,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 //启动定位
                 showLoading();
                 GPSUtils.getInstance().startLocation(locationListener);
-                myHandler.sendEmptyMessageDelayed(1,5000);
+                myHandler.sendEmptyMessageDelayed(1,Constant.location_loadTime);
             } else {
                 showPermissionsDialog();
             }
@@ -1260,6 +1260,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 case 1:
                     weakReference.hideLoading();
                     weakReference.showNormalDialog();
+                    GPSUtils.getInstance().removeLocationListener(weakReference.locationListener);
 
                     break;
             }

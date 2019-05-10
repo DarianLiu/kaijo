@@ -122,7 +122,8 @@
                         android:textSize="@dimen/t12"
                         android:textStyle="bold" />
 
-                    <EditText
+
+                    <!--<EditText
                         android:id="@+id/dongjichuxue_et_isPodao"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -138,7 +139,13 @@
                         android:spinnerMode="dialog"
                         android:textColor="@color/color_text_title"
                         android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
+                        android:textSize="@dimen/t14" />-->
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/dongjichuxue_et_isPodao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp" />
 
                 </LinearLayout>
                 <!--文明祭祀-->

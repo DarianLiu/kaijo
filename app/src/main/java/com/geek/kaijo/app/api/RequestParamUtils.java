@@ -168,9 +168,10 @@ public class RequestParamUtils {
     /**
      * 特种设备采集
      */
-    public static RequestBody thingInsertInfo(String streetId,String communityId,String gridId,String lat,String lng,String photos,
+    public static RequestBody thingInsertInfo(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos,
                                               String checkRecord,String danweiName,String tezhongshebei,String farenName,String address) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -192,10 +193,11 @@ public class RequestParamUtils {
     /**
      * 在建工地
      */
-    public static RequestBody thingInsertInfo_gd(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_gd(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                  String shoulishuNo,String name,String address,String danweiName,String isXukezheng,String zongzaojiaSum,String status,
                                                  String jianzhuSum,String startTime,String endTime,String jianshedanweiName,String jianlidanweiName) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -223,9 +225,10 @@ public class RequestParamUtils {
     /**
      * 危化品
      */
-    public static RequestBody thingInsertInfo_whp(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_whp(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                  String name,String address,String qita,String type) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -246,10 +249,11 @@ public class RequestParamUtils {
     /**
      * 食品
      */
-    public static RequestBody thingInsertInfo_food(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_food(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                   String jingyingzheName,String farenName,String jingjixingzhiName,String address,String xukezhengNo,String zhutiyetai,
                                                    String isNetwork,String youxiaoTime,String type,String jianguanjigouName,String fengxiandengjiName,String contact,String mobile) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -279,10 +283,11 @@ public class RequestParamUtils {
     /**
      * 药品
      */
-    public static RequestBody thingInsertInfo_drug(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_drug(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                    String name,String address,String farenName,String zhudianyaoshiName,String xukezhengNo,String xukezhengTime,
                                                    String youxiaoTime,String jingyingfangshiName,String jingyingfanweiName,String contact,String mobile) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -311,9 +316,10 @@ public class RequestParamUtils {
     /**
      * 森林防火
      */
-    public static RequestBody thingInsertInfo_senl(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_senl(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                    String name) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -331,10 +337,11 @@ public class RequestParamUtils {
     /**
      * 防台防汛
      */
-    public static RequestBody thingInsertInfo_ftfx(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_ftfx(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                    String type,String status,String address,String danweiName,String farenName,String contact,
                                                    String mobile,String jiedaozerenName,String jiedaozerenMobile) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -360,9 +367,10 @@ public class RequestParamUtils {
     /**
      * 冬季除雪
      */
-    public static RequestBody thingInsertInfo_dongjichuxue(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_dongjichuxue(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                    String address,String isPodao) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -381,9 +389,10 @@ public class RequestParamUtils {
     /**
      * 文明祭祀
      */
-    public static RequestBody thingInsertInfo_jisi(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_jisi(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                            String address,String farenName,String contact,String zerenquRemark) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -405,9 +414,10 @@ public class RequestParamUtils {
     /**
      * 网吧
      */
-    public static RequestBody thingInsertInfo_wangba(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_wangba(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                    String name,String address,String farenName,String contact) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -428,10 +438,11 @@ public class RequestParamUtils {
     /**
      * 文物保护单位
      */
-    public static RequestBody thingInsertInfo_wenwu(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_wenwu(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                    String name,String danweiName,String farenName,String chanquanDanweiName,String contact,String guanlishiyongDanweiName,
                                                    String guanlishiyongFarenName,String guanlishiyongLianxiName,String guanlishiyongContact) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
@@ -457,9 +468,10 @@ public class RequestParamUtils {
     /**
      * 演出场所
      */
-    public static RequestBody thingInsertInfo_yanchu(String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_yanchu(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
                                                      String name,String address,String jingyingzheName,String contact) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingId", thingId);
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
