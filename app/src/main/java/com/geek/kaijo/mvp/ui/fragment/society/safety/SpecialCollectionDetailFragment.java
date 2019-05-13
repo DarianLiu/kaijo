@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geek.kaijo.R;
-import com.geek.kaijo.mvp.model.entity.GridItemContent;
 import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
+import com.geek.kaijo.mvp.ui.activity.ComponentDetailActivity;
 import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
 
@@ -31,19 +31,15 @@ import butterknife.Unbinder;
 /**
  * 特种设备
  */
-public class SpecialCollectionFragment extends Fragment{
+public class SpecialCollectionDetailFragment extends Fragment{
     Unbinder unbinder;
     /*特种设备*/
     @BindView(R.id.et_name)
-    public EditText et_name;  //单位名称
+    public TextView et_name;  //单位名称
     @BindView(R.id.et_farenName)
-    public EditText et_farenName; //et_farenName
+    public TextView et_farenName; //et_farenName
     @BindView(R.id.et_address)
-    public EditText et_address; //使用地点
-    @BindView(R.id.tv_add_equipment)
-    TextView tv_add_equipment; //增加特种设备
-    @BindView(R.id.ly_addView)
-    public LinearLayout ly_addView; //增加特种设备
+    public TextView et_address; //使用地点
 
     public List<String> checkList;
     private ThingPositionInfo thingPositionInfo;
@@ -52,7 +48,7 @@ public class SpecialCollectionFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.include_tezhongshebei, container, false);
+        View view = inflater.inflate(R.layout.include_tezhongshebei_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -66,7 +62,7 @@ public class SpecialCollectionFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SpecialCollectionActivity activity = (SpecialCollectionActivity)getActivity();
+        ComponentDetailActivity activity = (ComponentDetailActivity)getActivity();
         if(activity!=null){
             this.thingPositionInfo = activity.thingPositionInfo;
         }
@@ -77,14 +73,14 @@ public class SpecialCollectionFragment extends Fragment{
         }
     }
 
-    @OnClick({R.id.tv_add_equipment})
-    public void onViewClicked(View view) {
-        switch (view.getId()){
-            case R.id.tv_add_equipment:
-                addComponentView();
-                break;
-        }
-    }
+//    @OnClick({R.id.tv_add_equipment})
+//    public void onViewClicked(View view) {
+//        switch (view.getId()){
+//            case R.id.tv_add_equipment:
+//                addComponentView();
+//                break;
+//        }
+//    }
 
     private void addComponentView() {
         if (checkList == null) {
@@ -103,10 +99,10 @@ public class SpecialCollectionFragment extends Fragment{
         tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ly_addView.removeView((View) view.getParent().getParent());
+//                ly_addView.removeView((View) view.getParent().getParent());
             }
         });
-        ly_addView.addView(view);
+//        ly_addView.addView(view);
     }
 
     public boolean checkParams(){

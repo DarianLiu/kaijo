@@ -68,6 +68,11 @@ public class SpecialCollectionModel extends BaseModel implements SpecialCollecti
     }
 
     @Override
+    public Observable<BaseResult<ThingPositionInfo>> updateInfo(RequestBody body) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).updateInfo(body);
+    }
+
+    @Override
     public Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts) {
         return mRepositoryManager.obtainRetrofitService(AppService.class).uploadFile(parts);
     }

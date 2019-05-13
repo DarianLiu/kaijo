@@ -115,13 +115,27 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                 DaoSession daoSession1 = MyApplication.get().getDaoSession();
                 IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
                 List<IPRegisterBean> dbresult = ipRegisterBeanDao.loadAll();
-                if (httpResult != null && dbresult != null) {
-                    for (int i = 0; i < httpResult.size(); i++) {
-                        for (int k = 0; k < dbresult.size(); k++) {
-                            if (httpResult.get(i).getThingPositionId() == dbresult.get(k).getThingPositionId()) {
-                                httpResult.get(i).setStatus(dbresult.get(k).getStatus());
-                            }
+//                if (httpResult != null && dbresult != null) {
+//                    for (int i = 0; i < httpResult.size(); i++) {
+//                        for (int k = 0; k < dbresult.size(); k++) {
+//                            if (httpResult.get(i).getThingPositionId() == dbresult.get(k).getThingPositionId()) {
+//                                httpResult.get(i).setStatus(dbresult.get(k).getStatus());
+//                            }
+//                        }
+//                    }
+//                }
+
+                for(int i=0;i<dbresult.size();i++){
+                    boolean flag = true;
+                    for(int k = 0;k<httpResult.size();k++){
+                        if (httpResult.get(k).getThingPositionId() == dbresult.get(i).getThingPositionId()) {
+                            httpResult.get(k).setStatus(dbresult.get(i).getStatus());
+                            flag = false;
+                            break;
                         }
+                    }
+                    if(flag){
+                        ipRegisterBeanDao.delete(dbresult.get(i));
                     }
                 }
 
@@ -265,8 +279,8 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<InspentionResult>(mErrorHandler) {
                     @Override
-                    public void onNext(InspentionResult inspectionList) {
-                        mRootView.httpStartSuccess();
+                    public void onNext(InspentionResult result) {
+                        mRootView.httpStartSuccess(result);
                     }
 
                     @Override
@@ -286,19 +300,23 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
     /**
      * 结束巡查
      */
-    public void endPath(String userId, int state, List<IPRegisterBean> list) {
+    public void endPath(String userId, int state, List<IPRegisterBean> list,int pathId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userId", userId);
         jsonObject.addProperty("state", state);
+        jsonObject.addProperty("pathId", pathId);
         if(list!=null && list.size()>0){
             JsonArray jsonArray = new JsonArray();
             for(int i=0;i<list.size();i++){
-                JsonObject object = new JsonObject();
-                object.addProperty("thingPositionId",list.get(i).getThingPositionId());
-                object.addProperty("arriveTime",list.get(i).getArriveTime());
-                jsonArray.add(object);
+                if(list.get(i).getStatus()==1){
+                    JsonObject object = new JsonObject();
+                    object.addProperty("thingPositionId",list.get(i).getThingPositionId());
+                    object.addProperty("arriveTime",list.get(i).getArriveTime());
+                    jsonArray.add(object);
+                }
             }
-            jsonObject.add("thingPositions",jsonArray);
+            jsonObject.addProperty("thingPositions",jsonArray.toString());
+//            jsonObject.add("thingPositions",jsonArray);
         }
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
@@ -308,9 +326,9 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<InspentionResult>(mErrorHandler) {
                     @Override
-                    public void onNext(InspentionResult inspectionList) {
+                    public void onNext(InspentionResult result) {
 
-                        mRootView.httpEndSuccess();
+                        mRootView.httpEndSuccess(result);
                     }
 
                     @Override
@@ -330,10 +348,11 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
     /**
      * 取消巡查
      */
-    public void cancelPath(String userId, int state) {
+    public void cancelPath(String userId, int state,int pathId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userId", userId);
         jsonObject.addProperty("state", state);
+        jsonObject.addProperty("pathId", pathId);
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
@@ -342,9 +361,9 @@ public class InspectionProjectRegisterPresenter extends BasePresenter<Inspection
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<InspentionResult>(mErrorHandler) {
                     @Override
-                    public void onNext(InspentionResult inspectionList) {
+                    public void onNext(InspentionResult result) {
 
-                        mRootView.httpCancelSuccess();
+                        mRootView.httpCancelSuccess(result);
                     }
 
                     @Override

@@ -42,6 +42,7 @@ public interface SpecialCollectionContract {
 
 
         Observable<BaseResult<ThingPositionInfo>> insertInfo(RequestBody body);
+        Observable<BaseResult<ThingPositionInfo>> updateInfo(RequestBody body);
 
         Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);
     }

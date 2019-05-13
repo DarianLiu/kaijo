@@ -87,6 +87,35 @@ public class SocialManagePresenter extends BasePresenter<SocialManageContract.Mo
                 });
     }
 
+    /**
+     * 物件点位列表
+     *
+     */
+    public void httpDeleteInfo(String thingPositionId) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("thingPositionId", thingPositionId);
+        RequestBody requestBody =  RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+
+        mModel.deleteInfo(requestBody)
+                .compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.handleBaseResult(mAppManager.getTopActivity()))
+                .subscribe(new ErrorHandleSubscriber<ThingPositionInfo>(mErrorHandler) {
+                    @Override
+                    public void onNext(ThingPositionInfo datas) {
+//                        mRootView.httpDeleteInfoSuccess();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        mRootView.httpDeleteInfoSuccess();
+                    }
+                });
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();

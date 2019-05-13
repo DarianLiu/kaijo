@@ -1,5 +1,6 @@
 package com.geek.kaijo.app.service;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -22,7 +24,10 @@ import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.app.api.Api;
 import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
+import com.geek.kaijo.mvp.model.entity.InspentionResult;
 import com.geek.kaijo.mvp.ui.activity.InspectionProjectRegisterActivity;
+import com.geek.kaijo.mvp.ui.activity.MainActivity;
+import com.geek.kaijo.mvp.ui.activity.MapActivity;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -48,6 +53,7 @@ public class LocalService extends Service {
     LocationReceiver locationReceiver;
     int state; //0 未巡查 1 开始巡查 2 结束巡查
     private Vibrator mVibrator;  //震动
+    private PowerManager.WakeLock wakeLock = null;  //电源锁，保持该服务在屏幕熄灭时仍然获取CPU时
 
     @Nullable
     @Override
@@ -68,6 +74,7 @@ public class LocalService extends Service {
         registerReceiver(locationReceiver, filter);
 
         GPSUtils.getInstance().startLocation(locationListener);
+        initData();
     }
 
     @Override
@@ -129,18 +136,29 @@ public class LocalService extends Service {
             }
             switch (msg.what) {
                 case 1:
+                    isServiceRunning(weakActivity);
                     if(weakActivity.cmccLocation!=null){
                         Double mLat = weakActivity.cmccLocation.getLatitude();
                         Double mLng = weakActivity.cmccLocation.getLongitude();
-                        Toast.makeText(weakActivity,"经度："+mLng+"纬度："+mLat,Toast.LENGTH_LONG).show();
+                        if(weakActivity.result!=null){
+                            Toast.makeText(weakActivity,"经度："+mLng+"纬度："+mLat+"巡查项list.size="+weakActivity.result.size()+"巡查状态state="+weakActivity.state,Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(weakActivity,"经度："+mLng+"纬度："+mLat+"巡查状态state="+weakActivity.state,Toast.LENGTH_LONG).show();
+                        }
                         if(mLat>0 && mLng>0){
                            String userId = DataHelper.getStringSF(weakActivity, Constant.SP_KEY_USER_ID);
                             weakActivity.httpUploadGpsLocation(userId, weakActivity.cmccLocation.getLatitude(), weakActivity.cmccLocation.getLongitude());
                             weakActivity.cmccLocation = null;
                         }
                     }else {
+//                        GPSUtils.getInstance().startLocation(weakActivity.locationListener);
+//                        Intent intent = new Intent(weakActivity, MainActivity.class);
+//                        weakActivity.startActivity(intent);
                         Toast.makeText(weakActivity,"定位获取失败",Toast.LENGTH_LONG).show();
                     }
+
+                    LogUtils.debugInfo("11111111111111111locationListener=="+weakActivity.locationListener+"巡查项list="+weakActivity.result+"巡查状态state="+weakActivity.state);
+                    weakActivity.acquireWakeLock();
                     sendEmptyMessageDelayed(1, 60000); //1分钟 上传一次经纬度
 
                     break;
@@ -230,7 +248,63 @@ public class LocalService extends Service {
         GPSUtils.getInstance().removeLocationListener(locationListener);
         GPSUtils.getInstance().onDestroy();
         unregisterReceiver(locationReceiver);
+        releaseWakeLock();
     }
 
+
+    /**
+     * 获取电源锁，保持该服务在屏幕熄灭时仍然获取CPU时，保持运行
+     */
+    private void acquireWakeLock() {
+
+        if (null == wakeLock) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getCanonicalName());
+        }
+        if (null != wakeLock) {
+            Log.i(this.getClass().getName(),"1111111111111唤醒CPU");
+            wakeLock.acquire();
+        }
+    }
+
+    // 释放设备电源锁
+    private void releaseWakeLock() {
+        if (null != wakeLock && wakeLock.isHeld()) {
+            wakeLock.release();
+            wakeLock = null;
+        }
+    }
+
+    private void initData(){
+//        state = DataHelper.getIntergerSF(this,Constant.SP_KEY_Patrol_state);
+        InspentionResult inspentionResult = DataHelper.getDeviceData(this, Constant.SP_KEY_Patrol_state);
+        if(inspentionResult!=null){
+            state = inspentionResult.getState();
+            if(state==1){ //开始巡查状态
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        DaoSession daoSession1 = MyApplication.get().getDaoSession();
+                        IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+                        result = ipRegisterBeanDao.loadAll();
+                    }
+                }.start();
+            }
+        }
+    }
+
+
+    public static boolean isServiceRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(200)) {
+            if ("com.cmmap.api.service.CmccService".equals(service.service.getClassName())) {
+                LogUtils.debugInfo("11111111111111111l定位服务在运行==");
+
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

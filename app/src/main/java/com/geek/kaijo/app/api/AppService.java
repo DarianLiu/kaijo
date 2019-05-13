@@ -189,12 +189,7 @@ public interface AppService {
     @GET("/thing/findThingPage.json")
     Observable<BaseResult<BaseArrayResult<Thing>>> findAllThingList(@Query("currPage") int currPage, @Query("pageSize") int pageSize);
 
-    /**
-     * 查询所有的巡查项目(8763端口)
-     */
-    @NonNull
-    @POST("/thing/findThingPositionPage.json")
-    Observable<BaseResult<BaseArrayResult<Inspection>>> findThingPositionListPage(@Query("thingType") int thingType,@Query("name") String name);
+
 
     /**
      * 添加或修改巡查项目(8763端口)
@@ -316,6 +311,22 @@ public interface AppService {
     @POST("/thing/findThingPositionListBy.json")
     Observable<BaseResult<List<IPRegisterBean>>> findThingPositionListBy(@Body RequestBody body);
 
+    /**
+     * 巡查项管理
+     *
+     */
+    @NonNull
+    @POST("/thing/findThingPositionListBy.json")
+    Observable<BaseResult<List<Inspection>>> httpThingList(@Body RequestBody body);
+
+
+//    /**
+//     * 巡查管理
+//     */
+//    @NonNull
+//    @POST("/thing/findThingPositionPage.json")
+//    Observable<BaseResult<BaseArrayResult<Inspection>>> findThingPositionListPage(@Query("thingType") int thingType,@Query("name") String name);
+
 
     /**
      * 部件采集菜单
@@ -330,6 +341,20 @@ public interface AppService {
     @NonNull
     @POST("/thingPositionInfo/insertInfo")
     Observable<BaseResult<ThingPositionInfo>> insertInfo(@Body RequestBody body);
+
+    /**
+     * 部件采集编辑修改
+     */
+    @NonNull
+    @POST("/thingPositionInfo/updateInfo")
+    Observable<BaseResult<ThingPositionInfo>> updateInfo(@Body RequestBody body);
+
+    /**
+     * 部件采集删除
+     */
+    @NonNull
+    @POST("/thingPositionInfo/deleteInfo")
+    Observable<BaseResult<ThingPositionInfo>> deleteInfo(@Body RequestBody body);
 
 
     /**

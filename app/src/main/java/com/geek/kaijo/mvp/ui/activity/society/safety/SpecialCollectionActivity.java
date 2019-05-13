@@ -33,6 +33,7 @@ import com.geek.kaijo.mvp.contract.SpecialCollectionContract;
 import com.geek.kaijo.mvp.model.entity.Equipment;
 import com.geek.kaijo.mvp.model.entity.GridItemContent;
 import com.geek.kaijo.mvp.model.entity.Street;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.SpecialCollectionPresenter;
@@ -60,6 +61,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -163,6 +165,9 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     private MyHandler myHandler;
     public List<String> checkList;
 
+    public ThingPositionInfo thingPositionInfo;
+    private String thingPositionId;
+
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerSpecialCollectionComponent //如找不到该类,请编译一下项目
@@ -181,6 +186,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         subMenu = (GridItemContent) getIntent().getSerializableExtra("Submenu");
+        thingPositionInfo = (ThingPositionInfo) getIntent().getSerializableExtra("ThingPositionInfo");
         if (subMenu != null) {
             tvToolbarTitle.setText(subMenu.getName() + "采集");
 //            Fragment fragment = new SpecialCollectionFragment();;
@@ -238,10 +244,13 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 yanchu__phone = findViewById(R.id.yanchu__phone);
             }
             if(fragment!=null){
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
             }
         }
-
+        if(thingPositionInfo!=null){
+            thingPositionId = String.valueOf(thingPositionInfo.getThingPositionId());
+        }
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         initSpinnerStreetGrid();
 
@@ -466,8 +475,8 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                     if (checkParams()) {
                         String streetId = String.valueOf(mStreetList.get(spinner_street.getSelectedItemPosition()).getId());
                         String communityId = String.valueOf(mCommunityList.get(spinner_community.getSelectedItemPosition()).getId());
-                        String photos = new Gson().toJsonTree(uploadPhotoList).toString();
-                        String checkRecord = new Gson().toJsonTree(fileList).toString();
+//                        String photos = new Gson().toJsonTree(uploadPhotoList).toString();
+//                        String checkRecord = new Gson().toJsonTree(fileList).toString();
                         RequestBody requestBody = null;
                         if("特种设备".equals(subMenu.getName())){
                             if(fragment instanceof SpecialCollectionFragment){
@@ -497,7 +506,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                     equipmentList.add(equipment);
                                 }
                                 String tezhongshebei = new Gson().toJsonTree(equipmentList).toString();
-                                requestBody = RequestParamUtils.thingInsertInfo(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord, equipmentFragment.et_name.getText().toString(),
+                                requestBody = RequestParamUtils.thingInsertInfo(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList, equipmentFragment.et_name.getText().toString(),
                                         tezhongshebei, equipmentFragment.et_farenName.getText().toString(), equipmentFragment.et_address.getText().toString());
 
                             }
@@ -508,7 +517,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 if(!mfragment.checkParams()){
                                     return;
                                 }
-                                requestBody = RequestParamUtils.thingInsertInfo_gd(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                                requestBody = RequestParamUtils.thingInsertInfo_gd(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                         mfragment.gd_et_mark.getText().toString(),mfragment.gd_et_name.getText().toString(),mfragment.gd_et_address.getText().toString(),mfragment.gd_et_shigongdanwei.getText().toString(),
                                         mfragment.checkList.get(mfragment.gd_spinner_check.getSelectedItemPosition()), mfragment.gd_et_price.getText().toString(), mfragment.gd_et_jingduzhuangtai.getText().toString(),
                                         mfragment.gd_jianzhumianji.getText().toString(),mfragment.gd_et_kaigongnriqi.getText().toString(),mfragment.gd_et_jungongriqi.getText().toString(),mfragment.gd_et_jianshedanwei.getText().toString(),
@@ -519,14 +528,14 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_whp(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_whp(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     mfragment.et_name.getText().toString(),mfragment.et_address.getText().toString(),mfragment.et_other.getText().toString(),mfragment.et_category.getText().toString());
                         }else if(fragment instanceof FoodSafteFragment) { //食品
                             FoodSafteFragment mfragment = (FoodSafteFragment) fragment;
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_food(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_food(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     mfragment.et_name.getText().toString(),mfragment.et_farenName.getText().toString(),mfragment.et_jjxz.getText().toString(),mfragment.et_jycs.getText().toString(),
                                     mfragment.et_xkzh.getText().toString(),mfragment.et_ztyt.getText().toString(),mfragment.checkList.get(mfragment.spinner_street.getSelectedItemPosition()),mfragment.tv_time.getText().toString(),
                                     mfragment.et_category.getText().toString(), mfragment.et_jgjg.getText().toString(),mfragment.et_fxdj.getText().toString(),mfragment.et_Telephone.getText().toString(),mfragment.et_phone.getText().toString());
@@ -535,7 +544,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_drug(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_drug(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     mfragment.et_companyName.getText().toString(),mfragment.et_register_name.getText().toString(),mfragment.et_farenName.getText().toString(),mfragment.et_yaoshi.getText().toString(),
                                     mfragment.et_xukezhanghao.getText().toString(),mfragment.et_xukezhengTime.getText().toString(),mfragment.et_youxiaoqiTime.getText().toString(),mfragment.et_jingyinfanshi.getText().toString(),
                                     mfragment.et_jingyinfanwei.getText().toString(), mfragment.et_Telephone.getText().toString(),mfragment.et_phone.getText().toString());
@@ -545,7 +554,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入点位名称");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_senl(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_senl(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     senl_et_name.getText().toString().trim());
 
                         }else if(fragment instanceof TyphoonFloodFragment){ //防台防汛
@@ -553,7 +562,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_ftfx(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_ftfx(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     mfragment.checkList.get(mfragment.spinner_category.getSelectedItemPosition()),mfragment.et_state.getText().toString(),mfragment.et_address.getText().toString(),mfragment.et_danweiName.getText().toString(),
                                     mfragment.et_farenName.getText().toString(),mfragment.et_leading_TlPhone.getText().toString(),mfragment.et_leading_phone.getText().toString(),mfragment.et_jiedaozerenName.getText().toString(),
                                     mfragment.jiedaozerenMobile.getText().toString());
@@ -563,7 +572,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入具体地址");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_dongjichuxue(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_dongjichuxue(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     dongjichuxue_et_address.getText().toString().trim(),checkList.get(dongjichuxue_et_isPodao.getSelectedItemPosition()));
 
                         }else if("文明祭祀".equals(subMenu.getName())){
@@ -571,7 +580,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入祭祀地点");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_jisi(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_jisi(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     jisi_et_address.getText().toString().trim(),jisi_farenName.getText().toString().trim(),jisi_phone.getText().toString().trim(),jisi_zerenquRemark.getText().toString().trim());
 
                         }else if("网吧".equals(subMenu.getName())){
@@ -582,7 +591,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入地址");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_wangba(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_wangba(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     et_wangba_name.getText().toString().trim(),et_wangba_adress.getText().toString().trim(),wangba_farenName.getText().toString().trim(),wangba__phone.getText().toString().trim());
 
                         }else if(fragment instanceof CulturalRelicFragment){ //文物保护单位
@@ -590,7 +599,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                             if(!mfragment.checkParams()){
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_wenwu(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_wenwu(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     mfragment.et_name.getText().toString().trim(),mfragment.et_danweiName.getText().toString().trim(),mfragment.et_farenName.getText().toString().trim(),
                                     mfragment.et_chanquanDanweiName.getText().toString().trim(),mfragment.et_phone.getText().toString().trim(),mfragment.et_guanlishiyongDanweiName.getText().toString().trim(),
                                     mfragment.et_guanlishiyongFarenName.getText().toString().trim(), mfragment.et_guanlishiyongLianxiName.getText().toString().trim(),mfragment.et_guanlishiyongContact.getText().toString().trim());
@@ -606,13 +615,18 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                 showMessage("请输入经营者名称");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_yanchu(String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), photos, checkRecord,
+                            requestBody = RequestParamUtils.thingInsertInfo_yanchu(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     et_yanchu_name.getText().toString().trim(),et_yanchu_adress.getText().toString().trim(),jingyingzheName.getText().toString().trim(),yanchu__phone.getText().toString().trim());
 
                         }
 
                         if(requestBody!=null){
-                            mPresenter.insertInfo(requestBody);
+                            if(thingPositionInfo==null){
+                                mPresenter.insertInfo(requestBody);
+                            }else {
+                                mPresenter.updateInfo(requestBody);
+                            }
+
                         }
                     }
 

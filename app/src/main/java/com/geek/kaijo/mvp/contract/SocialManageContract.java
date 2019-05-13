@@ -23,10 +23,13 @@ public interface SocialManageContract {
         void refreshData(List<ThingPositionInfo> datas);
 
         void loadMoreData(List<ThingPositionInfo> datas);
+
+        void httpDeleteInfoSuccess();
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<BaseResult<BaseArrayResult<ThingPositionInfo>>> findThingPositionList(RequestBody requestBody);
+        Observable<BaseResult<ThingPositionInfo>> deleteInfo(RequestBody requestBody);
     }
 }

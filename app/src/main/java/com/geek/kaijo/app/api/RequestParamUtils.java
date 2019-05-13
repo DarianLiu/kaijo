@@ -168,23 +168,27 @@ public class RequestParamUtils {
     /**
      * 特种设备采集
      */
-    public static RequestBody thingInsertInfo(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos,
-                                              String checkRecord,String danweiName,String tezhongshebei,String farenName,String address) {
+    public static RequestBody thingInsertInfo(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList,
+                                              List<UploadFile> fileList,String danweiName,String tezhongshebei,String farenName,String address) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
         jsonObject.addProperty("danweiName", danweiName);
         jsonObject.addProperty("tezhongshebei", tezhongshebei);
         jsonObject.addProperty("farenName", farenName);
         jsonObject.addProperty("address", address);
-//        jsonObject.addProperty("caseProcessRecordID", caseProcessRecordID);
-//        jsonObject.add("attachList", new Gson().toJsonTree(uploadPhotoList));
 
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                 new Gson().toJson(jsonObject));
@@ -193,18 +197,24 @@ public class RequestParamUtils {
     /**
      * 在建工地
      */
-    public static RequestBody thingInsertInfo_gd(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_gd(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                  String shoulishuNo,String name,String address,String danweiName,String isXukezheng,String zongzaojiaSum,String status,
                                                  String jianzhuSum,String startTime,String endTime,String jianshedanweiName,String jianlidanweiName) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
         jsonObject.addProperty("shoulishuNo", shoulishuNo);
         jsonObject.addProperty("name", name);
         jsonObject.addProperty("address", address);
@@ -225,17 +235,23 @@ public class RequestParamUtils {
     /**
      * 危化品
      */
-    public static RequestBody thingInsertInfo_whp(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_whp(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                  String name,String address,String qita,String type) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("name", name);
         jsonObject.addProperty("address", address);
@@ -249,18 +265,24 @@ public class RequestParamUtils {
     /**
      * 食品
      */
-    public static RequestBody thingInsertInfo_food(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_food(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                   String jingyingzheName,String farenName,String jingjixingzhiName,String address,String xukezhengNo,String zhutiyetai,
                                                    String isNetwork,String youxiaoTime,String type,String jianguanjigouName,String fengxiandengjiName,String contact,String mobile) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("jingyingzheName", jingyingzheName);
         jsonObject.addProperty("farenName", farenName);
@@ -283,18 +305,24 @@ public class RequestParamUtils {
     /**
      * 药品
      */
-    public static RequestBody thingInsertInfo_drug(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_drug(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                    String name,String address,String farenName,String zhudianyaoshiName,String xukezhengNo,String xukezhengTime,
                                                    String youxiaoTime,String jingyingfangshiName,String jingyingfanweiName,String contact,String mobile) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("name", name);
         jsonObject.addProperty("address", address);
@@ -316,17 +344,23 @@ public class RequestParamUtils {
     /**
      * 森林防火
      */
-    public static RequestBody thingInsertInfo_senl(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_senl(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                    String name) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("name", name);
 
@@ -337,18 +371,24 @@ public class RequestParamUtils {
     /**
      * 防台防汛
      */
-    public static RequestBody thingInsertInfo_ftfx(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_ftfx(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                    String type,String status,String address,String danweiName,String farenName,String contact,
                                                    String mobile,String jiedaozerenName,String jiedaozerenMobile) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("type", type);
         jsonObject.addProperty("status", status);
@@ -367,17 +407,23 @@ public class RequestParamUtils {
     /**
      * 冬季除雪
      */
-    public static RequestBody thingInsertInfo_dongjichuxue(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_dongjichuxue(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                    String address,String isPodao) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("address", address);
         jsonObject.addProperty("isPodao", isPodao);
@@ -389,17 +435,23 @@ public class RequestParamUtils {
     /**
      * 文明祭祀
      */
-    public static RequestBody thingInsertInfo_jisi(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_jisi(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                            String address,String farenName,String contact,String zerenquRemark) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("address", address);
         jsonObject.addProperty("farenName", farenName);
@@ -414,17 +466,23 @@ public class RequestParamUtils {
     /**
      * 网吧
      */
-    public static RequestBody thingInsertInfo_wangba(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_wangba(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                    String name,String address,String farenName,String contact) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("name", name);
         jsonObject.addProperty("address", address);
@@ -438,18 +496,24 @@ public class RequestParamUtils {
     /**
      * 文物保护单位
      */
-    public static RequestBody thingInsertInfo_wenwu(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_wenwu(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                    String name,String danweiName,String farenName,String chanquanDanweiName,String contact,String guanlishiyongDanweiName,
                                                    String guanlishiyongFarenName,String guanlishiyongLianxiName,String guanlishiyongContact) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("name", name);
         jsonObject.addProperty("danweiName", danweiName);
@@ -468,17 +532,23 @@ public class RequestParamUtils {
     /**
      * 演出场所
      */
-    public static RequestBody thingInsertInfo_yanchu(String thingId,String streetId,String communityId,String gridId,String lat,String lng,String photos, String checkRecord,
+    public static RequestBody thingInsertInfo_yanchu(String thingPositionId,String thingId,String streetId,String communityId,String gridId,String lat,String lng,List<UploadFile> uploadPhotoList, List<UploadFile> fileList,
                                                      String name,String address,String jingyingzheName,String contact) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("thingId", thingId);
+        if(TextUtils.isEmpty(thingPositionId)){  //新增
+            jsonObject.addProperty("thingId", thingId);
+        }else { //修改
+            jsonObject.addProperty("thingPositionId", thingPositionId);
+        }
         jsonObject.addProperty("streetId", streetId);
         jsonObject.addProperty("communityId", communityId);
         jsonObject.addProperty("gridId", gridId);
         jsonObject.addProperty("lat", lat);
         jsonObject.addProperty("lng", lng);
-        jsonObject.addProperty("photos", photos);
-        jsonObject.addProperty("checkRecord", checkRecord);
+        jsonObject.addProperty("photos", new Gson().toJsonTree(uploadPhotoList).toString());
+        jsonObject.addProperty("checkRecord", new Gson().toJsonTree(fileList).toString());
+//        jsonObject.add("photos", new Gson().toJsonTree(uploadPhotoList));
+//        jsonObject.add("checkRecord", new Gson().toJsonTree(fileList));
 
         jsonObject.addProperty("name", name);
         jsonObject.addProperty("address", address);

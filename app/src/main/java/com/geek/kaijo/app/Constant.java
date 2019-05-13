@@ -26,7 +26,7 @@ public class Constant {
     public final static String service_patrol= "service_patrol";  //广播 action
 
 
-    public final static int location_loadTime= 1000;  //获取定位超时加载时间
+    public final static int location_loadTime= 2000;  //获取定位超时加载时间
 
 
     /**

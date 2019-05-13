@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.GridItemContent;
 import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
+import com.geek.kaijo.mvp.model.event.ThingEvent;
 import com.geek.kaijo.mvp.presenter.SocialManagePresenter;
 import com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity;
 import com.geek.kaijo.mvp.ui.activity.society.culture.EntertainmentActivity;
@@ -38,6 +40,7 @@ import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 import com.geek.kaijo.mvp.ui.adapter.SocialThingAdapter;
 import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
+import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
@@ -45,6 +48,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
+import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -96,7 +100,7 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
     public void initData(@Nullable Bundle savedInstanceState) {
 //        assortId = getIntent().getIntExtra("assortId", 0);
 //        thingType = getIntent().getIntExtra("thingType", 0);
-
+        EventBus.getDefault().register(this);//注册EventBus 那个窗口接收 在哪个窗口注册
         subMenu = (GridItemContent) getIntent().getSerializableExtra("Submenu");
         if(subMenu!=null){
             tvToolbarTitle.setText(subMenu.getName());
@@ -183,14 +187,6 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         initRefreshLayout();
         smartRefresh.autoRefresh();
 
-//        if (mPresenter != null) {
-//            if (userInfo == null) {
-//                launchActivity(new Intent(this, LoginActivity.class));
-//            } else {
-////                mPresenter.findThingPositionList(true, assortId, userInfo.getStreetId(),
-////                        userInfo.getCommunityId(), userInfo.getGridId(), thingType, "");
-//            }
-//        }
     }
 
     /**
@@ -223,6 +219,16 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         mDatas = new ArrayList<>();
         mAdapter = new SocialThingAdapter(mDatas, thingType);
         recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new DefaultAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int viewType, Object data, int position) {
+                Intent intent = new Intent(SocialManageActivity.this,ComponentDetailActivity.class);
+                intent.putExtra("ThingPositionInfo",mDatas.get(position));
+                intent.putExtra("Submenu",subMenu);
+                startActivityForResult(intent,11);
+            }
+        });
     }
 
     /**
@@ -289,12 +295,29 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         }
     }
 
-    @Subscriber(tag = EventBusTags.TAG_SOCIAL_SEARCH)
-    public void receiveSearchKey(String searchKey) {
-        if (mPresenter != null)
-            mPresenter.findThingPositionList(true, subMenu.getName(), "",
-                    "", "", "");
+
+    @Subscriber
+    public void receiveThingEvent(ThingEvent event) {
+        Log.i(this.getClass().getName(), "111111111111111111111111111111event.getPosition()===" + event.getPosition());
+        if(event.getPosition()==0)return;
+        Intent intent;
+        switch (event.getEventType()) {
+            case 1://编辑
+                intent = new Intent(this, SpecialCollectionActivity.class);
+                intent.putExtra("ThingPositionInfo", mDatas.get(event.getPosition()-1));
+                intent.putExtra("Submenu", subMenu);
+                startActivityForResult(intent, 1);
+//                EventBus.getDefault().clear();
+                break;
+            case 2://删除
+                if (mPresenter != null){
+                    mPresenter.httpDeleteInfo(String.valueOf(mDatas.get(event.getPosition()-1).getThingPositionId()));
+                }
+
+                break;
+        }
     }
+
 
     @Override
     public void showLoading() {
@@ -363,11 +386,25 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         }
     }
 
+    /**
+     * 删除成功
+     */
+    @Override
+    public void httpDeleteInfoSuccess() {
+        smartRefresh.autoRefresh();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1 && resultCode==1){
             smartRefresh.autoRefresh();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//反注册 根据业务需要填写
     }
 }

@@ -106,6 +106,29 @@ public class SpecialCollectionPresenter extends BasePresenter<SpecialCollectionC
                 });
 
     }
+
+    /**
+     * 部件采集 编辑修改
+     */
+    public void updateInfo(RequestBody requestBody){
+        mModel.updateInfo(requestBody)
+                .compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.handleBaseResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<ThingPositionInfo>(mErrorHandler) {
+                    @Override
+                    public void onNext(ThingPositionInfo caseInfoEntity) {
+//                        mRootView.httpInsertInfoSuccess();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        mRootView.httpInsertInfoSuccess();
+                    }
+                });
+
+    }
+
 //    /**
 //     * 部件采集 添加
 //     */

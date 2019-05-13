@@ -31,6 +31,7 @@ import com.geek.kaijo.di.module.InspectionProjectRegisterModule;
 import com.geek.kaijo.mvp.contract.InspectionProjectRegisterContract;
 import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
 import com.geek.kaijo.mvp.model.entity.Inspection;
+import com.geek.kaijo.mvp.model.entity.InspentionResult;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.InspectionProjectRegisterPresenter;
 import com.geek.kaijo.mvp.ui.adapter.IPRegisterAdapter;
@@ -88,6 +89,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     private LocationReceiver locationReceiver;
     private RxPermissions rxPermissions;
     private int sfState;
+    private InspentionResult result;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -113,9 +115,12 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         iprCancel.setEnabled(false);
 
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
-        sfState = DataHelper.getIntergerSF(this,Constant.SP_KEY_Patrol_state);
+        result = DataHelper.getDeviceData(this, Constant.SP_KEY_Patrol_state);
+//        sfState = DataHelper.getIntergerSF(this,Constant.SP_KEY_Patrol_state);
+        if(result!=null){
+            sfState = result.getState();
+        }
         initView();
-
 
         locationReceiver = new LocationReceiver();
         IntentFilter filter = new IntentFilter();
@@ -236,13 +241,13 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
 
                 break;
             case R.id.ipr_complete://完成巡查
-                if(mPresenter!=null && userInfo!=null){
-                    mPresenter.endPath(userInfo.getUserId(),2,mList);
+                if(mPresenter!=null && userInfo!=null && result!=null){
+                    mPresenter.endPath(userInfo.getUserId(),2,mList,result.getPathId());
                 }
                 break;
             case R.id.ipr_cancel://取消巡查
-                if(mPresenter!=null && userInfo!=null){
-                    mPresenter.cancelPath(userInfo.getUserId(),3);
+                if(mPresenter!=null && userInfo!=null && result!=null){
+                    mPresenter.cancelPath(userInfo.getUserId(),3,result.getPathId());
                 }
 
                 break;
@@ -259,13 +264,15 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     }
 
     @Override
-    public void httpStartSuccess() {
-        if(this.isFinishing())return;
+    public void httpStartSuccess(InspentionResult result) {
+        if(this.isFinishing() || result==null)return;
+        this.result = result;
+//        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 1);
+        DataHelper.saveDeviceData(this,Constant.SP_KEY_Patrol_state,result);
+        sfState = result.getState();
         iprComplete.setEnabled(true);
         iprCancel.setEnabled(true);
         iprStart.setEnabled(false);
-        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 1);
-        sfState = 1;
         Intent intent = new Intent();
         intent.putExtra(Constant.SP_KEY_Patrol_state, sfState);
         intent.setAction(Constant.SP_KEY_Patrol_state);
@@ -275,8 +282,8 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     }
 
     @Override
-    public void httpEndSuccess() {   //结束巡查
-        if(this.isFinishing())return;
+    public void httpEndSuccess(InspentionResult result) {   //结束巡查
+        if(this.isFinishing() || result==null)return;
         if(mList!=null){
             for(int i=0;i<mList.size();i++){
                 mList.get(i).setStatus(0);
@@ -287,9 +294,28 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     }
 
     @Override
-    public void httpCancelSuccess() {
-        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 0);
-        sfState = 0;
+    public void httpCancelSuccess(InspentionResult result) {
+//        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 0);
+        if(this.isFinishing() || result==null)return;
+
+        DataHelper.saveDeviceData(this,Constant.SP_KEY_Patrol_state,result);
+        sfState = result.getState();
+        if(mList!=null){
+            for(int i=0;i<mList.size();i++){
+                mList.get(i).setStatus(0);
+            }
+            mAdapter.notifyDataSetChanged();
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+                    DaoSession daoSession1 = MyApplication.get().getDaoSession();
+                    IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
+                    ipRegisterBeanDao.insertOrReplaceInTx(mList);
+                }
+            }.start();
+        }
+
         refreshState();
         Intent intent = new Intent();
         intent.putExtra(Constant.SP_KEY_Patrol_state, 0);
@@ -303,7 +329,11 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         if(mAdapter!=null){
             mAdapter.notifyDataSetChanged();
         }
-        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 2);
+        if(result!=null){
+            result.setState(2);
+        }
+        DataHelper.saveDeviceData(this,Constant.SP_KEY_Patrol_state,result);
+//        DataHelper.setIntergerSF(MyApplication.get(), Constant.SP_KEY_Patrol_state, 2);
         sfState = 2;
         refreshState();
         Intent intent = new Intent();

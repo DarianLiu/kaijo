@@ -17,7 +17,7 @@ import com.geek.kaijo.di.component.DaggerInspectionProjectManagerComponent;
 import com.geek.kaijo.di.module.InspectionProjectManagerModule;
 import com.geek.kaijo.mvp.contract.InspectionProjectManagerContract;
 import com.geek.kaijo.mvp.model.entity.Inspection;
-import com.geek.kaijo.mvp.model.entity.Thing;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.model.event.ThingEvent;
 import com.geek.kaijo.mvp.presenter.InspectionProjectManagerPresenter;
 import com.geek.kaijo.mvp.ui.adapter.ThingManagerAdapter;
@@ -25,6 +25,7 @@ import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.DataHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -32,7 +33,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +53,7 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
     private List<Inspection> mList;
     private ThingManagerAdapter mAdapter;
     private LoadingProgressDialog loadingDialog;
+    private UserInfo userInfo;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -81,7 +82,7 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
 
         if (id == R.id.action_add) {
 //            launchActivity(new Intent(this, InspectionAddActivity.class));
-            startActivityForResult(new Intent(this, InspectionAddActivity.class),1);
+            startActivityForResult(new Intent(this, InspectionAddActivity.class), 1);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -90,6 +91,7 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         tvToolbarTitle.setText(R.string.inspection_project_manager);
+        userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         EventBus.getDefault().register(this);//注册EventBus 那个窗口接收 在哪个窗口注册
         initView();
     }
@@ -107,20 +109,18 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
         smartRefresh.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                if (mPresenter != null) {
-                    mPresenter.getInspectionProjectList(false);
-                }
+
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                if (smartRefresh != null)
-                    smartRefresh.setNoMoreData(false);
-                if (mPresenter != null) {
-                    mPresenter.getInspectionProjectList(true);
+
+                if (userInfo != null) {  //开始巡查状态
+                    mPresenter.findThingPositionListBy(String.valueOf(userInfo.getStreetId()), String.valueOf(userInfo.getCommunityId()), String.valueOf(userInfo.getGridId()));
                 }
             }
         });
+        smartRefresh.setEnableLoadMore(false);
         smartRefresh.autoRefresh();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -152,26 +152,26 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
 
     @Subscriber
     public void receiveThingEvent(ThingEvent event) {
-        Log.i(this.getClass().getName(),"111111111111111111111111111111event.getPosition()==="+event.getPosition());
+        Log.i(this.getClass().getName(), "111111111111111111111111111111event.getPosition()===" + event.getPosition());
         Intent intent;
         switch (event.getEventType()) {
             case 1://编辑
                 intent = new Intent(this, InspectionAddActivity.class);
                 intent.putExtra("Inspection", mList.get(event.getPosition()));
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
 //                EventBus.getDefault().clear();
                 break;
             case 2://删除
                 if (mPresenter != null)
                     mPresenter.delThings(new int[]{event.getPosition()},
-                            new String[]{mList.get(event.getPosition()).getThingPositionId()+""});
+                            new String[]{mList.get(event.getPosition()).getThingPositionId() + ""});
 //                EventBus.getDefault().clear();
                 break;
             case 3://查看坐标
                 intent = new Intent(this, MapActivity.class);
                 intent.putExtra("lat", mList.get(event.getPosition()).getLat());
                 intent.putExtra("lng", mList.get(event.getPosition()).getLng());
-                intent.putExtra(Constant.MAP_LOOK,Constant.MAP_LOOK);
+                intent.putExtra(Constant.MAP_LOOK, Constant.MAP_LOOK);
                 startActivity(intent);
 //                EventBus.getDefault().clear();
                 break;
@@ -195,24 +195,6 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
         finish();
     }
 
-    @Override
-    public void updateInspectionProjectList(boolean isRefresh, List<Inspection> list) {
-        if (isRefresh) {
-            mList.clear();
-            mAdapter.notifyDataSetChanged();
-            mList.addAll(list);
-            mAdapter.notifyDataSetChanged();
-        } else {
-            int index = mList.size();
-            mList.addAll(list);
-            mAdapter.notifyItemRangeInserted(index, list.size());
-        }
-
-        if (list.size() < 10) {
-            if (smartRefresh != null)
-                smartRefresh.setNoMoreData(true);
-        }
-    }
 
     @Override
     public void delThings(int[] positions) {
@@ -236,9 +218,19 @@ public class InspectionProjectManagerActivity extends BaseActivity<InspectionPro
     }
 
     @Override
+    public void httpThingListSuccess(List<Inspection> list) {
+        if (this.isFinishing() || list == null) return;
+        mList.clear();
+        mAdapter.notifyDataSetChanged();
+        mList.addAll(list);
+        mAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1 && resultCode==1){
+        if (requestCode == 1 && resultCode == 1) {
             smartRefresh.autoRefresh();
         }
     }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.DateUtils;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
 import com.jess.arms.widget.CustomPopupWindow;
@@ -66,6 +67,8 @@ public class ZaiJianGongDi extends Fragment {
     private TimePickerListener mTimePickerListener_jungong;
     public List<String> checkList;
 
+    private ThingPositionInfo thingPositionInfo;
+
 
     @Nullable
     @Override
@@ -85,12 +88,47 @@ public class ZaiJianGongDi extends Fragment {
         MySpinnerAdapter<String> mStreetAdapter = new MySpinnerAdapter<>(getActivity(), checkList);
         gd_spinner_check.setAdapter(mStreetAdapter);
 
+        SpecialCollectionActivity activity = (SpecialCollectionActivity)getActivity();
+        if(activity!=null){
+            this.thingPositionInfo = activity.thingPositionInfo;
+        }
+
+        if(thingPositionInfo!=null){
+            gd_et_mark.setText(thingPositionInfo.getShoulishuNo());
+            gd_et_name.setText(thingPositionInfo.getName());
+            gd_et_address.setText(thingPositionInfo.getAddress());
+            gd_et_shigongdanwei.setText(thingPositionInfo.getDanweiName());
+            if("是".equals(thingPositionInfo.getIsXukezheng())){
+                gd_spinner_check.setSelection(1);
+            }
+            gd_et_price.setText(thingPositionInfo.getZongzaojiaSum());
+            gd_et_jingduzhuangtai.setText(thingPositionInfo.getStatus());
+            gd_jianzhumianji.setText(thingPositionInfo.getJianzhuSum());
+
+            gd_et_jianshedanwei.setText(thingPositionInfo.getJianshedanweiName());
+            gd_et_jianlidanwei.setText(thingPositionInfo.getJianlidanweiName());
+
+
+
+//            gd_et_kaigongnriqi.setText(thingPositionInfo.getJianzhuSum());
+//            gd_et_jungongriqi.setText(thingPositionInfo.getJianzhuSum());
+
+            gd_et_kaigongnriqi.setText(DateUtils.getDateToString(thingPositionInfo.getStartTime(), DateUtils.dateString3));
+            gd_et_jungongriqi.setText(DateUtils.getDateToString(thingPositionInfo.getEndTime(), DateUtils.dateString3));
+        }else {
+            gd_et_kaigongnriqi.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+            gd_et_jungongriqi.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+        }
+
+
         //更新开工时间
         mTimePickerListener = time -> gd_et_kaigongnriqi.setText(time);
         initTimePopupWindow();
         //更新开工时间
         mTimePickerListener_jungong = time -> gd_et_jungongriqi.setText(time);
         initTimePopupWindow_gungong();
+
+
     }
 
     private interface TimePickerListener {
@@ -115,7 +153,7 @@ public class ZaiJianGongDi extends Fragment {
      */
     private void initTimePopupWindow() {
 //        gd_et_kaigongnriqi.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
-        gd_et_kaigongnriqi.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+//        gd_et_kaigongnriqi.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
 
         View timePickerView = View.inflate(getActivity(), R.layout.view_pop_time_picker, null);
 
@@ -191,7 +229,7 @@ public class ZaiJianGongDi extends Fragment {
      */
     private void initTimePopupWindow_gungong() {
 //        gd_et_jungongriqi.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
-        gd_et_jungongriqi.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+//        gd_et_jungongriqi.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
 
         View timePickerView = View.inflate(getActivity(), R.layout.view_pop_time_picker, null);
 

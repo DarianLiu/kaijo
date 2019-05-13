@@ -24,14 +24,18 @@
             android:id="@+id/wg_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/t10"
+            android:layout_marginBottom="@dimen/t10"
             android:src="@drawable/icon_label" />
 
         <TextView
             android:id="@+id/tv_service_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/wg_img"
             android:gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:textColor="@color/color_text_caption"
             android:textSize="@dimen/t14" />
 
@@ -39,7 +43,7 @@
             android:id="@+id/wg_right_edit_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:padding="10dp"
             android:layout_toLeftOf="@+id/wg_right_delete_img"
             android:src="@drawable/icon_label" />
 
@@ -47,6 +51,7 @@
             android:id="@+id/wg_right_delete_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:layout_alignParentRight="true"
             android:src="@drawable/icon_label" />
 

@@ -20,9 +20,9 @@ public interface InspectionProjectRegisterContract {
     //对于经常使用的关于UI的方法可以定义到IView中,如显示隐藏进度条,和显示文字消息
     interface View extends IView {
         void httpGetThingListSuccess(List<IPRegisterBean> inspectionList);
-        void httpStartSuccess();
-        void httpEndSuccess();
-        void httpCancelSuccess();
+        void httpStartSuccess(InspentionResult result);
+        void httpEndSuccess(InspentionResult result);
+        void httpCancelSuccess(InspentionResult result);
         void finishRefresh();
         void dbGetThingListSuccess(List<IPRegisterBean> result);
         void dbHttpShowContent(List<IPRegisterBean> result);
