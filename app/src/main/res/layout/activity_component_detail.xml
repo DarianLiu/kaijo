@@ -6,6 +6,9 @@
     android:orientation="vertical">
 
     <include layout="@layout/include_toolbar" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,9 +17,8 @@
         android:paddingRight="10dp"
         android:paddingLeft="10dp">
 
-
-
     <TextView
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="大龄"
@@ -25,6 +27,7 @@
         android:layout_marginTop="10dp"
         android:textColor="@color/black"/>
     <TextView
+        android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2108"
@@ -43,6 +46,326 @@
         android:orientation="vertical">
 
     </LinearLayout>
+
+        <!--森林防火-->
+        <LinearLayout
+            android:id="@+id/ly_senlinfanhuo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="点位名称："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/senl_et_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <!--冬季除雪-->
+        <LinearLayout
+            android:id="@+id/ly_dongjichuxue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="具体地址："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/dongjichuxue_et_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是否为破路："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/dongjichuxue_et_isPodao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <!--文明祭祀-->
+        <LinearLayout
+            android:id="@+id/ly_wenmingjisi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="祭扫地点："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/jisi_et_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="责任人："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/jisi_farenName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="联系电话："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/jisi_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="责任区扫描："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/jisi_zerenquRemark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <!--网吧采集-->
+        <LinearLayout
+            android:id="@+id/ly_wangba"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="名称："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/et_wangba_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地址："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/et_wangba_adress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="法定代表人："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/wangba_farenName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="联系电话："
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/wangba__phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <!--演出场所-->
+        <LinearLayout
+            android:id="@+id/ly_yanchu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="名称"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/et_yanchu_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地址"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/et_yanchu_adress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="经营者名称"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/jingyingzheName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="联系电话"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+                <TextView
+                    android:id="@+id/yanchu__phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="@dimen/t12" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,5 +391,5 @@
         android:layout_height="wrap_content" />
 
     </LinearLayout>
-
+    </ScrollView>
 </LinearLayout>

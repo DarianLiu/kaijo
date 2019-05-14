@@ -33,6 +33,7 @@ public class SocialThingAdapter extends DefaultAdapter<ThingPositionInfo> {
 
     @Override
     public BaseHolder<ThingPositionInfo> getHolder(View v, int viewType) {
+
         if (viewType == 0) {
             return new SocialSearchItemHolder(v, entryType);
         } else {
@@ -52,6 +53,15 @@ public class SocialThingAdapter extends DefaultAdapter<ThingPositionInfo> {
         } else {
             holder.setData(mInfos.get(position - 1), position);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnItemClickListener!=null){
+                    mOnItemClickListener.onItemClick(view,position);
+                }
+            }
+        });
     }
 
     @Override
@@ -61,5 +71,15 @@ public class SocialThingAdapter extends DefaultAdapter<ThingPositionInfo> {
         } else {
             return R.layout.item_contorl_service;
         }
+    }
+
+
+    protected ItemClickListener mOnItemClickListener = null;
+    public interface ItemClickListener<T> {
+        void onItemClick(View view,int position);
+    }
+
+    public void setItemClickListener(ItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 }

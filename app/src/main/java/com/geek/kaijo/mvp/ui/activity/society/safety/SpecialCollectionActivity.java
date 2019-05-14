@@ -50,6 +50,7 @@ import com.geek.kaijo.mvp.ui.fragment.society.safety.WHPFragment;
 import com.geek.kaijo.mvp.ui.fragment.society.safety.ZaiJianGongDi;
 import com.geek.kaijo.view.LoadingProgressDialog;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -205,6 +206,9 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 ly_senlinfanhuo = findViewById(R.id.ly_senlinfanhuo);
                 ly_senlinfanhuo.setVisibility(View.VISIBLE);
                 senl_et_name = findViewById(R.id.senl_et_name);
+                if(thingPositionInfo!=null){
+                    senl_et_name.setText(thingPositionInfo.getName());
+                }
             }else if("防台防汛".equals(subMenu.getName())){
                 fragment = new TyphoonFloodFragment();
             }else if("冬季除雪".equals(subMenu.getName())){
@@ -219,6 +223,13 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 }
                 MySpinnerAdapter<String> mStreetAdapter = new MySpinnerAdapter<>(this, checkList);
                 dongjichuxue_et_isPodao.setAdapter(mStreetAdapter);
+
+                if(thingPositionInfo!=null){
+                    dongjichuxue_et_address.setText(thingPositionInfo.getAddress());
+                    if("是".equals(thingPositionInfo.getIsPodao())){
+                        dongjichuxue_et_isPodao.setSelection(1);
+                    }
+                }
             }else if("文明祭祀".equals(subMenu.getName())){
                 ly_wenmingjisi = findViewById(R.id.ly_wenmingjisi);
                 ly_wenmingjisi.setVisibility(View.VISIBLE);
@@ -226,6 +237,14 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 jisi_farenName = findViewById(R.id.jisi_farenName);
                 jisi_phone = findViewById(R.id.jisi_phone);
                 jisi_zerenquRemark = findViewById(R.id.jisi_zerenquRemark);
+
+                if(thingPositionInfo!=null){
+                    jisi_et_address.setText(thingPositionInfo.getAddress());
+                    jisi_farenName.setText(thingPositionInfo.getFarenName());
+                    jisi_phone.setText(thingPositionInfo.getContact());
+                    jisi_zerenquRemark.setText(thingPositionInfo.getZerenquRemark());
+
+                }
             }else if("网吧".equals(subMenu.getName())){
                 ly_wangba = findViewById(R.id.ly_wangba);
                 ly_wangba.setVisibility(View.VISIBLE);
@@ -233,6 +252,14 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 et_wangba_adress = findViewById(R.id.et_wangba_adress);
                 wangba_farenName = findViewById(R.id.wangba_farenName);
                 wangba__phone = findViewById(R.id.wangba__phone);
+
+                if(thingPositionInfo!=null){
+                    et_wangba_name.setText(thingPositionInfo.getName());
+                    et_wangba_adress.setText(thingPositionInfo.getAddress());
+                    wangba_farenName.setText(thingPositionInfo.getFarenName());
+                    wangba__phone.setText(thingPositionInfo.getContact());
+
+                }
             }else if("文物保护单位".equals(subMenu.getName())){
                 fragment = new CulturalRelicFragment();
             }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "演艺娱乐".equals(subMenu.getName())|| "娱乐场所".equals(subMenu.getName())){
@@ -242,6 +269,13 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 et_yanchu_adress = findViewById(R.id.et_yanchu_adress);
                 jingyingzheName = findViewById(R.id.jingyingzheName);
                 yanchu__phone = findViewById(R.id.yanchu__phone);
+                if(thingPositionInfo!=null){
+                    et_yanchu_name.setText(thingPositionInfo.getName());
+                    et_yanchu_adress.setText(thingPositionInfo.getAddress());
+                    jingyingzheName.setText(thingPositionInfo.getJingyingzheName());
+                    yanchu__phone.setText(thingPositionInfo.getContact());
+
+                }
             }
             if(fragment!=null){
 
@@ -250,7 +284,15 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         }
         if(thingPositionInfo!=null){
             thingPositionId = String.valueOf(thingPositionInfo.getThingPositionId());
-        }
+            Gson gson = new Gson();
+            uploadPhotoList = gson.fromJson(thingPositionInfo.getPhotos(), new TypeToken<List<UploadFile>>() {}.getType());
+            fileList = gson.fromJson(thingPositionInfo.getCheckRecord(), new TypeToken<List<UploadFile>>() {}.getType());
+
+            tvLocationLongitude.setText(String.valueOf(thingPositionInfo.getLng()));
+            tvLocationLatitude.setText(String.valueOf(thingPositionInfo.getLat()));
+
+
+    }
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         initSpinnerStreetGrid();
 
@@ -269,7 +311,9 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
 
     private void initRecyclerView() {
         //上传图片
-        uploadPhotoList = new ArrayList<>();
+        if(uploadPhotoList==null){
+            uploadPhotoList = new ArrayList<>();
+        }
         photoAdapter = new UploadPhotoAdapter(this, uploadPhotoList);
         upload_picture_list.setLayoutManager(new LinearLayoutManager(this));
         upload_picture_list.setHasFixedSize(true);
@@ -291,7 +335,9 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         });
 
         //上传检查记录
-        fileList = new ArrayList<>();
+        if(fileList==null){
+            fileList = new ArrayList<>();
+        }
         fileAdapter = new UploadPhotoAdapter(this, fileList);
         check_record_list.setLayoutManager(new LinearLayoutManager(this));
         check_record_list.setHasFixedSize(true);
@@ -351,18 +397,6 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         spinner_community.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                spinnerCaseGrid.setSelection(0);
-//                mGridList.clear();
-//                mGridList.add(mGrid);
-//                mGridAdapter.notifyDataSetChanged();
-//                if (position > 0) {
-//                    mCommunityId = mCommunityList.get(position).getId();
-//                    if (mPresenter != null) {
-//                        mPresenter.findGridListByCommunityId(mCommunityList.get(position).getId());
-//                    }
-//                } else {
-//                    mCommunityId = "";
-//                }
             }
 
             @Override

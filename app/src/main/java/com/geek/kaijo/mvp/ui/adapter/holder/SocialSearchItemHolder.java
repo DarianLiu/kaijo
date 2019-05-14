@@ -11,6 +11,7 @@ import com.geek.kaijo.app.EventBusTags;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.model.event.ServiceEvent;
+import com.geek.kaijo.mvp.model.event.ThingEvent;
 import com.geek.kaijo.mvp.ui.activity.society.safety.SocialProductDangerActivity;
 import com.jess.arms.base.BaseHolder;
 
@@ -41,35 +42,39 @@ public class SocialSearchItemHolder extends BaseHolder<ThingPositionInfo> {
 
     @Override
     public void setData(ThingPositionInfo data, int position) {
-        switch (entryType) {
-            case 1://计划生育
-            case 2://结婚登记
-            case 3://医疗卫生
-            case 4://社会救助
-            case 5://社会保障
-            case 6://死亡殡葬
-            case 7://养老服务
-            case 8://兵役
-            case 9://土地房产
-            case 13://扶持政策
-                etSearch.setHint("请输入标题内容");
-                break;
+//        switch (entryType) {
+////            case 1://计划生育
+////            case 2://结婚登记
+////            case 3://医疗卫生
+////            case 4://社会救助
+////            case 5://社会保障
+////            case 6://死亡殡葬
+////            case 7://养老服务
+////            case 8://兵役
+////            case 9://土地房产
+////            case 13://扶持政策
+////                etSearch.setHint("请输入标题内容");
+////                break;
+////
+////        }
 
-        }
-
-        itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), SocialProductDangerActivity.class);
-//            intent.putExtra("entry_type", assortId);
-//            intent.putExtra("title", ((ServiceBean) data).getTitle());
-//            intent.putExtra("content", ((ServiceBean) data).getContent());
-            v.getContext().startActivity(intent);
-        });
+//        itemView.setOnClickListener(v -> {
+//            Intent intent = new Intent(v.getContext(), SocialProductDangerActivity.class);
+////            intent.putExtra("entry_type", assortId);
+////            intent.putExtra("title", ((ServiceBean) data).getTitle());
+////            intent.putExtra("content", ((ServiceBean) data).getContent());
+//            v.getContext().startActivity(intent);
+//        });
 
         ivSearch.setOnClickListener(v -> {
             String key = etSearch.getText().toString();
             if (!TextUtils.isEmpty(key)) {
-                EventBus.getDefault().post(new ServiceEvent(entryType, key), EventBusTags.TAG_SOCIAL_SEARCH);
+                EventBus.getDefault().post(new ServiceEvent(3, key));
             }
         });
+
+//        ivSearch.setOnClickListener(v ->
+//                EventBus.getDefault().post(new ThingEvent(3, position)));
+
     }
 }

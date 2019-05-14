@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="受理书标号："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="工程名称："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="工程地址："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="施工单位："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_shigongdanwei"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="是否有施工许可证："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_spinner_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="工程总造价（万元）："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="形象进度/状态："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_jingduzhuangtai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="建筑面积（万平）："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_jianzhumianji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开工日期："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_kaigongnriqi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="竣工日期："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_jungongriqi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="建设单位："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_jianshedanwei"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="监理单位："
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+
+        <TextView
+            android:id="@+id/gd_et_jianlidanwei"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_text_black"
+            android:textSize="@dimen/t12" />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

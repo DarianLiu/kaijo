@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
+import com.geek.kaijo.mvp.ui.activity.ComponentDetailActivity;
 import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 
 import butterknife.BindView;
@@ -22,35 +24,35 @@ import butterknife.Unbinder;
 /**
  * 文物保护单位
  */
-public class CulturalRelicFragment extends Fragment {
+public class CulturalRelicDetailFragment extends Fragment {
     Unbinder unbinder;
 
     @BindView(R.id.et_name)
-    public EditText et_name;  //名称
+    public TextView et_name;  //名称
 
     @BindView(R.id.et_danweiName)
-    public EditText et_danweiName; //产权单位名称
+    public TextView et_danweiName; //产权单位名称
 
     @BindView(R.id.et_farenName)
-    public EditText et_farenName; //产权单位法定代表人
+    public TextView et_farenName; //产权单位法定代表人
 
     @BindView(R.id.et_chanquanDanweiName)
-    public EditText et_chanquanDanweiName; //产权单位联系人
+    public TextView et_chanquanDanweiName; //产权单位联系人
 
     @BindView(R.id.et_phone)
-    public EditText et_phone; //产权单位联系人电话
+    public TextView et_phone; //产权单位联系人电话
 
     @BindView(R.id.et_guanlishiyongDanweiName)
-    public EditText et_guanlishiyongDanweiName; //管理使用单位名称
+    public TextView et_guanlishiyongDanweiName; //管理使用单位名称
 
     @BindView(R.id.et_guanlishiyongFarenName)
-    public EditText et_guanlishiyongFarenName; //管理使用单位法定代表人
+    public TextView et_guanlishiyongFarenName; //管理使用单位法定代表人
 
     @BindView(R.id.et_guanlishiyongLianxiName)
-    public EditText et_guanlishiyongLianxiName; //管理使用单位联系人
+    public TextView et_guanlishiyongLianxiName; //管理使用单位联系人
 
     @BindView(R.id.et_guanlishiyongContact)
-    public EditText et_guanlishiyongContact; //管理使用单位联系人电话
+    public TextView et_guanlishiyongContact; //管理使用单位联系人电话
 
     private ThingPositionInfo thingPositionInfo;
 
@@ -58,7 +60,7 @@ public class CulturalRelicFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.thing_cuturalrelic, container, false);
+        View view = inflater.inflate(R.layout.thing_cuturalrelic_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -67,7 +69,7 @@ public class CulturalRelicFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SpecialCollectionActivity activity = (SpecialCollectionActivity)getActivity();
+        ComponentDetailActivity activity = (ComponentDetailActivity)getActivity();
         if(activity!=null){
             this.thingPositionInfo = activity.thingPositionInfo;
         }

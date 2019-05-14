@@ -517,12 +517,6 @@
 
                 </LinearLayout>
 
-                <!--&lt;!&ndash;特种设备&ndash;&gt;-->
-                <!--<include android:id="@+id/include_tezhongshebei" layout="@layout/include_tezhongshebei" android:visibility="gone"/>-->
-                <!--&lt;!&ndash;在建工地&ndash;&gt;-->
-                <!--<include android:id="@+id/include_zaijiangongdi" layout="@layout/include_zaijiangongdi" android:visibility="gone"/>-->
-                <!--&lt;!&ndash;危化品&ndash;&gt;-->
-                <!--<include android:id="@+id/include_weihuapin" layout="@layout/include_weihuapin" android:visibility="gone"/>-->
 
                 <include layout="@layout/addtail_layout" />
 

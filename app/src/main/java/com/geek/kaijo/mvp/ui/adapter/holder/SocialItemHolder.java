@@ -48,6 +48,10 @@ public class SocialItemHolder extends BaseHolder<ThingPositionInfo> {
             tvServiceTitle.setText(data.getName());
         }else if(!TextUtils.isEmpty(data.getDanweiName())){
             tvServiceTitle.setText(data.getDanweiName());
+        }else if(!TextUtils.isEmpty(data.getJingyingzheName())){
+            tvServiceTitle.setText(data.getJingyingzheName());  //经营者名称
+        }else if(!TextUtils.isEmpty(data.getAddress())){
+            tvServiceTitle.setText(data.getAddress());  //地址
         }
 
 

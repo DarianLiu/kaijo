@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +16,9 @@ import android.widget.Toast;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.DateUtils;
-import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
-import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
-import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
 import com.jess.arms.widget.CustomPopupWindow;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,19 +28,19 @@ import butterknife.Unbinder;
 /**
  * 药品
  */
-public class DrugSafteFragment extends Fragment{
+public class DrugSafteDetailFragment extends Fragment{
     Unbinder unbinder;
 
     @BindView(R.id.et_companyName)
-    public EditText et_companyName;  //企业名称
+    public TextView et_companyName;  //企业名称
     @BindView(R.id.et_register_name)
-    public EditText et_register_name; //注册地址
+    public TextView et_register_name; //注册地址
     @BindView(R.id.et_farenName)
-    public EditText et_farenName; //企业法定代表人
+    public TextView et_farenName; //企业法定代表人
     @BindView(R.id.et_yaoshi)
-    public EditText et_yaoshi; //住店药师
+    public TextView et_yaoshi; //住店药师
     @BindView(R.id.et_xukezhanghao)
-    public EditText et_xukezhanghao; //许可证号
+    public TextView et_xukezhanghao; //许可证号
 
     @BindView(R.id.et_xukezhengTime)
     public TextView et_xukezhengTime; //许可证颁发时间
@@ -54,13 +48,13 @@ public class DrugSafteFragment extends Fragment{
     public TextView et_youxiaoqiTime; //有效期至
 
     @BindView(R.id.et_jingyinfanshi)
-    public EditText et_jingyinfanshi; //经营方式
+    public TextView et_jingyinfanshi; //经营方式
    @BindView(R.id.et_jingyinfanwei)
-    public EditText et_jingyinfanwei; //经营范围
+    public TextView et_jingyinfanwei; //经营范围
     @BindView(R.id.et_Telephone)
-    public EditText et_Telephone; //联系电话
+    public TextView et_Telephone; //联系电话
     @BindView(R.id.et_phone)
-    public EditText et_phone; //手机号码
+    public TextView et_phone; //手机号码
 
 
 
@@ -69,12 +63,10 @@ public class DrugSafteFragment extends Fragment{
     private CustomPopupWindow mTimePickerPopupWindow_xukezheng;//时间选择弹出框,许可证颁发时间
     private CustomPopupWindow mTimePickerPopupWindow;//时间选择弹出框,有效期至
 
-    private ThingPositionInfo thingPositionInfo;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.thing_drug_safety, container, false);
+        View view = inflater.inflate(R.layout.thing_drug_safety_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -82,29 +74,6 @@ public class DrugSafteFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        SpecialCollectionActivity activity = (SpecialCollectionActivity)getActivity();
-        if(activity!=null){
-            this.thingPositionInfo = activity.thingPositionInfo;
-        }
-        if(thingPositionInfo!=null){
-            et_companyName.setText(thingPositionInfo.getName());
-            et_register_name.setText(thingPositionInfo.getAddress());
-            et_farenName.setText(thingPositionInfo.getFarenName());
-            et_yaoshi.setText(thingPositionInfo.getZhudianyaoshiName());
-            et_xukezhanghao.setText(thingPositionInfo.getXukezhengNo());
-            et_jingyinfanshi.setText(thingPositionInfo.getJingyingfangshiName());
-            et_jingyinfanwei.setText(thingPositionInfo.getJingyingfanweiName());
-            et_Telephone.setText(thingPositionInfo.getContact());
-            et_phone.setText(thingPositionInfo.getMobile());
-
-
-            et_xukezhengTime.setText(DateUtils.getDateToString(thingPositionInfo.getXukezhengTime(), DateUtils.dateString3));
-            et_youxiaoqiTime.setText(DateUtils.getDateToString(thingPositionInfo.getYouxiaoTime(), DateUtils.dateString3));
-        }else {
-            et_xukezhengTime.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
-            et_youxiaoqiTime.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
-        }
 
         //许可证颁发时间
         mTimePickerListener_xukezheng = time -> et_xukezhengTime.setText(time);
@@ -139,7 +108,7 @@ public class DrugSafteFragment extends Fragment{
      */
     private void initTimePopupWindow() {
 //        et_youxiaoqiTime.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
-//        et_youxiaoqiTime.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+        et_youxiaoqiTime.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
 
         View timePickerView = View.inflate(getActivity(), R.layout.view_pop_time_picker, null);
 
@@ -213,7 +182,7 @@ public class DrugSafteFragment extends Fragment{
      */
     private void initTimePopupWindow_xukezheng() {
 //        et_xukezhengTime.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
-//        et_xukezhengTime.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+        et_xukezhengTime.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
 
         View timePickerView = View.inflate(getActivity(), R.layout.view_pop_time_picker, null);
 

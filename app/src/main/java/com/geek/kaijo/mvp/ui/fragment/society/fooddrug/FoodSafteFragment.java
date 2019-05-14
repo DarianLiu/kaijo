@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.DateUtils;
+import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
+import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
 import com.geek.kaijo.mvp.ui.fragment.society.safety.ZaiJianGongDi;
 import com.jess.arms.widget.CustomPopupWindow;
@@ -69,6 +71,8 @@ public class FoodSafteFragment extends Fragment{
     private TimePickerListener mTimePickerListener;
     private CustomPopupWindow mTimePickerPopupWindow;//时间选择弹出框
 
+    private ThingPositionInfo thingPositionInfo;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,6 +90,32 @@ public class FoodSafteFragment extends Fragment{
         checkList.add("是");
         MySpinnerAdapter<String> mStreetAdapter = new MySpinnerAdapter<>(getActivity(), checkList);
         spinner_street.setAdapter(mStreetAdapter);
+
+        SpecialCollectionActivity activity = (SpecialCollectionActivity)getActivity();
+        if(activity!=null){
+            this.thingPositionInfo = activity.thingPositionInfo;
+        }
+
+        if(thingPositionInfo!=null){
+            et_name.setText(thingPositionInfo.getJingyingzheName());
+            et_farenName.setText(thingPositionInfo.getFarenName());
+            et_jjxz.setText(thingPositionInfo.getJingjixingzhiName());
+            et_jycs.setText(thingPositionInfo.getAddress());
+            et_xkzh.setText(thingPositionInfo.getXukezhengNo());
+            et_ztyt.setText(thingPositionInfo.getZhutiyetai());
+            if("是".equals(thingPositionInfo.getIsNetwork())){
+                spinner_street.setSelection(1);
+            }
+            et_category.setText(thingPositionInfo.getType());
+            et_jgjg.setText(thingPositionInfo.getJianguanjigouName());
+            et_fxdj.setText(thingPositionInfo.getFengxiandengjiName());
+            et_Telephone.setText(thingPositionInfo.getContact());
+            et_phone.setText(thingPositionInfo.getMobile());
+
+            tv_time.setText(DateUtils.getDateToString(thingPositionInfo.getYouxiaoTime(), DateUtils.dateString3));
+        }else {
+            tv_time.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+        }
 
         //更新开工时间
         mTimePickerListener = time -> tv_time.setText(time);
@@ -110,7 +140,7 @@ public class FoodSafteFragment extends Fragment{
      */
     private void initTimePopupWindow() {
 //        tv_time.setText(DateUtils.getDateToStringNonSecond(DateUtils.getCurrentTimeMillis(), DateUtils.dateString1));
-        tv_time.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
+//        tv_time.setText(DateUtils.getDateToString(DateUtils.getCurrentTimeMillis(), DateUtils.dateString3));
 
         View timePickerView = View.inflate(getActivity(), R.layout.view_pop_time_picker, null);
 

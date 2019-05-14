@@ -21,6 +21,7 @@ import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.GridItemContent;
 import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
+import com.geek.kaijo.mvp.model.event.ServiceEvent;
 import com.geek.kaijo.mvp.model.event.ThingEvent;
 import com.geek.kaijo.mvp.presenter.SocialManagePresenter;
 import com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity;
@@ -110,79 +111,13 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         ivAdd.setVisibility(View.VISIBLE);
         ivAdd.setOnClickListener(v -> {
             Intent intents = new Intent();
-            switch (thingType) {
-                case 3://药品
-                    intents.setClass(this, DrugSafetyActivity.class);
-                    intents.putExtra("title", "药品");
-                    break;
-                case 4://食品
-                    intents.setClass(this, FoodSafteActivity.class);
-                    intents.putExtra("title", "食品");
-                    break;
-                case 5://特种设备
-                    intents.setClass(this, SpecialCollectionActivity.class);
-                    intents.putExtra("title", "特种设备");
-                    break;
-                case 6://在建工地
-                    intents.setClass(this, BuilderSiteActivity.class);
-                    intents.putExtra("title", "在建工地");
-                    break;
-                case 7://危化品
-                    intents.setClass(this, SocialProductDangerActivity.class);
-                    intents.putExtra("title", "危化品");
-                    break;
-                case 8://森森防火
-                    intents.setClass(this, ForestFireActivity.class);
-                    intents.putExtra("title", "危化品");
-                    break;
-                case 9://防台防汛
-                    intents.setClass(this, TyphoonFloodActivity.class);
-                    intents.putExtra("title", "森森防火");
-                    break;
-                case 10://文明祭祀
-                    intents.setClass(this, SacrificeActivity.class);
-                    intents.putExtra("title", "防台防汛");
-                    break;
-                case 11://冬季除雪
-                    intents.setClass(this, WinterSnowActivity.class);
-                    intents.putExtra("title", "文明祭祀");
-                    break;
-                case 12://网吧
-                    intents.setClass(this, InternetBarActivity.class);
-                    intents.putExtra("title", "网吧");
-                    break;
-                case 13://文物保护单位
-                    intents.setClass(this, CulturalRelicActivity.class);
-                    intents.putExtra("title", "文物保护单位");
-                    break;
-                case 14://演出场所
-                    intents.setClass(this, PerformanceActivity.class);
-                    intents.putExtra("title", "演出场所");
-                    break;
-                case 15://游艺娱乐
-                    intents.setClass(this, RecreationalActivity.class);
-                    intents.putExtra("title", "游艺娱乐");
-                    break;
-                case 16://娱乐场所
-                    intents.setClass(this, EntertainmentActivity.class);
-                    intents.putExtra("title", "娱乐场所");
-                    break;
-                default:
-                    intents.setClass(this, SpecialCollectionActivity.class);
-                    intents.putExtra("Submenu", subMenu);
-                    break;
-            }
-//            Intent intent = new Intent(SocialManageActivity.this, SocialProductDangerActivity.class);
-//            intent.putExtra("entry_type", assortId);
-//            intent.putExtra("title", ((ServiceBean) data).getTitle());
-//            intent.putExtra("content", ((ServiceBean) data).getContent());
+            intents.setClass(this, SpecialCollectionActivity.class);
+            intents.putExtra("Submenu", subMenu);
             startActivityForResult(intents,1);
-//            launchActivity(intents);
         });
 
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
 
-        initTitle();
         initRecycleView();
         initRefreshLayout();
         smartRefresh.autoRefresh();
@@ -219,82 +154,18 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         mDatas = new ArrayList<>();
         mAdapter = new SocialThingAdapter(mDatas, thingType);
         recyclerView.setAdapter(mAdapter);
-
-        mAdapter.setOnItemClickListener(new DefaultAdapter.OnRecyclerViewItemClickListener() {
+        mAdapter.setItemClickListener(new SocialThingAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(View view, int viewType, Object data, int position) {
-                Intent intent = new Intent(SocialManageActivity.this,ComponentDetailActivity.class);
-                intent.putExtra("ThingPositionInfo",mDatas.get(position));
-                intent.putExtra("Submenu",subMenu);
-                startActivityForResult(intent,11);
+            public void onItemClick(View view, int position) {
+                if(position>0){
+                    Intent intent = new Intent(SocialManageActivity.this,ComponentDetailActivity.class);
+                    intent.putExtra("ThingPositionInfo",mDatas.get(position-1));
+                    intent.putExtra("Submenu",subMenu);
+                    SocialManageActivity.this.startActivityForResult(intent,1);
+                }
             }
         });
     }
-
-    /**
-     * 初始化标题
-     * 药品 3
-     * 餐饮 4
-     * 特种设备 5
-     * 在建工地 6
-     * 危化品 7
-     * 森森防火 8
-     * 防台防汛 9
-     * 文明祭祀 10
-     * 冬季除雪 11
-     * 网吧 12
-     * 文物保护单位 13
-     * 演出场所 14
-     * 游艺娱乐 15
-     * 娱乐场所 16
-     */
-    private void initTitle() {
-        switch (thingType) {
-            case 3://药品
-                tvToolbarTitle.setText(R.string.social_fad_drug);
-                break;
-            case 4://餐饮
-                tvToolbarTitle.setText(R.string.social_fad_foot);
-                break;
-            case 5://特种设备
-                tvToolbarTitle.setText(R.string.social_product_device);
-                break;
-            case 6://在建工地
-                tvToolbarTitle.setText(R.string.social_product_work_site);
-                break;
-            case 7://危化品
-                tvToolbarTitle.setText(R.string.social_product_danger);
-                break;
-            case 8://森森防火
-                tvToolbarTitle.setText(R.string.social_prevent_forest_fire);
-                break;
-            case 9://防台防汛
-                tvToolbarTitle.setText(R.string.social_prevent_flood);
-                break;
-            case 10://文明祭祀
-                tvToolbarTitle.setText(R.string.social_prevent_sacrifice);
-                break;
-            case 11://冬季除雪
-                tvToolbarTitle.setText(R.string.social_prevent_snow_removal);
-                break;
-            case 12://网吧
-                tvToolbarTitle.setText(R.string.social_cultura_internet_bar);
-                break;
-            case 13://文物保护单位
-                tvToolbarTitle.setText(R.string.social_cultura_relic_protect);
-                break;
-            case 14://演出场所
-                tvToolbarTitle.setText(R.string.social_cultura_performing_place);
-                break;
-            case 15://游艺娱乐
-                tvToolbarTitle.setText(R.string.social_cultura_recreation);
-                break;
-            case 16://娱乐场所
-                tvToolbarTitle.setText(R.string.social_cultura_place);
-                break;
-        }
-    }
-
 
     @Subscriber
     public void receiveThingEvent(ThingEvent event) {
@@ -313,10 +184,40 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
                 if (mPresenter != null){
                     mPresenter.httpDeleteInfo(String.valueOf(mDatas.get(event.getPosition()-1).getThingPositionId()));
                 }
-
                 break;
         }
     }
+
+    /**
+     * 搜索
+     * @param event
+     */
+    @Subscriber
+    public void receiveServiceEvent(ServiceEvent event) {
+        if(event.getCategoryId()==3){
+            String name = "";
+            String danweiName = "";
+            String jingyingzheName = "";
+            String address = "";
+            String menu = subMenu.getName();
+            if ("特种设备".equals(menu)) {
+                danweiName = event.getKey();
+            } else if ("在建工地".equals(menu)||"危化品".equals(menu)||"药品".equals(menu)||"森林防火".equals(menu)||"网吧".equals(menu)||"文物保护单位".equals(menu)||"演出场所".equals(menu)
+                    ||"游艺娱乐".equals(menu)||"演艺娱乐".equals(menu)||"娱乐场所".equals(menu)   ) {
+                name = event.getKey();
+            } else if ("食品".equals(subMenu.getName()) || "餐饮".equals(subMenu.getName())) {
+                jingyingzheName = event.getKey();
+            }else if ("防台防汛".equals(subMenu.getName()) || "冬季除雪".equals(subMenu.getName()) || "文明祭祀".equals(subMenu.getName())) {
+                address  = event.getKey();
+            }
+            if (mPresenter != null)
+                mPresenter.findThingPositionList(true, subMenu.getName(), name,danweiName,
+                        jingyingzheName, address);
+        }
+
+    }
+
+
 
 
     @Override
@@ -367,6 +268,7 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
 
     @Override
     public void refreshData(List<ThingPositionInfo> datas) {
+        smartRefresh.setNoMoreData(false);
         mDatas.clear();
         mDatas.addAll(datas);
         mAdapter.notifyDataSetChanged();
