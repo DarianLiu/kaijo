@@ -3,6 +3,7 @@ package com.geek.kaijo.mvp.ui.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -32,7 +33,7 @@ public class ProcessActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
         // 设置允许JS弹窗
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-
+        webWiew.setWebChromeClient(new WebChromeClient());
         if(aCase!=null){
             Map<String,String> map=new HashMap<String,String>();
             map.put("caseId",aCase.getCaseId());

@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,7 +94,13 @@ public class PlanViewActivity extends BaseActivity<PlanViewPresenter> implements
         list.addAll(initRoot());
 //        initAdapter();
 
-        webview.loadUrl("file:////android_asset/tree.html");
+        WebSettings webSettings = webview.getSettings();
+        // 设置与Js交互的权限
+        webSettings.setJavaScriptEnabled(true);
+        // 设置允许JS弹窗
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webview.setWebChromeClient(new WebChromeClient());
+        webview.loadUrl("file:////android_asset/html/tree.html");
 
     }
 
