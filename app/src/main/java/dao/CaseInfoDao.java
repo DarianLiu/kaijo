@@ -15,7 +15,7 @@ import com.geek.kaijo.mvp.model.entity.CaseInfo;
 /** 
  * DAO for table "CASE_INFO".
 */
-public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
+public class CaseInfoDao extends AbstractDao<CaseInfo, Long> {
 
     public static final String TABLENAME = "CASE_INFO";
 
@@ -24,7 +24,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, String.class, "id", true, "ID");
+        public final static Property Id = new Property(0, long.class, "id", true, "_id");
         public final static Property CurrPage = new Property(1, int.class, "currPage", false, "CURR_PAGE");
         public final static Property PageSize = new Property(2, int.class, "pageSize", false, "PAGE_SIZE");
         public final static Property CaseId = new Property(3, String.class, "caseId", false, "CASE_ID");
@@ -104,7 +104,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CASE_INFO\" (" + //
-                "\"ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
                 "\"CURR_PAGE\" INTEGER NOT NULL ," + // 1: currPage
                 "\"PAGE_SIZE\" INTEGER NOT NULL ," + // 2: pageSize
                 "\"CASE_ID\" TEXT," + // 3: caseId
@@ -180,11 +180,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, CaseInfo entity) {
         stmt.clearBindings();
- 
-        String id = entity.getId();
-        if (id != null) {
-            stmt.bindString(1, id);
-        }
+        stmt.bindLong(1, entity.getId());
         stmt.bindLong(2, entity.getCurrPage());
         stmt.bindLong(3, entity.getPageSize());
  
@@ -478,11 +474,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, CaseInfo entity) {
         stmt.clearBindings();
- 
-        String id = entity.getId();
-        if (id != null) {
-            stmt.bindString(1, id);
-        }
+        stmt.bindLong(1, entity.getId());
         stmt.bindLong(2, entity.getCurrPage());
         stmt.bindLong(3, entity.getPageSize());
  
@@ -774,14 +766,14 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
     }
 
     @Override
-    public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public CaseInfo readEntity(Cursor cursor, int offset) {
         CaseInfo entity = new CaseInfo( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // id
+            cursor.getLong(offset + 0), // id
             cursor.getInt(offset + 1), // currPage
             cursor.getInt(offset + 2), // pageSize
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // caseId
@@ -852,7 +844,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
      
     @Override
     public void readEntity(Cursor cursor, CaseInfo entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setId(cursor.getLong(offset + 0));
         entity.setCurrPage(cursor.getInt(offset + 1));
         entity.setPageSize(cursor.getInt(offset + 2));
         entity.setCaseId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -920,12 +912,13 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
      }
     
     @Override
-    protected final String updateKeyAfterInsert(CaseInfo entity, long rowId) {
-        return entity.getId();
+    protected final Long updateKeyAfterInsert(CaseInfo entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     @Override
-    public String getKey(CaseInfo entity) {
+    public Long getKey(CaseInfo entity) {
         if(entity != null) {
             return entity.getId();
         } else {
@@ -935,7 +928,7 @@ public class CaseInfoDao extends AbstractDao<CaseInfo, String> {
 
     @Override
     public boolean hasKey(CaseInfo entity) {
-        return entity.getId() != null;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

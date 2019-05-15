@@ -30,7 +30,7 @@ public interface HandleDetailContract {
                                                              String address, String description, String caseAttribute,
                                                              String casePrimaryCategory, String caseSecondaryCategory,
                                                              String caseChildCategory, String handleType, String whenType,
-                                                             String caseProcessRecordID,List<UploadFile> uploadPhotoList);
+                                                             String caseProcessRecordID,List<UploadFile> uploadPhotoList,String handleResultDescription);
 
 
         /**
@@ -48,7 +48,7 @@ public interface HandleDetailContract {
          */
         Observable<BaseResult<String>> addOperate(String userId,String label, String content, String formId,
                                                              String processId, String curNode, String nextUserId, String firstWorkunit,
-                                                            List<UploadFile> uploadPhotoList);
+                                                            List<UploadFile> uploadPhotoList,String handleResultDescription);
         Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);
     }
 }

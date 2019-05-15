@@ -85,7 +85,7 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
                                     String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
         mModel.addOrUpdateCaseInfo(userId,acceptDate, streetId, communityId, gridId, lat, lng, source,
                 address, description, caseAttribute, casePrimaryCategory, caseSecondaryCategory,
-                caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList)
+                caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList,"")
                 .compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {
@@ -107,7 +107,7 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
                                     String processId, String curNode, String nextUserId, String firstWorkunit,
                                     List<UploadFile> uploadPhotoList) {
         mModel.addOperate(userId,label, content, formId, processId, curNode, nextUserId, firstWorkunit,
-                uploadPhotoList)
+                uploadPhotoList,"")
                 .compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<String>(mErrorHandler) {

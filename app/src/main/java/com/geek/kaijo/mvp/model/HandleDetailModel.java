@@ -55,15 +55,15 @@ public class HandleDetailModel extends BaseModel implements HandleDetailContract
                                                                 String address, String description, String caseAttribute,
                                                                 String casePrimaryCategory, String caseSecondaryCategory,
                                                                 String caseChildCategory, String handleType, String whenType,
-                                                                String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
+                                                                String caseProcessRecordID,List<UploadFile> uploadPhotoList,String handleResultDescription) {
         RequestBody requestBody = RequestParamUtils.addOrUpdateCaseInfo(userId,acceptDate, streetId,
                 communityId, gridId, lat, lng, source, address, description, caseAttribute,
-                casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList);
+                casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList,handleResultDescription);
         return mRepositoryManager.obtainRetrofitService(AppService.class).addOrUpdateCaseInfo(requestBody);
     }
 
     @Override
-    public Observable<BaseResult<String>> addOperate(String userId, String label, String content, String formId, String processId, String curNode, String nextUserId, String firstWorkunit, List<UploadFile> uploadPhotoList) {
+    public Observable<BaseResult<String>> addOperate(String userId, String label, String content, String formId, String processId, String curNode, String nextUserId, String firstWorkunit, List<UploadFile> uploadPhotoList,String handleResultDescription) {
         RequestBody requestBody = RequestParamUtils.addOperate(userId,label, content,
                 formId, processId, curNode, nextUserId, firstWorkunit,uploadPhotoList);
         return mRepositoryManager.obtainRetrofitService(AppService.class).addOperate(requestBody);

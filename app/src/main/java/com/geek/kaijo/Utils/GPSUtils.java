@@ -86,8 +86,6 @@ public class GPSUtils {
         //给定位客户端对象设置定位参数 GPS定位结果不会被缓存
         mLocationClient.setLocationOption(mLocationOption);
 
-
-
     }
 
     public void startLocation(LocationListener locationListener) {

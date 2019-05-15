@@ -1,12 +1,14 @@
 package com.geek.kaijo.mvp.ui.activity;
 
 import android.Manifest;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -18,9 +20,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmmap.api.location.CmccLocation;
 import com.geek.kaijo.R;
+import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
@@ -40,6 +44,7 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -80,6 +85,11 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     Button iprComplete;
     @BindView(R.id.ipr_cancel)
     Button iprCancel;
+
+    @BindView(R.id.tv_lng)
+    TextView tv_lng;
+    @BindView(R.id.tv_lat)
+    TextView tv_lat;
 
 
     private List<IPRegisterBean> mList;
@@ -126,6 +136,8 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constant.service_patrol);
         registerReceiver(locationReceiver, filter);
+
+        GPSUtils.getInstance().startLocation(locationListener);
     }
 
     @Override
@@ -391,6 +403,13 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
             if(InspectionProjectRegisterActivity.this.isFinishing())return;
+            if(cmccLocation!=null){
+                tv_lng.setText("经度："+cmccLocation.getLongitude());
+                tv_lat.setText("纬度："+cmccLocation.getLatitude());
+            }else {
+                tv_lng.setText("经度：CmccLocation==null");
+                tv_lat.setText("纬度：CmccLocation==null");
+            }
 
 //            mLat = cmccLocation.getLatitude();
 //            mLng = cmccLocation.getLongitude();
@@ -460,5 +479,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         GPSUtils.getInstance().removeLocationListener(locationListener);
         unregisterReceiver(locationReceiver);
     }
+
+
 
 }

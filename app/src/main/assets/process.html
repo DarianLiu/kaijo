@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+      <style>
+          body{
+                background-color: #ecf0f5;
+          }
+          .detailed{
+            width: 98%;
+                margin: 2px auto;
+                background-color: white;
+                padding: 5px 5px 5px 30px;
+                text-indent: 1em;
+          }
+            .detailed .list{
+            width: 98%;
+          }
+          /* @media (min-width: 768px) {
+            .admin{
+            font-size:6em;
+            }
+          }
+          @media (min-width: 992px) {
+            .admin{
+            font-size: 12em;
+            }
+          } */
+          h3{
+                color: #3c8dbc;
+            font-weight: 600;
+            font-size: 1em;
+            line-height: 1.1;
+          }
+            .detailed:before {
+                content: '';
+                position: absolute;
+                top: 0px;
+                bottom: 0;
+                width: 4px;
+                background: #ddd;
+                left: 31px;
+                margin: 0;
+                border-radius: 2px;
+            }
+            .detailed .d_process{
+                padding: 5px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+          }
+            .detailed .list table{
+                border-collapse: collapse;
+            }
+            .detailed .d_process div{
+              border-bottom: 1px solid #f4f4f4;
+              padding: 5px;
+          }
+            .detailed .d_process{
+                padding: 20px auto;
+          }
+            .detailed .d_process_f table tr td{
+                font-size: 14px;
+            }
+            .list .d_process table tr td{
+            width: 16%;
+                border: 2px solid #ddd;
+          }
+            .detailed>.list>.faa{
+                height: 30px;
+                font-size: 12px;
+                line-height: 30px;
+                position: absolute;
+                color: white;
+                background: #00a65a;
+                border-radius: 5%;
+                text-align: center;
+                left: 18px;
+                top: 22px;
+                text-indent:0;
+                padding: 0 5px;
+            }
+          .detailed>.list>.frr{
+              height: 30px;
+              font-size: 12px;
+              line-height: 30px;
+              position: absolute;
+              color: white;
+              background: #cc0216;
+              border-radius: 5%;
+              text-align: center;
+              left: 18px;
+              top: 825px;
+              text-indent:0;
+              padding: 0 5px;
+          }
+            .detailed>.list>i{
+                width: 30px;
+                height: 30px;
+                font-size: 15px;
+                line-height: 30px;
+                position: absolute;
+                color:white;
+                background: blue;
+                border-radius: 50%;
+                text-align: center;
+                left: 18px;
+                text-indent: 0;
+                font-weight: 700;
+            }
+            .d_process_f{
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .itemFlow{
+                display: flex;
+                text-indent: 0;
+                align-items: center;
+                flex-direction:column;
+            }
+            .hnImg,.lnImg{
+                position: relative;
+            }
+            .hnImg:after,.lnImg:after{
+                right: -4px;
+                bottom: -2px;
+                width: 14px;
+                height: 14px;
+                content: '';
+                position: absolute;
+                display: inline-block;
+            }
+            .hnImg:after{
+                background: url(../static/common/images/tzsb.png) no-repeat 100%/cover;
+            }
+            .lnImg:after{
+                background: url(../static/common/images/dg.png) no-repeat 100%/cover;
+            }
+            .dx{
+                display: flex;
+                align-items: center;
+            }
+            .dx>span{
+                width: 80px;
+                height: 2px;
+                background: #e4e4e4;
+                display: inline-block;
+            }
+        </style>
+        <body>
+  <article class="page-container">
+    <form class="form form-horizontal" id="form-user">
+      <#if user?exists>
+      <input type="hidden" name="userId" value="${user.userId}"/>
+      </#if>
+      <div class="detailed">
+          <!--<div class="list" style="margin-top: 30px;">-->
+                <!--<p class="faa">案情信息</p>-->
+                <!--<p style="color: #c42c25;font-size: 16px;font-weight: 700;">自行处置案件</p>-->
+          <!--</div>-->
+          <!--<div class="list">-->
+                <!--<i class="fa fa-info bg-purple ">i</i>-->
+                <!--<h3 class="admin">采集人信息</h3>-->
+                <!--<div class="d_process">-->
+                    <!--<div class="col-sm-12 col-md-4">诉求联系人：${caseInfo.username}</div>-->
+                    <!--<div class="col-sm-12 col-md-8">联系电话：${caseInfo.mobile}</div>-->
+                    <!--<div class="col-sm-12 col-md-4">采集区域：${caseInfo.gridName}</div>-->
+                    <!--<div class="col-sm-12 col-md-4">所属街道：${caseInfo.streetName}</div>-->
+                    <!--<div class="col-sm-12 col-md-4">上报单位：${caseInfo.communityName}</div>-->
+                    <!--<div class="col-sm-12 col-md-12">发生地址：${caseInfo.address}</div>-->
+                <!--</div>-->
+          <!--</div>-->
+          <!--<div class="list">-->
+              <!--<i class="fa fa-info bg-purple">i</i>-->
+              <!--<h3>案件信息</h3>-->
+              <!--<div class="d_process">-->
+                    <!--<div class="col-sm-12 col-md-4">案件编号：${caseInfo.caseCode}</div>-->
+                    <!--<div class="col-sm-12 col-md-8">问题来源：${caseInfo.source}</div>-->
+                    <!--<div class="col-sm-12 col-md-4">上报时间：${caseInfo.acceptDate}</div>-->
+                    <!--<div class="col-sm-12 col-md-4">处置时限：暂无</div>-->
+                    <!--<div class="col-sm-12 col-md-4">提醒时限：暂无</div>-->
+                    <!--<div class="col-sm-12 col-md-12">案件类别(大)：${caseInfo.casePrimaryCategory}</div>-->
+                    <!--<div class="col-sm-12 col-md-12">案件类别(小)：${caseInfo.caseSecondaryCategory}</div>-->
+                    <!--<div colspan="3">案件类别(子)：${caseInfo.caseChildCategory}</div>-->
+              <!--</div>-->
+          <!--</div>-->
+          <!--<div class="list">-->
+              <!--<i class="fa fa-info bg-purple">i</i>-->
+              <!--<h3>案件处置流程</h3>-->
+              <!--<div class="d_process">-->
+                    <!--<div class="col-sm-12 col-md-4">主责部门：${caseInfo.workunitName}</div>-->
+                    <!--<div class="col-sm-12 col-md-8">当前状态：${workFlowNode.text}</div>-->
+                    <!--<div class="col-sm-12 col-md-4">当前处置部门：${caseInfo.workunitName}</div>-->
+                    <!--<div class="col-sm-12 col-md-8">当前处置人员：</div>-->
+                    <!--<div class="col-sm-12 col-md-4">核查评分： 暂未评价</div>-->
+                    <!--<div class="col-sm-12 col-md-8">回访评分： 暂未评价</div>-->
+                    <!--<div class="col-md-offset-8" style="border: none;">-->
+                         <!--<a href=""><img src="http://221.180.255.173/nmp/common/work/images/afdz.png" alt=""></a>-->
+                        <!--<a href=""><img style="width: 110px;height: 46px;" src="http://221.180.255.173/nmp/common/client/home/prt.png" alt=""></a>&ndash;&gt;-->
+                    <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="list" style="margin-top: 10px;margin-bottom: 40px;">-->
+                    <!--<h3 style="color: #c42c25;">处置流程:</h3>-->
+                    <!--<div class="d_process_f">-->
+                            <!--<div class="itemFlow col-sm-12 col-md-2">-->
+                                <!--<div>&nbsp;</div>-->
+                                <!--<div style="color: #bcb1b0;">(${workflowOperate.content})</div>-->
+                                <!--<div class="hnImg" >-->
+                                    <!--<img src="../static/common/images/hn.png" alt="">-->
+                                <!--</div>-->
+
+                                <!--<div style="color: #bcb1b0;">【${workflowOperate.label}】</div>-->
+                                <!--<div style="color: red;">处理中</div>-->
+                            <!--</div>-->
+                            <!--<div class="dx col-sm-12 col-md-2">-->
+                                <!--<span></span>-->
+                            <!--</div>-->
+                            <!--<div class="itemFlow col-sm-12 col-md-2">-->
+                                <!--<div style="color: blue;">${workflowOperate.user.username}</div>-->
+                                <!--<div style="color: blue;">(${workflowOperate.user.streetCommunityDO.name})</div>-->
+                                <!--<div class="lnImg" >-->
+                                    <!--<img src="../static/common/images/ln.png" alt="">-->
+                                <!--</div>-->
+                                <!--<div style="color: blue;">【${workflowOperate.label}】</div>-->
+                                <!--<td style="color: green;">已完成</td>-->
+                            <!--</div>-->
+                            <!--<div class="dx col-sm-12 col-md-2">-->
+                                <!--<span></span>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; <table>-->
+                                    <!--<tr style="border-bottom: 1px solid #ddd;">-->
+                                        <!--<td>&nbsp;</td>-->
+                                        <!--<td style="color: #bcb1b0;">(${workflowOperate.content})</td>-->
+                                        <!--<td><i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-user2"></td>-->
+                                        <!--<td style="color: #bcb1b0;">【${workflowOperate.label}】</td>-->
+                                        <!--<td style="color: red;">处理中</td>-->
+                                    <!--</tr>-->
+                                    <!--<tr style="border-bottom: 1px solid #ddd;">-->
+                                        <!--<td style="color: blue;">${workflowOperate.user.username}</td>-->
+                                        <!--<td style="color: blue;">(${workflowOperate.user.streetCommunityDO.name})</td>-->
+                                        <!--<td><i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-user"></i></td>-->
+                                        <!--<td style="color: blue;">【${workflowOperate.label}】</td>-->
+                                        <!--<td style="color: green;">已完成</td>-->
+                                    <!--</tr>-->
+                            <!--</table> &ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="list">-->
+                    <!--<i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-picture"></i>-->
+                    <!--<div class="d_process" style="border: none;">-->
+                        <!--<table>-->
+                            <!--<tr style="border-bottom: 1px solid #ddd;">-->
+                                <!--<td><h3 style="display: inline;">整改前</h3>&nbsp&nbsp<h3 style="display: inline;color: black">照片</h3></td>-->
+                                <!--<td><h3 style="display: inline;">整改后</h3>&nbsp&nbsp<h3 style="display: inline;color: black">照片</h3></td>-->
+                            <!--</tr>-->
+                            <!--<tr style="border: none;">-->
+                                <!--<td>-->
+                                    <!--&lt;!&ndash;<img src="${address}${attach.url}">&ndash;&gt;-->
+                                <!--</td>-->
+                                <!--<td style=" border-left: 1px solid #ddd;">无</td>-->
+                            <!--</tr>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="list">-->
+                    <!--<i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-zhaoxiangji"></i>-->
+                    <!--<div class="d_process" style="border: none;">-->
+                        <!--<table>-->
+                            <!--<tr style="border-bottom: 1px solid #ddd;">-->
+                                <!--<td><h3 style="display: inline;">整改前</h3>&nbsp&nbsp<h3 style="display: inline;color: black">视频</h3></td>-->
+                                <!--<td><h3 style="display: inline;">整改后</h3>&nbsp&nbsp<h3 style="display: inline;color: black">视频</h3></td>-->
+                            <!--</tr>-->
+                            <!--<tr style="border: none;">-->
+                                <!--<td>无</td>-->
+                                <!--<td style=" border-left: 1px solid #ddd;">无</td>-->
+                            <!--</tr>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="list">-->
+                    <!--<i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-msg"></i>-->
+                    <!--<h3 style="display: inline;">整改前</h3>&nbsp&nbsp<h3 style="display: inline;color: black;font-weight: 300">语音报案</h3>-->
+                    <!--<div class="d_process">-->
+                        <!--无-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="list">-->
+                    <!--<i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-comment"></i>-->
+                    <!--<h3>问题描述</h3>-->
+                    <!--<div class="d_process">-->
+                        <!--${caseInfo.description}-->
+                    <!--</div>-->
+                    <!--<hr style="height: 4px; background: #dddddd;margin:50px 0 5px -30px;border: none;">-->
+                <!--</div>-->
+                <!--<div class="list">-->
+                        <!--<i class="fa fa-info bg-purple layui-icon-dialogue" style="background-color: #605ca8;">i</i>-->
+                        <!--<h3>上报采集 </h3>-->
+                        <!--<div class="d_process">-->
+                            <!--<table>-->
+                                <!--<tr>-->
+                                    <!--<td>处置实体：${caseInfo.communityName}</td>-->
+                                    <!--<td>处理人员：${caseInfo.username}</td>-->
+                                    <!--<td></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td colspan="3">处理结果：${caseB.handleResultDescription}</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>到期时间：<span style="color: #0073b7">未要求</span></td>-->
+                                    <!--<td>环节用时：</td>-->
+                                    <!--<td>环节超时：</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td colspan="3">无</td>-->
+                                <!--</tr>-->
+                            <!--</table>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="list">-->
+                        <!--<i class="fa fa-info bg-purple" style="background-color: #dd4b39;">i</i>-->
+                        <!--<h3>下一环节相关时限信息</h3>-->
+                        <!--<div class="d_process">-->
+                            <!--<p>需签收信息(未签收)：</p>-->
+                            <!--<table>-->
+                                <!--<tr>-->
+                                    <!--<td>部门</td>-->
+                                    <!--<td>姓名</td>-->
+                                    <!--<td>签收时限</td>-->
+                                    <!--<td>实际签收时间</td>-->
+                                    <!--<td>超出时间</td>-->
+                                    <!--<td>电话</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>二〇二医院社区</td>-->
+                                    <!--<td>无</td>-->
+                                    <!--<td>18-09-12 11:10:00</td>-->
+                                    <!--<td>无</td>-->
+                                    <!--<td style="color: red;">无</td>-->
+                                    <!--<td>无</td>-->
+                                <!--</tr>-->
+                            <!--</table>-->
+                        <!--</div>-->
+                    <!--</div>-->
+      </div>
+    </form>
+  </article>
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+  　<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+  <script>
+      $(function () {
+          var param={
+              "caseId":578,
+              "processId":2,
+              "caseAttribute":2
+          }
+
+          $.ajax({
+              type:"post",
+              url:"http://localhost:8766/case/viewCaseForApp.json",
+              data:JSON.stringify(param),
+              dataType:"json",
+              contentType:"application/json",
+              success: function(data){
+                  console.log(data);
+                  
+                  var strList='';
+                  var strImgBefore=''
+                  for (var i=0 ;i<data.data.workflowOperateList.length;i++){
+                            if (data.data.workflowOperateList[i].isFinish==1){
+                                var clo="#605ca8"
+                            } else {
+                                clo="#ccc"
+                            }
+                      strList+=`
+                             <i class="fa fa-info bg-purple layui-icon-dialogue" style="background-color: ${clo};">i</i>
+                        <h3 style="margin-top: 50px">${data.data.workflowOperateList[i].handleNode}</h3>
+                        <div class="d_process">
+                            <table>
+                                <tr>
+                                    <td>处置实体：${data.data.workflowOperateList[i].handleEntity}</td>
+                                    <td>处理人员：${data.data.workflowOperateList[i].handlePeople}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">处理结果：${data.data.workflowOperateList[i].handleResult?data.data.workflowOperateList[i].handleResult:"未要求"}</td>
+                                </tr>
+                                <tr>
+                                    <td>到期时间：<span style="color: #0073b7">${data.data.workflowOperateList[i].timeDuration?data.data.workflowOperateList[i].timeDuration:""}</span></td>
+                                    <td>环节用时：${data.data.workflowOperateList[i].handleTime?data.data.workflowOperateList[i].handleTime:""}</td>
+                                    <td>环节超时：${data.data.workflowOperateList[i].handleTimeout?data.data.workflowOperateList[i].handleTimeout:""}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">无</td>
+                                </tr>
+                            </table>
+                        </div>
+                      `
+                  }
+                  
+                  for (var i=0;i<data.data.caseInfoVO.attachList.length;i++){
+                      strImgBefore+=`
+                               <img src=${data.data.caseInfoVO.attachList[i].url}>
+
+                      `
+                  }
+                  
+
+                  var str=`
+
+          <div class="list" style="margin-top: 30px;">
+                <p class="faa">案情信息</p>
+          </div>
+          <div class="list">
+                <i class="fa fa-info bg-purple ">i</i>
+                <h3 class="admin">采集人信息</h3>
+                <div class="d_process">
+                    <div class="col-sm-12 col-md-4">诉求联系人：${data.data.caseInfoVO.username}</div>
+                    <div class="col-sm-12 col-md-8">联系电话：${data.data.caseInfoVO.mobile}</div>
+                    <div class="col-sm-12 col-md-4">采集区域：${data.data.caseInfoVO.gridName}</div>
+                    <div class="col-sm-12 col-md-4">所属街道：${data.data.caseInfoVO.streetName}</div>
+                    <div class="col-sm-12 col-md-4">上报单位：${data.data.caseInfoVO.communityName}</div>
+                    <div class="col-sm-12 col-md-12">发生地址：${data.data.caseInfoVO.address}</div>
+                </div>
+          </div>
+          <div class="list">
+
+              <div class="d_process">
+                    <div class="col-sm-12 col-md-4">案件编号：${data.data.caseInfoVO.caseCode}</div>
+                    <div class="col-sm-12 col-md-8">问题来源：${data.data.caseInfoVO.source}</div>
+                    <div class="col-sm-12 col-md-4">上报时间：${data.data.caseInfoVO.acceptDate}</div>
+                    <div class="col-sm-12 col-md-4">处置时限：暂无</div>
+                    <div class="col-sm-12 col-md-4">提醒时限：暂无</div>
+                    <div class="col-sm-12 col-md-12">案件类别(大)：${data.data.caseInfoVO.casePrimaryCategory}</div>
+                    <div class="col-sm-12 col-md-12">案件类别(小)：${data.data.caseInfoVO.caseSecondaryCategory}</div>
+                    <div colspan="3">案件类别(子)：${data.data.caseInfoVO.caseChildCategory}</div>
+              </div>
+          </div>
+                <div class="list">
+                    <i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-picture"></i>
+                    <div class="d_process" style="border: none;">
+                        <table>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td><h3 style="display: inline;">整改前</h3>&nbsp&nbsp<h3 style="display: inline;color: black">照片</h3></td>
+                                <td><h3 style="display: inline;">整改后</h3>&nbsp&nbsp<h3 style="display: inline;color: black">照片</h3></td>
+                            </tr>
+                            <tr style="border: none;">
+                                <td>
+                                    ${strImgBefore}
+                                </td>
+                                <td style=" border-left: 1px solid #ddd;">无</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="list">
+                    <i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-zhaoxiangji"></i>
+                    <div class="d_process" style="border: none;">
+                        <table>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td><h3 style="display: inline;">整改前</h3>&nbsp&nbsp<h3 style="display: inline;color: black">视频</h3></td>
+                                <td><h3 style="display: inline;">整改后</h3>&nbsp&nbsp<h3 style="display: inline;color: black">视频</h3></td>
+                            </tr>
+                            <tr style="border: none;">
+                                <td>无</td>
+                                <td style=" border-left: 1px solid #ddd;">无</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="list">
+                    <i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-msg"></i>
+                    <h3 style="display: inline;">整改前</h3>&nbsp&nbsp<h3 style="display: inline;color: black;font-weight: 300">语音报案</h3>
+                    <div class="d_process">
+                        无
+                    </div>
+                </div>
+                <div class="list">
+                    <i class="fa fa-info bg-purple Hui-iconfont Hui-iconfont-comment"></i>
+                    <h3>问题描述</h3>
+                    <div class="d_process">
+                        ${data.data.caseInfoVO.description}
+                    </div>
+                    <hr style="height: 4px; background: #dddddd;margin:50px 0 5px -30px;border: none;">
+                </div>
+                <div class="list">
+                       <p class="frr">处理流程</p>
+                        <i class="fa fa-info bg-purple layui-icon-dialogue" style="background-color: #605ca8;">i</i>
+                        <h3 style="margin-top: 50px">上报采集 </h3>
+                        <div class="d_process">
+                            <table>
+                                <tr>
+                                    <td>处置实体：${data.data.caseInfoVO.communityName}</td>
+                                    <td>处理人员：${data.data.caseInfoVO.username}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">处理结果：</td>
+                                </tr>
+                                <tr>
+                                    <td>到期时间：<span style="color: #0073b7">未要求</span></td>
+                                    <td>环节用时：</td>
+                                    <td>环节超时：</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">无</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                      <div class="list">
+                       <p class="frr">案情信息</p>
+                       ${strList}
+                    </div>
+                  `
+
+
+
+                $(".detailed").html(str)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              }
+          });
+
+
+
+
+
+      })//
+
+  </script>
+  </body>
+</html>

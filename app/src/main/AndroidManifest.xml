@@ -81,6 +81,7 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".mvp.ui.activity.MapActivity" android:screenOrientation="portrait" />
         <activity android:name=".mvp.ui.activity.ComponentDetailActivity" android:screenOrientation="portrait" />
+        <activity android:name=".mvp.ui.activity.ProcessActivity" android:screenOrientation="portrait" />
 
         <!-- 实时发送位置 -->
         <service android:name=".app.service.LocalService" />

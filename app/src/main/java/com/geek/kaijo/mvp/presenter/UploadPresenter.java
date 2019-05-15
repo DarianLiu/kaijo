@@ -3,8 +3,10 @@ package com.geek.kaijo.mvp.presenter;
 import android.annotation.SuppressLint;
 import android.app.Application;
 
+import com.geek.kaijo.app.api.RequestParamUtils;
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.contract.UploadContract;
+import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.UploadCaseFile;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.model.entity.User;
@@ -72,6 +74,50 @@ public class UploadPresenter extends BasePresenter<UploadContract.Model, UploadC
                     }
                 });
     }
+
+
+    /**
+     * 案件上报
+     *
+     * @param acceptDate            案发时间
+     * @param streetId              街道ID
+     * @param communityId           社区ID
+     * @param gridId                网格ID
+     * @param lat                   纬度
+     * @param lng                   经度
+     * @param source                来源 网格员默认17
+     * @param address               地址
+     * @param description           问题描述
+     * @param caseAttribute         案件属性
+     * @param casePrimaryCategory   案件大类
+     * @param caseSecondaryCategory 案件小类
+     * @param caseChildCategory     案件子类
+     * @param handleType            直接处理传1 ，非直接处理传2
+     * @param whenType              直接处理( 整改前的写1  整改后写2),  非直接处理 whenType 1
+     * @param caseProcessRecordID   直接处理 caseProcessRecordID  19,  非直接处理 caseProcessRecordID  11
+     */
+    public void addOrUpdateCaseInfo(String userId,String acceptDate, String streetId, String communityId,
+                                    String gridId, String lat, String lng, String source,
+                                    String address, String description, String caseAttribute,
+                                    String casePrimaryCategory, String caseSecondaryCategory,
+                                    String caseChildCategory, String handleType, String whenType,
+                                    String caseProcessRecordID,List<UploadFile> uploadPhotoList,String handleResultDescription) {
+        RequestBody requestBody = RequestParamUtils.addOrUpdateCaseInfo(userId,acceptDate, streetId, communityId, gridId, lat, lng, source,
+                address, description, caseAttribute, casePrimaryCategory, caseSecondaryCategory,
+                caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList,handleResultDescription);
+
+        mModel.addOrUpdateCaseInfo(requestBody)
+                .compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.handleBaseResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {
+                    @Override
+                    public void onNext(CaseInfo caseInfoEntity) {
+                        mRootView.uploadCaseInfoSuccess(caseInfoEntity);
+//                        mRootView.killMyself();
+                    }
+                });
+    }
+
 
 
     /**

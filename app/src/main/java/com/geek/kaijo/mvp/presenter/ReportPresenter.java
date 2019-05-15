@@ -174,7 +174,7 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                                     String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
         mModel.addOrUpdateCaseInfo(userId,acceptDate, streetId, communityId, gridId, lat, lng, source,
                 address, description, caseAttribute, casePrimaryCategory, caseSecondaryCategory,
-                caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList)
+                caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList,"")
                 .compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<CaseInfo>(mErrorHandler) {

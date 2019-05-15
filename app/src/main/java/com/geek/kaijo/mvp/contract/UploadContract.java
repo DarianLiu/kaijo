@@ -1,6 +1,7 @@
 package com.geek.kaijo.mvp.contract;
 
 import com.geek.kaijo.mvp.model.entity.BaseResult;
+import com.geek.kaijo.mvp.model.entity.CaseInfo;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.model.entity.User;
 import com.jess.arms.mvp.IView;
@@ -19,11 +20,15 @@ public interface UploadContract {
 
         void uploadSuccess(UploadFile uploadPhoto);
 
+        void uploadCaseInfoSuccess(CaseInfo caseInfoEntity);
+
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
         Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);
         Observable<BaseResult<String>> addCaseAttach(RequestBody info);
+
+        Observable<BaseResult<CaseInfo>> addOrUpdateCaseInfo(RequestBody info);
     }
 }

@@ -46,7 +46,7 @@ public interface ReportContract {
                                                              String address, String description, String caseAttribute,
                                                              String casePrimaryCategory, String caseSecondaryCategory,
                                                              String caseChildCategory, String handleType, String whenType,
-                                                             String caseProcessRecordID,List<UploadFile> uploadPhotoList);
+                                                             String caseProcessRecordID,List<UploadFile> uploadPhotoList,String handleResultDescription);
 
 
         Observable<UploadFile> uploadFile(List<MultipartBody.Part> parts);

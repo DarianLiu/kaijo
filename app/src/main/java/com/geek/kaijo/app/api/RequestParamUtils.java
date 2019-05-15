@@ -31,7 +31,7 @@ public class RequestParamUtils {
                                                   String address, String description, String caseAttribute,
                                                   String casePrimaryCategory, String caseSecondaryCategory,
                                                   String caseChildCategory, String handleType, String whenType,
-                                                  String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
+                                                  String caseProcessRecordID,List<UploadFile> uploadPhotoList,String handleResultDescription) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("userId", userId);
         jsonObject.addProperty("acceptDate", acceptDate + ":00");
@@ -50,6 +50,7 @@ public class RequestParamUtils {
         jsonObject.addProperty("handleType", handleType);
         jsonObject.addProperty("whenType", whenType);
         jsonObject.addProperty("caseProcessRecordID", caseProcessRecordID);
+        jsonObject.addProperty("handleResultDescription", handleResultDescription);
         jsonObject.add("attachList", new Gson().toJsonTree(uploadPhotoList));
 
         return RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),

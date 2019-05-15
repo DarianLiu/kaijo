@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">海城</string>
+    <string name="app_name">腾鳌镇工作协同系统</string>
 
     <!--底部菜单-->
     <string name="tab_case">案件管理</string>

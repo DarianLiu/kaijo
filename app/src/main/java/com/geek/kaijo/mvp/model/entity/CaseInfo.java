@@ -18,8 +18,10 @@ public class CaseInfo implements Serializable {
 
     static final long serialVersionUID = 536871008;
 
+//    @Id(autoincrement = true)
+//    private long id;
     @Id
-    private String id; //本地数据库ID
+    private long id;
     private int currPage;
     private int pageSize;
     private String caseId;
@@ -91,8 +93,8 @@ public class CaseInfo implements Serializable {
     private List<UploadCaseFile> uploadCaseFileList;
     private String fileListGson;  // 暂存 待上传的文件list
 
-    @Generated(hash = 1025839969)
-    public CaseInfo(String id, int currPage, int pageSize, String caseId,
+    @Generated(hash = 1586258811)
+    public CaseInfo(long id, int currPage, int pageSize, String caseId,
             long createTime, String createUser, long modifyTime, String modifyUser,
             String acceptDate, String address, String streetId,
             String caseChildCategory, String caseNumber, String casePrimaryCategory,
@@ -185,6 +187,14 @@ public class CaseInfo implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getCurrPage() {
@@ -721,13 +731,5 @@ public class CaseInfo implements Serializable {
 
     public void setFileListGson(String fileListGson) {
         this.fileListGson = fileListGson;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

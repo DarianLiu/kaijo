@@ -1,5 +1,9 @@
 package com.geek.kaijo.mvp.model.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +11,7 @@ import java.util.List;
  * Created by LiuLi on 2018/9/8.
  */
 
-public class Case {
+public class Case implements Parcelable{
 
     private String caseId;
     private String source;
@@ -32,6 +36,49 @@ public class Case {
     private List<ButtonLabel> buttonList;
     private Double lat;
     private Double lng;
+
+    protected Case(Parcel in) {
+        caseId = in.readString();
+        source = in.readString();
+        username = in.readString();
+        mobile = in.readString();
+        address = in.readString();
+        streetName = in.readString();
+        communityName = in.readString();
+        gridName = in.readString();
+        caseAttribute = in.readString();
+        casePrimaryCategory = in.readString();
+        caseSecondaryCategory = in.readString();
+        caseChildCategory = in.readString();
+        acceptDate = in.readString();
+        description = in.readString();
+        caseCode = in.readString();
+        processId = in.readString();
+        userId = in.readString();
+        firstWorkunit = in.readString();
+        if (in.readByte() == 0) {
+            lat = null;
+        } else {
+            lat = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            lng = null;
+        } else {
+            lng = in.readDouble();
+        }
+    }
+
+    public static final Creator<Case> CREATOR = new Creator<Case>() {
+        @Override
+        public Case createFromParcel(Parcel in) {
+            return new Case(in);
+        }
+
+        @Override
+        public Case[] newArray(int size) {
+            return new Case[size];
+        }
+    };
 
     public String getCaseId() {
         return caseId;
@@ -207,5 +254,44 @@ public class Case {
 
     public void setLng(Double lng) {
         this.lng = lng;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(caseId);
+        parcel.writeString(source);
+        parcel.writeString(username);
+        parcel.writeString(mobile);
+        parcel.writeString(address);
+        parcel.writeString(streetName);
+        parcel.writeString(communityName);
+        parcel.writeString(gridName);
+        parcel.writeString(caseAttribute);
+        parcel.writeString(casePrimaryCategory);
+        parcel.writeString(caseSecondaryCategory);
+        parcel.writeString(caseChildCategory);
+        parcel.writeString(acceptDate);
+        parcel.writeString(description);
+        parcel.writeString(caseCode);
+        parcel.writeString(processId);
+        parcel.writeString(userId);
+        parcel.writeString(firstWorkunit);
+        if (lat == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(lat);
+        }
+        if (lng == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(lng);
+        }
     }
 }

@@ -66,10 +66,10 @@ public class ReportModel extends BaseModel implements ReportContract.Model {
                                                                 String address, String description, String caseAttribute,
                                                                 String casePrimaryCategory, String caseSecondaryCategory,
                                                                 String caseChildCategory, String handleType, String whenType,
-                                                                String caseProcessRecordID,List<UploadFile> uploadPhotoList) {
+                                                                String caseProcessRecordID,List<UploadFile> uploadPhotoList,String handleResultDescription) {
         RequestBody requestBody = RequestParamUtils.addOrUpdateCaseInfo(userId,acceptDate, streetId,
                 communityId, gridId, lat, lng, source, address, description, caseAttribute,
-                casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList);
+                casePrimaryCategory, caseSecondaryCategory, caseChildCategory, handleType, whenType, caseProcessRecordID,uploadPhotoList,handleResultDescription);
         return mRepositoryManager.obtainRetrofitService(AppService.class).addOrUpdateCaseInfo(requestBody);
     }
 

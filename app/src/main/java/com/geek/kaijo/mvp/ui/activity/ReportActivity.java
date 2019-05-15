@@ -839,10 +839,43 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
 
                 if (type.equals(next)) {//下一步
                     if (checkParams(caseTime, address, description) && mPresenter != null) {
-                        mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(), caseTime, mStreetId, mCommunityId, mGridId,
-                                String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
-                                mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
-                                mCaseChildCategory, handleType, whenType, caseProcessRecordID, uploadPhotoList);
+
+//                        if (caseInfo != null) {
+//                            caseInfoEntity.setId(caseInfo.getId());
+//                            caseInfoEntity.setFileListGson(caseInfo.getFileListGson());
+//                            caseInfoEntity.setHandleResult(caseInfo.getHandleResult());
+//                        } else {
+//                            caseInfoEntity.setId(caseInfoEntity.getCaseId());
+//                        }
+                        if(caseInfo==null){
+                            caseInfo = new CaseInfo();
+                            caseInfo.setId(System.currentTimeMillis());
+                        }
+                        caseInfo.setUserId(userInfo.getUserId());
+                        caseInfo.setAcceptDate(caseTime);
+                        caseInfo.setStreetId(mStreetId);
+                        caseInfo.setCommunityId(mCommunityId);
+                        caseInfo.setGridId(mGridId);
+                        caseInfo.setLat(String.valueOf(mLat));
+                        caseInfo.setLng(String.valueOf(mLng));
+                        caseInfo.setSource("17");
+                        caseInfo.setAddress(address);
+                        caseInfo.setDescription(description);
+                        caseInfo.setCaseAttribute(mCaseAttributeId);
+                        caseInfo.setCasePrimaryCategory(mCasePrimaryCategory);
+                        caseInfo.setCaseSecondaryCategory(mCaseSecondaryCategory);
+                        caseInfo.setCaseChildCategory(mCaseChildCategory);
+//                        caseInfo.setHandleType(Integer.parseInt(handleType));
+
+
+                        Intent intent = new Intent(this, UploadActivity.class);
+                        intent.putExtra("caseInfo", caseInfo);
+                        startActivityForResult(intent,1003);
+
+//                        mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(), caseTime, mStreetId, mCommunityId, mGridId,
+//                                String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
+//                                mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
+//                                mCaseChildCategory, handleType, whenType, caseProcessRecordID, uploadPhotoList);
                     }
                 } else if (type.equals(submit)) {//提交
 
@@ -1060,7 +1093,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == 1) {
+        if (requestCode == 1003 && resultCode == 1003) {
             if (caseInfo != null) {  //暂存 回暂存界面刷新
                 setResult(1);
             }
@@ -1222,9 +1255,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     caseInfoEntity.setId(caseInfo.getId());
                     caseInfoEntity.setFileListGson(caseInfo.getFileListGson());
                     caseInfoEntity.setHandleResult(caseInfo.getHandleResult());
-                } else {
-                    caseInfoEntity.setId(caseInfoEntity.getCaseId());
                 }
+//                else {
+//                    caseInfoEntity.setId(caseInfoEntity.getCaseId());
+//                }
                 Intent intent = new Intent(this, UploadActivity.class);
                 intent.putExtra("caseInfo", caseInfoEntity);
                 launchActivity(intent);

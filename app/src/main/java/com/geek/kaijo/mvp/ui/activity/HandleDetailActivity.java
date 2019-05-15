@@ -320,6 +320,9 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                 }
                 break;
             case R.id.tv_View_handle_process://查看处理过程
+                Intent intent = new Intent(this,ProcessActivity.class);
+                intent.putExtra("Case",aCase);
+                startActivity(intent);
                 break;
             case R.id.tv_upload_image://上传照片
                 isWhich = 1;

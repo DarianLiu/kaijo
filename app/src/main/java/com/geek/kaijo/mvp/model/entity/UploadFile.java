@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class UploadFile implements Parcelable{
+    public int caseId;
     public static final int width = 340;
     public static final int height = 600;
     private String fileName;   //文件本地路径
@@ -16,6 +17,7 @@ public class UploadFile implements Parcelable{
     public int caseProcessRecordId = 11;  //节点ID
     public int whenType = 1;    // 1整改前  2整改后
     public int fileType = 0;   //0 图片  视频 1
+    public int handleType = 1;   //直接处理传1 ，非直接处理传2
 
     public UploadFile(){}
 
