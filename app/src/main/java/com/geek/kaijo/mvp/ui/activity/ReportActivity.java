@@ -398,7 +398,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             if (granted) {
                 //启动定位
                 showLoading();
-                GPSUtils.getInstance().startLocation(locationListener);
+                GPSUtils.getInstance().setOnLocationListener(locationListener);
                 myHandler.sendEmptyMessageDelayed(1,Constant.location_loadTime);
             } else {
                 showPermissionsDialog();

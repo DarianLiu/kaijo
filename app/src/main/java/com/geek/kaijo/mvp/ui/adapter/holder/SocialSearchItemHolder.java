@@ -67,10 +67,11 @@ public class SocialSearchItemHolder extends BaseHolder<ThingPositionInfo> {
 //        });
 
         ivSearch.setOnClickListener(v -> {
-            String key = etSearch.getText().toString();
-            if (!TextUtils.isEmpty(key)) {
-                EventBus.getDefault().post(new ServiceEvent(3, key));
-            }
+            String key = etSearch.getText().toString().trim();
+//            if (!TextUtils.isEmpty(key)) {
+//                EventBus.getDefault().post(new ServiceEvent(3, key));
+//            }
+            EventBus.getDefault().post(new ServiceEvent(3, key));
         });
 
 //        ivSearch.setOnClickListener(v ->

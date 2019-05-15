@@ -192,7 +192,7 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
                 break;
             case R.id.tv_map:
                 showLoading();
-                GPSUtils.getInstance().startLocation(locationListener);
+                GPSUtils.getInstance().setOnLocationListener(locationListener);
                 myHandler.sendEmptyMessageDelayed(1,5000);
                 break;
             case R.id.btn_save_back:

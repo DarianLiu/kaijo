@@ -137,7 +137,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         filter.addAction(Constant.service_patrol);
         registerReceiver(locationReceiver, filter);
 
-        GPSUtils.getInstance().startLocation(locationListener);
+        GPSUtils.getInstance().setOnLocationListener(locationListener);
     }
 
     @Override

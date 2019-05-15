@@ -71,6 +71,7 @@ public class UploadPresenter extends BasePresenter<UploadContract.Model, UploadC
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
+                        mRootView.uploadPhotoError();
                     }
                 });
     }
@@ -173,6 +174,7 @@ public class UploadPresenter extends BasePresenter<UploadContract.Model, UploadC
                     public void onNext(UploadFile uploadPhoto) {
                         mRootView.uploadSuccess(uploadPhoto);
                     }
+
                 });
     }
 

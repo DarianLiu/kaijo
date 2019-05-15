@@ -493,7 +493,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         switch (view.getId()) {
             case R.id.btn_location_obtain:  //定位
                 showLoading();
-                GPSUtils.getInstance().startLocation(locationListener);
+                GPSUtils.getInstance().setOnLocationListener(locationListener);
                 myHandler.sendEmptyMessageDelayed(1,Constant.location_loadTime);
                 break;
             case R.id.btn_submit_pic:

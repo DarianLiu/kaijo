@@ -26,6 +26,7 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -94,6 +95,11 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                     @Override
                     public void onNext(List<CaseAttribute> caseAttributeList) {
                         mRootView.setCaseAttributeList(caseAttributeList);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
                     }
                 });
     }
