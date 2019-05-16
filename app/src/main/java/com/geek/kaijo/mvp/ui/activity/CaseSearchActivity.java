@@ -307,10 +307,11 @@ public class CaseSearchActivity extends BaseActivity<CaseSearchPresenter> implem
 //                }
                 break;
             case R.id.tv_cancel://取消
-                spinnerCaseAttribute.setSelection(0);
-                spinnerCategoryLarge.setSelection(0);
-                spinnerCategorySmall.setSelection(0);
-                spinnerCategorySub.setSelection(0);
+//                spinnerCaseAttribute.setSelection(0);
+//                spinnerCategoryLarge.setSelection(0);
+//                spinnerCategorySmall.setSelection(0);
+//                spinnerCategorySub.setSelection(0);
+                finish();
                 break;
         }
     }

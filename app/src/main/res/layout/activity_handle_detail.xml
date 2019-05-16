@@ -107,13 +107,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:background="@drawable/shape_frame_bg_normal"
+                android:background="@drawable/selector_frame_background"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/btn_view_location"
                 android:textColor="@color/color_text_title"
                 android:textSize="@dimen/t16" />
-
+            <!--android:background="@drawable/shape_frame_bg_normal"-->
             <!--<View-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="1px"-->
@@ -158,7 +158,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:background="@drawable/shape_frame_bg_normal"
+                android:background="@drawable/selector_frame_background"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/btn_view_handle_process"
@@ -301,35 +301,36 @@
                 android:paddingTop="8dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="8dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/btn_submit_pic"
                 android:textColor="@color/color_title_text"
                 android:textSize="@dimen/t14" />
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/color_text_tip" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="照片列表"
-                android:textColor="@color/color_text_black"
-                android:textSize="@dimen/t14" />
+                android:orientation="vertical"
+                android:background="@color/color_bg_gray"
+                android:layout_marginLeft="15dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/file_top_line"/>
+                <TextView
+                    android:id="@+id/tv_photo_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="10dp"
+                    android:text="照片列表"
+                    android:textColor="@color/color_text_title"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/ra_picture_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/ra_picture_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/color_text_tip" />
             <!--上传视频-->
             <TextView
                 android:id="@+id/ra_video"
@@ -342,35 +343,35 @@
                 android:paddingTop="8dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="8dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/btn_submit_video"
                 android:textColor="@color/color_title_text"
                 android:textSize="@dimen/t14" />
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/color_text_tip" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="视频列表"
-                android:textColor="@color/color_text_black"
-                android:textSize="@dimen/t14" />
+                android:orientation="vertical"
+                android:background="@color/color_bg_gray"
+                android:layout_marginLeft="15dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/file_top_line"/>
+                <TextView
+                    android:id="@+id/tv_video_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="10dp"
+                    android:text="视频列表"
+                    android:textColor="@color/color_text_title"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/ra_video_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/color_text_tip" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/ra_video_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
 
             <RelativeLayout

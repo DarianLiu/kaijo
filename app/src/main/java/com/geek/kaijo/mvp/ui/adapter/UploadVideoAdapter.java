@@ -41,6 +41,7 @@ public class UploadVideoAdapter extends RecyclerView.Adapter {
 
     public interface OnItemOnClicklisten {
         void onItemDeleteClick(View v, int position);
+        void onItemAgainUploadClick(View v, int position);
     }
 
     @Override
@@ -65,24 +66,21 @@ public class UploadVideoAdapter extends RecyclerView.Adapter {
         Bitmap bitmap = VideoUtil.getVideoThumbnail(list.get(position).getFileName(), UploadActivity.imag_width, UploadActivity.imag_height,-1);
         mHolder.img_upload_phto.setImageBitmap(bitmap);
 
-        if(!TextUtils.isEmpty(list.get(position).getUrl())){
+//        if(!TextUtils.isEmpty(list.get(position).getUrl())){
             if(list.get(position).getIsSuccess()==1){
-                mHolder.tv_status.setVisibility(View.VISIBLE);
-                mHolder.progress.setVisibility(View.GONE);
                 mHolder.tv_status.setText("上传成功");
-                mHolder.tv_upload_delete.setText("删除");
+                mHolder.rl_delete.setVisibility(View.VISIBLE);
+                mHolder.again_upload.setVisibility(View.GONE);
             }else if(list.get(position).getIsSuccess()==0) {
-                mHolder.tv_status.setVisibility(View.GONE);
-                mHolder.progress.setVisibility(View.VISIBLE);
                 mHolder.tv_status.setText("上传中");
-                mHolder.tv_upload_delete.setText("上传中");
+                mHolder.rl_delete.setVisibility(View.GONE);
             }else {
-                mHolder.tv_status.setVisibility(View.VISIBLE);
-                mHolder.progress.setVisibility(View.GONE);
                 mHolder.tv_status.setText("上传失败");
-                mHolder.tv_upload_delete.setText("重新上传");
+                mHolder.rl_delete.setVisibility(View.VISIBLE);
+
+                mHolder.again_upload.setVisibility(View.VISIBLE);
             }
-        }
+//        }
 
 
         mHolder.tv_size.setText(list.get(position).getFileSize());
@@ -92,6 +90,15 @@ public class UploadVideoAdapter extends RecyclerView.Adapter {
             public void onClick(View view) {
                 if(onItemOnClicklisten!=null){
                     onItemOnClicklisten.onItemDeleteClick(view,position);
+                }
+            }
+        });
+
+        mHolder.again_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(onItemOnClicklisten!=null){
+                    onItemOnClicklisten.onItemAgainUploadClick(view,position);
                 }
             }
         });
@@ -106,6 +113,7 @@ public class UploadVideoAdapter extends RecyclerView.Adapter {
         public TextView tv_upload_delete;
         public RelativeLayout rl_delete;
         public ProgressBar progress;
+        public TextView again_upload;
 
         public BleViewHolder(View view) {
             super(view);
@@ -116,6 +124,7 @@ public class UploadVideoAdapter extends RecyclerView.Adapter {
             rl_delete = view.findViewById(R.id.rl_delete);
             tv_upload_delete = view.findViewById(R.id.tv_upload_delete);
             progress = view.findViewById(R.id.progress);
+            again_upload = view.findViewById(R.id.again_upload);
         }
     }
 }

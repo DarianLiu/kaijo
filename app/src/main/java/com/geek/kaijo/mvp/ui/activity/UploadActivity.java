@@ -271,22 +271,22 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         adapter.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    uploadPhotoList.remove(position);
-                    adapter.notifyDataSetChanged();
-                } else if (uploadPhotoList.get(position).getIsSuccess() == 0) {
-
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
-                    }
-                }
+                uploadPhotoList.remove(position);
+                adapter.notifyDataSetChanged();
                 if (adapter.getItemCount() != 0) {
                     tv_photo_list.setVisibility(View.GONE);
                 } else {
                     tv_photo_list.setVisibility(View.VISIBLE);
                 }
 
+            }
+
+            @Override
+            public void onItemAgainUploadClick(View v, int position) {  //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    isWhich = 3;
+                }
             }
         });
         if (adapter.getItemCount() != 0) {
@@ -308,22 +308,22 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         adapter_later.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (uploadPhotoList_later.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    uploadPhotoList_later.remove(position);
-                    adapter_later.notifyDataSetChanged();
-                } else if (uploadPhotoList_later.get(position).getIsSuccess() == 0) {
-
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(uploadPhotoList_later.get(position).getFileName());
-                    }
-                }
+                uploadPhotoList_later.remove(position);
+                adapter_later.notifyDataSetChanged();
                 if (adapter.getItemCount() != 0) {
                     tv_photo_list.setVisibility(View.GONE);
                 } else {
                     tv_photo_list.setVisibility(View.VISIBLE);
                 }
 
+            }
+
+            @Override
+            public void onItemAgainUploadClick(View v, int position) {  //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(uploadPhotoList_later.get(position).getFileName());
+                    isWhich = 4;
+                }
             }
         });
         if (adapter_later.getItemCount() != 0) {
@@ -345,22 +345,22 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         adapter_video.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (videoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    videoList.remove(position);
-                    adapter_video.notifyDataSetChanged();
-                } else if (videoList.get(position).getIsSuccess() == 0) {
-
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(videoList.get(position).getFileName());
-                    }
-                }
+                videoList.remove(position);
+                adapter_video.notifyDataSetChanged();
                 if (adapter_video.getItemCount() != 0) {
                     tv_photo_list.setVisibility(View.GONE);
                 } else {
                     tv_photo_list.setVisibility(View.VISIBLE);
                 }
 
+            }
+
+            @Override
+            public void onItemAgainUploadClick(View v, int position) {  //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(videoList.get(position).getFileName());
+                    isWhich = 1;
+                }
             }
         });
         if (adapter_video.getItemCount() != 0) {
@@ -382,22 +382,22 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Upl
         adapter_video_later.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (videoList_later.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    videoList_later.remove(position);
-                    adapter_video_later.notifyDataSetChanged();
-                } else if (videoList_later.get(position).getIsSuccess() == 0) {
-
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(videoList_later.get(position).getFileName());
-                    }
-                }
+                videoList_later.remove(position);
+                adapter_video_later.notifyDataSetChanged();
                 if (adapter_video_later.getItemCount() != 0) {
                     tv_photo_list.setVisibility(View.GONE);
                 } else {
                     tv_photo_list.setVisibility(View.VISIBLE);
                 }
 
+            }
+
+            @Override
+            public void onItemAgainUploadClick(View v, int position) {  //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(videoList_later.get(position).getFileName());
+                    isWhich = 2;
+                }
             }
         });
         if (adapter_video_later.getItemCount() != 0) {

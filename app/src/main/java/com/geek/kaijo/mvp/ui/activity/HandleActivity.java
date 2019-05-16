@@ -140,7 +140,9 @@ public class HandleActivity extends BaseActivity<HandlePresenter> implements Han
         mAdapter = new CaseAdapter(mCaseList);
         mAdapter.setOnItemClickListener((view, viewType, data, position) -> {
             if(isCaseSearch){  //案件查询
-
+                Intent intent = new Intent(this,ProcessActivity.class);
+                intent.putExtra("Case",mCaseList.get(position));
+                startActivity(intent);
             }else {
                 Intent intent = new Intent(HandleActivity.this, HandleDetailActivity.class);
                 intent.putExtra("curNode", curNode);

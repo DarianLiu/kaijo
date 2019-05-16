@@ -146,6 +146,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     @BindView(R.id.rp_bottom_layout)
     LinearLayout raBottomLayout;
 
+    @BindView(R.id.tv_photo_list)
+    TextView tv_photo_list;
+    @BindView(R.id.tv_video_list)
+    TextView tv_video_list;
+
     private int entry_type;
 
     private CustomPopupWindow mTimePickerPopupWindow;//时间选择弹出框
@@ -200,21 +205,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
     private CaseInfo caseInfo;
     private MyHandler myHandler;
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     protected void onDestroy() {
@@ -294,10 +284,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         initSpinnerCaseAttribute();
         initSpinnerCategory();
 
-
         //照片列表
+        DividerItemDecoration divider_photo = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL); //分割线
+        raPictureList.addItemDecoration(divider_photo);
         raPictureList.setLayoutManager(new LinearLayoutManager(this));
-        raPictureList.setHasFixedSize(true);
 
         uploadPhotoList = new ArrayList<>();
 
@@ -327,16 +317,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
             }
         }
 
-//         streetList = DataHelper.getDeviceData(this,Constant.SP_KEY_STREETLIST);
-//        if(streetList!=null && streetList.size()>0){
-//            showStreet(streetList);
-//        }
         if (mPresenter != null) {
             mPresenter.findAllStreetCommunity(0);
         }
 
     }
-
 
 
     /**
@@ -526,8 +511,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 } else {
                     mCaseAttributeId = "0";
                 }
-//                mCaseAttributeId = String.valueOf(position);
-
                 spinnerCategoryLarge.setSelection(0);
                 mCategoryLarge.clear();
                 mCategoryLarge.add(mCaseAttribute);
@@ -810,8 +793,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 break;
             case R.id.btn_location_obtain://获取坐标
                 checkPermissionAndAction();
-//                mPresenter.httpUploadGpsLocation(116.486073,40.000565);
-//                mPresenter.httpXmlRequest(116.486073,40.000565);
                 break;
             case R.id.btn_next://下一步
                 String type = btnNext.getText().toString();
@@ -840,13 +821,6 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 if (type.equals(next)) {//下一步
                     if (checkParams(caseTime, address, description) && mPresenter != null) {
 
-//                        if (caseInfo != null) {
-//                            caseInfoEntity.setId(caseInfo.getId());
-//                            caseInfoEntity.setFileListGson(caseInfo.getFileListGson());
-//                            caseInfoEntity.setHandleResult(caseInfo.getHandleResult());
-//                        } else {
-//                            caseInfoEntity.setId(caseInfoEntity.getCaseId());
-//                        }
                         if(caseInfo==null){
                             caseInfo = new CaseInfo();
                             caseInfo.setId(System.currentTimeMillis());
@@ -865,50 +839,26 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                         caseInfo.setCasePrimaryCategory(mCasePrimaryCategory);
                         caseInfo.setCaseSecondaryCategory(mCaseSecondaryCategory);
                         caseInfo.setCaseChildCategory(mCaseChildCategory);
-//                        caseInfo.setHandleType(Integer.parseInt(handleType));
-
 
                         Intent intent = new Intent(this, UploadActivity.class);
                         intent.putExtra("caseInfo", caseInfo);
                         startActivityForResult(intent,1003);
 
-//                        mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(), caseTime, mStreetId, mCommunityId, mGridId,
-//                                String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
-//                                mCaseAttributeId, mCasePrimaryCategory, mCaseSecondaryCategory,
-//                                mCaseChildCategory, handleType, whenType, caseProcessRecordID, uploadPhotoList);
                     }
                 } else if (type.equals(submit)) {//提交
 
-                    caseFileList = new ArrayList<>();
-                    if (uploadPhotoList != null) { //照片整改前
-                        for (int i = 0; i < uploadPhotoList.size(); i++) {
-                            UploadCaseFile caseFile = new UploadCaseFile();
-                            caseFile.setCaseId(Integer.valueOf(mCaseAttributeId));
-                            caseFile.setUrl(uploadPhotoList.get(i).getFileRelativePath());
-                            caseFile.setCaseProcessRecordId(Integer.valueOf(caseProcessRecordID));
-                            caseFile.setFileType(0); //照片
-                            caseFile.setWhenType(1); //整改前
-                            caseFile.setHandleType(2);
-                            caseFileList.add(caseFile);
-                        }
-                    }
-                    if (uploadVideoList != null) { //照片整改前
-                        for (int i = 0; i < uploadVideoList.size(); i++) {
-                            UploadCaseFile caseFile = new UploadCaseFile();
-                            caseFile.setCaseId(Integer.valueOf(mCaseAttributeId));
-                            caseFile.setUrl(uploadVideoList.get(i).getFileRelativePath());
-                            caseFile.setCaseProcessRecordId(Integer.valueOf(caseProcessRecordID));
-                            caseFile.setFileType(1); //视频
-                            caseFile.setWhenType(1);
-                            caseFile.setHandleType(2);
-                            caseFileList.add(caseFile);
-                        }
-                    }
                     if (mPresenter != null) {
-//                        mPresenter.addCaseAttach(caseFileList);
                         List<UploadFile> uploadFileList = new ArrayList<>();
-                        uploadFileList.addAll(uploadPhotoList);
-                        uploadFileList.addAll(uploadVideoList);
+                        for(int i=0;i<uploadPhotoList.size();i++){
+                            if(!TextUtils.isEmpty(uploadPhotoList.get(i).getUrl())){
+                                uploadFileList.add(uploadPhotoList.get(i));
+                            }
+                        }
+                        for(int i=0;i<uploadVideoList.size();i++){
+                            if(!TextUtils.isEmpty(uploadVideoList.get(i).getUrl())){
+                                uploadFileList.add(uploadVideoList.get(i));
+                            }
+                        }
                         if (checkParams(caseTime, address, description) && mPresenter != null && userInfo != null) {
                             mPresenter.addOrUpdateCaseInfo(userInfo.getUserId(), caseTime, mStreetId, mCommunityId, mGridId,
                                     String.valueOf(mLat), String.valueOf(mLng), "17", address, description,
@@ -992,9 +942,7 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
      */
     @Override
     public void setAllStreetCommunity(List<Street> list) {
-//        if(streetList==null || streetList.size()==0){  //如果有缓存 就不更新UI
         showStreet(list);
-//        }
     }
 
     private void showStreet(List<Street> list) {
@@ -1081,22 +1029,11 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         builder.show();
     }
 
-    @Subscriber(tag = "location")
-    private void receivedLocation(LocationEvent event) {
-        mLat = event.getLat();
-        mLng = event.getLng();
-
-        tvLocationLatitude.setText(String.valueOf(event.getLat()));
-        tvLocationLongitude.setText(String.valueOf(event.getLng()));
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1003 && resultCode == 1003) {
-            if (caseInfo != null) {  //暂存 回暂存界面刷新
-                setResult(1);
-            }
+            setResult(1);
             finish();
         } else if (resultCode == RESULT_OK) {
             switch (requestCode) {
@@ -1162,19 +1099,29 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         adapter1.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    uploadPhotoList.remove(position);
-                    adapter1.notifyDataSetChanged();
-                } else if (uploadPhotoList.get(position).getIsSuccess() == 0) {
-
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
-                    }
+                uploadPhotoList.remove(position);
+                adapter1.notifyDataSetChanged();
+                if (adapter1.getItemCount() != 0) {
+                    tv_photo_list.setVisibility(View.GONE);
+                } else {
+                    tv_photo_list.setVisibility(View.VISIBLE);
                 }
+            }
 
+            @Override
+            public void onItemAgainUploadClick(View v, int position) {
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    isWhich = 1;
+                }
             }
         });
+
+        if (adapter1.getItemCount() != 0) {
+            tv_photo_list.setVisibility(View.GONE);
+        } else {
+            tv_photo_list.setVisibility(View.VISIBLE);
+        }
     }
 
     //视频
@@ -1188,18 +1135,28 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         adapterVideo.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (uploadVideoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    uploadVideoList.remove(position);
-                    adapterVideo.notifyDataSetChanged();
-                } else if (uploadVideoList.get(position).getIsSuccess() == 0) {
+                uploadVideoList.remove(position);
+                adapterVideo.notifyDataSetChanged();
+                if (adapterVideo.getItemCount() != 0) {
+                    tv_video_list.setVisibility(View.GONE);
+                } else {
+                    tv_video_list.setVisibility(View.VISIBLE);
+                }
+            }
 
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(uploadVideoList.get(position).getFileName());
-                    }
+            @Override
+            public void onItemAgainUploadClick(View v, int position) { //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(uploadVideoList.get(position).getFileName());
+                    isWhich = 2;
                 }
             }
         });
+        if (adapterVideo.getItemCount() != 0) {
+            tv_video_list.setVisibility(View.GONE);
+        } else {
+            tv_video_list.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -1256,21 +1213,35 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                     caseInfoEntity.setFileListGson(caseInfo.getFileListGson());
                     caseInfoEntity.setHandleResult(caseInfo.getHandleResult());
                 }
-//                else {
-//                    caseInfoEntity.setId(caseInfoEntity.getCaseId());
-//                }
                 Intent intent = new Intent(this, UploadActivity.class);
                 intent.putExtra("caseInfo", caseInfoEntity);
                 launchActivity(intent);
                 break;
             case 1:
-//                if (mPresenter != null) {
-//                    mPresenter.addCaseAttach(caseFileList);
-//                }
                 finish();
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void uploadPhotoError() {
+        if(uploadPhotoList!=null){
+            for (int i = 0; i < uploadPhotoList.size(); i++) {
+                if (TextUtils.isEmpty(uploadPhotoList.get(i).getUrl())) {
+                    uploadPhotoList.get(i).setIsSuccess(2);
+                    adapter1.notifyItemChanged(i);
+                }
+            }
+        }
+        if(uploadVideoList!=null){
+            for (int i = 0; i < uploadVideoList.size(); i++) {
+                if (TextUtils.isEmpty(uploadVideoList.get(i).getUrl())) {
+                    uploadVideoList.get(i).setIsSuccess(2);
+                    adapterVideo.notifyItemChanged(i);
+                }
+            }
         }
     }
 
