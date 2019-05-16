@@ -324,12 +324,13 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
                     uploadPhotoList.remove(position);
                     photoAdapter.notifyDataSetChanged();
-                } else if (uploadPhotoList.get(position).getIsSuccess() == 0) {
+                }
+            }
 
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
-                    }
+            @Override
+            public void onItemAgainUploadClick(View v, int position) { //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
                 }
             }
         });
@@ -348,12 +349,13 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 if (fileList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
                     fileList.remove(position);
                     fileAdapter.notifyDataSetChanged();
-                } else if (fileList.get(position).getIsSuccess() == 0) {
+                }
+            }
 
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(fileList.get(position).getFileName());
-                    }
+            @Override
+            public void onItemAgainUploadClick(View v, int position) { //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(fileList.get(position).getFileName());
                 }
             }
         });
@@ -493,7 +495,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         switch (view.getId()) {
             case R.id.btn_location_obtain:  //定位
                 showLoading();
-                GPSUtils.getInstance().startLocation(locationListener);
+                GPSUtils.getInstance().setOnLocationListener(locationListener);
                 myHandler.sendEmptyMessageDelayed(1,Constant.location_loadTime);
                 break;
             case R.id.btn_submit_pic:

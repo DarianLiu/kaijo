@@ -73,7 +73,7 @@ public class LocalService extends Service {
         filter.addAction(Constant.SP_KEY_Patrol_state);
         registerReceiver(locationReceiver, filter);
 
-        GPSUtils.getInstance().startLocation(locationListener);
+        GPSUtils.getInstance().setOnLocationListener(locationListener);
         initData();
     }
 

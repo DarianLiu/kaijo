@@ -82,7 +82,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     EditText etSituationDescription;
     @BindView(R.id.tv_upload_image)
     TextView tvUploadImage;
-//    @BindView(R.id.ll_img_list)
+    //    @BindView(R.id.ll_img_list)
 //    LinearLayout llImgList;
     @BindView(R.id.tv_sign_in)
     TextView tvSignIn;
@@ -116,6 +116,10 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     @BindView(R.id.la_ratinbar)
     LinearLayout la_ratinbar;
 
+    @BindView(R.id.tv_photo_list)
+    TextView tv_photo_list;
+    @BindView(R.id.tv_video_list)
+    TextView tv_video_list;
 
 
     private List<UploadFile> uploadPhotoList;
@@ -152,19 +156,19 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         String caseId = getIntent().getStringExtra("case_id");
         String caseAttribute = getIntent().getStringExtra("case_attribute");
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
-        if (mPresenter != null && userInfo!=null) {
-            mPresenter.findCaseInfoByMap(caseId, caseAttribute,userInfo.getUserId());
+        if (mPresenter != null && userInfo != null) {
+            mPresenter.findCaseInfoByMap(caseId, caseAttribute, userInfo.getUserId());
         }
-        if(curNode==12){
+        if (curNode == 12) {
             tvToolbarTitle.setText("处理详情页");
 //            handle_radioGroup.setVisibility(View.VISIBLE);
-        }else if(curNode==13){
+        } else if (curNode == 13) {
             tvToolbarTitle.setText("核实详情页");
 //            true_radio.setVisibility(View.VISIBLE);
-        }else if(curNode==14){
+        } else if (curNode == 14) {
             tvToolbarTitle.setText("核查详情页");
 //            radioGroup.setVisibility(View.VISIBLE);
-            la_ratinbar.setVisibility(View.VISIBLE);
+//            la_ratinbar.setVisibility(View.VISIBLE);
         }
 
         /*tvImageList = new TextView(this);
@@ -190,9 +194,9 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                RadioButton radiobutton = (RadioButton)HandleDetailActivity.this.findViewById(radioGroup.getCheckedRadioButtonId());
-                for(int i=0;i<aCase.getButtonList().size();i++){
-                    if(aCase.getButtonList().get(i).getLabel().equals(radiobutton.getText().toString())){
+                RadioButton radiobutton = (RadioButton) HandleDetailActivity.this.findViewById(radioGroup.getCheckedRadioButtonId());
+                for (int i = 0; i < aCase.getButtonList().size(); i++) {
+                    if (aCase.getButtonList().get(i).getLabel().equals(radiobutton.getText().toString())) {
                         radioCheckedPosition = i;
                         break;
                     }
@@ -216,9 +220,10 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 
         tvCaseAddress.setText(Html.fromHtml("<b>地址：</b>" + data.getAddress()));
         tvCaseDescribe.setText(Html.fromHtml("<b>描述：</b>" + data.getDescription()));
-        if(aCase!=null && aCase.getButtonList()!=null){
-            for(int i=0;i<aCase.getButtonList().size();i++){
+        if (aCase != null && aCase.getButtonList() != null) {
+            for (int i = 0; i < aCase.getButtonList().size(); i++) {
                 RadioButton radioButton = new RadioButton(this);
+                radioButton.setTextColor(getResources().getColor(R.color.color_text_title));
 //                radioButton.setId(i);
                 radioButton.setText(aCase.getButtonList().get(i).getLabel());
                 radioGroup.addView(radioButton);
@@ -269,6 +274,26 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     }
 
     @Override
+    public void uploadPhotoError() {
+        if (uploadPhotoList != null) {
+            for (int i = 0; i < uploadPhotoList.size(); i++) {
+                if (TextUtils.isEmpty(uploadPhotoList.get(i).getUrl())) {
+                    uploadPhotoList.get(i).setIsSuccess(2);
+                    adapter1.notifyItemChanged(i);
+                }
+            }
+        }
+        if (uploadVideoList != null) {
+            for (int i = 0; i < uploadVideoList.size(); i++) {
+                if (TextUtils.isEmpty(uploadVideoList.get(i).getUrl())) {
+                    uploadVideoList.get(i).setIsSuccess(2);
+                    adapterVideo.notifyItemChanged(i);
+                }
+            }
+        }
+    }
+
+    @Override
     public void showLoading() {
         if (loadingDialog == null)
             loadingDialog = new LoadingProgressDialog.Builder(this)
@@ -308,11 +333,11 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         finish();
     }
 
-    @OnClick({R.id.tv_view_location, R.id.tv_View_handle_process, R.id.tv_upload_image, R.id.tv_sign_in, R.id.tv_submit, R.id.tv_cancel,R.id.ra_video})
+    @OnClick({R.id.tv_view_location, R.id.tv_View_handle_process, R.id.tv_upload_image, R.id.tv_sign_in, R.id.tv_submit, R.id.tv_cancel, R.id.ra_video})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_view_location://查看坐标
-                if(aCase!=null){
+                if (aCase != null) {
                     Intent intent = new Intent(this, MapActivity.class);
                     intent.putExtra("lat", aCase.getLat());
                     intent.putExtra("lng", aCase.getLng());
@@ -320,8 +345,8 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                 }
                 break;
             case R.id.tv_View_handle_process://查看处理过程
-                Intent intent = new Intent(this,ProcessActivity.class);
-                intent.putExtra("Case",aCase);
+                Intent intent = new Intent(this, ProcessActivity.class);
+                intent.putExtra("Case", aCase);
                 startActivity(intent);
                 break;
             case R.id.tv_upload_image://上传照片
@@ -335,18 +360,27 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
             case R.id.tv_sign_in://签收
                 break;
             case R.id.tv_submit://提交
-                if(TextUtils.isEmpty(etSituationDescription.getText().toString())){
-                    Toast.makeText(this,"描述情况不能为空",Toast.LENGTH_LONG).show();
+                if (TextUtils.isEmpty(etSituationDescription.getText().toString())) {
+                    Toast.makeText(this, "描述情况不能为空", Toast.LENGTH_LONG).show();
                     return;
-                }else{
-                    if(userInfo!=null && aCase!=null){
-                        List<UploadFile> uploadFileList = new ArrayList<>();
-                        uploadFileList.addAll(uploadPhotoList);
-                        uploadFileList.addAll(uploadVideoList);
-                        ButtonLabel buttonLabel = aCase.getButtonList().get(radioCheckedPosition);
-                        if(buttonLabel!=null){
-
+                }
+                if (userInfo != null && aCase != null) {
+                    List<UploadFile> uploadFileList = new ArrayList<>();
+                    for (int i = 0; i < uploadPhotoList.size(); i++) {
+                        if (!TextUtils.isEmpty(uploadPhotoList.get(i).getUrl())) {
+                            uploadFileList.add(uploadPhotoList.get(i));
                         }
+                    }
+                    for (int i = 0; i < uploadVideoList.size(); i++) {
+                        if (!TextUtils.isEmpty(uploadVideoList.get(i).getUrl())) {
+                            uploadFileList.add(uploadVideoList.get(i));
+                        }
+                    }
+                    ButtonLabel buttonLabel = aCase.getButtonList().get(radioCheckedPosition);
+                    if (TextUtils.isEmpty(buttonLabel.getLabel())) {
+                        Toast.makeText(this, "请选择流程节点", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 //                        String label="";
 //                        if(radioGroup.getCheckedRadioButtonId()==ok_radio.getId()){ //审核通过
 //                            label = ok_radio.getText().toString();
@@ -359,8 +393,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 //                        }else if(true_radio.isChecked()){ //核实
 //                            label = true_radio.getText().toString();
 //                        }
-                        mPresenter.addOperate(userInfo.getUserId(),buttonLabel.getLabel(),etSituationDescription.getText().toString(),aCase.getCaseId(),aCase.getProcessId(),buttonLabel.getState()+"","",aCase.getFirstWorkunit(),uploadFileList);
-                    }
+                    mPresenter.addOperate(userInfo.getUserId(), buttonLabel.getLabel(), etSituationDescription.getText().toString(), aCase.getCaseId(), aCase.getProcessId(), buttonLabel.getState() + "", "", aCase.getFirstWorkunit(), uploadFileList);
                 }
 
                 break;
@@ -390,6 +423,7 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
                 .isDragFrame(true)
                 .forResult(PictureConfig.CHOOSE_REQUEST);
     }
+
     /**
      * 视频选择
      */
@@ -416,18 +450,28 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         adapter1.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    uploadPhotoList.remove(position);
-                    adapter1.notifyDataSetChanged();
-                } else if (uploadPhotoList.get(position).getIsSuccess() == 0) {
+                uploadPhotoList.remove(position);
+                adapter1.notifyDataSetChanged();
+                if (adapter1.getItemCount() != 0) {
+                    tv_photo_list.setVisibility(View.GONE);
+                } else {
+                    tv_photo_list.setVisibility(View.VISIBLE);
+                }
+            }
 
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
-                    }
+            @Override
+            public void onItemAgainUploadClick(View v, int position) {  ////上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    isWhich = 1;
                 }
             }
         });
+        if (adapter1.getItemCount() != 0) {
+            tv_photo_list.setVisibility(View.GONE);
+        } else {
+            tv_photo_list.setVisibility(View.VISIBLE);
+        }
     }
 
     //视频
@@ -441,18 +485,28 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
         adapterVideo.setOnItemOnClilcklisten(new UploadVideoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (uploadVideoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    uploadVideoList.remove(position);
-                    adapterVideo.notifyDataSetChanged();
-                } else if (uploadVideoList.get(position).getIsSuccess() == 0) {
+                uploadVideoList.remove(position);
+                adapterVideo.notifyDataSetChanged();
+                if (adapterVideo.getItemCount() != 0) {
+                    tv_video_list.setVisibility(View.GONE);
+                } else {
+                    tv_video_list.setVisibility(View.VISIBLE);
+                }
+            }
 
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(uploadVideoList.get(position).getFileName());
-                    }
+            @Override
+            public void onItemAgainUploadClick(View v, int position) { //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(uploadVideoList.get(position).getFileName());
+                    isWhich = 2;
                 }
             }
         });
+        if (adapterVideo.getItemCount() != 0) {
+            tv_video_list.setVisibility(View.GONE);
+        } else {
+            tv_video_list.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

@@ -242,14 +242,16 @@ public class SocialProductDangerActivity extends BaseActivity<SocialProductDange
                 if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
                     uploadPhotoList.remove(position);
                     adapter1.notifyDataSetChanged();
-                } else if (uploadPhotoList.get(position).getIsSuccess() == 0) {
-
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
-                    }
                 }
 
+            }
+
+            @Override
+            public void onItemAgainUploadClick(View v, int position) {//上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    isWhich = 1;
+                }
             }
         });
     }
@@ -268,14 +270,16 @@ public class SocialProductDangerActivity extends BaseActivity<SocialProductDange
                 if (checkPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
                     checkPhotoList.remove(position);
                     adapter2.notifyDataSetChanged();
-                } else if (checkPhotoList.get(position).getIsSuccess() == 0) {
-
-                } else { //上传失败 重新上传
-                    if (mPresenter != null) {
-                        mPresenter.uploadFile(checkPhotoList.get(position).getFileName());
-                    }
                 }
 
+            }
+
+            @Override
+            public void onItemAgainUploadClick(View v, int position) { //上传失败 重新上传
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(checkPhotoList.get(position).getFileName());
+                    isWhich = 2;
+                }
             }
         });
 

@@ -42,6 +42,7 @@ public class UploadPhotoAdapter extends RecyclerView.Adapter {
 
     public interface OnItemOnClicklisten {
         void onItemDeleteClick(View v, int position);
+        void onItemAgainUploadClick(View v, int position);
     }
 
     @Override
@@ -67,20 +68,25 @@ public class UploadPhotoAdapter extends RecyclerView.Adapter {
             if(file.exists()){
                 Picasso.get().load(new File(list.get(position).getFileName())).resize(UploadActivity.imag_width, UploadActivity.imag_height).centerCrop().into(mHolder.img_upload_phto);
                 if(list.get(position).getIsSuccess()==1){
-                    mHolder.tv_status.setVisibility(View.VISIBLE);
-                    mHolder.progress.setVisibility(View.GONE);
+//                    mHolder.tv_status.setVisibility(View.VISIBLE);
+//                    mHolder.progress.setVisibility(View.GONE);
                     mHolder.tv_status.setText("上传成功");
-                    mHolder.tv_upload_delete.setText("删除");
+                    mHolder.rl_delete.setVisibility(View.VISIBLE);
+                    mHolder.again_upload.setVisibility(View.GONE);
                 }else if(list.get(position).getIsSuccess()==0) {
-                    mHolder.tv_status.setVisibility(View.GONE);
+//                    mHolder.tv_status.setVisibility(View.GONE);
 //            mHolder.progress.setVisibility(View.VISIBLE);
                     mHolder.tv_status.setText("上传中");
-                    mHolder.tv_upload_delete.setText("上传中");
+//                    mHolder.tv_upload_delete.setText("上传中");
+                    mHolder.rl_delete.setVisibility(View.GONE);
                 }else {
-                    mHolder.tv_status.setVisibility(View.VISIBLE);
-                    mHolder.progress.setVisibility(View.GONE);
+//                    mHolder.tv_status.setVisibility(View.VISIBLE);
+//                    mHolder.progress.setVisibility(View.GONE);
                     mHolder.tv_status.setText("上传失败");
-                    mHolder.tv_upload_delete.setText("重新上传");
+                    mHolder.rl_delete.setVisibility(View.VISIBLE);
+
+                    mHolder.again_upload.setVisibility(View.VISIBLE);
+
                 }
             }else {
                 Glide.with(context).load(list.get(position).getUrl()).into(mHolder.img_upload_phto);
@@ -93,11 +99,20 @@ public class UploadPhotoAdapter extends RecyclerView.Adapter {
 
         mHolder.tv_size.setText(list.get(position).getFileSize());
 
-        mHolder.rl_delete.setOnClickListener(new View.OnClickListener() {
+        mHolder.tv_upload_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(onItemOnClicklisten!=null){
                     onItemOnClicklisten.onItemDeleteClick(view,position);
+                }
+            }
+        });
+
+        mHolder.again_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(onItemOnClicklisten!=null){
+                    onItemOnClicklisten.onItemAgainUploadClick(view,position);
                 }
             }
         });
@@ -110,6 +125,7 @@ public class UploadPhotoAdapter extends RecyclerView.Adapter {
         public TextView tv_size;
         public TextView tv_status;
         public TextView tv_upload_delete;
+        public TextView again_upload;
         public RelativeLayout rl_delete;
         public ProgressBar progress;
 
@@ -121,6 +137,7 @@ public class UploadPhotoAdapter extends RecyclerView.Adapter {
             tv_status = view.findViewById(R.id.tv_status);
             rl_delete = view.findViewById(R.id.rl_delete);
             tv_upload_delete = view.findViewById(R.id.tv_upload_delete);
+            again_upload = view.findViewById(R.id.again_upload);
             progress = view.findViewById(R.id.progress);
         }
     }

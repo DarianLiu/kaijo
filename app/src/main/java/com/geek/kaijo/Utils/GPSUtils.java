@@ -38,26 +38,9 @@ public class GPSUtils {
     private void initLocation() {
         //初始化定位
         mLocationClient = new CmccLocationClient(MyApplication.get());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(new CmccLocationListener() {
-            @Override
-            public void onLocationChanged(CmccLocation cmccLocation) {
-                if(cmccLocation!=null){
-                    Log.i(this.getClass().getName(), "111111111111111111111getErrorCode==" + cmccLocation.getErrorCode());
-                    Log.i(this.getClass().getName(), "111111111111111111111getLocationDetail==" + cmccLocation.getLocationDetail());
-                    Log.i(this.getClass().getName(), "111111111111111111111getLatitude==" + cmccLocation.getLatitude());
-                }else {
-                    Log.i(this.getClass().getName(), "111111111111111111111cmccLocation==" + cmccLocation);
-                }
 
-                if(locationListenerList==null)return;
-                for(int i=0;i<locationListenerList.size();i++){
-                    if(locationListenerList.get(i)!=null){
-                        locationListenerList.get(i).onLocationChanged(cmccLocation);
-                    }
-                }
-            }
-        });
+        //设置定位回调监听
+        mLocationClient.setLocationListener(cmccLocationListener);
 
         //初始化CmccLocationClientOption对象
         mLocationOption = new CmccLocationClientOption();
@@ -88,7 +71,44 @@ public class GPSUtils {
 
     }
 
-    public void startLocation(LocationListener locationListener) {
+    private CmccLocationListener cmccLocationListener = new CmccLocationListener() {
+        @Override
+        public void onLocationChanged(CmccLocation cmccLocation) {
+            if(cmccLocation!=null){
+                Log.i(this.getClass().getName(), "11111111Code==" + cmccLocation.getErrorCode()+"纬度="+cmccLocation.getLatitude());
+//                    Log.i(this.getClass().getName(), "1111111日志==" + cmccLocation.getLocationDetail());
+            }else {
+                Log.i(this.getClass().getName(), "111111111111111111111cmccLocation==" + cmccLocation);
+            }
+
+            if(locationListenerList==null)return;
+            for(int i=0;i<locationListenerList.size();i++){
+                if(locationListenerList.get(i)!=null){
+                    locationListenerList.get(i).onLocationChanged(cmccLocation);
+                }
+            }
+        }
+    };
+
+//    public void startLocation(LocationListener locationListener) {
+//        if(locationListenerList==null){
+//            locationListenerList = new ArrayList<>();
+//        }
+//        boolean flag = true;
+//        for(int i=0;i<locationListenerList.size();i++){
+//            if(locationListenerList.get(i)==locationListener){
+//                flag = false;
+//                break;
+//            }
+//        }
+//        if(flag){
+//            locationListenerList.add(locationListener);
+//        }
+//        startLocation();
+//
+//    }
+
+    public void setOnLocationListener(LocationListener locationListener) {
         if(locationListenerList==null){
             locationListenerList = new ArrayList<>();
         }
@@ -102,18 +122,24 @@ public class GPSUtils {
         if(flag){
             locationListenerList.add(locationListener);
         }
-        startLocation();
 
     }
 
     public void startLocation(){
-//        mLocationClient.
+
         if (mLocationClient == null || !mLocationClient.isStarted()) {
             initLocation();
         }
         if(!mLocationClient.isStarted()){
             mLocationClient.startLocation();
         }
+//        if(mLocationClient!=null && cmccLocationListener!=null){
+//            mLocationClient.unRegisterLocationListener(cmccLocationListener);
+//        }
+//        initLocation();
+//        if(mLocationClient!=null){
+//            mLocationClient.startLocation();
+//        }
     }
 
     public void onDestroy(){

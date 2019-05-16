@@ -95,7 +95,7 @@
     <string name="view_plan">预案查看</string>
     <string name="search_key">关键字：</string>
     <string name="create_time">发布时间：</string>
-    <string name="btn_submit_pic">上传图片</string>
+    <string name="btn_submit_pic">上传照片</string>
     <string name="btn_submit_video">上传视频</string>
     <string name="btn_submit_check_record">上传检查记录</string>
     <string name="details">详情</string>

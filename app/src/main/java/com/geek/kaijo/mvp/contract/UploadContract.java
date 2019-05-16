@@ -19,8 +19,8 @@ public interface UploadContract {
     interface View extends IView {
 
         void uploadSuccess(UploadFile uploadPhoto);
-
         void uploadCaseInfoSuccess(CaseInfo caseInfoEntity);
+        void uploadPhotoError();
 
     }
 

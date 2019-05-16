@@ -3,25 +3,26 @@ package com.geek.kaijo.mvp.presenter;
 import android.app.Application;
 
 import com.geek.kaijo.app.MyApplication;
+import com.geek.kaijo.mvp.contract.TemporaryContract;
 import com.geek.kaijo.mvp.model.entity.CaseInfo;
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import dao.CaseInfoDao;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-
-import javax.inject.Inject;
-
-import com.geek.kaijo.mvp.contract.TemporaryContract;
-
-import java.util.List;
 
 
 /**
@@ -59,7 +60,7 @@ public class TemporaryPresenter extends BasePresenter<TemporaryContract.Model, T
         Observable<List<CaseInfo>> observable = Observable.create(new ObservableOnSubscribe<List<CaseInfo>>() {
             @Override
             public void subscribe(ObservableEmitter<List<CaseInfo>> emitter) throws Exception {
-                List<CaseInfo> caseInfos =  MyApplication.get().getDaoSession().getCaseInfoDao().queryBuilder().orderDesc(CaseInfoDao.Properties.CaseId).list();
+                List<CaseInfo> caseInfos = MyApplication.get().getDaoSession().getCaseInfoDao().queryBuilder().orderDesc(CaseInfoDao.Properties.CaseId).list();
                 emitter.onNext(caseInfos);
                 emitter.onComplete();
             }
@@ -83,8 +84,9 @@ public class TemporaryPresenter extends BasePresenter<TemporaryContract.Model, T
             public void onComplete() {
             }
         };
-        //建立连接
-        observable.subscribe(observer);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer); //建立连接
 
     }
 

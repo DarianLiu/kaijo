@@ -26,6 +26,7 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.DataHelper;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -94,6 +95,11 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                     @Override
                     public void onNext(List<CaseAttribute> caseAttributeList) {
                         mRootView.setCaseAttributeList(caseAttributeList);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
                     }
                 });
     }
@@ -218,6 +224,11 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
                         mRootView.uploadSuccess(uploadPhoto);
                     }
 
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                        mRootView.uploadPhotoError();
+                    }
                 });
     }
 
@@ -232,305 +243,302 @@ public class ReportPresenter extends BasePresenter<ReportContract.Model, ReportC
         }.getType());
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), jsonString);
-//        mRootView.showLoading();
         mModel.addCaseAttach(body).compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribe(new ErrorHandleSubscriber<String>(mErrorHandler) {
                     @Override
                     public void onNext(String user) {
                        mRootView.showMessage("案件上报成功");
-//                        mRootView.hideLoading();
                         mRootView.killMyself();
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-//                        mRootView.hideLoading();
                     }
                 });
     }
 
-    /**
-     * 经纬度偏移计算
-     *
-     * @param userId
-     * @param lat
-     * @param lng
-     */
-    private void httpUploadGpsLocation(String userId, double lat, double lng) {
-
-        OkHttpClient client = new OkHttpClient();
-        FormBody formBody = new FormBody.Builder()
-                .add("userId", userId)
-                .add("lat", lat + "")
-                .add("lng", lng + "")
-                .build();
-
-        Request request = new Request.Builder().url("http://host:port/GeService").post(formBody).build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.i(this.getClass().getName(), "11111111111111111111111上传位置信息的返回" + response.body().string());
-            }
-        });
-    }
-
-    /**
-     * 经纬度偏移换算
-     */
-    public void httpUploadGpsLocation(double lng, double lat){
-
-        Observable<Location> observable = Observable.create(new ObservableOnSubscribe<Location>() {
-            @Override
-            public void subscribe(ObservableEmitter<Location> emitter) throws Exception {
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-
-                        Log.i(this.getClass().getName(),"rx_call==========线程名======="+Thread.currentThread().getName());
-                        Location location = new Location();
-                        String xml = gettRequest(1,1);
-                        try {
-                            byte[] xmlbyte = xml.toString().getBytes("UTF-8");
-
-                            System.out.println(xml);
-                            URL url = new URL("http://211.137.35.35:9213/GeService");
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                            conn.setConnectTimeout(5000);
-                            conn.setDoOutput(true);// 允许输出
-                            conn.setDoInput(true);
-                            conn.setUseCaches(false);// 不使用缓存
-                            conn.setRequestMethod("POST");
-//                    conn.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
-                            conn.setRequestProperty("Charset", "UTF-8");
-                            conn.setRequestProperty("Content-Length",
-                                    String.valueOf(xmlbyte.length));
-                            conn.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
-//                    conn.setRequestProperty("X-ClientType", "2");//发送自定义的头信息
-
-                            conn.getOutputStream().write(xmlbyte);
-                            conn.getOutputStream().flush();
-                            conn.getOutputStream().close();
-
-
-                            if (conn.getResponseCode() != 200)
-                                throw new RuntimeException("请求url失败");
-
-                            InputStream is = conn.getInputStream();// 获取返回数据
-
-                            // 使用输出流来输出字符(可选)
-                            ByteArrayOutputStream out = new ByteArrayOutputStream();
-                            byte[] buf = new byte[1024];
-                            int len;
-                            while ((len = is.read(buf)) != -1) {
-                                out.write(buf, 0, len);
-                            }
-                            String string = out.toString("UTF-8");
-                            System.out.println("1111111111111111111111经纬度换算===="+string);
-                            out.close();
-
-                            // xml解析
-                            String version = null;
-                            String seqID = null;
-                            XmlPullParser parser = Xml.newPullParser();
-                            try {
-                                parser.setInput(new ByteArrayInputStream(string.substring(1)
-                                        .getBytes("UTF-8")), "UTF-8");
-                                parser.setInput(is, "UTF-8");
-                                int eventType = parser.getEventType();
-                                while (eventType != XmlPullParser.END_DOCUMENT) {
-                                    if (eventType == XmlPullParser.START_TAG) {
-                                        if ("Envelope".equals(parser.getName())) {
-                                            version = parser.getAttributeValue(0);
-                                        } else if ("SeqID".equals(parser.getName())) {
-                                            seqID = parser.nextText();
-                                        } else if ("ResultCode".equals(parser.getName())) {
-//                                    resultCode = parser.nextText();
-                                        }
-                                    }
-                                    eventType = parser.next();
-                                }
-                            } catch (XmlPullParserException e) {
-                                e.printStackTrace();
-                                System.out.println(e);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                System.out.println(e);
-                            }
-                            System.out.println("version = " + version);
-                            System.out.println("seqID = " + seqID);
-//                    System.out.println("resultCode = " + resultCode);
-
-                            location.setLng(1);
-                            location.setLat(1);
-
-                            emitter.onNext(location);
-
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                            System.out.println(e);
-                            e.printStackTrace();
-                        }
-
-                        emitter.onComplete();
-
-                    }
-                }.start();
-
-            }
-        });
-        //创建一个下游 Observer
-        Observer<Location> observer = new Observer<Location>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-            }
-
-            @Override
-            public void onNext(Location menuList) {
-//                mRootView.preListInfoMenuSuccess(menuList);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-//                mRootView.preError();
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-        //建立连接
-        observable.subscribe(observer);
-
-    }
-
-    public void httpXmlRequest(double lng, double lat){
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                String xml = gettRequest(1,1);
-                try {
-                    byte[] xmlbyte = xml.toString().getBytes("UTF-8");
-
-                    System.out.println(xml);
-                    URL url = new URL("http://211.137.35.35:9213/GeService");
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setConnectTimeout(5000);
-                    conn.setDoOutput(true);// 允许输出
-                    conn.setDoInput(true);
-                    conn.setUseCaches(false);// 不使用缓存
-                    conn.setRequestMethod("POST");
-//                    conn.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
-                    conn.setRequestProperty("Charset", "UTF-8");
-                    conn.setRequestProperty("Content-Length",
-                            String.valueOf(xmlbyte.length));
-                    conn.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
-//                    conn.setRequestProperty("X-ClientType", "2");//发送自定义的头信息
-
-                    conn.getOutputStream().write(xmlbyte);
-                    conn.getOutputStream().flush();
-                    conn.getOutputStream().close();
-
-
-                    if (conn.getResponseCode() != 200)
-                        throw new RuntimeException("请求url失败");
-
-                    InputStream is = conn.getInputStream();// 获取返回数据
-
-                    // 使用输出流来输出字符(可选)
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = is.read(buf)) != -1) {
-                        out.write(buf, 0, len);
-                    }
-                    String string = out.toString("UTF-8");
-                    System.out.println("1111111111111111111111经纬度换算===="+string);
-                    out.close();
-
-                    // xml解析
-                    String version = null;
-                    String seqID = null;
-                    XmlPullParser parser = Xml.newPullParser();
-                    try {
-                        parser.setInput(new ByteArrayInputStream(string.substring(1)
-                                .getBytes("UTF-8")), "UTF-8");
-                        parser.setInput(is, "UTF-8");
-                        int eventType = parser.getEventType();
-                        while (eventType != XmlPullParser.END_DOCUMENT) {
-                            if (eventType == XmlPullParser.START_TAG) {
-                                if ("Envelope".equals(parser.getName())) {
-                                    version = parser.getAttributeValue(0);
-                                } else if ("SeqID".equals(parser.getName())) {
-                                    seqID = parser.nextText();
-                                } else if ("ResultCode".equals(parser.getName())) {
-//                                    resultCode = parser.nextText();
-                                }
-                            }
-                            eventType = parser.next();
-                        }
-                    } catch (XmlPullParserException e) {
-                        e.printStackTrace();
-                        System.out.println(e);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println(e);
-                    }
-                    System.out.println("version = " + version);
-                    System.out.println("seqID = " + seqID);
-//                    System.out.println("resultCode = " + resultCode);
-
-//            location.setLng(1);
-//            location.setLat(1);
+//    /**
+//     * 经纬度偏移计算
+//     *
+//     * @param userId
+//     * @param lat
+//     * @param lng
+//     */
+//    private void httpUploadGpsLocation(String userId, double lat, double lng) {
 //
-//            emitter.onNext(location);
-
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-//            System.out.println(e);
-                }
-
-            }
-        }.start();
-
-    }
-
-    private String gettRequest(double lng,double lat){
-        //组建xml数据
-        StringBuilder xml = new StringBuilder();
-        xml.append("<?xml version=\"1.0\" encoding=\"GB2312\"?>");
-        xml.append("<Envelope>");
-        xml.append("<Header>");
-        xml.append("<id>LNASHC</id>");
-        xml.append("<pwd>20190505_SeWy</pwd>");
-        xml.append("</Header>");
-        xml.append("<Body>");
-        xml.append("<request>");
-        xml.append("<property key=\"lng\">"+lng);
-        xml.append("</property>");
-        xml.append("<property key=\"lat\">"+lat);
-        xml.append("</property>");
-        xml.append("<property key=\"heit\">"+0);
-        xml.append("</property>");
-        xml.append("<property key=\"week\">"+1377);
-        xml.append("</property>");
-        xml.append("<property key=\"time\">"+252001542);
-        xml.append("</property>");
-
-        xml.append("</request>");
-        xml.append("</Body>");
-        xml.append("</Envelope>");
-        return xml.toString();
-    }
-
+//        OkHttpClient client = new OkHttpClient();
+//        FormBody formBody = new FormBody.Builder()
+//                .add("userId", userId)
+//                .add("lat", lat + "")
+//                .add("lng", lng + "")
+//                .build();
+//
+//        Request request = new Request.Builder().url("http://host:port/GeService").post(formBody).build();
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                Log.i(this.getClass().getName(), "11111111111111111111111上传位置信息的返回" + response.body().string());
+//            }
+//        });
+//    }
+//
+//    /**
+//     * 经纬度偏移换算
+//     */
+//    public void httpUploadGpsLocation(double lng, double lat){
+//
+//        Observable<Location> observable = Observable.create(new ObservableOnSubscribe<Location>() {
+//            @Override
+//            public void subscribe(ObservableEmitter<Location> emitter) throws Exception {
+//                new Thread(){
+//                    @Override
+//                    public void run() {
+//                        super.run();
+//
+//                        Log.i(this.getClass().getName(),"rx_call==========线程名======="+Thread.currentThread().getName());
+//                        Location location = new Location();
+//                        String xml = gettRequest(1,1);
+//                        try {
+//                            byte[] xmlbyte = xml.toString().getBytes("UTF-8");
+//
+//                            System.out.println(xml);
+//                            URL url = new URL("http://211.137.35.35:9213/GeService");
+//                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//                            conn.setConnectTimeout(5000);
+//                            conn.setDoOutput(true);// 允许输出
+//                            conn.setDoInput(true);
+//                            conn.setUseCaches(false);// 不使用缓存
+//                            conn.setRequestMethod("POST");
+////                    conn.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
+//                            conn.setRequestProperty("Charset", "UTF-8");
+//                            conn.setRequestProperty("Content-Length",
+//                                    String.valueOf(xmlbyte.length));
+//                            conn.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
+////                    conn.setRequestProperty("X-ClientType", "2");//发送自定义的头信息
+//
+//                            conn.getOutputStream().write(xmlbyte);
+//                            conn.getOutputStream().flush();
+//                            conn.getOutputStream().close();
+//
+//
+//                            if (conn.getResponseCode() != 200)
+//                                throw new RuntimeException("请求url失败");
+//
+//                            InputStream is = conn.getInputStream();// 获取返回数据
+//
+//                            // 使用输出流来输出字符(可选)
+//                            ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                            byte[] buf = new byte[1024];
+//                            int len;
+//                            while ((len = is.read(buf)) != -1) {
+//                                out.write(buf, 0, len);
+//                            }
+//                            String string = out.toString("UTF-8");
+//                            System.out.println("1111111111111111111111经纬度换算===="+string);
+//                            out.close();
+//
+//                            // xml解析
+//                            String version = null;
+//                            String seqID = null;
+//                            XmlPullParser parser = Xml.newPullParser();
+//                            try {
+//                                parser.setInput(new ByteArrayInputStream(string.substring(1)
+//                                        .getBytes("UTF-8")), "UTF-8");
+//                                parser.setInput(is, "UTF-8");
+//                                int eventType = parser.getEventType();
+//                                while (eventType != XmlPullParser.END_DOCUMENT) {
+//                                    if (eventType == XmlPullParser.START_TAG) {
+//                                        if ("Envelope".equals(parser.getName())) {
+//                                            version = parser.getAttributeValue(0);
+//                                        } else if ("SeqID".equals(parser.getName())) {
+//                                            seqID = parser.nextText();
+//                                        } else if ("ResultCode".equals(parser.getName())) {
+////                                    resultCode = parser.nextText();
+//                                        }
+//                                    }
+//                                    eventType = parser.next();
+//                                }
+//                            } catch (XmlPullParserException e) {
+//                                e.printStackTrace();
+//                                System.out.println(e);
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                                System.out.println(e);
+//                            }
+//                            System.out.println("version = " + version);
+//                            System.out.println("seqID = " + seqID);
+////                    System.out.println("resultCode = " + resultCode);
+//
+//                            location.setLng(1);
+//                            location.setLat(1);
+//
+//                            emitter.onNext(location);
+//
+//                        } catch (Exception e) {
+//                            // TODO Auto-generated catch block
+//                            System.out.println(e);
+//                            e.printStackTrace();
+//                        }
+//
+//                        emitter.onComplete();
+//
+//                    }
+//                }.start();
+//
+//            }
+//        });
+//        //创建一个下游 Observer
+//        Observer<Location> observer = new Observer<Location>() {
+//            @Override
+//            public void onSubscribe(Disposable d) {
+//            }
+//
+//            @Override
+//            public void onNext(Location menuList) {
+////                mRootView.preListInfoMenuSuccess(menuList);
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+////                mRootView.preError();
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//            }
+//        };
+//        //建立连接
+//        observable.subscribe(observer);
+//
+//    }
+//
+//    public void httpXmlRequest(double lng, double lat){
+//        new Thread(){
+//            @Override
+//            public void run() {
+//                super.run();
+//                String xml = gettRequest(1,1);
+//                try {
+//                    byte[] xmlbyte = xml.toString().getBytes("UTF-8");
+//
+//                    System.out.println(xml);
+//                    URL url = new URL("http://211.137.35.35:9213/GeService");
+//                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//                    conn.setConnectTimeout(5000);
+//                    conn.setDoOutput(true);// 允许输出
+//                    conn.setDoInput(true);
+//                    conn.setUseCaches(false);// 不使用缓存
+//                    conn.setRequestMethod("POST");
+////                    conn.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
+//                    conn.setRequestProperty("Charset", "UTF-8");
+//                    conn.setRequestProperty("Content-Length",
+//                            String.valueOf(xmlbyte.length));
+//                    conn.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
+////                    conn.setRequestProperty("X-ClientType", "2");//发送自定义的头信息
+//
+//                    conn.getOutputStream().write(xmlbyte);
+//                    conn.getOutputStream().flush();
+//                    conn.getOutputStream().close();
+//
+//
+//                    if (conn.getResponseCode() != 200)
+//                        throw new RuntimeException("请求url失败");
+//
+//                    InputStream is = conn.getInputStream();// 获取返回数据
+//
+//                    // 使用输出流来输出字符(可选)
+//                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                    byte[] buf = new byte[1024];
+//                    int len;
+//                    while ((len = is.read(buf)) != -1) {
+//                        out.write(buf, 0, len);
+//                    }
+//                    String string = out.toString("UTF-8");
+//                    System.out.println("1111111111111111111111经纬度换算===="+string);
+//                    out.close();
+//
+//                    // xml解析
+//                    String version = null;
+//                    String seqID = null;
+//                    XmlPullParser parser = Xml.newPullParser();
+//                    try {
+//                        parser.setInput(new ByteArrayInputStream(string.substring(1)
+//                                .getBytes("UTF-8")), "UTF-8");
+//                        parser.setInput(is, "UTF-8");
+//                        int eventType = parser.getEventType();
+//                        while (eventType != XmlPullParser.END_DOCUMENT) {
+//                            if (eventType == XmlPullParser.START_TAG) {
+//                                if ("Envelope".equals(parser.getName())) {
+//                                    version = parser.getAttributeValue(0);
+//                                } else if ("SeqID".equals(parser.getName())) {
+//                                    seqID = parser.nextText();
+//                                } else if ("ResultCode".equals(parser.getName())) {
+////                                    resultCode = parser.nextText();
+//                                }
+//                            }
+//                            eventType = parser.next();
+//                        }
+//                    } catch (XmlPullParserException e) {
+//                        e.printStackTrace();
+//                        System.out.println(e);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                        System.out.println(e);
+//                    }
+//                    System.out.println("version = " + version);
+//                    System.out.println("seqID = " + seqID);
+////                    System.out.println("resultCode = " + resultCode);
+//
+////            location.setLng(1);
+////            location.setLat(1);
+////
+////            emitter.onNext(location);
+//
+//                } catch (Exception e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+////            System.out.println(e);
+//                }
+//
+//            }
+//        }.start();
+//
+//    }
+//
+//    private String gettRequest(double lng,double lat){
+//        //组建xml数据
+//        StringBuilder xml = new StringBuilder();
+//        xml.append("<?xml version=\"1.0\" encoding=\"GB2312\"?>");
+//        xml.append("<Envelope>");
+//        xml.append("<Header>");
+//        xml.append("<id>LNASHC</id>");
+//        xml.append("<pwd>20190505_SeWy</pwd>");
+//        xml.append("</Header>");
+//        xml.append("<Body>");
+//        xml.append("<request>");
+//        xml.append("<property key=\"lng\">"+lng);
+//        xml.append("</property>");
+//        xml.append("<property key=\"lat\">"+lat);
+//        xml.append("</property>");
+//        xml.append("<property key=\"heit\">"+0);
+//        xml.append("</property>");
+//        xml.append("<property key=\"week\">"+1377);
+//        xml.append("</property>");
+//        xml.append("<property key=\"time\">"+252001542);
+//        xml.append("</property>");
+//
+//        xml.append("</request>");
+//        xml.append("</Body>");
+//        xml.append("</Envelope>");
+//        return xml.toString();
+//    }
+//
 
 }

@@ -145,6 +145,11 @@ public class HandleDetailPresenter extends BasePresenter<HandleDetailContract.Mo
                     public void onNext(UploadFile uploadPhoto) {
                         mRootView.uploadSuccess(uploadPhoto);
                     }
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                        mRootView.uploadPhotoError();
+                    }
 
                 });
     }
