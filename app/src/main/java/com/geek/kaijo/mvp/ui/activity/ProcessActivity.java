@@ -38,6 +38,7 @@ public class ProcessActivity extends Activity {
             Map<String,String> map=new HashMap<String,String>();
             map.put("caseId",aCase.getCaseId());
             map.put("caseAttribute",aCase.getCaseAttribute());
+            map.put("processId","2");
             webWiew.loadUrl("file:////android_asset/process.html",map);
         }else {
             webWiew.loadUrl("file:////android_asset/process.html");
