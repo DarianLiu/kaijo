@@ -58,8 +58,8 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
 
     @BindView(R.id.tv_toolbar_title)
     TextView tvToolbarTitle;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+//    @BindView(R.id.toolbar)
+//    Toolbar toolbar;
     @BindView(R.id.tv_case_attribute)
     TextView tvCaseAttribute;
     @BindView(R.id.tv_category_large)

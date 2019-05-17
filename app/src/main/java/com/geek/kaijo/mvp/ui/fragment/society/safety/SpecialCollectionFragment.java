@@ -15,10 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.mvp.model.entity.Equipment;
 import com.geek.kaijo.mvp.model.entity.GridItemContent;
 import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
+import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +51,7 @@ public class SpecialCollectionFragment extends Fragment{
 
     public List<String> checkList;
     private ThingPositionInfo thingPositionInfo;
+    private List<Equipment> equipmentList;
 
 
     @Nullable
@@ -74,6 +79,35 @@ public class SpecialCollectionFragment extends Fragment{
             et_name.setText(thingPositionInfo.getDanweiName());
             et_farenName.setText(thingPositionInfo.getFarenName());
             et_address.setText(thingPositionInfo.getAddress());
+
+            if(!TextUtils.isEmpty(thingPositionInfo.getTezhongshebei())){
+                Gson gson = new Gson();
+                equipmentList = gson.fromJson(thingPositionInfo.getTezhongshebei(), new TypeToken<List<Equipment>>() {}.getType());
+                if(equipmentList!=null && equipmentList.size()>0){
+                    for(int i=0;i<equipmentList.size();i++){
+                        addComponentView();
+                    }
+                }
+                initEquipment();
+            }
+        }
+    }
+
+    private void initEquipment(){
+
+        for(int i=0;i<ly_addView.getChildCount();i++){
+            View equipmentView = ly_addView.getChildAt(i);
+            EditText et_category = equipmentView.findViewById(R.id.et_category);
+            EditText et_name = equipmentView.findViewById(R.id.et_name);
+            EditText et_code = equipmentView.findViewById(R.id.et_code);
+            AppCompatSpinner spinner_check = equipmentView.findViewById(R.id.spinner_check);
+
+            et_category.setText(equipmentList.get(i).getCategory());
+            et_name.setText(equipmentList.get(i).getName());
+            et_code.setText(equipmentList.get(i).getRegisterCode());
+            if("是".equals(equipmentList.get(i).getCheckIsValid())){
+                spinner_check.setSelection(1);
+            }
         }
     }
 

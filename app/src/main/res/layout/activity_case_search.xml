@@ -123,10 +123,12 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/selector_frame_background"
                 android:hint="请输入案件编号"
+                android:maxLength="30"
                 android:paddingBottom="10dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="10dp"
+                android:textColor="@color/color_text_title"
                 android:textSize="@dimen/t14" />
 
             <RelativeLayout

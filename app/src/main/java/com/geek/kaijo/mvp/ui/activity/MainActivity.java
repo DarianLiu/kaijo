@@ -1,20 +1,14 @@
 package com.geek.kaijo.mvp.ui.activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -43,7 +37,6 @@ import com.geek.kaijo.mvp.presenter.MainPresenter;
 import com.geek.kaijo.mvp.ui.fragment.CaseManagerFragment;
 import com.geek.kaijo.mvp.ui.fragment.ComponentFragment;
 import com.geek.kaijo.mvp.ui.fragment.MyMessageFragment;
-import com.geek.kaijo.mvp.ui.fragment.SocialManageFragment;
 import com.geek.kaijo.view.FragmentTabHost;
 import com.geek.kaijo.view.autoviewpager.AutoScrollViewPager;
 import com.jess.arms.base.BaseActivity;
@@ -52,7 +45,6 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
-import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.simple.eventbus.Subscriber;
@@ -66,7 +58,6 @@ import javax.inject.Inject;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
-import io.reactivex.functions.Consumer;
 
 import static com.geek.kaijo.app.api.Api.URL_BANNER;
 import static com.geek.kaijo.app.api.Api.URL_FILE_UPLOAD;
@@ -309,7 +300,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
      */
     public void updateUserInfo(UserInfo userInfo) {
         tvUserName.setText(String.format("登录名称：%s", userInfo.getUsername()));
-        tvGridName.setText(String.format("网格名称：%s", userInfo.getCommunityName()+" "+userInfo.getGridName()));
+        tvGridName.setText(String.format("网格名称：%s", userInfo.getCommunityName() + " " + userInfo.getGridName()));
     }
 
 //    /**
@@ -437,7 +428,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             rxPermissions = new RxPermissions(this);
         }
         //同时申请多个权限
-        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
+        rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_NETWORK_STATE,
                 Manifest.permission.ACCESS_WIFI_STATE,
                 Manifest.permission.CHANGE_WIFI_STATE,

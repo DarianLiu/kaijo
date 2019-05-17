@@ -238,9 +238,9 @@ public class ComponentDetailActivity extends BaseActivity<ComponentDetailPresent
 
 
         //视频列表
-        DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+//        DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         LinearLayoutManager layoutManager_video_later = new LinearLayoutManager(this);
-        checkRecyclerView.addItemDecoration(divider);
+//        checkRecyclerView.addItemDecoration(divider);
         checkRecyclerView.setLayoutManager(layoutManager_video_later);
 
         photoAdapter = new PhotoAdapter(this, uploadPhotoList);

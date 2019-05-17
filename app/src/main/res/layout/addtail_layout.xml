@@ -75,35 +75,35 @@
         android:paddingTop="8dp"
         android:paddingRight="10dp"
         android:paddingBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/btn_submit_pic"
         android:textColor="@color/color_title_text"
         android:textSize="@dimen/t14" />
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/color_text_tip" />
-
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:text="照片列表"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t14" />
+        android:orientation="vertical"
+        android:background="@color/color_bg_gray">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/file_top_line"/>
+        <TextView
+            android:id="@+id/tv_photo_list"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:text="照片列表"
+            android:textColor="@color/color_text_title"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/upload_picture_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/upload_picture_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/color_text_tip" />
     <!--上传检查记录-->
     <TextView
         android:id="@+id/btn_submit_check_record"
@@ -115,35 +115,35 @@
         android:paddingTop="8dp"
         android:paddingRight="10dp"
         android:paddingBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/btn_submit_check_record"
         android:textColor="@color/color_title_text"
         android:textSize="@dimen/t14" />
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/color_text_tip" />
-
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:text="检查记录列表"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t14" />
+        android:orientation="vertical"
+        android:background="@color/color_bg_gray">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/file_top_line"/>
+        <TextView
+            android:id="@+id/tv_video_list"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:text="视频列表"
+            android:textColor="@color/color_text_title"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/check_record_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/check_record_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/color_text_tip" />
 
     <RelativeLayout
         android:layout_width="match_parent"

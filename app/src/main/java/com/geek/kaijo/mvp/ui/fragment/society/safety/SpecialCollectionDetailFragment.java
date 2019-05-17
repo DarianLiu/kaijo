@@ -15,10 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.mvp.model.entity.Equipment;
 import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.ui.activity.ComponentDetailActivity;
 import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +43,13 @@ public class SpecialCollectionDetailFragment extends Fragment{
     public TextView et_farenName; //et_farenName
     @BindView(R.id.et_address)
     public TextView et_address; //使用地点
+    @BindView(R.id.ly_addView)
+    public LinearLayout ly_addView; //增加特种设备
 
     public List<String> checkList;
     private ThingPositionInfo thingPositionInfo;
+    private List<Equipment> equipmentList;
+
 
 
     @Nullable
@@ -70,17 +77,37 @@ public class SpecialCollectionDetailFragment extends Fragment{
             et_name.setText(thingPositionInfo.getDanweiName());
             et_farenName.setText(thingPositionInfo.getFarenName());
             et_address.setText(thingPositionInfo.getAddress());
+
+            if(!TextUtils.isEmpty(thingPositionInfo.getTezhongshebei())){
+                Gson gson = new Gson();
+                equipmentList = gson.fromJson(thingPositionInfo.getTezhongshebei(), new TypeToken<List<Equipment>>() {}.getType());
+                if(equipmentList!=null && equipmentList.size()>0){
+                    for(int i=0;i<equipmentList.size();i++){
+                        addComponentView();
+                    }
+                }
+                initEquipment();
+            }
         }
     }
 
-//    @OnClick({R.id.tv_add_equipment})
-//    public void onViewClicked(View view) {
-//        switch (view.getId()){
-//            case R.id.tv_add_equipment:
-//                addComponentView();
-//                break;
-//        }
-//    }
+    private void initEquipment(){
+
+        for(int i=0;i<ly_addView.getChildCount();i++){
+            View equipmentView = ly_addView.getChildAt(i);
+            TextView et_category = equipmentView.findViewById(R.id.et_category);
+            TextView et_name = equipmentView.findViewById(R.id.et_name);
+            TextView et_code = equipmentView.findViewById(R.id.et_code);
+            AppCompatSpinner spinner_check = equipmentView.findViewById(R.id.spinner_check);
+
+            et_category.setText(equipmentList.get(i).getCategory());
+            et_name.setText(equipmentList.get(i).getName());
+            et_code.setText(equipmentList.get(i).getRegisterCode());
+            if("是".equals(equipmentList.get(i).getCheckIsValid())){
+                spinner_check.setSelection(1);
+            }
+        }
+    }
 
     private void addComponentView() {
         if (checkList == null) {
@@ -89,20 +116,11 @@ public class SpecialCollectionDetailFragment extends Fragment{
             checkList.add("是");
         }
 
-        View view = getLayoutInflater().inflate(R.layout.component_include_add, null);
+        View view = getLayoutInflater().inflate(R.layout.component_include_add_detail, null);
         AppCompatSpinner spinner_check = view.findViewById(R.id.spinner_check);
         MySpinnerAdapter<String> mStreetAdapter = new MySpinnerAdapter<>(getActivity(), checkList);
         spinner_check.setAdapter(mStreetAdapter);
-
-
-        TextView tv_delete = view.findViewById(R.id.tv_delete);
-        tv_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                ly_addView.removeView((View) view.getParent().getParent());
-            }
-        });
-//        ly_addView.addView(view);
+        ly_addView.addView(view);
     }
 
     public boolean checkParams(){

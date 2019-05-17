@@ -24,39 +24,21 @@ import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.model.event.ServiceEvent;
 import com.geek.kaijo.mvp.model.event.ThingEvent;
 import com.geek.kaijo.mvp.presenter.SocialManagePresenter;
-import com.geek.kaijo.mvp.ui.activity.society.culture.CulturalRelicActivity;
-import com.geek.kaijo.mvp.ui.activity.society.culture.EntertainmentActivity;
-import com.geek.kaijo.mvp.ui.activity.society.culture.InternetBarActivity;
-import com.geek.kaijo.mvp.ui.activity.society.culture.PerformanceActivity;
-import com.geek.kaijo.mvp.ui.activity.society.culture.RecreationalActivity;
-import com.geek.kaijo.mvp.ui.activity.society.emergency.ForestFireActivity;
-import com.geek.kaijo.mvp.ui.activity.society.emergency.SacrificeActivity;
-import com.geek.kaijo.mvp.ui.activity.society.emergency.TyphoonFloodActivity;
-import com.geek.kaijo.mvp.ui.activity.society.emergency.WinterSnowActivity;
-import com.geek.kaijo.mvp.ui.activity.society.foot.DrugSafetyActivity;
-import com.geek.kaijo.mvp.ui.activity.society.foot.FoodSafteActivity;
-import com.geek.kaijo.mvp.ui.activity.society.safety.BuilderSiteActivity;
-import com.geek.kaijo.mvp.ui.activity.society.safety.SocialProductDangerActivity;
 import com.geek.kaijo.mvp.ui.activity.society.safety.SpecialCollectionActivity;
 import com.geek.kaijo.mvp.ui.adapter.SocialThingAdapter;
 import com.geek.kaijo.view.LoadingProgressDialog;
 import com.jess.arms.base.BaseActivity;
-import com.jess.arms.base.DefaultAdapter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
-
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
@@ -81,6 +63,11 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
     private List<ThingPositionInfo> mDatas;
     private SocialThingAdapter mAdapter;
     private GridItemContent subMenu;
+
+    String name = "";
+    String danweiName = "";
+    String jingyingzheName = "";
+    String address = "";
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -133,15 +120,15 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 if (mPresenter != null)
-                    mPresenter.findThingPositionList(false, subMenu.getName(), "","",
-                            "", "");
+                    mPresenter.findThingPositionList(false, subMenu.getName(), name,danweiName,
+                            jingyingzheName, address);
             }
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 if (mPresenter != null)
-                    mPresenter.findThingPositionList(true, subMenu.getName(), "","",
-                            "", "");
+                    mPresenter.findThingPositionList(true, subMenu.getName(), name,danweiName,
+                            jingyingzheName, address);
             }
         });
     }
@@ -169,7 +156,6 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
 
     @Subscriber
     public void receiveThingEvent(ThingEvent event) {
-        Log.i(this.getClass().getName(), "111111111111111111111111111111event.getPosition()===" + event.getPosition());
         if(event.getPosition()==0)return;
         Intent intent;
         switch (event.getEventType()) {
@@ -195,10 +181,7 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
     @Subscriber
     public void receiveServiceEvent(ServiceEvent event) {
         if(event.getCategoryId()==3){
-            String name = "";
-            String danweiName = "";
-            String jingyingzheName = "";
-            String address = "";
+
             String menu = subMenu.getName();
             if ("特种设备".equals(menu)) {
                 danweiName = event.getKey();

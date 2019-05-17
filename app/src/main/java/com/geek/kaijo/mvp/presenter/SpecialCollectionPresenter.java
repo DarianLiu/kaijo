@@ -174,6 +174,7 @@ public class SpecialCollectionPresenter extends BasePresenter<SpecialCollectionC
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
+                        mRootView.uploadPhotoError();
                     }
                 });
     }
@@ -201,6 +202,11 @@ public class SpecialCollectionPresenter extends BasePresenter<SpecialCollectionC
                         mRootView.uploadFileSuccess(uploadPhoto);
                     }
 
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                        mRootView.uploadPhotoError();
+                    }
                 });
     }
 }

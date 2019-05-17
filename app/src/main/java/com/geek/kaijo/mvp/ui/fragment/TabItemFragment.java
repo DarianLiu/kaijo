@@ -24,8 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * 社会治理 - 安全生产
- * Created by LiuLi on 2019/1/18.
+ * 社会治理
  */
 
 public class TabItemFragment extends Fragment {

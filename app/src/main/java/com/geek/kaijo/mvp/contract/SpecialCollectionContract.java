@@ -33,6 +33,7 @@ public interface SpecialCollectionContract {
         void httpInsertInfoSuccess();
         void uploadFileSuccess(UploadFile uploadPhoto);
         void uploadPhotoSuccess(UploadFile uploadPhoto);
+        void uploadPhotoError();
 
     }
 
