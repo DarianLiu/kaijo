@@ -7,232 +7,102 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="受理书标号"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="受理书标号" />
 
     <EditText
         android:id="@+id/gd_et_mark"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
-        android:hint="受理书标号"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
-
+        android:hint="请输入受理书标号"
+        />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldDrawableStyle"
         android:layout_marginTop="12dp"
-        android:drawableRight="@drawable/icon_required"
-        android:drawablePadding="5dp"
-        android:text="工程名称"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="工程名称" />
 
     <EditText
         android:id="@+id/gd_et_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入工程名称"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldDrawableStyle"
         android:layout_marginTop="12dp"
-        android:drawableRight="@drawable/icon_required"
-        android:drawablePadding="5dp"
-        android:text="工程地址"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="工程地址" />
 
     <EditText
         android:id="@+id/gd_et_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入工程地址"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
-
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldDrawableStyle"
         android:layout_marginTop="12dp"
-        android:drawableRight="@drawable/icon_required"
-        android:drawablePadding="5dp"
-        android:text="施工单位"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="施工单位" />
 
     <EditText
         android:id="@+id/gd_et_shigongdanwei"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入施工单位"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="是否有施工许可证"
-        android:textColor="@color/color_text_black"
+        style="@style/textBoldDrawableStyle"
         android:layout_marginTop="12dp"
-        android:drawableRight="@drawable/icon_required"
-        android:drawablePadding="5dp"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="是否有施工许可证" />
 
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/gd_spinner_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" />
-
-
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="工程总造价（万元）"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="工程总造价（万元）" />
 
     <EditText
         android:id="@+id/gd_et_price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入工程总造价"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="形象进度/状态"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="形象进度/状态" />
 
     <EditText
         android:id="@+id/gd_et_jingduzhuangtai"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入形象进度/状态"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
-
+        />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="建筑面积（万平）"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="建筑面积（万平）" />
 
     <EditText
         android:id="@+id/gd_jianzhumianji"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入建筑面积（万平）"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+    />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="开工日期"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="开工日期" />
+
 
     <TextView
         android:id="@+id/gd_et_kaigongnriqi"
@@ -240,7 +110,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:background="@drawable/selector_frame_background"
-        android:hint="请输入开工日期"
         android:inputType="text"
         android:maxLines="1"
         android:paddingLeft="15dp"
@@ -253,14 +122,9 @@
         android:textSize="@dimen/t14" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="竣工日期"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="竣工日期" />
 
     <TextView
         android:id="@+id/gd_et_jungongriqi"
@@ -268,7 +132,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:background="@drawable/selector_frame_background"
-        android:hint="请输入竣工日期"
         android:inputType="text"
         android:maxLines="1"
         android:paddingLeft="15dp"
@@ -279,62 +142,30 @@
         android:textColor="@color/color_text_title"
         android:textColorHint="@color/color_text_hint"
         android:textSize="@dimen/t14" />
-
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="建设单位"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="建设单位" />
 
     <EditText
         android:id="@+id/gd_et_jianshedanwei"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入建设单位"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
-
+        />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="监理单位"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="监理单位" />
 
     <EditText
         android:id="@+id/gd_et_jianlidanwei"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入监理单位"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
+
+
 
 
 </LinearLayout>

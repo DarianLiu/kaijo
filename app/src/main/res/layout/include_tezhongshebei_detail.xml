@@ -15,7 +15,7 @@
         android:id="@+id/et_name"
         style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:hint="@string/hint_name"/>
+        />
 
     <TextView
         style="@style/textBoldStyle"
@@ -24,7 +24,6 @@
 
     <TextView
         android:id="@+id/et_farenName"
-        android:hint="请输入法定代表人"
         android:layout_marginTop="5dp"
         style="@style/editDefalutStyle"/>
 
@@ -36,7 +35,6 @@
     <TextView
         android:id="@+id/et_address"
         android:layout_marginTop="5dp"
-        android:hint="@string/hint_address"
         style="@style/editDefalutStyle"
         />
 

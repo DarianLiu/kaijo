@@ -68,9 +68,7 @@ import okhttp3.RequestBody;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**
- * 特种设备采集
- */
+
 public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPresenter> implements SpecialCollectionContract.View {
     private static final int phot_requestCode = 1011;  //上传图片
     private static final int file_requestCode = 1012;  //上传检查记录

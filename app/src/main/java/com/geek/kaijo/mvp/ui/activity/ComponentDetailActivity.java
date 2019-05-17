@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -72,6 +73,11 @@ public class ComponentDetailActivity extends BaseActivity<ComponentDetailPresent
     TextView tv_name;
     @BindView(R.id.tv_time)
     TextView tv_time;
+    @BindView(R.id.tv_location_longitude)
+    TextView tv_location_longitude;
+    @BindView(R.id.tv_location_latitude)
+    TextView tv_location_latitude;
+
 
     public ThingPositionInfo thingPositionInfo;
     private GridItemContent subMenu;
@@ -130,6 +136,8 @@ public class ComponentDetailActivity extends BaseActivity<ComponentDetailPresent
 
         if (thingPositionInfo != null && subMenu != null) {
             tvToolbarTitle.setText(subMenu.getName() + "详情");
+            tv_location_longitude.setText(thingPositionInfo.getLng()+"");
+            tv_location_latitude.setText(thingPositionInfo.getLat()+"");
             if(!TextUtils.isEmpty(thingPositionInfo.getName())){
                 tv_name.setText(thingPositionInfo.getName());
             }else if(!TextUtils.isEmpty(thingPositionInfo.getDanweiName())){
@@ -233,13 +241,11 @@ public class ComponentDetailActivity extends BaseActivity<ComponentDetailPresent
 
     private void initRecyclerView() {
         //照片列表
-        pictureRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        pictureRecyclerView.setHasFixedSize(true);
-
+        pictureRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
 
         //视频列表
 //        DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        LinearLayoutManager layoutManager_video_later = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager_video_later = new GridLayoutManager(this,2);
 //        checkRecyclerView.addItemDecoration(divider);
         checkRecyclerView.setLayoutManager(layoutManager_video_later);
 
