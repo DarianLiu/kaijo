@@ -10,20 +10,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.cmmap.api.location.CmccLocation;
 import com.geek.kaijo.R;
-import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.Utils.FileSizeUtil;
 import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.app.Constant;
@@ -38,7 +36,6 @@ import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.SpecialCollectionPresenter;
 import com.geek.kaijo.mvp.ui.activity.MapActivity;
-import com.geek.kaijo.mvp.ui.activity.ReportActivity;
 import com.geek.kaijo.mvp.ui.adapter.MySpinnerAdapter;
 import com.geek.kaijo.mvp.ui.adapter.UploadPhotoAdapter;
 import com.geek.kaijo.mvp.ui.fragment.society.culture.CulturalRelicFragment;
@@ -55,16 +52,13 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
-import com.jess.arms.widget.CustomPopupWindow;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,9 +68,7 @@ import okhttp3.RequestBody;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
-/**
- * 特种设备采集
- */
+
 public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPresenter> implements SpecialCollectionContract.View {
     private static final int phot_requestCode = 1011;  //上传图片
     private static final int file_requestCode = 1012;  //上传检查记录
@@ -105,6 +97,11 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     @BindView(R.id.smartRefresh)
     SmartRefreshLayout smartRefresh;
 
+    @BindView(R.id.tv_photo_list)
+    TextView tv_photo_list;
+    @BindView(R.id.tv_video_list)
+    TextView tv_video_list;
+
 //    @BindView(R.id.include_tezhongshebei)
 //    LinearLayout include_tezhongshebei;
 //    @BindView(R.id.include_zaijiangongdi)
@@ -129,7 +126,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
 
     private LoadingProgressDialog loadingDialog;
 
-//    @BindView(R.id.ly_parentView)
+    //    @BindView(R.id.ly_parentView)
 //    LinearLayout ly_parentView;
     Fragment fragment;
 
@@ -191,27 +188,27 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         if (subMenu != null) {
             tvToolbarTitle.setText(subMenu.getName() + "采集");
 //            Fragment fragment = new SpecialCollectionFragment();;
-            if("特种设备".equals(subMenu.getName())){
+            if ("特种设备".equals(subMenu.getName())) {
                 fragment = new SpecialCollectionFragment();
-            }else if("在建工地".equals(subMenu.getName())){
+            } else if ("在建工地".equals(subMenu.getName())) {
                 fragment = new ZaiJianGongDi();
-            }else if("危化品".equals(subMenu.getName())){
+            } else if ("危化品".equals(subMenu.getName())) {
                 fragment = new WHPFragment();
-            }else if("食品".equals(subMenu.getName()) || "餐饮".equals(subMenu.getName())){
+            } else if ("食品".equals(subMenu.getName()) || "餐饮".equals(subMenu.getName())) {
                 fragment = new FoodSafteFragment();
-            }else if("药品".equals(subMenu.getName())){
+            } else if ("药品".equals(subMenu.getName())) {
                 fragment = new DrugSafteFragment();
-            }else if("森林防火".equals(subMenu.getName())){
+            } else if ("森林防火".equals(subMenu.getName())) {
 //                fragment = new DrugSafteFragment();
                 ly_senlinfanhuo = findViewById(R.id.ly_senlinfanhuo);
                 ly_senlinfanhuo.setVisibility(View.VISIBLE);
                 senl_et_name = findViewById(R.id.senl_et_name);
-                if(thingPositionInfo!=null){
+                if (thingPositionInfo != null) {
                     senl_et_name.setText(thingPositionInfo.getName());
                 }
-            }else if("防台防汛".equals(subMenu.getName())){
+            } else if ("防台防汛".equals(subMenu.getName())) {
                 fragment = new TyphoonFloodFragment();
-            }else if("冬季除雪".equals(subMenu.getName())){
+            } else if ("冬季除雪".equals(subMenu.getName())) {
                 ly_dongjichuxue = findViewById(R.id.ly_dongjichuxue);
                 ly_dongjichuxue.setVisibility(View.VISIBLE);
                 dongjichuxue_et_address = findViewById(R.id.dongjichuxue_et_address);
@@ -224,13 +221,13 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 MySpinnerAdapter<String> mStreetAdapter = new MySpinnerAdapter<>(this, checkList);
                 dongjichuxue_et_isPodao.setAdapter(mStreetAdapter);
 
-                if(thingPositionInfo!=null){
+                if (thingPositionInfo != null) {
                     dongjichuxue_et_address.setText(thingPositionInfo.getAddress());
-                    if("是".equals(thingPositionInfo.getIsPodao())){
+                    if ("是".equals(thingPositionInfo.getIsPodao())) {
                         dongjichuxue_et_isPodao.setSelection(1);
                     }
                 }
-            }else if("文明祭祀".equals(subMenu.getName())){
+            } else if ("文明祭祀".equals(subMenu.getName())) {
                 ly_wenmingjisi = findViewById(R.id.ly_wenmingjisi);
                 ly_wenmingjisi.setVisibility(View.VISIBLE);
                 jisi_et_address = findViewById(R.id.jisi_et_address);
@@ -238,14 +235,14 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 jisi_phone = findViewById(R.id.jisi_phone);
                 jisi_zerenquRemark = findViewById(R.id.jisi_zerenquRemark);
 
-                if(thingPositionInfo!=null){
+                if (thingPositionInfo != null) {
                     jisi_et_address.setText(thingPositionInfo.getAddress());
                     jisi_farenName.setText(thingPositionInfo.getFarenName());
                     jisi_phone.setText(thingPositionInfo.getContact());
                     jisi_zerenquRemark.setText(thingPositionInfo.getZerenquRemark());
 
                 }
-            }else if("网吧".equals(subMenu.getName())){
+            } else if ("网吧".equals(subMenu.getName())) {
                 ly_wangba = findViewById(R.id.ly_wangba);
                 ly_wangba.setVisibility(View.VISIBLE);
                 et_wangba_name = findViewById(R.id.et_wangba_name);
@@ -253,23 +250,23 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 wangba_farenName = findViewById(R.id.wangba_farenName);
                 wangba__phone = findViewById(R.id.wangba__phone);
 
-                if(thingPositionInfo!=null){
+                if (thingPositionInfo != null) {
                     et_wangba_name.setText(thingPositionInfo.getName());
                     et_wangba_adress.setText(thingPositionInfo.getAddress());
                     wangba_farenName.setText(thingPositionInfo.getFarenName());
                     wangba__phone.setText(thingPositionInfo.getContact());
 
                 }
-            }else if("文物保护单位".equals(subMenu.getName())){
+            } else if ("文物保护单位".equals(subMenu.getName())) {
                 fragment = new CulturalRelicFragment();
-            }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "演艺娱乐".equals(subMenu.getName())|| "娱乐场所".equals(subMenu.getName())){
+            } else if ("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "演艺娱乐".equals(subMenu.getName()) || "娱乐场所".equals(subMenu.getName())) {
                 ly_yanchu = findViewById(R.id.ly_yanchu);
                 ly_yanchu.setVisibility(View.VISIBLE);
                 et_yanchu_name = findViewById(R.id.et_yanchu_name);
                 et_yanchu_adress = findViewById(R.id.et_yanchu_adress);
                 jingyingzheName = findViewById(R.id.jingyingzheName);
                 yanchu__phone = findViewById(R.id.yanchu__phone);
-                if(thingPositionInfo!=null){
+                if (thingPositionInfo != null) {
                     et_yanchu_name.setText(thingPositionInfo.getName());
                     et_yanchu_adress.setText(thingPositionInfo.getAddress());
                     jingyingzheName.setText(thingPositionInfo.getJingyingzheName());
@@ -277,22 +274,25 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
 
                 }
             }
-            if(fragment!=null){
+            if (fragment != null) {
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             }
         }
-        if(thingPositionInfo!=null){
+        if (thingPositionInfo != null) {
             thingPositionId = String.valueOf(thingPositionInfo.getThingPositionId());
             Gson gson = new Gson();
-            uploadPhotoList = gson.fromJson(thingPositionInfo.getPhotos(), new TypeToken<List<UploadFile>>() {}.getType());
-            fileList = gson.fromJson(thingPositionInfo.getCheckRecord(), new TypeToken<List<UploadFile>>() {}.getType());
+            uploadPhotoList = gson.fromJson(thingPositionInfo.getPhotos(), new TypeToken<List<UploadFile>>() {
+            }.getType());
+            fileList = gson.fromJson(thingPositionInfo.getCheckRecord(), new TypeToken<List<UploadFile>>() {
+            }.getType());
+            lat = thingPositionInfo.getLat();
+            lng = thingPositionInfo.getLng();
+            tvLocationLongitude.setText(String.valueOf(lng));
+            tvLocationLatitude.setText(String.valueOf(lat));
 
-            tvLocationLongitude.setText(String.valueOf(thingPositionInfo.getLng()));
-            tvLocationLatitude.setText(String.valueOf(thingPositionInfo.getLat()));
 
-
-    }
+        }
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         initSpinnerStreetGrid();
 
@@ -308,47 +308,62 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     }
 
 
-
     private void initRecyclerView() {
         //上传图片
-        if(uploadPhotoList==null){
+        if (uploadPhotoList == null) {
             uploadPhotoList = new ArrayList<>();
         }
         photoAdapter = new UploadPhotoAdapter(this, uploadPhotoList);
+        DividerItemDecoration divider_photo = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL); //分割线
+        upload_picture_list.addItemDecoration(divider_photo);
         upload_picture_list.setLayoutManager(new LinearLayoutManager(this));
         upload_picture_list.setHasFixedSize(true);
         upload_picture_list.setAdapter(photoAdapter);
         photoAdapter.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (uploadPhotoList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    uploadPhotoList.remove(position);
-                    photoAdapter.notifyDataSetChanged();
+                uploadPhotoList.remove(position);
+                photoAdapter.notifyDataSetChanged();
+                if (photoAdapter.getItemCount() != 0) {
+                    tv_photo_list.setVisibility(View.GONE);
+                } else {
+                    tv_photo_list.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onItemAgainUploadClick(View v, int position) { //上传失败 重新上传
                 if (mPresenter != null) {
-                    mPresenter.uploadFile(uploadPhotoList.get(position).getFileName());
+                    mPresenter.uploadPhotoFile(uploadPhotoList.get(position).getFileName());
                 }
             }
         });
 
+        if (photoAdapter.getItemCount() != 0) {
+            tv_photo_list.setVisibility(View.GONE);
+        } else {
+            tv_photo_list.setVisibility(View.VISIBLE);
+        }
+
         //上传检查记录
-        if(fileList==null){
+        if (fileList == null) {
             fileList = new ArrayList<>();
         }
         fileAdapter = new UploadPhotoAdapter(this, fileList);
+        DividerItemDecoration divider_file = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL); //分割线
+        check_record_list.addItemDecoration(divider_file);
         check_record_list.setLayoutManager(new LinearLayoutManager(this));
         check_record_list.setHasFixedSize(true);
         check_record_list.setAdapter(fileAdapter);
         fileAdapter.setOnItemOnClilcklisten(new UploadPhotoAdapter.OnItemOnClicklisten() {
             @Override
             public void onItemDeleteClick(View v, int position) {
-                if (fileList.get(position).getIsSuccess() == 1) { //上传成功  显示删除
-                    fileList.remove(position);
-                    fileAdapter.notifyDataSetChanged();
+                fileList.remove(position);
+                fileAdapter.notifyDataSetChanged();
+                if (fileAdapter.getItemCount() != 0) {
+                    tv_video_list.setVisibility(View.GONE);
+                } else {
+                    tv_video_list.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -359,6 +374,12 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 }
             }
         });
+
+        if (fileAdapter.getItemCount() != 0) {
+            tv_video_list.setVisibility(View.GONE);
+        } else {
+            tv_video_list.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -475,6 +496,11 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 fileAdapter.notifyItemChanged(i);
             }
         }
+        if (fileAdapter.getItemCount() != 0) {
+            tv_video_list.setVisibility(View.GONE);
+        } else {
+            tv_video_list.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -487,6 +513,31 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 photoAdapter.notifyItemChanged(i);
             }
         }
+        if (photoAdapter.getItemCount() != 0) {
+            tv_photo_list.setVisibility(View.GONE);
+        } else {
+            tv_photo_list.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void uploadPhotoError() {
+        if(uploadPhotoList!=null){
+            for (int i = 0; i < uploadPhotoList.size(); i++) {
+                if (TextUtils.isEmpty(uploadPhotoList.get(i).getUrl())) {
+                    uploadPhotoList.get(i).setIsSuccess(2);
+                    photoAdapter.notifyItemChanged(i);
+                }
+            }
+        }
+        if(fileList!=null){
+            for (int i = 0; i < fileList.size(); i++) {
+                if (TextUtils.isEmpty(fileList.get(i).getUrl())) {
+                    fileList.get(i).setIsSuccess(2);
+                    fileAdapter.notifyItemChanged(i);
+                }
+            }
+        }
     }
 
 
@@ -496,7 +547,7 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
             case R.id.btn_location_obtain:  //定位
                 showLoading();
                 GPSUtils.getInstance().setOnLocationListener(locationListener);
-                myHandler.sendEmptyMessageDelayed(1,Constant.location_loadTime);
+                myHandler.sendEmptyMessageDelayed(1, Constant.location_loadTime);
                 break;
             case R.id.btn_submit_pic:
 //                isWhich = 1;
@@ -514,15 +565,15 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
 //                        String photos = new Gson().toJsonTree(uploadPhotoList).toString();
 //                        String checkRecord = new Gson().toJsonTree(fileList).toString();
                         RequestBody requestBody = null;
-                        if("特种设备".equals(subMenu.getName())){
-                            if(fragment instanceof SpecialCollectionFragment){
-                                SpecialCollectionFragment equipmentFragment = (SpecialCollectionFragment)fragment;
-                                if(!equipmentFragment.checkParams()){
+                        if ("特种设备".equals(subMenu.getName())) {
+                            if (fragment instanceof SpecialCollectionFragment) {
+                                SpecialCollectionFragment equipmentFragment = (SpecialCollectionFragment) fragment;
+                                if (!equipmentFragment.checkParams()) {
                                     return;
                                 }
                                 List<Equipment> equipmentList = new ArrayList<>();
                                 for (int i = 0; i < equipmentFragment.ly_addView.getChildCount(); i++) {
-                                    View equipmentView = equipmentFragment.ly_addView.getChildAt(0);
+                                    View equipmentView = equipmentFragment.ly_addView.getChildAt(i);
                                     EditText et_category = equipmentView.findViewById(R.id.et_category);
                                     EditText et_name = equipmentView.findViewById(R.id.et_name);
                                     EditText et_code = equipmentView.findViewById(R.id.et_code);
@@ -542,124 +593,124 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                                     equipmentList.add(equipment);
                                 }
                                 String tezhongshebei = new Gson().toJsonTree(equipmentList).toString();
-                                requestBody = RequestParamUtils.thingInsertInfo(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList, equipmentFragment.et_name.getText().toString(),
+                                requestBody = RequestParamUtils.thingInsertInfo(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList, equipmentFragment.et_name.getText().toString(),
                                         tezhongshebei, equipmentFragment.et_farenName.getText().toString(), equipmentFragment.et_address.getText().toString());
 
                             }
 
-                        }else if("在建工地".equals(subMenu.getName())){
-                            if(fragment instanceof ZaiJianGongDi) {
+                        } else if ("在建工地".equals(subMenu.getName())) {
+                            if (fragment instanceof ZaiJianGongDi) {
                                 ZaiJianGongDi mfragment = (ZaiJianGongDi) fragment;
-                                if(!mfragment.checkParams()){
+                                if (!mfragment.checkParams()) {
                                     return;
                                 }
-                                requestBody = RequestParamUtils.thingInsertInfo_gd(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                        mfragment.gd_et_mark.getText().toString(),mfragment.gd_et_name.getText().toString(),mfragment.gd_et_address.getText().toString(),mfragment.gd_et_shigongdanwei.getText().toString(),
+                                requestBody = RequestParamUtils.thingInsertInfo_gd(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                        mfragment.gd_et_mark.getText().toString(), mfragment.gd_et_name.getText().toString(), mfragment.gd_et_address.getText().toString(), mfragment.gd_et_shigongdanwei.getText().toString(),
                                         mfragment.checkList.get(mfragment.gd_spinner_check.getSelectedItemPosition()), mfragment.gd_et_price.getText().toString(), mfragment.gd_et_jingduzhuangtai.getText().toString(),
-                                        mfragment.gd_jianzhumianji.getText().toString(),mfragment.gd_et_kaigongnriqi.getText().toString(),mfragment.gd_et_jungongriqi.getText().toString(),mfragment.gd_et_jianshedanwei.getText().toString(),
+                                        mfragment.gd_jianzhumianji.getText().toString(), mfragment.gd_et_kaigongnriqi.getText().toString(), mfragment.gd_et_jungongriqi.getText().toString(), mfragment.gd_et_jianshedanwei.getText().toString(),
                                         mfragment.gd_et_jianlidanwei.getText().toString());
                             }
-                        }else if(fragment instanceof WHPFragment) { //危化品
+                        } else if (fragment instanceof WHPFragment) { //危化品
                             WHPFragment mfragment = (WHPFragment) fragment;
-                            if(!mfragment.checkParams()){
+                            if (!mfragment.checkParams()) {
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_whp(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    mfragment.et_name.getText().toString(),mfragment.et_address.getText().toString(),mfragment.et_other.getText().toString(),mfragment.et_category.getText().toString());
-                        }else if(fragment instanceof FoodSafteFragment) { //食品
+                            requestBody = RequestParamUtils.thingInsertInfo_whp(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    mfragment.et_name.getText().toString(), mfragment.et_address.getText().toString(), mfragment.et_other.getText().toString(), mfragment.et_category.getText().toString());
+                        } else if (fragment instanceof FoodSafteFragment) { //食品
                             FoodSafteFragment mfragment = (FoodSafteFragment) fragment;
-                            if(!mfragment.checkParams()){
+                            if (!mfragment.checkParams()) {
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_food(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    mfragment.et_name.getText().toString(),mfragment.et_farenName.getText().toString(),mfragment.et_jjxz.getText().toString(),mfragment.et_jycs.getText().toString(),
-                                    mfragment.et_xkzh.getText().toString(),mfragment.et_ztyt.getText().toString(),mfragment.checkList.get(mfragment.spinner_street.getSelectedItemPosition()),mfragment.tv_time.getText().toString(),
-                                    mfragment.et_category.getText().toString(), mfragment.et_jgjg.getText().toString(),mfragment.et_fxdj.getText().toString(),mfragment.et_Telephone.getText().toString(),mfragment.et_phone.getText().toString());
-                        }else if(fragment instanceof DrugSafteFragment) { //药品
+                            requestBody = RequestParamUtils.thingInsertInfo_food(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    mfragment.et_name.getText().toString(), mfragment.et_farenName.getText().toString(), mfragment.et_jjxz.getText().toString(), mfragment.et_jycs.getText().toString(),
+                                    mfragment.et_xkzh.getText().toString(), mfragment.et_ztyt.getText().toString(), mfragment.checkList.get(mfragment.spinner_street.getSelectedItemPosition()), mfragment.tv_time.getText().toString(),
+                                    mfragment.et_category.getText().toString(), mfragment.et_jgjg.getText().toString(), mfragment.et_fxdj.getText().toString(), mfragment.et_Telephone.getText().toString(), mfragment.et_phone.getText().toString());
+                        } else if (fragment instanceof DrugSafteFragment) { //药品
                             DrugSafteFragment mfragment = (DrugSafteFragment) fragment;
-                            if(!mfragment.checkParams()){
+                            if (!mfragment.checkParams()) {
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_drug(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    mfragment.et_companyName.getText().toString(),mfragment.et_register_name.getText().toString(),mfragment.et_farenName.getText().toString(),mfragment.et_yaoshi.getText().toString(),
-                                    mfragment.et_xukezhanghao.getText().toString(),mfragment.et_xukezhengTime.getText().toString(),mfragment.et_youxiaoqiTime.getText().toString(),mfragment.et_jingyinfanshi.getText().toString(),
-                                    mfragment.et_jingyinfanwei.getText().toString(), mfragment.et_Telephone.getText().toString(),mfragment.et_phone.getText().toString());
+                            requestBody = RequestParamUtils.thingInsertInfo_drug(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    mfragment.et_companyName.getText().toString(), mfragment.et_register_name.getText().toString(), mfragment.et_farenName.getText().toString(), mfragment.et_yaoshi.getText().toString(),
+                                    mfragment.et_xukezhanghao.getText().toString(), mfragment.et_xukezhengTime.getText().toString(), mfragment.et_youxiaoqiTime.getText().toString(), mfragment.et_jingyinfanshi.getText().toString(),
+                                    mfragment.et_jingyinfanwei.getText().toString(), mfragment.et_Telephone.getText().toString(), mfragment.et_phone.getText().toString());
 
-                        }else if("森林防火".equals(subMenu.getName())){
-                            if(TextUtils.isEmpty(senl_et_name.getText().toString())){
+                        } else if ("森林防火".equals(subMenu.getName())) {
+                            if (TextUtils.isEmpty(senl_et_name.getText().toString())) {
                                 showMessage("请输入点位名称");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_senl(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                            requestBody = RequestParamUtils.thingInsertInfo_senl(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
                                     senl_et_name.getText().toString().trim());
 
-                        }else if(fragment instanceof TyphoonFloodFragment){ //防台防汛
+                        } else if (fragment instanceof TyphoonFloodFragment) { //防台防汛
                             TyphoonFloodFragment mfragment = (TyphoonFloodFragment) fragment;
-                            if(!mfragment.checkParams()){
+                            if (!mfragment.checkParams()) {
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_ftfx(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    mfragment.checkList.get(mfragment.spinner_category.getSelectedItemPosition()),mfragment.et_state.getText().toString(),mfragment.et_address.getText().toString(),mfragment.et_danweiName.getText().toString(),
-                                    mfragment.et_farenName.getText().toString(),mfragment.et_leading_TlPhone.getText().toString(),mfragment.et_leading_phone.getText().toString(),mfragment.et_jiedaozerenName.getText().toString(),
+                            requestBody = RequestParamUtils.thingInsertInfo_ftfx(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    mfragment.checkList.get(mfragment.spinner_category.getSelectedItemPosition()), mfragment.et_state.getText().toString(), mfragment.et_address.getText().toString(), mfragment.et_danweiName.getText().toString(),
+                                    mfragment.et_farenName.getText().toString(), mfragment.et_leading_TlPhone.getText().toString(), mfragment.et_leading_phone.getText().toString(), mfragment.et_jiedaozerenName.getText().toString(),
                                     mfragment.jiedaozerenMobile.getText().toString());
 
-                        }else if("冬季除雪".equals(subMenu.getName())){
-                            if(TextUtils.isEmpty(dongjichuxue_et_address.getText().toString())){
+                        } else if ("冬季除雪".equals(subMenu.getName())) {
+                            if (TextUtils.isEmpty(dongjichuxue_et_address.getText().toString())) {
                                 showMessage("请输入具体地址");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_dongjichuxue(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    dongjichuxue_et_address.getText().toString().trim(),checkList.get(dongjichuxue_et_isPodao.getSelectedItemPosition()));
+                            requestBody = RequestParamUtils.thingInsertInfo_dongjichuxue(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    dongjichuxue_et_address.getText().toString().trim(), checkList.get(dongjichuxue_et_isPodao.getSelectedItemPosition()));
 
-                        }else if("文明祭祀".equals(subMenu.getName())){
-                            if(TextUtils.isEmpty(jisi_et_address.getText().toString())){
+                        } else if ("文明祭祀".equals(subMenu.getName())) {
+                            if (TextUtils.isEmpty(jisi_et_address.getText().toString())) {
                                 showMessage("请输入祭祀地点");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_jisi(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    jisi_et_address.getText().toString().trim(),jisi_farenName.getText().toString().trim(),jisi_phone.getText().toString().trim(),jisi_zerenquRemark.getText().toString().trim());
+                            requestBody = RequestParamUtils.thingInsertInfo_jisi(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    jisi_et_address.getText().toString().trim(), jisi_farenName.getText().toString().trim(), jisi_phone.getText().toString().trim(), jisi_zerenquRemark.getText().toString().trim());
 
-                        }else if("网吧".equals(subMenu.getName())){
-                            if(TextUtils.isEmpty(et_wangba_name.getText().toString())){
+                        } else if ("网吧".equals(subMenu.getName())) {
+                            if (TextUtils.isEmpty(et_wangba_name.getText().toString())) {
                                 showMessage("请输入名称");
                                 return;
-                            }else if(TextUtils.isEmpty(et_wangba_adress.getText().toString())){
+                            } else if (TextUtils.isEmpty(et_wangba_adress.getText().toString())) {
                                 showMessage("请输入地址");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_wangba(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    et_wangba_name.getText().toString().trim(),et_wangba_adress.getText().toString().trim(),wangba_farenName.getText().toString().trim(),wangba__phone.getText().toString().trim());
+                            requestBody = RequestParamUtils.thingInsertInfo_wangba(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    et_wangba_name.getText().toString().trim(), et_wangba_adress.getText().toString().trim(), wangba_farenName.getText().toString().trim(), wangba__phone.getText().toString().trim());
 
-                        }else if(fragment instanceof CulturalRelicFragment){ //文物保护单位
+                        } else if (fragment instanceof CulturalRelicFragment) { //文物保护单位
                             CulturalRelicFragment mfragment = (CulturalRelicFragment) fragment;
-                            if(!mfragment.checkParams()){
+                            if (!mfragment.checkParams()) {
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_wenwu(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    mfragment.et_name.getText().toString().trim(),mfragment.et_danweiName.getText().toString().trim(),mfragment.et_farenName.getText().toString().trim(),
-                                    mfragment.et_chanquanDanweiName.getText().toString().trim(),mfragment.et_phone.getText().toString().trim(),mfragment.et_guanlishiyongDanweiName.getText().toString().trim(),
-                                    mfragment.et_guanlishiyongFarenName.getText().toString().trim(), mfragment.et_guanlishiyongLianxiName.getText().toString().trim(),mfragment.et_guanlishiyongContact.getText().toString().trim());
+                            requestBody = RequestParamUtils.thingInsertInfo_wenwu(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    mfragment.et_name.getText().toString().trim(), mfragment.et_danweiName.getText().toString().trim(), mfragment.et_farenName.getText().toString().trim(),
+                                    mfragment.et_chanquanDanweiName.getText().toString().trim(), mfragment.et_phone.getText().toString().trim(), mfragment.et_guanlishiyongDanweiName.getText().toString().trim(),
+                                    mfragment.et_guanlishiyongFarenName.getText().toString().trim(), mfragment.et_guanlishiyongLianxiName.getText().toString().trim(), mfragment.et_guanlishiyongContact.getText().toString().trim());
 
-                        }else if("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) ||"演艺娱乐".equals(subMenu.getName()) || "娱乐场所".equals(subMenu.getName())){
-                            if(TextUtils.isEmpty(et_yanchu_name.getText().toString())){
+                        } else if ("演出场所".equals(subMenu.getName()) || "游艺娱乐".equals(subMenu.getName()) || "演艺娱乐".equals(subMenu.getName()) || "娱乐场所".equals(subMenu.getName())) {
+                            if (TextUtils.isEmpty(et_yanchu_name.getText().toString())) {
                                 showMessage("请输入名称");
                                 return;
-                            }else if(TextUtils.isEmpty(et_yanchu_adress.getText().toString())){
+                            } else if (TextUtils.isEmpty(et_yanchu_adress.getText().toString())) {
                                 showMessage("请输入地址");
                                 return;
-                            }else if(TextUtils.isEmpty(jingyingzheName.getText().toString())){
+                            } else if (TextUtils.isEmpty(jingyingzheName.getText().toString())) {
                                 showMessage("请输入经营者名称");
                                 return;
                             }
-                            requestBody = RequestParamUtils.thingInsertInfo_yanchu(thingPositionId,String.valueOf(subMenu.getThingId()),streetId,communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
-                                    et_yanchu_name.getText().toString().trim(),et_yanchu_adress.getText().toString().trim(),jingyingzheName.getText().toString().trim(),yanchu__phone.getText().toString().trim());
+                            requestBody = RequestParamUtils.thingInsertInfo_yanchu(thingPositionId, String.valueOf(subMenu.getThingId()), streetId, communityId, String.valueOf(userInfo.getGridId()), String.valueOf(lat), String.valueOf(lng), uploadPhotoList, fileList,
+                                    et_yanchu_name.getText().toString().trim(), et_yanchu_adress.getText().toString().trim(), jingyingzheName.getText().toString().trim(), yanchu__phone.getText().toString().trim());
 
                         }
 
-                        if(requestBody!=null){
-                            if(thingPositionInfo==null){
+                        if (requestBody != null) {
+                            if (thingPositionInfo == null) {
                                 mPresenter.insertInfo(requestBody);
-                            }else {
+                            } else {
                                 mPresenter.updateInfo(requestBody);
                             }
 
@@ -670,8 +721,6 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 break;
         }
     }
-
-
 
 
     /**
@@ -723,6 +772,12 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                         uploadPhoto1.setFileSize(size1);
                         uploadPhotoList.add(uploadPhoto1);
                         photoAdapter.notifyDataSetChanged();
+                        if (photoAdapter.getItemCount() != 0) {
+                            tv_photo_list.setVisibility(View.GONE);
+                        } else {
+                            tv_photo_list.setVisibility(View.VISIBLE);
+                        }
+
                         if (mPresenter != null) {
                             mPresenter.uploadPhotoFile(compressedPath);
                         }
@@ -740,16 +795,21 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                         uploadPhoto1.setFileSize(size1);
                         fileList.add(uploadPhoto1);
                         fileAdapter.notifyDataSetChanged();
+                        if (fileAdapter.getItemCount() != 0) {
+                            tv_video_list.setVisibility(View.GONE);
+                        } else {
+                            tv_video_list.setVisibility(View.VISIBLE);
+                        }
                         if (mPresenter != null) {
                             mPresenter.uploadFile(compressedPath);
                         }
                     }
                     break;
             }
-        }else if(requestCode==Constant.MAP_REQUEST_CODE && resultCode==Constant.MAP_REQUEST_CODE){
-            if(data!=null){
-                lng = data.getDoubleExtra("lng",0);
-                lat = data.getDoubleExtra("lat",0);
+        } else if (requestCode == Constant.MAP_REQUEST_CODE && resultCode == Constant.MAP_REQUEST_CODE) {
+            if (data != null) {
+                lng = data.getDoubleExtra("lng", 0);
+                lat = data.getDoubleExtra("lat", 0);
 
                 tvLocationLatitude.setText(String.valueOf(lat));
                 tvLocationLongitude.setText(String.valueOf(lng));
@@ -760,25 +820,25 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     private GPSUtils.LocationListener locationListener = new GPSUtils.LocationListener() {
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
-            if(SpecialCollectionActivity.this.isFinishing())return;
-            if(myHandler!=null){
+            if (SpecialCollectionActivity.this.isFinishing()) return;
+            if (myHandler != null) {
                 myHandler.removeMessages(1);
             }
             hideLoading();
-            if(cmccLocation!=null){
+            if (cmccLocation != null) {
                 lat = cmccLocation.getLatitude();
                 lng = cmccLocation.getLongitude();
-                if(lat>0 &&lng>0){
+                if (lat > 0 && lng > 0) {
                     tvLocationLatitude.setText(String.valueOf(lat));
                     tvLocationLongitude.setText(String.valueOf(lng));
                     Intent intent = new Intent(SpecialCollectionActivity.this, MapActivity.class);
                     intent.putExtra("lat", lat);
                     intent.putExtra("lng", lng);
                     SpecialCollectionActivity.this.startActivityForResult(intent, Constant.MAP_REQUEST_CODE);
-                }else {
+                } else {
                     showNormalDialog();
                 }
-            }else {
+            } else {
                 showNormalDialog();
             }
 
@@ -812,8 +872,8 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
         }
     }
 
-    private void showNormalDialog(){
-        if(this.isFinishing())return;
+    private void showNormalDialog() {
+        if (this.isFinishing()) return;
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(this);
         normalDialog.setTitle("定位");

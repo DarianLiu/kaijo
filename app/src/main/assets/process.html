@@ -151,7 +151,6 @@
 
 </div>
 
-
 <script src="jquery-1.9.1.min.js"></script>
 <script>
    function passParam(caseId,processId,caseAttribute) {
@@ -161,7 +160,6 @@
 
       function showData(caseId,processId,caseAttribute) {
 
-
           var param={
               "caseId":caseId,
               "processId":processId,
@@ -170,7 +168,7 @@
 
           $.ajax({
               type:"post",
-              url:"http://192.168.43.186:8766/case/viewCaseForApp.json",
+              url:"http://192.168.0.252:8766/case/viewCaseForApp.json",
               data:JSON.stringify(param),
               dataType:"json",
               contentType:"application/json",

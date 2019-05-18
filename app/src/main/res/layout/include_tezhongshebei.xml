@@ -7,90 +7,47 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldDrawableStyle"
         android:layout_marginTop="12dp"
-        android:drawableRight="@drawable/icon_required"
-        android:drawablePadding="5dp"
-        android:text="单位名称"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="单位名称" />
 
     <EditText
         android:id="@+id/et_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
-        android:hint="@string/hint_name"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        android:hint="@string/hint_name"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="法定代表人"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="法定代表人" />
 
     <EditText
         android:id="@+id/et_farenName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入法定代表人"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        android:layout_marginTop="5dp"
+        style="@style/editDefalutStyle"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldDrawableStyle"
         android:layout_marginTop="12dp"
-        android:drawableRight="@drawable/icon_required"
-        android:drawablePadding="5dp"
-        android:text="使用地点"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="使用地点" />
 
     <EditText
         android:id="@+id/et_address"
+        android:layout_marginTop="5dp"
+        android:hint="@string/hint_address"
+        style="@style/editDefalutStyle"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/ly_addView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
-        android:hint="@string/hint_address"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        android:orientation="vertical">
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_add_equipment"
@@ -102,12 +59,4 @@
         android:padding="8dp"
         android:text="@string/add_special"
         android:textSize="@dimen/t14" />
-
-    <LinearLayout
-        android:id="@+id/ly_addView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    </LinearLayout>
 </LinearLayout>

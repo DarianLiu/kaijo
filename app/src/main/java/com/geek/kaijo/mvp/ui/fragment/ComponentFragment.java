@@ -40,11 +40,6 @@ public class ComponentFragment extends BaseFragment<ComponentPresenter> implemen
     @BindView(R.id.tab)
     TabLayout tabLayout;
     private LoadingProgressDialog loadingDialog;
-
-//    private SocialCulturalFragment culturalFragment;//文化娱乐
-//    private SocialEmergencyPreventFragment emergencyPreventFragment;//应急防御
-//    private SocialFoodDrugFragment foodDrugFragment;//食品药品
-//    private SocialProductFragment productFragment;//安全生产
     private List<Menu> menuList;
     private List<Fragment> fragmentList = new ArrayList<>();
 
@@ -66,12 +61,9 @@ public class ComponentFragment extends BaseFragment<ComponentPresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
-
         if (mPresenter != null) {
             mPresenter.preListInfoMenu(); //存储文件里获取菜单数据
         }
-
     }
 
     private void showDataView() {
@@ -189,8 +181,6 @@ public class ComponentFragment extends BaseFragment<ComponentPresenter> implemen
                 showDataView();
             }
         }
-
-
     }
 
     @Override
@@ -203,11 +193,6 @@ public class ComponentFragment extends BaseFragment<ComponentPresenter> implemen
         if (mPresenter != null) {
             mPresenter.httpListInfoMenu();
         }
-//        else {
-//            if (mPresenter != null) {
-//                mPresenter.httpListInfoMenu();
-//            }
-//        }
 
     }
 

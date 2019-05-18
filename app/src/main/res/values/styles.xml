@@ -103,4 +103,38 @@
     </declare-styleable>
 
 
+    <!--textView-->
+    <style name="textBoldStyle" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textSize">@dimen/t12</item>
+        <item name="android:textColor">@color/color_text_black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textBoldDrawableStyle" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawableRight">@drawable/icon_required</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textSize">@dimen/t12</item>
+        <item name="android:textColor">@color/color_text_black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="editDefalutStyle" parent="@android:style/Widget.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/selector_frame_background</item>
+        <item name="android:maxLength">30</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">@dimen/t14</item>
+        <item name="android:textColor">@color/color_text_title</item>
+        <item name="android:textColorHint">@color/color_text_hint</item>
+    </style>
+
 </resources>

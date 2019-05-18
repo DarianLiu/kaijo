@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmmap.api.location.CmccLocation;
 import com.cmmap.api.location.CmccLocationClient;
@@ -197,6 +199,14 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
                 break;
             case R.id.btn_save_back:
                 if (userInfo != null) {
+                    if(TextUtils.isEmpty(tv_thing_name.getText().toString().trim())){
+                        Toast.makeText(this,"请选择巡查项",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if(mLat==0 || mLng==0){
+                        Toast.makeText(this,"请选择位置",Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     Inspection inspection = inspectionList.get(radioCheckedPosition);
                     mPresenter.addOrUpdateThingPosition(inspection.getThingId(), inspection.getName(), mLat, mLng, userInfo.getStreetId(), userInfo.getCommunityId(), userInfo.getGridId(), userInfo.getUserId());
                 }

@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.mvp.model.entity.Case;
@@ -15,8 +19,12 @@ import com.geek.kaijo.mvp.model.entity.Case;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProcessActivity extends Activity {
+import butterknife.BindView;
 
+public class ProcessActivity extends AppCompatActivity {
+
+    private TextView tvToolbarTitle;
+    private Toolbar toolbar;
     private WebView webWiew;
     private Case aCase;
 
@@ -26,6 +34,16 @@ public class ProcessActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_process);
+
+        toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        tvToolbarTitle = findViewById(R.id.tv_toolbar_title);
+        toolbar = findViewById(R.id.toolbar);
+
+        tvToolbarTitle.setText("查看处理过程");
 
         webWiew = findViewById(R.id.webWiew);
 
@@ -48,32 +66,33 @@ public class ProcessActivity extends Activity {
                         }
                     }
                 });
-//        webWiew.setWebViewClient(new WebViewClient()
-//        {
-//            @Override
-//            public void onPageFinished(WebView view, String url)
-//            {
-//                super.onPageFinished(view, url);
-//                webWiew.loadUrl("javascript:passParam("+aCase.getCaseId()+","+aCase.getCaseAttribute()+","+aCase.getProcessId()+")");
-//            }
-//            @Override
-//            public void onPageStarted(WebView view, String url, Bitmap favicon)
-//            {
-//
-//                super.onPageStarted(view, url, favicon);
-//
-//            }
-//        });
 
         if(aCase!=null){
-            Map<String,String> map=new HashMap<String,String>();
-            map.put("caseId",aCase.getCaseId());
-            map.put("caseAttribute",aCase.getCaseAttribute());
-            map.put("processId","2");
-            webWiew.loadUrl("file:////android_asset/process.html",map);
+//            Map<String,String> map=new HashMap<String,String>();
+//            map.put("caseId",aCase.getCaseId());
+//            map.put("caseAttribute",aCase.getCaseAttribute());
+//            map.put("processId","2");
+//            webWiew.loadUrl("file:////android_asset/process.html",map);
+            webWiew.loadUrl("file:////android_asset/process.html");
         }else {
             webWiew.loadUrl("file:////android_asset/process.html");
         }
+//
+//        String a = "";
+////        String method ="javascript:test(\""+a+"\")" ;
+//        String method ="javascript:passParamaa(rtretre)" ;
+//        webWiew.loadUrl(method);
+
+
+
+
+
+//        webWiew.evaluateJavascript(method, new ValueCallback<String>() {
+//            @Override
+//            public void onReceiveValue(String value) {
+//                DyToastUtils.showShort(PropertyPaymentActivity.this, value);
+//            }
+//        });
     }
 
 
