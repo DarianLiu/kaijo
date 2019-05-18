@@ -1,6 +1,6 @@
 <html lang="zh-CN">
-  <body>
-      <style>
+<body>
+<style>
           body{
                 background-color: #ecf0f5;
           }
@@ -144,36 +144,41 @@
                 display: inline-block;
             }
         </style>
-        <body>
+<body>
 
 
-      <div class="detailed">
-          
-      </div>
+<div class="detailed">
+
+</div>
 
 
-  <script src="jquery-1.9.1.min.js"></script>
-  <script>
+<script src="jquery-1.9.1.min.js"></script>
+<script>
    function passParam(caseId,processId,caseAttribute) {
-        alert(caseId+"-"+processId+"-"+caseAttribute)
+        //alert(caseId+" "+processId+" "+caseAttribute);
+        showData(caseId,processId,caseAttribute);
    }
-      $(function () {
+
+      function showData(caseId,processId,caseAttribute) {
+
+
           var param={
-              "caseId":578,
-              "processId":2,
-              "caseAttribute":2
+              "caseId":caseId,
+              "processId":processId,
+              "caseAttribute":caseAttribute
           }
 
           $.ajax({
               type:"post",
-              url:"http://192.168.0.252:8766/case/viewCaseForApp.json",
+              url:"http://192.168.43.186:8766/case/viewCaseForApp.json",
               data:JSON.stringify(param),
               dataType:"json",
               contentType:"application/json",
               success: function(data){
-                  console.log(data);
-                  
-                  var strList='';
+
+
+
+var strList='';
                   var strImgBefore=''
                   for (var i=0 ;i<data.data.workflowOperateList.length;i++){
                             if (data.data.workflowOperateList[i].isFinish==1){
@@ -206,16 +211,17 @@
                         </div>
                       `
                   }
-                  
+
                   for (var i=0;i<data.data.caseInfoVO.attachList.length;i++){
                       strImgBefore+=`
                                <img src=${data.data.caseInfoVO.attachList[i].url}>
 
                       `
                   }
-                  
 
-                  var str=`
+
+
+var str=`
 
           <div class="list" style="margin-top: 60px;">
                 <p class="faa">案情信息</p>
@@ -340,22 +346,13 @@
 
 
 
-
-
-
-
-
-
-
               }
           });
 
 
 
-
-
-      })//
+      }
 
   </script>
-  </body>
+</body>
 </html>

@@ -1,11 +1,13 @@
 package com.geek.kaijo.mvp.ui.activity;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.mvp.model.entity.Case;
@@ -18,6 +20,7 @@ public class ProcessActivity extends Activity {
     private WebView webWiew;
     private Case aCase;
 
+    static boolean flag =false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +36,35 @@ public class ProcessActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
         // 设置允许JS弹窗
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webWiew.setWebChromeClient(new WebChromeClient());
+
+        webWiew.setWebChromeClient(new WebChromeClient()
+                {
+                    public void onProgressChanged(WebView view, int progress)
+                    {
+                        //当进度走到100的时候做自己的操作，我这边是弹出dialog
+                        if(progress == 100 &&!flag){
+                            flag = true;
+                            webWiew.loadUrl("javascript:passParam("+aCase.getCaseId()+","+aCase.getCaseAttribute()+","+aCase.getProcessId()+")");
+                        }
+                    }
+                });
+//        webWiew.setWebViewClient(new WebViewClient()
+//        {
+//            @Override
+//            public void onPageFinished(WebView view, String url)
+//            {
+//                super.onPageFinished(view, url);
+//                webWiew.loadUrl("javascript:passParam("+aCase.getCaseId()+","+aCase.getCaseAttribute()+","+aCase.getProcessId()+")");
+//            }
+//            @Override
+//            public void onPageStarted(WebView view, String url, Bitmap favicon)
+//            {
+//
+//                super.onPageStarted(view, url, favicon);
+//
+//            }
+//        });
+
         if(aCase!=null){
             Map<String,String> map=new HashMap<String,String>();
             map.put("caseId",aCase.getCaseId());
