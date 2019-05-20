@@ -17,6 +17,7 @@ import com.geek.kaijo.mvp.contract.MyMessageContract;
 import com.geek.kaijo.mvp.presenter.MyMessagePresenter;
 import com.geek.kaijo.mvp.ui.activity.ChangePasswordActivity;
 import com.geek.kaijo.mvp.ui.activity.LoginActivity;
+import com.geek.kaijo.mvp.ui.activity.MyInfoActivity;
 import com.geek.kaijo.mvp.ui.activity.PlanViewActivity;
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.di.component.AppComponent;
@@ -96,7 +97,8 @@ public class MyMessageFragment extends BaseFragment<MyMessagePresenter> implemen
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_change_password://更改密码
-                launchActivity(new Intent(getActivity(),ChangePasswordActivity.class));
+//                launchActivity(new Intent(getActivity(),ChangePasswordActivity.class));
+                launchActivity(new Intent(getActivity(),MyInfoActivity.class));
                 break;
                 case R.id.tv_view_plan://预案查看
                 launchActivity(new Intent(getActivity(),PlanViewActivity.class));

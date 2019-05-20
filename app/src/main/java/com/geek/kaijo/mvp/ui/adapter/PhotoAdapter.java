@@ -63,9 +63,6 @@ public class PhotoAdapter extends RecyclerView.Adapter {
 
         Glide.with(context).load(Api.URL_BANNER+"/"+list.get(position).getUrl()).into(mHolder.img_upload_phto);
 
-        LogUtils.debugInfo("1111111111111111111111111111111111111url===="+Api.URL_BANNER+"/"+list.get(position).getUrl());
-//        Picasso.get().load(new File(list.get(position).getUrl())).resize(UploadFile.width, UploadFile.height).centerCrop().into(mHolder.img_upload_phto);
-
 //        if(list.get(position).selectStatus==0){
 //            mHolder.photo_checkBox.setChecked(false);
 //        }else {

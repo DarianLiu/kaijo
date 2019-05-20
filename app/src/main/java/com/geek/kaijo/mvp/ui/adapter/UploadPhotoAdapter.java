@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.geek.kaijo.R;
+import com.geek.kaijo.app.api.Api;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.ui.activity.UploadActivity;
 import com.squareup.picasso.Picasso;
@@ -89,11 +90,17 @@ public class UploadPhotoAdapter extends RecyclerView.Adapter {
 
                 }
             }else {
-                Glide.with(context).load(list.get(position).getUrl()).into(mHolder.img_upload_phto);
+                if(!TextUtils.isEmpty(list.get(position).getUrl())) {
+                    Glide.with(context).load(Api.URL_BANNER + "/" + list.get(position).getUrl()).into(mHolder.img_upload_phto);
+                    mHolder.rl_delete.setVisibility(View.VISIBLE);
+                    mHolder.again_upload.setVisibility(View.GONE);
+                }
             }
         }else {
-            if(TextUtils.isEmpty(list.get(position).getUrl())){
-                Glide.with(context).load(list.get(position).getUrl()).into(mHolder.img_upload_phto);
+            if(!TextUtils.isEmpty(list.get(position).getUrl())){
+                Glide.with(context).load(Api.URL_BANNER+"/"+list.get(position).getUrl()).into(mHolder.img_upload_phto);
+                mHolder.rl_delete.setVisibility(View.VISIBLE);
+                mHolder.again_upload.setVisibility(View.GONE);
             }
         }
 

@@ -101,6 +101,10 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     TextView tv_photo_list;
     @BindView(R.id.tv_video_list)
     TextView tv_video_list;
+    @BindView(R.id.la_check_record)
+    LinearLayout la_check_record;
+    @BindView(R.id.btn_submit_check_record)
+    TextView btn_submit_check_record;
 
 //    @BindView(R.id.include_tezhongshebei)
 //    LinearLayout include_tezhongshebei;
@@ -206,8 +210,12 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                 if (thingPositionInfo != null) {
                     senl_et_name.setText(thingPositionInfo.getName());
                 }
+                la_check_record.setVisibility(View.GONE);
+                btn_submit_check_record.setVisibility(View.GONE);
             } else if ("防台防汛".equals(subMenu.getName())) {
                 fragment = new TyphoonFloodFragment();
+                la_check_record.setVisibility(View.GONE);
+                btn_submit_check_record.setVisibility(View.GONE);
             } else if ("冬季除雪".equals(subMenu.getName())) {
                 ly_dongjichuxue = findViewById(R.id.ly_dongjichuxue);
                 ly_dongjichuxue.setVisibility(View.VISIBLE);
@@ -227,6 +235,8 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                         dongjichuxue_et_isPodao.setSelection(1);
                     }
                 }
+                la_check_record.setVisibility(View.GONE);
+                btn_submit_check_record.setVisibility(View.GONE);
             } else if ("文明祭祀".equals(subMenu.getName())) {
                 ly_wenmingjisi = findViewById(R.id.ly_wenmingjisi);
                 ly_wenmingjisi.setVisibility(View.VISIBLE);
@@ -242,6 +252,8 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
                     jisi_zerenquRemark.setText(thingPositionInfo.getZerenquRemark());
 
                 }
+                la_check_record.setVisibility(View.GONE);
+                btn_submit_check_record.setVisibility(View.GONE);
             } else if ("网吧".equals(subMenu.getName())) {
                 ly_wangba = findViewById(R.id.ly_wangba);
                 ly_wangba.setVisibility(View.VISIBLE);
@@ -745,7 +757,13 @@ public class SpecialCollectionActivity extends BaseActivity<SpecialCollectionPre
     }
 
     private boolean checkParams() {
-        if (lat == 0 || lng == 0) {
+        if(mStreetList.size()==0 || spinner_street.getSelectedItemPosition()<0){
+            showMessage("请选择街道");
+            return false;
+        }else if(mCommunityList.size()==0 || spinner_community.getSelectedItemPosition()<0){
+            showMessage("请选择社区");
+            return false;
+        }else if (lat == 0 || lng == 0) {
             showMessage("请定位位置");
             return false;
         } else {

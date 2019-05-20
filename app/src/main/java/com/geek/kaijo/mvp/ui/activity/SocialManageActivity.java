@@ -139,7 +139,7 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
     private void initRecycleView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mDatas = new ArrayList<>();
-        mAdapter = new SocialThingAdapter(mDatas, thingType);
+        mAdapter = new SocialThingAdapter(mDatas, thingType,subMenu);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setItemClickListener(new SocialThingAdapter.ItemClickListener() {
             @Override

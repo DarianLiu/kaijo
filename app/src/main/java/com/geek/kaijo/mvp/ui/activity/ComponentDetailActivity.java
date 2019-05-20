@@ -77,6 +77,12 @@ public class ComponentDetailActivity extends BaseActivity<ComponentDetailPresent
     TextView tv_location_longitude;
     @BindView(R.id.tv_location_latitude)
     TextView tv_location_latitude;
+    @BindView(R.id.la_check_record)
+    LinearLayout la_check_record;
+//    @BindView(R.id.spinner_street)
+//    TextView spinner_street;  //街道
+//    @BindView(R.id.spinner_community)
+//    TextView spinner_community;  //社区
 
 
     public ThingPositionInfo thingPositionInfo;
@@ -169,8 +175,10 @@ public class ComponentDetailActivity extends BaseActivity<ComponentDetailPresent
                 if(thingPositionInfo!=null){
                     senl_et_name.setText(thingPositionInfo.getName());
                 }
+                la_check_record.setVisibility(View.GONE);
             } else if ("防台防汛".equals(subMenu.getName())) {
                 fragment = new TyphoonFloodDetailFragment();
+                la_check_record.setVisibility(View.GONE);
             } else if ("冬季除雪".equals(subMenu.getName())) {
                 ly_dongjichuxue = findViewById(R.id.ly_dongjichuxue);
                 ly_dongjichuxue.setVisibility(View.VISIBLE);
@@ -185,6 +193,7 @@ public class ComponentDetailActivity extends BaseActivity<ComponentDetailPresent
                         dongjichuxue_et_isPodao.setText("否");
                     }
                 }
+                la_check_record.setVisibility(View.GONE);
             } else if ("文明祭祀".equals(subMenu.getName())) {
                 ly_wenmingjisi = findViewById(R.id.ly_wenmingjisi);
                 ly_wenmingjisi.setVisibility(View.VISIBLE);
@@ -199,6 +208,7 @@ public class ComponentDetailActivity extends BaseActivity<ComponentDetailPresent
                     jisi_zerenquRemark.setText(thingPositionInfo.getZerenquRemark());
 
                 }
+                la_check_record.setVisibility(View.GONE);
             } else if ("网吧".equals(subMenu.getName())) {
                 ly_wangba = findViewById(R.id.ly_wangba);
                 ly_wangba.setVisibility(View.VISIBLE);

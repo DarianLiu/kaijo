@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -28,7 +28,7 @@
                 android:paddingLeft="15dp"
                 android:paddingTop="10dp"
                 android:paddingRight="15dp"
-                android:paddingBottom="10dp">
+                android:paddingBottom="30dp">
 
                 <include layout="@layout/addtop_layout" />
                 <LinearLayout
@@ -45,34 +45,18 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldDrawableStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="点位名称"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="点位名称" />
 
                     <EditText
                         android:id="@+id/senl_et_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入点位名称"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
+                        />
 
                 </LinearLayout>
                 <!--冬季除雪-->
@@ -82,46 +66,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldDrawableStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="具体地址"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="具体地址" />
 
                     <EditText
                         android:id="@+id/dongjichuxue_et_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入具体地址"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
+                        />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="是否为破路"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
-
+                        android:text="是否为破路" />
 
                     <!--<EditText
                         android:id="@+id/dongjichuxue_et_isPodao"
@@ -155,118 +116,51 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldDrawableStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="祭扫地点"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="祭扫地点" />
 
                     <EditText
                         android:id="@+id/jisi_et_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入祭扫地点"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
-
+                        />
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="责任人"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="责任人" />
 
                     <EditText
                         android:id="@+id/jisi_farenName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入负责人"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
-
+                        />
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="联系电话"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="联系电话" />
 
                     <EditText
                         android:id="@+id/jisi_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入联系电话"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
-
+                        />
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="责任区扫描"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="责任区扫描" />
 
                     <EditText
                         android:id="@+id/jisi_zerenquRemark"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入责任区扫描"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
+                        />
 
                 </LinearLayout>
                 <!--网吧采集-->
@@ -276,119 +170,52 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldDrawableStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="名称"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="名称" />
 
                     <EditText
                         android:id="@+id/et_wangba_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入名称"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
-
+                        />
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldDrawableStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="地址"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="地址" />
 
                     <EditText
                         android:id="@+id/et_wangba_adress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入地址"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
+                        />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="法定代表人"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="法定代表人" />
 
                     <EditText
                         android:id="@+id/wangba_farenName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入法定代表人"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
-
+                        />
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="联系电话"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="联系电话" />
 
                     <EditText
                         android:id="@+id/wangba__phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入联系电话"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
+                        />
 
 
                 </LinearLayout>
@@ -399,120 +226,52 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldDrawableStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="名称"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="名称" />
 
                     <EditText
                         android:id="@+id/et_yanchu_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入名称"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
+                        />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldDrawableStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="地址"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="地址" />
 
                     <EditText
                         android:id="@+id/et_yanchu_adress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入地址"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
-
+                        />
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldDrawableStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="经营者名称"
-                        android:drawableRight="@drawable/icon_required"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="经营者名称" />
 
                     <EditText
                         android:id="@+id/jingyingzheName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入经营者名称"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
-
+                        />
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/textBoldStyle"
                         android:layout_marginTop="12dp"
-                        android:drawablePadding="5dp"
-                        android:text="联系电话"
-                        android:textColor="@color/color_text_black"
-                        android:textSize="@dimen/t12"
-                        android:textStyle="bold" />
+                        android:text="联系电话" />
 
                     <EditText
                         android:id="@+id/yanchu__phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/editDefalutStyle"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/selector_frame_background"
                         android:hint="请输入联系电话"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingLeft="15dp"
-                        android:paddingTop="10dp"
-                        android:paddingRight="15dp"
-                        android:paddingBottom="10dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="@color/color_text_title"
-                        android:textColorHint="@color/color_text_hint"
-                        android:textSize="@dimen/t14" />
+                        />
 
 
                 </LinearLayout>
@@ -522,7 +281,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

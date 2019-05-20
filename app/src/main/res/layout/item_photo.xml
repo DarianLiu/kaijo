@@ -7,10 +7,8 @@
 
     <ImageView
         android:id="@+id/img_upload_phto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="200dp"
-        android:minHeight="200dp"
+        android:layout_width="@dimen/photo_width"
+        android:layout_height="@dimen/photo_height"
         android:layout_marginTop="10dp"
         />
 

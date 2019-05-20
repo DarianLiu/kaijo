@@ -95,31 +95,17 @@
         android:id="@+id/gd_jianzhumianji"
         style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:hint="请输入建筑面积（万平）"
-    />
+        android:hint="请输入建筑面积（万平）" />
 
     <TextView
         style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
         android:text="开工日期" />
 
-
     <TextView
         android:id="@+id/gd_et_kaigongnriqi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        style="@style/textTimeStyle"
+        android:layout_marginTop="5dp" />
 
     <TextView
         style="@style/textBoldStyle"
@@ -128,20 +114,9 @@
 
     <TextView
         android:id="@+id/gd_et_jungongriqi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        style="@style/textTimeStyle"
+        android:layout_marginTop="5dp" />
+
     <TextView
         style="@style/textBoldStyle"
         android:layout_marginTop="12dp"

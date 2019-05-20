@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/img_upload_phto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="@dimen/photo_width"
+        android:layout_height="@dimen/photo_height" />
 
     <RelativeLayout
         android:layout_width="wrap_content"

@@ -121,6 +121,7 @@
         android:textSize="@dimen/t14" />
 
     <LinearLayout
+        android:id="@+id/la_check_record"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

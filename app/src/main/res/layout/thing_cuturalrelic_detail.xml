@@ -4,174 +4,269 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="名称："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="名称" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="产权单位名称："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_danweiName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/et_name"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="产权单位法定代表人："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_farenName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="产权单位名称" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="产权单位联系人："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_chanquanDanweiName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/et_danweiName"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="产权单位联系人电话："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="产权单位法定代表人" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="管理使用单位名称："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_guanlishiyongDanweiName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/et_farenName"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="产权单位联系人" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="管理使用单位法定代表人："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_guanlishiyongFarenName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="管理使用单位联系人："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_guanlishiyongLianxiName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="管理使用单位联系人电话："
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-        <TextView
-            android:id="@+id/et_guanlishiyongContact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_text_black"
-            android:textSize="@dimen/t12" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/et_chanquanDanweiName"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="产权单位联系人电话" />
+
+    <TextView
+        android:id="@+id/et_phone"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="管理使用单位名称" />
+
+    <TextView
+        android:id="@+id/et_guanlishiyongDanweiName"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="管理使用单位法定代表人" />
+
+    <TextView
+        android:id="@+id/et_guanlishiyongFarenName"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="管理使用单位联系人" />
+
+    <TextView
+        android:id="@+id/et_guanlishiyongLianxiName"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="管理使用单位联系人电话" />
+
+    <TextView
+        android:id="@+id/et_guanlishiyongContact"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+
+    <!-- <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="名称："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_name"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="产权单位名称："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_danweiName"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="产权单位法定代表人："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_farenName"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="产权单位联系人："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_chanquanDanweiName"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="产权单位联系人电话："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_phone"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="管理使用单位名称："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_guanlishiyongDanweiName"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="管理使用单位法定代表人："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_guanlishiyongFarenName"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="管理使用单位联系人："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_guanlishiyongLianxiName"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_marginTop="12dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="管理使用单位联系人电话："
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+         <TextView
+             android:id="@+id/et_guanlishiyongContact"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/color_text_black"
+             android:textSize="@dimen/t12" />
+     </LinearLayout>-->
 
 
 </LinearLayout>

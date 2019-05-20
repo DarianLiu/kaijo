@@ -3,6 +3,7 @@ package com.geek.kaijo.mvp.ui.adapter;
 import android.view.View;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.mvp.model.entity.GridItemContent;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.ThingPositionInfo;
 import com.geek.kaijo.mvp.ui.adapter.holder.SocialItemHolder;
@@ -20,10 +21,12 @@ import java.util.List;
 public class SocialThingAdapter extends DefaultAdapter<ThingPositionInfo> {
 
     private int entryType;
+    private GridItemContent subMenu;
 
-    public SocialThingAdapter(List<ThingPositionInfo> infos, int entryType) {
+    public SocialThingAdapter(List<ThingPositionInfo> infos, int entryType,GridItemContent subMenu) {
         super(infos);
         this.entryType = entryType;
+        this.subMenu = subMenu;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class SocialThingAdapter extends DefaultAdapter<ThingPositionInfo> {
         if (viewType == 0) {
             return new SocialSearchItemHolder(v, entryType);
         } else {
-            return new SocialItemHolder(v);
+            return new SocialItemHolder(v,subMenu);
         }
     }
 

@@ -75,13 +75,19 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.LoginActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.UploadActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".mvp.ui.activity.MapActivity" android:screenOrientation="portrait" />
-        <activity android:name=".mvp.ui.activity.ComponentDetailActivity" android:screenOrientation="portrait" />
-        <activity android:name=".mvp.ui.activity.ProcessActivity" android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.MapActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ComponentDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.ProcessActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 实时发送位置 -->
         <service android:name=".app.service.LocalService" />
@@ -198,10 +204,8 @@
             android:name=".mvp.ui.activity.society.culture.EntertainmentActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.ui.activity.TemporaryActivity"
-            android:screenOrientation="portrait" />
-
-
+            android:name=".mvp.ui.activity.TemporaryActivity" android:screenOrientation="portrait" />
+        <activity android:name=".mvp.ui.activity.MyInfoActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

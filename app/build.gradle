@@ -11,7 +11,7 @@ android {
 
 
     greendao {
-        schemaVersion 1  //版本
+        schemaVersion 2  //版本
         daoPackage 'dao' // 一般为app包名+生成文件的文件夹名
         targetGenDir 'src/main/java' //生成文件路径
     }

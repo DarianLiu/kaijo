@@ -137,4 +137,16 @@
         <item name="android:textColorHint">@color/color_text_hint</item>
     </style>
 
+    <style name="textTimeStyle" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/selector_frame_bg_with_gray</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">@dimen/t14</item>
+        <item name="android:textColor">@color/color_text_title</item>
+    </style>
+
 </resources>

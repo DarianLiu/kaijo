@@ -5,15 +5,9 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldDrawableStyle"
         android:layout_marginTop="12dp"
-        android:drawableRight="@drawable/icon_required"
-        android:drawablePadding="5dp"
-        android:text="类别"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="类别" />
 
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/spinner_category"
@@ -22,234 +16,99 @@
         android:layout_marginTop="5dp" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="状态"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="状态" />
 
     <EditText
         android:id="@+id/et_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入状态"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldDrawableStyle"
         android:layout_marginTop="12dp"
-        android:drawableRight="@drawable/icon_required"
-        android:drawablePadding="5dp"
-        android:text="位置"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="位置" />
 
     <EditText
         android:id="@+id/et_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入位置"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
-
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="产权单位（管理单位）"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
-
+        android:text="产权单位（管理单位）" />
 
     <EditText
         android:id="@+id/et_danweiName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入产权单位（管理单位）"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="产权单位（管理单位）责任人"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
-
+        android:text="产权单位（管理单位）责任人" />
 
     <EditText
         android:id="@+id/et_farenName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入产权单位（管理单位）责任人"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="产权单位责任人联系电话"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
-
+        android:text="产权单位责任人联系电话" />
 
     <EditText
         android:id="@+id/et_leading_TlPhone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入产权单位责任人联系电话"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
 
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="产权单位责任人联系手机"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="产权单位责任人联系手机" />
 
     <EditText
         android:id="@+id/et_leading_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入产权单位责任人联系手机"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
-
+        />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="街道责任人"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="街道责任人" />
 
     <EditText
         android:id="@+id/et_jiedaozerenName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入街道责任人"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
-
+        />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/textBoldStyle"
         android:layout_marginTop="12dp"
-        android:drawablePadding="5dp"
-        android:text="街道责任人联系电话"
-        android:textColor="@color/color_text_black"
-        android:textSize="@dimen/t12"
-        android:textStyle="bold" />
+        android:text="街道责任人联系电话" />
 
     <EditText
         android:id="@+id/jiedaozerenMobile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editDefalutStyle"
         android:layout_marginTop="5dp"
-        android:background="@drawable/selector_frame_background"
         android:hint="请输入街道责任人联系电话"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:spinnerMode="dialog"
-        android:textColor="@color/color_text_title"
-        android:textColorHint="@color/color_text_hint"
-        android:textSize="@dimen/t14" />
+        />
 
 
 </LinearLayout>

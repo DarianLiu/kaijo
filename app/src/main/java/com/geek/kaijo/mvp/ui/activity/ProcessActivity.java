@@ -55,44 +55,24 @@ public class ProcessActivity extends AppCompatActivity {
         // 设置允许JS弹窗
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
 
-        webWiew.setWebChromeClient(new WebChromeClient()
-                {
-                    public void onProgressChanged(WebView view, int progress)
-                    {
+        webWiew.setWebChromeClient(new WebChromeClient() {
+                    public void onProgressChanged(WebView view, int progress) {
                         //当进度走到100的时候做自己的操作，我这边是弹出dialog
-                        if(progress == 100 &&!flag){
-                            flag = true;
+//                        if(progress == 100 &&!flag){
+//                            flag = true;
+//                            webWiew.loadUrl("javascript:passParam("+aCase.getCaseId()+","+aCase.getCaseAttribute()+","+aCase.getProcessId()+")");
+//                        }
+                        if(progress == 100){
                             webWiew.loadUrl("javascript:passParam("+aCase.getCaseId()+","+aCase.getCaseAttribute()+","+aCase.getProcessId()+")");
                         }
                     }
                 });
 
         if(aCase!=null){
-//            Map<String,String> map=new HashMap<String,String>();
-//            map.put("caseId",aCase.getCaseId());
-//            map.put("caseAttribute",aCase.getCaseAttribute());
-//            map.put("processId","2");
-//            webWiew.loadUrl("file:////android_asset/process.html",map);
             webWiew.loadUrl("file:////android_asset/process.html");
         }else {
             webWiew.loadUrl("file:////android_asset/process.html");
         }
-//
-//        String a = "";
-////        String method ="javascript:test(\""+a+"\")" ;
-//        String method ="javascript:passParamaa(rtretre)" ;
-//        webWiew.loadUrl(method);
-
-
-
-
-
-//        webWiew.evaluateJavascript(method, new ValueCallback<String>() {
-//            @Override
-//            public void onReceiveValue(String value) {
-//                DyToastUtils.showShort(PropertyPaymentActivity.this, value);
-//            }
-//        });
     }
 
 

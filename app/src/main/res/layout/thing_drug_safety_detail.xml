@@ -2,9 +2,133 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="企业名称" />
+
+    <TextView
+        android:id="@+id/et_companyName"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="注册地址" />
+
+    <TextView
+        android:id="@+id/et_register_name"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="企业法定代表人" />
+
+    <TextView
+        android:id="@+id/et_farenName"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="住店药师" />
+
+    <TextView
+        android:id="@+id/et_yaoshi"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="许可证号" />
+
+    <TextView
+        android:id="@+id/et_xukezhanghao"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="许可证颁发时间" />
+
+    <TextView
+        android:id="@+id/et_xukezhengTime"
+        style="@style/textTimeStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldDrawableStyle"
+        android:layout_marginTop="12dp"
+        android:text="有效期至" />
+
+    <TextView
+        android:id="@+id/et_youxiaoqiTime"
+        style="@style/textTimeStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="经营方式" />
+
+    <TextView
+        android:id="@+id/et_jingyinfanshi"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="经营范围" />
+
+    <TextView
+        android:id="@+id/et_jingyinfanwei"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="联系电话" />
+
+    <TextView
+        android:id="@+id/et_Telephone"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        style="@style/textBoldStyle"
+        android:layout_marginTop="12dp"
+        android:text="手机号" />
+
+    <TextView
+        android:id="@+id/et_phone"
+        style="@style/editDefalutStyle"
+        android:layout_marginTop="5dp"
+        />
+
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -210,6 +334,6 @@
             android:textColor="@color/color_text_black"
             android:textSize="@dimen/t12" />
     </LinearLayout>
-
+-->
 
 </LinearLayout>

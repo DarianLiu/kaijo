@@ -26,7 +26,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 public class ChangePasswordActivity extends BaseActivity<ChangePasswordPresenter> implements ChangePasswordContract.View {
-
+    @BindView(R.id.tv_toolbar_title)
+    TextView tvToolbarTitle;
     @BindView(R.id.change_pd_username)
     TextView changePdUsername;//用户名
     @BindView(R.id.change_pd_actualname)
@@ -95,7 +96,7 @@ public class ChangePasswordActivity extends BaseActivity<ChangePasswordPresenter
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-
+        tvToolbarTitle.setText("编辑个人信息");
     }
 
     @Override
@@ -135,7 +136,7 @@ public class ChangePasswordActivity extends BaseActivity<ChangePasswordPresenter
                 break;
             case R.id.change_pd_changepwd://修改密码
                 changePdLayout.setVisibility(View.VISIBLE);
-                changePdScrollview.fullScroll(NestedScrollView.FOCUS_DOWN);
+                changePdScrollview.fullScroll(NestedScrollView.FOCUS_DOWN);  //滚动到底部
                 break;
             case R.id.change_pd_save://保存
                 break;
