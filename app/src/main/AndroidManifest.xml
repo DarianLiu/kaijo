@@ -204,8 +204,15 @@
             android:name=".mvp.ui.activity.society.culture.EntertainmentActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mvp.ui.activity.TemporaryActivity" android:screenOrientation="portrait" />
-        <activity android:name=".mvp.ui.activity.MyInfoActivity" android:screenOrientation="portrait"></activity>
+            android:name=".mvp.ui.activity.TemporaryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.MyInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.InfoEditActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".mvp.ui.activity.AgainPasswordActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

@@ -271,15 +271,15 @@
                     android:textSize="@dimen/t14" />
 
                 <TextView
-                    android:id="@+id/btn_location_obtain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/selector_frame_background"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:text="@string/location_obtain"
-                    android:textSize="@dimen/t14" />
+                android:id="@+id/btn_location_obtain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/selector_frame_background"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/location_obtain"
+                android:textSize="@dimen/t14" />
                 <LinearLayout
                     android:id="@+id/rp_bottom_layout"
                     android:layout_width="match_parent"
@@ -382,7 +382,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:layout_toLeftOf="@+id/btn_cancel"
-                        android:background="@drawable/shape_btn_bg_blue"
+                        android:background="@drawable/select_btn_main"
                         android:gravity="center"
                         android:paddingLeft="15dp"
                         android:paddingTop="8dp"
@@ -397,7 +397,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:background="@drawable/shape_btn_bg_normal"
+                        android:background="@drawable/select_btn_white"
                         android:gravity="center"
                         android:paddingLeft="15dp"
                         android:paddingTop="8dp"

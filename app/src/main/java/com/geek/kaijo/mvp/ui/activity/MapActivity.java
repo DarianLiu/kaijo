@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.cmmap.api.maps.CameraUpdateFactory;
 import com.cmmap.api.maps.Map;
@@ -49,7 +50,7 @@ import timber.log.Timber;
 public class MapActivity extends AppCompatActivity {
 
     private MapView mMapView;
-    private Button btnSure;
+    private TextView btnSure;
 
     //地图
     private Map mMap;

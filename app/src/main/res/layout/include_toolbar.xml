@@ -27,8 +27,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:maxLines="1"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:background="@drawable/selector_transparent_themebg"
         android:visibility="gone" />
     <TextView
         android:id="@+id/tv_toolbar_title_right_text"
@@ -36,10 +37,11 @@
         android:layout_height="match_parent"
         android:layout_gravity="end|center_vertical"
         android:maxLines="1"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
         android:gravity="center"
         android:textColor="@color/white"
+        android:background="@drawable/selector_transparent_themebg"
         android:visibility="gone" />
 
 </android.support.v7.widget.Toolbar>

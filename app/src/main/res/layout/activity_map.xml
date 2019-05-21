@@ -9,13 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_sure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_btn_bg_blue"
+        android:background="@drawable/select_btn_main"
         android:text="@string/btn_sure"
         android:textColor="@color/color_title_text"
-        android:textSize="@dimen/t16" />
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:textSize="@dimen/t16"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

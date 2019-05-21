@@ -3,6 +3,8 @@
     <color name="colorAccent">#ffff4081</color>
     <color name="colorPrimary">#083B7C</color>
     <color name="colorPrimaryDark">#083B7C</color>
+
+    <color name="transparent_bg">#30000000</color>
     <color name="default_background">#F2F2F2</color>
     <color name="component_bg">#ebeaea</color>
 
@@ -44,4 +46,7 @@
     <color name="file_top_line">#53dd93</color>
 
     <color name="color_tab_line">#DBDBDB</color>
+
+    <color name="transparent">#00000000</color>
+
 </resources>

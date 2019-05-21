@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -224,6 +225,8 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
             for (int i = 0; i < aCase.getButtonList().size(); i++) {
                 RadioButton radioButton = new RadioButton(this);
                 radioButton.setTextColor(getResources().getColor(R.color.color_text_title));
+
+                radioButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.t13));
 //                radioButton.setId(i);
                 radioButton.setText(aCase.getButtonList().get(i).getLabel());
                 radioGroup.addView(radioButton);
