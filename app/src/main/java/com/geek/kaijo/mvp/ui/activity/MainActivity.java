@@ -45,6 +45,9 @@ import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.simple.eventbus.Subscriber;
@@ -102,6 +105,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     Drawable selector_tab_service;
     @BindDrawable(R.drawable.selector_tab_business)
     Drawable selector_tab_business;
+    @BindView(R.id.smartRefresh)
+    SmartRefreshLayout refreshLayout;
 
     @Inject
     ImageLoader mImageLoader;
@@ -142,17 +147,21 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             updateUserInfo(userInfo);
         }
         initTabHost();
-        if (mPresenter != null) {
-            mPresenter.findAllBannerList();
-//            mPresenter.findStreetById();
-        }
 
         setBannerHeight();
+        if (mPresenter != null) {
+            mPresenter.findAllBannerList();
+        }
 
-
-//        userId = DataHelper.getStringSF(this, Constant.SP_KEY_USER_ID);
-//        myHandler = new MyHandler(this);
-//        myHandler.sendEmptyMessageDelayed(1, 3000);
+        refreshLayout.setEnableLoadMore(false);
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                if (mPresenter != null) {
+                    mPresenter.findAllBannerList();
+                }
+            }
+        });
     }
 
     @Override
@@ -251,7 +260,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     /**
      * 初始化轮播图控件
      */
-    private void initAutoScrollViewPager() {
+    private void  initAutoScrollViewPager() {
         autoScroll.setAdapter(mPagerAdapter);
 
         autoScroll.setScrollFactgor(10); // 控制滑动速度
@@ -283,8 +292,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
      */
     @Override
     public void setAutoBanner(List<Banner> banners) {
+        if(this.isFinishing())return;
         mBannerList = banners;
         initAutoScrollViewPager();
+        refreshLayout.finishRefresh();
+    }
+
+    @Override
+    public void onError() {
+        if(this.isFinishing())return;
+        refreshLayout.finishRefresh();
     }
 
     @Subscriber(tag = EventBusTags.TAG_LOGIN_STATE)

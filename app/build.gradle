@@ -139,6 +139,7 @@ dependencies {
     //    releaseCompile rootProject.ext.dependencies["canary-release"]
     //    testCompile rootProject.ext.dependencies["canary-release"]
     implementation rootProject.ext.dependencies["smartRefreshLayout"]
+    implementation rootProject.ext.dependencies["smartrefresh-header"]
     implementation 'com.tsy.video:video-sdk:1.0.0'
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
     //    implementation files('libs/LoginLib.jar')

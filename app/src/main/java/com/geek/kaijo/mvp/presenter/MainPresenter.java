@@ -51,6 +51,11 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                     public void onNext(List<Banner> bannerList) {
                         mRootView.setAutoBanner(bannerList);
                     }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                    }
                 });
     }
 

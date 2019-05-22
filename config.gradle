@@ -54,6 +54,7 @@ ext {
             "paginate"                 : "com.github.markomilos:paginate:0.5.1",
             "vlayout"                  : "com.alibaba.android:vlayout:1.1.0@aar",
             "smartRefreshLayout"       : "com.scwang.smartrefresh:SmartRefreshLayout:${version["smartRefreshLayoutSdkVersion"]}",
+            "smartrefresh-header"            : "com.scwang.smartrefresh:SmartRefreshHeader:${version["smartRefreshLayoutSdkVersion"]}",
 
 //            //rx1
 //            "rxandroid"                : "io.reactivex:rxandroid:1.2.1",
