@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -162,6 +163,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 }
             }
         });
+
+        GPSUtils.getInstance().startLocation();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            startForegroundService(new Intent(MainActivity.this, LocalService.class));
+        }else {
+            startService(new Intent(MainActivity.this, LocalService.class));
+        }
+
     }
 
     @Override
@@ -452,8 +461,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
             if (granted) {           // All requested permissions are granted
-                GPSUtils.getInstance().startLocation();
-                startService(new Intent(MainActivity.this, LocalService.class));
+//                GPSUtils.getInstance().startLocation();
+//                startService(new Intent(MainActivity.this, LocalService.class));
             } else {
                 showPermissionsDialog();
             }

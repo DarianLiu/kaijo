@@ -86,7 +86,7 @@ public class CaseReportFragment extends Fragment {
                 break;
             case R.id.tv_inquiry://案件查询
                 intent = new Intent(getActivity(), CaseSearchActivity.class);
-                intent.putExtra("entry_type", 1);
+                intent.putExtra("handleType", 1);
                 launchActivity(intent);
                 break;
         }

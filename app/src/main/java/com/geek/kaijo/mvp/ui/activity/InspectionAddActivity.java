@@ -77,6 +77,8 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
     TextView btn_save_back;
     @BindView(R.id.et_thing_remark)
     TextView et_thing_remark;
+    @BindView(R.id.btn_back)
+    TextView btn_back;
 
     View popView;
     private PopupUtils popupUtils;
@@ -186,11 +188,14 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
         ArmsUtils.snackbarText(message);
     }
 
-    @OnClick({R.id.tv_thing_name, R.id.tv_map, R.id.btn_save_back})
+    @OnClick({R.id.tv_thing_name, R.id.tv_map, R.id.btn_save_back,R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_thing_name:
                 mPresenter.findThingListBy("10");
+                break;
+            case R.id.btn_back:
+                finish();
                 break;
             case R.id.tv_map:
                 showLoading();

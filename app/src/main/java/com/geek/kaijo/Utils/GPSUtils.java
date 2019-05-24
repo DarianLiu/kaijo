@@ -1,11 +1,17 @@
 package com.geek.kaijo.Utils;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.cmmap.api.location.CmccLocation;
 import com.cmmap.api.location.CmccLocationClient;
 import com.cmmap.api.location.CmccLocationClientOption;
 import com.cmmap.api.location.CmccLocationListener;
+import com.geek.kaijo.R;
 import com.geek.kaijo.app.MyApplication;
 import com.jess.arms.utils.LogUtils;
 
@@ -36,6 +42,7 @@ public class GPSUtils {
     }
 
     private void initLocation() {
+
         //初始化定位
         mLocationClient = new CmccLocationClient(MyApplication.get());
 
@@ -127,18 +134,24 @@ public class GPSUtils {
 
     public void startLocation(){
 
+        Log.i(this.getClass().getName(),"1111111111111111111111初始化吗。。。。===mLocationClient=="+mLocationClient);
+
+
         if (mLocationClient == null || !mLocationClient.isStarted()) {
             initLocation();
         }
         if(!mLocationClient.isStarted()){
             mLocationClient.startLocation();
+            mLocationClient.enableBackgroundLocation(543543, buildNotification());
         }
 //        if(mLocationClient!=null && cmccLocationListener!=null){
 //            mLocationClient.unRegisterLocationListener(cmccLocationListener);
 //        }
+
 //        initLocation();
 //        if(mLocationClient!=null){
 //            mLocationClient.startLocation();
+//            mLocationClient.enableBackgroundLocation(543543, buildNotification());
 //        }
     }
 
@@ -173,6 +186,46 @@ public class GPSUtils {
     }
     private static double rad(double d) {
         return d * Math.PI / 180.0;
+    }
+
+
+
+    private static final String NOTIFICATION_CHANNEL_NAME = "BackgroundLocation";
+    private Notification buildNotification() {
+
+        Notification.Builder builder = null;
+        Notification notification = null;
+        if (android.os.Build.VERSION.SDK_INT >= 26) {
+            //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
+
+//            if (null == notificationManager) {
+            NotificationManager notificationManager = (NotificationManager) MyApplication.get().getSystemService(Context.NOTIFICATION_SERVICE);
+//            }
+            String channelId = MyApplication.get().getPackageName();
+//            if (!isCreateChannel) {
+            NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                    NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.enableLights(true);//是否在桌面icon右上角展示小圆点
+            notificationChannel.setLightColor(Color.BLUE); //小圆点颜色
+            notificationChannel.setShowBadge(true); //是否在久按桌面图标时显示此渠道的通知
+            notificationManager.createNotificationChannel(notificationChannel);
+//                isCreateChannel = true;
+//            }
+            builder = new Notification.Builder(MyApplication.get(), channelId);
+        } else {
+            builder = new Notification.Builder(MyApplication.get());
+        }
+        builder.setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("定位SDK")
+                .setContentText("正在后台运行")
+                .setWhen(System.currentTimeMillis());
+
+        if (android.os.Build.VERSION.SDK_INT >= 16) {
+            notification = builder.build();
+        } else {
+            return builder.getNotification();
+        }
+        return notification;
     }
 
 

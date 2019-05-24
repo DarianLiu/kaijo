@@ -1,23 +1,35 @@
 package com.geek.kaijo.app.service;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.cmmap.api.location.CmccLocation;
 import com.cmmap.api.location.CmccLocationClient;
 import com.cmmap.api.location.CmccLocationClientOption;
+import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.app.Constant;
@@ -45,6 +57,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static android.os.Build.ID;
+import static android.provider.ContactsContract.Intents.Insert.NAME;
+
 public class LocalService extends Service {
 
     private MyHandler myHandler;
@@ -54,6 +69,7 @@ public class LocalService extends Service {
     int state; //0 未巡查 1 开始巡查 2 结束巡查
     private Vibrator mVibrator;  //震动
     private PowerManager.WakeLock wakeLock = null;  //电源锁，保持该服务在屏幕熄灭时仍然获取CPU时
+    private int spaseTime = 60000;
 
     @Nullable
     @Override
@@ -66,7 +82,7 @@ public class LocalService extends Service {
         super.onCreate();
 
         myHandler = new MyHandler(this);
-        myHandler.sendEmptyMessageDelayed(1, 60000);
+//        myHandler.sendEmptyMessageDelayed(1, 60000);
 
         locationReceiver = new LocationReceiver();
         IntentFilter filter = new IntentFilter();
@@ -75,14 +91,83 @@ public class LocalService extends Service {
 
         GPSUtils.getInstance().setOnLocationListener(locationListener);
         initData();
+
+        acquireWakeLock();
+
+        setForeground();
+
+
+
+
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        userId = DataHelper.getStringSF(this, Constant.SP_KEY_USER_ID);
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                Log.i(this.getClass().getName(),"1111111111111111111111199999988");//这是定时所执行的任务
+                String userId = DataHelper.getStringSF(LocalService.this, Constant.SP_KEY_USER_ID);
+                if(cmccLocation!=null && cmccLocation.getLatitude()!=0 && cmccLocation.getLongitude()!=0){
+                    httpUploadGpsLocation(userId, LocalService.this.cmccLocation.getLatitude(), cmccLocation.getLongitude());
+                }
+                cmccLocation = null;
+            }
+        }).start();
+        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long triggerAtTime = SystemClock.elapsedRealtime() + spaseTime;
+        PendingIntent pi;
+//        Intent intent2 = new Intent(this, LocalService.class);
+//        PendingIntent pi = PendingIntent.getService(this, 0, intent2, 0);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            pi = PendingIntent.getForegroundService(this, 0,
+                    intent,0);
+        }else{
+            pi = PendingIntent.getService(this, 0,
+                    intent, 0);
+        }
+
+        //广播
+//        Intent intent2 = new Intent(this, AlarmReceiver.class);
+//         pi = PendingIntent.getBroadcast(this, 0, intent2, 0);
+
+        manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+
         return super.onStartCommand(intent, flags, startId);
 
     }
+
+    private static final String CHANNEL_ID = "LocalService";
+    @TargetApi(26)
+    private void setForeground(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+        NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel Channel = new NotificationChannel(CHANNEL_ID,"主服务",NotificationManager.IMPORTANCE_HIGH);
+    Channel.enableLights(true);//设置提示灯
+    Channel.setLightColor(Color.RED);//设置提示灯颜色
+        Channel.setShowBadge(true);//显示logo
+        Channel.setDescription("ytzn");//设置描述
+        Channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC); //设置锁屏可见 VISIBILITY_PUBLIC=可见
+        manager.createNotificationChannel(Channel);
+
+        Notification notification = new Notification.Builder(this)
+                .setChannelId(CHANNEL_ID)
+                .setContentTitle("主服务")//标题
+                .setContentText("运行中...")//内容
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher)//小图标一定需要设置,否则会报错(如果不设置它启动服务前台化不会报错,但是你会发现这个通知不会启动),如果是普通通知,不设置必然报错
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
+                .build();
+        startForeground(1,notification);//服务前台化只能使用startForeground()方法,不能使用 notificationManager.notify(1,notification); 这个只是启动通知使用的,使用这个方法你只需要等待几秒就会发现报错了
+
+        }
+    }
+
+
 
     /**
      * 上传位置信息
@@ -92,7 +177,7 @@ public class LocalService extends Service {
      * @param lng
      */
     private void httpUploadGpsLocation(String userId, double lat, double lng) {
-        if (lat == 0 || lng == 0) {
+        if (lat == 0 || lng == 0 || TextUtils.isEmpty(userId)) {
             return;
         }
         OkHttpClient client = new OkHttpClient();
@@ -157,9 +242,9 @@ public class LocalService extends Service {
                         Toast.makeText(weakActivity,"定位获取失败",Toast.LENGTH_LONG).show();
                     }
 
-                    LogUtils.debugInfo("11111111111111111locationListener=="+weakActivity.locationListener+"巡查项list="+weakActivity.result+"巡查状态state="+weakActivity.state);
-                    weakActivity.acquireWakeLock();
-                    sendEmptyMessageDelayed(1, 60000); //1分钟 上传一次经纬度
+                    LogUtils.debugInfo("11111111111111111一分钟上传一次locaListener=="+weakActivity.locationListener+"巡查项list="+weakActivity.result+"巡查状态state="+weakActivity.state);
+//                    weakActivity.acquireWakeLock();
+                    sendEmptyMessageDelayed(1, 10000); //1分钟 上传一次经纬度
 
                     break;
             }
@@ -221,6 +306,11 @@ public class LocalService extends Service {
             String intentAction = intent.getAction();
             if (intentAction.equals(Constant.SP_KEY_Patrol_state)) {
                 state = intent.getIntExtra(Constant.SP_KEY_Patrol_state,0);
+                if(state == 1){
+                    spaseTime = 5000;
+                }else {
+                    spaseTime = 60000;
+                }
 //                if(state==1){ //开始巡查
 //                    DaoSession daoSession1 = MyApplication.get().getDaoSession();
 //                    IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
