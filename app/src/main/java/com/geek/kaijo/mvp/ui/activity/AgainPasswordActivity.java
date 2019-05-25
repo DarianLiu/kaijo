@@ -4,9 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.geek.kaijo.mvp.model.entity.UserInfo;
+import com.geek.kaijo.view.LoadingProgressDialog;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -20,6 +26,8 @@ import com.geek.kaijo.R;
 
 
 import butterknife.BindView;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -30,6 +38,16 @@ public class AgainPasswordActivity extends BaseActivity<AgainPasswordPresenter> 
     TextView tvToolbarTitle;
     @BindView(R.id.tv_toolbar_title_right_text)
     TextView tv_toolbar_title_right_text;
+    private LoadingProgressDialog loadingDialog;
+
+    private UserInfo userInfo;
+    @BindView(R.id.et_password_old)
+    TextView et_password_old;  //原密码
+    @BindView(R.id.et_password_new)
+    TextView et_password_new;  //新密码
+    @BindView(R.id.et_password_new_true)
+    TextView et_password_new_true;  //确定密码
+
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -51,23 +69,51 @@ public class AgainPasswordActivity extends BaseActivity<AgainPasswordPresenter> 
         tvToolbarTitle.setText("修改密码");
         tv_toolbar_title_right_text.setVisibility(View.VISIBLE);
         tv_toolbar_title_right_text.setText("确定");
+        userInfo = (UserInfo) getIntent().getSerializableExtra("UserInfo");
 
         tv_toolbar_title_right_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(TextUtils.isEmpty(et_password_old.getText().toString().trim())){
+                    Toast.makeText(AgainPasswordActivity.this,"请输入原密码",Toast.LENGTH_LONG).show();
+                    return;
+                }else if(TextUtils.isEmpty(et_password_new.getText().toString().trim())){
+                    Toast.makeText(AgainPasswordActivity.this,"请输入新密码",Toast.LENGTH_LONG).show();
+                    return;
+                }else if(TextUtils.isEmpty(et_password_new_true.getText().toString().trim())){
+                    Toast.makeText(AgainPasswordActivity.this,"请输入确认密码",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(userInfo==null)return;
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("userId", userInfo.getUserId());
 
+//                jsonObject.addProperty("trueName", et_password_old.getText().toString().trim());
+//                jsonObject.addProperty("trueName", et_password_new.getText().toString().trim());
+//                jsonObject.addProperty("trueName", et_password_new_true.getText().toString().trim());
+
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                        new Gson().toJson(jsonObject));
+
+                mPresenter.httpUpdateUserForApp(requestBody);
             }
         });
     }
 
     @Override
     public void showLoading() {
-
+        if (loadingDialog == null)
+            loadingDialog = new LoadingProgressDialog.Builder(this)
+                    .setCancelable(true)
+                    .setCancelOutside(true).create();
+        if (!loadingDialog.isShowing())
+            loadingDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (loadingDialog != null && loadingDialog.isShowing())
+            loadingDialog.dismiss();
     }
 
     @Override
@@ -84,6 +130,12 @@ public class AgainPasswordActivity extends BaseActivity<AgainPasswordPresenter> 
 
     @Override
     public void killMyself() {
+        finish();
+    }
+
+    @Override
+    public void httpUpdateUserSuccess(UserInfo userInfo) {
+        setResult(1);
         finish();
     }
 }

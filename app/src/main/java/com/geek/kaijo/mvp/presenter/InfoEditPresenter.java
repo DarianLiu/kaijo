@@ -2,12 +2,16 @@ package com.geek.kaijo.mvp.presenter;
 
 import android.app.Application;
 
+import com.geek.kaijo.app.api.RxUtils;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import okhttp3.RequestBody;
 
 import javax.inject.Inject;
 
@@ -38,4 +42,36 @@ public class InfoEditPresenter extends BasePresenter<InfoEditContract.Model, Inf
         this.mImageLoader = null;
         this.mApplication = null;
     }
+
+    /**
+     * 用户修改
+     */
+    public void httpUpdateUserForApp(RequestBody requestBody) {
+
+
+        mModel.httpUpdateUserForApp(requestBody)
+//                .compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.applySchedulersHide(mRootView))
+                .compose(RxUtils.handleBaseResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<UserInfo>(mErrorHandler) {
+                    @Override
+                    public void onNext(UserInfo ipRegisterBeans) {
+
+                        mRootView.httpUpdateUserSuccess(ipRegisterBeans);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+
+                    }
+                });
+    }
+
 }

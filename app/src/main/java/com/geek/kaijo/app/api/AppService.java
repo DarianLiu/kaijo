@@ -381,4 +381,13 @@ public interface AppService {
     @POST("/path/cancelPath")
     Observable<BaseResult<InspentionResult>> cancelPath(@Body RequestBody body);
 
+    /**
+     * 修改用户信息
+     *
+     */
+    @NonNull
+    @POST("/user/updateUserForApp.json")
+    Observable<BaseResult<UserInfo>> updateUserForApp(@Body RequestBody body);
+
+
 }

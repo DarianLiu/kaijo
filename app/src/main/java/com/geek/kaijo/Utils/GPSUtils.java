@@ -45,7 +45,6 @@ public class GPSUtils {
 
         //初始化定位
         mLocationClient = new CmccLocationClient(MyApplication.get());
-
         //设置定位回调监听
         mLocationClient.setLocationListener(cmccLocationListener);
 
@@ -135,24 +134,11 @@ public class GPSUtils {
     public void startLocation(){
 
         Log.i(this.getClass().getName(),"1111111111111111111111初始化吗。。。。===mLocationClient=="+mLocationClient);
-
-
-        if (mLocationClient == null || !mLocationClient.isStarted()) {
+        if (mLocationClient == null) {
             initLocation();
         }
-        if(!mLocationClient.isStarted()){
             mLocationClient.startLocation();
             mLocationClient.enableBackgroundLocation(543543, buildNotification());
-        }
-//        if(mLocationClient!=null && cmccLocationListener!=null){
-//            mLocationClient.unRegisterLocationListener(cmccLocationListener);
-//        }
-
-//        initLocation();
-//        if(mLocationClient!=null){
-//            mLocationClient.startLocation();
-//            mLocationClient.enableBackgroundLocation(543543, buildNotification());
-//        }
     }
 
     public void onDestroy(){

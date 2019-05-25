@@ -4,14 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.geek.kaijo.R;
 import com.geek.kaijo.app.Constant;
+import com.geek.kaijo.app.MyApplication;
+import com.geek.kaijo.app.api.Api;
 import com.geek.kaijo.di.component.DaggerMyInfoComponent;
 import com.geek.kaijo.di.module.MyInfoModule;
 import com.geek.kaijo.mvp.contract.MyInfoContract;
@@ -65,6 +69,7 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
 
 
     private UserInfo userInfo;
+    RequestOptions options ;//图片加载失败后，显示的图片
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -84,13 +89,37 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         tvToolbarTitle.setText("个人信息");
+        options = new RequestOptions()
+                .placeholder(R.mipmap.ic_launcher)//图片加载出来前，显示的图片
+                .fallback(R.mipmap.ic_launcher) //url为空的时候,显示的图片
+                .error(R.mipmap.ic_launcher);//图片加载失败后，显示的图片
+        initInfo();
+    }
+
+    private void initInfo(){
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         if(userInfo!=null){
+            Glide.with(MyApplication.get())
+//                    .load(Api.URL_BANNER + "/" + userInfo.getHeadUrl()) //图片地址
+                    .load(userInfo.getHeadUrl()) //图片地址
+                    .apply(options)
+                    .into(img_head);
+
             tv_userName.setText(userInfo.getUsername());
+            tv_name.setText(userInfo.getTrueName());
+            tv_phone.setText(userInfo.getMobile());
+//            tv_department.setText(userInfo.getDeptId()); //部门
+//            tv_phone.setText(tv_position);  //职位
+            tv_telephone.setText(userInfo.getPhone());
+            tv_adress.setText(userInfo.getAddress());
+            tv_code.setText(userInfo.getIdcard());
+            tv_equipment.setText(userInfo.getDeviceSn()); //终端设备编号
+            tv_equipment_phone.setText(userInfo.getDevicePhone());//终端电话号码
+            tv_sim.setText(userInfo.getDeviceSim());//sim编号
         }
     }
 
-    @OnClick({R.id.rl_head, R.id.rl_userName, R.id.rl_name, R.id.rl_phone, R.id.rl_department, R.id.rl_position, R.id.rl_telephone, R.id.rl_adress,
+    @OnClick({R.id.rl_head, R.id.rl_userName, R.id.rl_name, R.id.rl_phone, R.id.rl_position, R.id.rl_telephone, R.id.rl_adress,
             R.id.rl_code,R.id.rl_equipment,R.id.rl_equipment_phone,R.id.rl_sim,R.id.rl_change_password,})
     public void onViewClicked(View view) {
         Intent intent;
@@ -116,12 +145,7 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
                 intent.putExtra("tag",Constant.info_phone);
                 startActivityForResult(intent,1);
                 break;
-            case R.id.rl_department://部门
-                intent = new Intent(this,InfoEditActivity.class);
-                intent.putExtra("UserInfo",userInfo);
-                intent.putExtra("tag",Constant.info_department);
-                startActivityForResult(intent,1);
-                break;
+
             case R.id.rl_position://职务
                 intent = new Intent(this,InfoEditActivity.class);
                 intent.putExtra("UserInfo",userInfo);
@@ -167,7 +191,7 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
             case R.id.rl_change_password://修改密码
                 intent = new Intent(this,AgainPasswordActivity.class);
                 intent.putExtra("UserInfo",userInfo);
-                startActivity(intent);
+                startActivityForResult(intent,1);
                 break;
 
         }
@@ -200,13 +224,25 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
         if(requestCode==PictureConfig.CHOOSE_REQUEST && resultCode==RESULT_OK){
             List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
             String cutPath = selectList.get(0).getCutPath();
+            if(!TextUtils.isEmpty(cutPath)){
+                if (mPresenter != null) {
+                    mPresenter.uploadFile(cutPath);
+                }
+            }
 
+        }else if(requestCode==1 && resultCode==1){
+            initInfo();
         }
+
     }
 
     @Override
     public void uploadSuccess(UploadFile uploadPhoto) {
-
+//        Glide.with(this).load(Api.URL_BANNER + "/" + uploadPhoto.getUrl()).into(img_head);
+        Glide.with(MyApplication.get())
+                .load(Api.URL_BANNER + "/" + uploadPhoto.getFileRelativePath()) //图片地址
+                .apply(options)
+                .into(img_head);
     }
 
     @Override

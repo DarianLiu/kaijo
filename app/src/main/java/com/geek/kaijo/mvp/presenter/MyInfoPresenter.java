@@ -79,4 +79,5 @@ public class MyInfoPresenter extends BasePresenter<MyInfoContract.Model, MyInfoC
                 });
     }
 
+
 }

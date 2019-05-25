@@ -17,6 +17,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmmap.api.location.CmccLocation;
+import com.cmmap.api.location.CmccLocationQualityReport;
 import com.cmmap.api.maps.CameraUpdateFactory;
 import com.cmmap.api.maps.Map;
 import com.cmmap.api.maps.MapView;
@@ -58,8 +60,10 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -97,6 +101,8 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     TextView tv_lng;
     @BindView(R.id.tv_lat)
     TextView tv_lat;
+    @BindView(R.id.tv_time)
+    TextView tv_time;
 
 
     private List<IPRegisterBean> mList;
@@ -411,19 +417,21 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         public void onLocationChanged(CmccLocation cmccLocation) {
             if(InspectionProjectRegisterActivity.this.isFinishing())return;
             if(cmccLocation!=null){
-                tv_lng.setText("经度："+cmccLocation.getLongitude());
-                tv_lat.setText("纬度："+cmccLocation.getLatitude());
+                if(cmccLocation.getErrorCode()==0){
+                    tv_lng.setText("经度："+cmccLocation.getLongitude());
+                    tv_lat.setText("纬度："+cmccLocation.getLatitude());
+                    tv_time.setText("定位时间："+formatUTC(cmccLocation.getTime(), "yyyy-MM-dd HH:mm:ss"));
+                }else {
+                    tv_lng.setText("错误码："+cmccLocation.getErrorCode()+"\n错误描述"+cmccLocation.getLocationDetail()+"\nGPS卫星数"+cmccLocation.getLocationQualityReport().getGPSSatellites());
+                    tv_lat.setText("错误信息："+cmccLocation.getErrorInfo()+"\nGPS状态"+getGPSStatusString(cmccLocation.getLocationQualityReport().getGPSStatus()));
+                    tv_time.setText("回调时间："+formatUTC(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
+                }
+
+
             }else {
                 tv_lng.setText("经度：CmccLocation==null");
                 tv_lat.setText("纬度：CmccLocation==null");
             }
-
-//            mLat = cmccLocation.getLatitude();
-//            mLng = cmccLocation.getLongitude();
-//            tvLocationLatitude.setText(String.valueOf(mLat));
-//            tvLocationLongitude.setText(String.valueOf(mLng));
-
-
 
         }
     };
@@ -487,6 +495,48 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         unregisterReceiver(locationReceiver);
     }
 
+    /**
+     * 获取GPS状态的字符串
+     *
+     * @param statusCode GPS状态码
+     * @return
+     */
+    private String getGPSStatusString(int statusCode) {
+        String str = "";
+        switch (statusCode) {
+            case CmccLocationQualityReport.GPS_STATUS_OK:
+                str = "GPS状态正常";
+                break;
+            case CmccLocationQualityReport.GPS_STATUS_NOGPSPROVIDER:
+                str = "手机中没有GPS Provider，无法进行GPS定位";
+                break;
+            case CmccLocationQualityReport.GPS_STATUS_OFF:
+                str = "GPS关闭，建议开启GPS，提高定位质量";
+                break;
+            case CmccLocationQualityReport.GPS_STATUS_MODE_SAVING:
+                str = "选择的定位模式中不包含GPS定位，建议选择包含GPS定位的模式，提高定位质量";
+                break;
+            case CmccLocationQualityReport.GPS_STATUS_NOGPSPERMISSION:
+                str = "没有GPS定位权限，建议开启gps定位权限";
+                break;
+        }
+        return str;
+    }
 
+    private static SimpleDateFormat sdf = null;
+    public  static String formatUTC(long l, String strPattern) {
+        if (TextUtils.isEmpty(strPattern)) {
+            strPattern = "yyyy-MM-dd HH:mm:ss";
+        }
+        if (sdf == null) {
+            try {
+                sdf = new SimpleDateFormat(strPattern, Locale.CHINA);
+            } catch (Throwable e) {
+            }
+        } else {
+            sdf.applyPattern(strPattern);
+        }
+        return sdf == null ? "NULL" : sdf.format(l);
+    }
 
 }
