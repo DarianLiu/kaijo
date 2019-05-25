@@ -49,6 +49,8 @@ public class ProcessActivity extends AppCompatActivity {
 
         aCase = (Case) getIntent().getParcelableExtra("Case");
 
+        if(aCase==null)return;
+
         WebSettings webSettings = webWiew.getSettings();
         // 设置与Js交互的权限
         webSettings.setJavaScriptEnabled(true);

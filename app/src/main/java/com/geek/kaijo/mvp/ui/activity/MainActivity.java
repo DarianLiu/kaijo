@@ -160,6 +160,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 if (mPresenter != null) {
                     mPresenter.findAllBannerList();
+                    refreshMenu();
                 }
             }
         });
@@ -171,6 +172,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             startService(new Intent(MainActivity.this, LocalService.class));
         }
 
+    }
+
+    private void refreshMenu(){
+        ComponentFragment fragment = (ComponentFragment) getSupportFragmentManager().findFragmentByTag(str_tab_social);
+        if (fragment != null) {
+            fragment.refreshMenu();
+        }
     }
 
     @Override

@@ -66,6 +66,15 @@ public class ComponentFragment extends BaseFragment<ComponentPresenter> implemen
         }
     }
 
+    public void refreshMenu(){
+        if(tabLayout.getTabCount()>0){
+            return;
+        }
+        if (mPresenter != null) {
+            mPresenter.preListInfoMenu(); //存储文件里获取菜单数据
+        }
+    }
+
     private void showDataView() {
         if (menuList != null) {
             tabLayout.removeAllTabs();

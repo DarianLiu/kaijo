@@ -1,11 +1,20 @@
 package com.geek.kaijo.Utils;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
+import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cmmap.api.location.CmccLocation;
 import com.cmmap.api.location.CmccLocationClient;
@@ -24,9 +33,9 @@ public class GPSUtils {
     private CmccLocationClient mLocationClient = null;
     //声明CmccLocationClientOption对象
     private CmccLocationClientOption mLocationOption = null;
-    private List<LocationListener>  locationListenerList;
+    private List<LocationListener> locationListenerList;
 
-    public interface LocationListener{
+    public interface LocationListener {
         void onLocationChanged(CmccLocation cmccLocation);
     }
 
@@ -53,7 +62,7 @@ public class GPSUtils {
         //设置定位模式为CmccLocationClientOption.CmccLocationMode.Hight_Accuracy，高精度模式。pgs+网络
 //        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode.Hight_Accuracy);
         //设置定位模式为CmccLocationClientOption.CmccLocationMode.Device_Sensors，仅设备模式GPS。
-        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode. Device_Sensors);
+        mLocationOption.setLocationMode(CmccLocationClientOption.CmccLocationMode.Device_Sensors);
 
         //获取一次定位结果：
         //该方法默认为false。
@@ -80,21 +89,42 @@ public class GPSUtils {
     private CmccLocationListener cmccLocationListener = new CmccLocationListener() {
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
-            if(cmccLocation!=null){
-                Log.i(this.getClass().getName(), "11111111Code==" + cmccLocation.getErrorCode()+"纬度="+cmccLocation.getLatitude());
+//            if (cmccLocation.getErrorCode() != 0) {
+//                initLocal();
+//            }
+            if (cmccLocation != null) {
+                Log.i(this.getClass().getName(), "11111111Code==" + cmccLocation.getErrorCode() + "纬度=" + cmccLocation.getLatitude());
 //                    Log.i(this.getClass().getName(), "1111111日志==" + cmccLocation.getLocationDetail());
-            }else {
+            } else {
                 Log.i(this.getClass().getName(), "111111111111111111111cmccLocation==" + cmccLocation);
             }
 
-            if(locationListenerList==null)return;
-            for(int i=0;i<locationListenerList.size();i++){
-                if(locationListenerList.get(i)!=null){
+            if (locationListenerList == null) return;
+            for (int i = 0; i < locationListenerList.size(); i++) {
+                if (locationListenerList.get(i) != null) {
                     locationListenerList.get(i).onLocationChanged(cmccLocation);
                 }
             }
         }
     };
+
+    //打补丁唤醒gps
+    private LocationManager locationManager;
+    private void initLocal() {
+        locationManager = (LocationManager) MyApplication.get().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(MyApplication.get(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MyApplication.get(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, null);
+    }
 
 //    public void startLocation(LocationListener locationListener) {
 //        if(locationListenerList==null){
@@ -213,6 +243,57 @@ public class GPSUtils {
         }
         return notification;
     }
+//
+//
+//
+//    android.location.LocationListener locationListener = new android.location.LocationListener() {
+//        // Provider的状态在可用、暂时不可用和无服务三个状态直接切换时触发此函数
+//        @Override
+//        public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//            switch (status){
+//
+//                case LocationProvider.AVAILABLE:
+//
+//                    Toast.makeText(MyApplication.get(),"当前GPS为可用状态!",Toast.LENGTH_SHORT).show();
+//
+//                    break;
+//
+//                case LocationProvider.OUT_OF_SERVICE:
+//
+//                    Toast.makeText(MyApplication.get(),"当前GPS不在服务内",Toast.LENGTH_SHORT).show();
+//
+//                    break;
+//
+//                case LocationProvider.TEMPORARILY_UNAVAILABLE:
+//
+//                    Toast.makeText(MyApplication.get(),"当前GPS为暂停服务状态",Toast.LENGTH_SHORT).show();
+//                    break;
+//
+//
+//            }
+//        }
+//
+//        // Provider被enable时触发此函数，比如GPS被打开
+//        @Override
+//        public void onProviderEnabled(String provider) {
+//
+//        }
+//
+//        // Provider被disable时触发此函数，比如GPS被关闭
+//        @Override
+//        public void onProviderDisabled(String provider) {
+//
+//        }
+//
+//        // 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
+//        @Override
+//        public void onLocationChanged(Location location) {
+//            if (location != null) {
+//
+//            }
+//        }
+//    };
 
 
 }
