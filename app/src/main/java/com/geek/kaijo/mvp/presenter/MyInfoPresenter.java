@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.geek.kaijo.app.api.RxUtils;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -78,6 +79,39 @@ public class MyInfoPresenter extends BasePresenter<MyInfoContract.Model, MyInfoC
                     }
                 });
     }
+
+    /**
+     * 用户修改
+     */
+    public void httpUpdateUserForApp(RequestBody requestBody) {
+
+
+        mModel.httpUpdateUserForApp(requestBody)
+//                .compose(RxUtils.applySchedulers(mRootView))
+                .compose(RxUtils.applySchedulersHide(mRootView))
+                .compose(RxUtils.handleBaseResult(mApplication))
+                .subscribeWith(new ErrorHandleSubscriber<UserInfo>(mErrorHandler) {
+                    @Override
+                    public void onNext(UserInfo ipRegisterBeans) {
+
+                        mRootView.httpUpdateUserSuccess(ipRegisterBeans);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+
+                    }
+                });
+    }
+
+
 
 
 }

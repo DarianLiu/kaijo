@@ -12,6 +12,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -21,9 +23,13 @@ import com.cmmap.api.location.CmccLocationClient;
 import com.cmmap.api.location.CmccLocationClientOption;
 import com.cmmap.api.location.CmccLocationListener;
 import com.geek.kaijo.R;
+import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.MyApplication;
+import com.geek.kaijo.app.service.LocalService;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.LogUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,12 +40,16 @@ public class GPSUtils {
     //声明CmccLocationClientOption对象
     private CmccLocationClientOption mLocationOption = null;
     private List<LocationListener> locationListenerList;
+    private MyHandler myHandler;
+    private CmccLocation mcmccLocation;
 
     public interface LocationListener {
         void onLocationChanged(CmccLocation cmccLocation);
     }
 
     private GPSUtils() {
+        myHandler = new MyHandler(this);
+        myHandler.sendEmptyMessageDelayed(1,5000);
     }
 
     public static GPSUtils getInstance() {
@@ -89,9 +99,7 @@ public class GPSUtils {
     private CmccLocationListener cmccLocationListener = new CmccLocationListener() {
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
-//            if (cmccLocation.getErrorCode() != 0) {
-//                initLocal();
-//            }
+            mcmccLocation = cmccLocation;
             if (cmccLocation != null) {
                 Log.i(this.getClass().getName(), "11111111Code==" + cmccLocation.getErrorCode() + "纬度=" + cmccLocation.getLatitude());
 //                    Log.i(this.getClass().getName(), "1111111日志==" + cmccLocation.getLocationDetail());
@@ -295,5 +303,35 @@ public class GPSUtils {
 //        }
 //    };
 
+    private static class MyHandler extends Handler {
+        private final WeakReference<GPSUtils> weakTrainModelActivity;
+
+        public MyHandler(GPSUtils activity) {
+            weakTrainModelActivity = new WeakReference<GPSUtils>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            GPSUtils weakActivity;
+            if (weakTrainModelActivity.get() == null) {
+                return;
+            } else {
+                weakActivity = weakTrainModelActivity.get();
+            }
+            switch (msg.what) {
+                case 1:
+                    if (weakActivity.mcmccLocation.getErrorCode() != 0) {
+//                initLocal();
+                        if(weakActivity.mLocationClient!=null){
+                            weakActivity.mLocationClient.startLocation();
+                        }
+                    }
+                    sendEmptyMessageDelayed(1,5000);
+
+                    break;
+            }
+        }
+    }
 
 }

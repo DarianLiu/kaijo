@@ -83,15 +83,15 @@ public class AgainPasswordActivity extends BaseActivity<AgainPasswordPresenter> 
                 }else if(TextUtils.isEmpty(et_password_new_true.getText().toString().trim())){
                     Toast.makeText(AgainPasswordActivity.this,"请输入确认密码",Toast.LENGTH_LONG).show();
                     return;
+                }else if(!et_password_new.getText().toString().trim().equals(et_password_new_true.getText().toString().trim())){
+                    Toast.makeText(AgainPasswordActivity.this,"密码不一致",Toast.LENGTH_LONG).show();
+                    return;
                 }
                 if(userInfo==null)return;
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("userId", userInfo.getUserId());
-
-//                jsonObject.addProperty("trueName", et_password_old.getText().toString().trim());
-//                jsonObject.addProperty("trueName", et_password_new.getText().toString().trim());
-//                jsonObject.addProperty("trueName", et_password_new_true.getText().toString().trim());
-
+                jsonObject.addProperty("password", et_password_old.getText().toString().trim());
+                jsonObject.addProperty("password2", et_password_new.getText().toString().trim());
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
                         new Gson().toJson(jsonObject));
 

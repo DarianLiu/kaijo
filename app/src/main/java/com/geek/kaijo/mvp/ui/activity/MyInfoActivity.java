@@ -22,6 +22,9 @@ import com.geek.kaijo.mvp.contract.MyInfoContract;
 import com.geek.kaijo.mvp.model.entity.UploadFile;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.presenter.MyInfoPresenter;
+import com.geek.kaijo.view.LoadingProgressDialog;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -35,6 +38,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -70,7 +75,7 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
 
     private UserInfo userInfo;
     RequestOptions options ;//图片加载失败后，显示的图片
-
+    private LoadingProgressDialog loadingDialog;
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerMyInfoComponent //如找不到该类,请编译一下项目
@@ -108,8 +113,8 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
             tv_userName.setText(userInfo.getUsername());
             tv_name.setText(userInfo.getTrueName());
             tv_phone.setText(userInfo.getMobile());
-//            tv_department.setText(userInfo.getDeptId()); //部门
-//            tv_phone.setText(tv_position);  //职位
+            tv_department.setText(userInfo.getBelongEntity()); //部门
+            tv_position.setText(userInfo.getJob());  //职位
             tv_telephone.setText(userInfo.getPhone());
             tv_adress.setText(userInfo.getAddress());
             tv_code.setText(userInfo.getIdcard());
@@ -119,7 +124,7 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
         }
     }
 
-    @OnClick({R.id.rl_head, R.id.rl_userName, R.id.rl_name, R.id.rl_phone, R.id.rl_position, R.id.rl_telephone, R.id.rl_adress,
+    @OnClick({R.id.rl_head, R.id.rl_name, R.id.rl_phone, R.id.rl_position, R.id.rl_telephone, R.id.rl_adress,
             R.id.rl_code,R.id.rl_equipment,R.id.rl_equipment_phone,R.id.rl_sim,R.id.rl_change_password,})
     public void onViewClicked(View view) {
         Intent intent;
@@ -127,12 +132,7 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
             case R.id.rl_head://头像
                 pictureSelector();
                 break;
-            case R.id.rl_userName://用户名
-                intent = new Intent(this,InfoEditActivity.class);
-                intent.putExtra("UserInfo",userInfo);
-                intent.putExtra("tag",Constant.info_userName);
-                startActivityForResult(intent,1);
-                break;
+
             case R.id.rl_name://真实姓名
                 intent = new Intent(this,InfoEditActivity.class);
                 intent.putExtra("UserInfo",userInfo);
@@ -238,11 +238,24 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
 
     @Override
     public void uploadSuccess(UploadFile uploadPhoto) {
-//        Glide.with(this).load(Api.URL_BANNER + "/" + uploadPhoto.getUrl()).into(img_head);
         Glide.with(MyApplication.get())
-                .load(Api.URL_BANNER + "/" + uploadPhoto.getFileRelativePath()) //图片地址
+//                .load(Api.URL_BANNER + "/" + uploadPhoto.getFileRelativePath()) //图片地址
+                .load(uploadPhoto.getFileName()) //图片地址
                 .apply(options)
                 .into(img_head);
+        if(uploadPhoto!=null){
+            httpUpdateHeader(uploadPhoto.getFileRelativePath());
+        }
+    }
+
+    private void httpUpdateHeader(String headUrl){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userId", userInfo.getUserId());
+        jsonObject.addProperty("headUrl", headUrl);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
+                new Gson().toJson(jsonObject));
+
+        mPresenter.httpUpdateUserForApp(requestBody);
     }
 
     @Override
@@ -250,15 +263,28 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
 
     }
 
+    @Override
+    public void httpUpdateUserSuccess(UserInfo userInfo) {
+        if(userInfo!=null){
+            DataHelper.saveDeviceData(this,Constant.SP_KEY_USER_INFO,userInfo);
+        }
+    }
+
 
     @Override
     public void showLoading() {
-
+        if (loadingDialog == null)
+            loadingDialog = new LoadingProgressDialog.Builder(this)
+                    .setCancelable(true)
+                    .setCancelOutside(true).create();
+        if (!loadingDialog.isShowing())
+            loadingDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (loadingDialog != null && loadingDialog.isShowing())
+            loadingDialog.dismiss();
     }
 
     @Override

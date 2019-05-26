@@ -31,6 +31,24 @@ public class UserInfo implements Serializable {
     private String devicePhone; //终端电话号码
     private String deviceSn;  //设备编号
     private String headUrl;  //头像
+    private String job; //职位
+    private String belongEntity;  //部门
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public String getBelongEntity() {
+        return belongEntity;
+    }
+
+    public void setBelongEntity(String belongEntity) {
+        this.belongEntity = belongEntity;
+    }
 
     public int getAreaStreetCommunityId() {
         return areaStreetCommunityId;
