@@ -167,8 +167,10 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
             if (granted) {           // All requested permissions are granted
-                GPSUtils.getInstance().startLocation();
-                startService(new Intent(InspectionProjectRegisterActivity.this, LocalService.class));
+                boolean isOpen = GPSUtils.isOPen(this);//判断GPS是否打开
+                if (!isOpen) {
+                    GPSUtils.showGPSDialog(this);
+                }
             } else {
                 showPermissionsDialog();
             }
@@ -426,7 +428,6 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
                     tv_lat.setText("错误信息："+cmccLocation.getErrorInfo()+"\nGPS状态"+getGPSStatusString(cmccLocation.getLocationQualityReport().getGPSStatus()));
                     tv_time.setText("回调时间："+formatUTC(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
                 }
-
 
             }else {
                 tv_lng.setText("经度：CmccLocation==null");

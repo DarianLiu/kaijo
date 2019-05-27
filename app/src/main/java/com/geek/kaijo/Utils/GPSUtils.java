@@ -5,6 +5,8 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -14,7 +16,9 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -251,57 +255,6 @@ public class GPSUtils {
         }
         return notification;
     }
-//
-//
-//
-//    android.location.LocationListener locationListener = new android.location.LocationListener() {
-//        // Provider的状态在可用、暂时不可用和无服务三个状态直接切换时触发此函数
-//        @Override
-//        public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//            switch (status){
-//
-//                case LocationProvider.AVAILABLE:
-//
-//                    Toast.makeText(MyApplication.get(),"当前GPS为可用状态!",Toast.LENGTH_SHORT).show();
-//
-//                    break;
-//
-//                case LocationProvider.OUT_OF_SERVICE:
-//
-//                    Toast.makeText(MyApplication.get(),"当前GPS不在服务内",Toast.LENGTH_SHORT).show();
-//
-//                    break;
-//
-//                case LocationProvider.TEMPORARILY_UNAVAILABLE:
-//
-//                    Toast.makeText(MyApplication.get(),"当前GPS为暂停服务状态",Toast.LENGTH_SHORT).show();
-//                    break;
-//
-//
-//            }
-//        }
-//
-//        // Provider被enable时触发此函数，比如GPS被打开
-//        @Override
-//        public void onProviderEnabled(String provider) {
-//
-//        }
-//
-//        // Provider被disable时触发此函数，比如GPS被关闭
-//        @Override
-//        public void onProviderDisabled(String provider) {
-//
-//        }
-//
-//        // 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
-//        @Override
-//        public void onLocationChanged(Location location) {
-//            if (location != null) {
-//
-//            }
-//        }
-//    };
 
     private static class MyHandler extends Handler {
         private final WeakReference<GPSUtils> weakTrainModelActivity;
@@ -332,6 +285,43 @@ public class GPSUtils {
                     break;
             }
         }
+    }
+
+    /**
+     * 判断GPS是否开启，GPS或者AGPS开启一个就认为是开启的
+     * @param context
+     * @return true 表示开启
+     */
+    public static final boolean isOPen(final Context context) {
+        LocationManager locationManager
+                = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快）
+        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // 通过WLAN或移动网络(3G/2G)确定的位置（也称作AGPS，辅助GPS定位。主要用于在室内或遮盖物（建筑群或茂密的深林等）密集的地方定位）
+//        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (gps) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 提示需要权限 AlertDialog
+     */
+    public static void showGPSDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("GPS提醒");
+        builder.setMessage("获取定位需要开启GPS");
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent locationIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                MyApplication.get().startActivity(locationIntent);
+            }
+        });
+        builder.show();
     }
 
 }

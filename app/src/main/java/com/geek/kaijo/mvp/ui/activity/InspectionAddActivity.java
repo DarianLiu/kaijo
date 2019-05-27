@@ -140,7 +140,7 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
                 Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
             if (granted) {           // All requested permissions are granted
                 GPSUtils.getInstance().startLocation();
-                startService(new Intent(InspectionAddActivity.this, LocalService.class));
+//                startService(new Intent(InspectionAddActivity.this, LocalService.class));
             } else {
                 showPermissionsDialog();
             }
@@ -198,6 +198,11 @@ public class InspectionAddActivity extends BaseActivity<InspectionAddPresenter> 
                 finish();
                 break;
             case R.id.tv_map:
+                boolean isOpen = GPSUtils.isOPen(this);//判断GPS是否打开
+                if (!isOpen) {
+                    GPSUtils.showGPSDialog(this);
+                    return;
+                }
                 showLoading();
                 GPSUtils.getInstance().setOnLocationListener(locationListener);
                 myHandler.sendEmptyMessageDelayed(1,5000);

@@ -381,9 +381,15 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
             if (granted) {
+                boolean isOpen = GPSUtils.isOPen(this);//判断GPS是否打开
+                if (!isOpen) {
+                    GPSUtils.showGPSDialog(this);
+                    return;
+                }
                 //启动定位
                 showLoading();
                 GPSUtils.getInstance().setOnLocationListener(locationListener);
+                GPSUtils.getInstance().startLocation();
                 myHandler.sendEmptyMessageDelayed(1,Constant.location_loadTime);
             } else {
                 showPermissionsDialog();
