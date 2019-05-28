@@ -305,8 +305,10 @@ public class ReportActivity extends BaseActivity<ReportPresenter> implements Rep
         if (caseInfo != null) {
             etCaseAddress.setText(caseInfo.getAddress());
             etCaseProblemDescription.setText(caseInfo.getDescription());
-            mLat = Double.parseDouble(caseInfo.getLat());
-            mLng = Double.parseDouble(caseInfo.getLng());
+            if(!TextUtils.isEmpty(caseInfo.getLat()) && !TextUtils.isEmpty(caseInfo.getLng())){
+                mLat = Double.parseDouble(caseInfo.getLat());
+                mLng = Double.parseDouble(caseInfo.getLng());
+            }
             tvLocationLongitude.setText(mLng + "");
             tvLocationLatitude.setText(mLat + "");
 

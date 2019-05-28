@@ -34,8 +34,8 @@ public class Case implements Parcelable{
     private String userId;
     private String firstWorkunit;
     private List<ButtonLabel> buttonList;
-    private Double lat;
-    private Double lng;
+    private String lat;
+    private String lng;
 
     protected Case(Parcel in) {
         caseId = in.readString();
@@ -59,12 +59,12 @@ public class Case implements Parcelable{
         if (in.readByte() == 0) {
             lat = null;
         } else {
-            lat = in.readDouble();
+            lat = in.readString();
         }
         if (in.readByte() == 0) {
             lng = null;
         } else {
-            lng = in.readDouble();
+            lng = in.readString();
         }
     }
 
@@ -240,19 +240,19 @@ public class Case implements Parcelable{
         this.buttonList = buttonList;
     }
 
-    public Double getLat() {
+    public String getLat() {
         return lat;
     }
 
-    public void setLat(Double lat) {
+    public void setLat(String lat) {
         this.lat = lat;
     }
 
-    public Double getLng() {
+    public String getLng() {
         return lng;
     }
 
-    public void setLng(Double lng) {
+    public void setLng(String lng) {
         this.lng = lng;
     }
 
@@ -285,13 +285,13 @@ public class Case implements Parcelable{
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeDouble(lat);
+            parcel.writeString(lat);
         }
         if (lng == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeDouble(lng);
+            parcel.writeString(lng);
         }
     }
 }

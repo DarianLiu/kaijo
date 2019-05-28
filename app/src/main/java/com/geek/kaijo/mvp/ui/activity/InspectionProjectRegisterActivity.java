@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -60,6 +61,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +115,8 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
     private RxPermissions rxPermissions;
     private int sfState;
     private InspentionResult result;
+    private MyHandler myHandler;
+    private CmccLocation mcmccLocation;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -151,6 +155,8 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         registerReceiver(locationReceiver, filter);
 
         GPSUtils.getInstance().setOnLocationListener(locationListener);
+        myHandler = new MyHandler(this);
+        myHandler.sendEmptyMessageDelayed(1,5000);
     }
 
     @Override
@@ -418,6 +424,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         @Override
         public void onLocationChanged(CmccLocation cmccLocation) {
             if(InspectionProjectRegisterActivity.this.isFinishing())return;
+            mcmccLocation = cmccLocation;
             if(cmccLocation!=null){
                 if(cmccLocation.getErrorCode()==0){
                     tv_lng.setText("经度："+cmccLocation.getLongitude());
@@ -428,12 +435,10 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
                     tv_lat.setText("错误信息："+cmccLocation.getErrorInfo()+"\nGPS状态"+getGPSStatusString(cmccLocation.getLocationQualityReport().getGPSStatus()));
                     tv_time.setText("回调时间："+formatUTC(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
                 }
-
             }else {
                 tv_lng.setText("经度：CmccLocation==null");
                 tv_lat.setText("纬度：CmccLocation==null");
             }
-
         }
     };
 
@@ -478,7 +483,7 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
          */
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("权限提醒");
-        builder.setMessage("获取坐标需要位置权限");
+        builder.setMessage("获取定位需要GPS位置权限");
         builder.setNegativeButton("取消", null);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
@@ -494,7 +499,11 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
         super.onDestroy();
         GPSUtils.getInstance().removeLocationListener(locationListener);
         unregisterReceiver(locationReceiver);
+        if(myHandler!=null){
+            myHandler.removeCallbacksAndMessages(null);
+        }
     }
+
 
     /**
      * 获取GPS状态的字符串
@@ -538,6 +547,34 @@ public class InspectionProjectRegisterActivity extends BaseActivity<InspectionPr
             sdf.applyPattern(strPattern);
         }
         return sdf == null ? "NULL" : sdf.format(l);
+    }
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<InspectionProjectRegisterActivity> weakTrainModelActivity;
+
+        public MyHandler(InspectionProjectRegisterActivity activity) {
+            weakTrainModelActivity = new WeakReference<InspectionProjectRegisterActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            InspectionProjectRegisterActivity weakActivity;
+            if (weakTrainModelActivity.get() == null) {
+                return;
+            } else {
+                weakActivity = weakTrainModelActivity.get();
+            }
+            switch (msg.what) {
+                case 1:
+                    if (weakActivity.mcmccLocation.getErrorCode() != 0) {
+                        GPSUtils.getInstance().startLocation();
+                    }
+                    sendEmptyMessageDelayed(1,5000);
+
+                    break;
+            }
+        }
     }
 
 }

@@ -340,10 +340,10 @@ public class HandleDetailActivity extends BaseActivity<HandleDetailPresenter> im
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_view_location://查看坐标
-                if (aCase != null) {
+                if (aCase != null && !TextUtils.isEmpty(aCase.getLat()) && !TextUtils.isEmpty(aCase.getLng())) {
                     Intent intent = new Intent(this, MapActivity.class);
-                    intent.putExtra("lat", aCase.getLat());
-                    intent.putExtra("lng", aCase.getLng());
+                    intent.putExtra("lat", Double.parseDouble(aCase.getLat()));
+                    intent.putExtra("lng", Double.parseDouble(aCase.getLng()));
                     launchActivity(intent);
                 }
                 break;

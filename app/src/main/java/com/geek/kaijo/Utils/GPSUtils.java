@@ -37,6 +37,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class GPSUtils {
     private static final double EARTH_RADIUS = 6378137.0;
     //声明CmccLocationClient类对象
@@ -53,7 +55,7 @@ public class GPSUtils {
 
     private GPSUtils() {
         myHandler = new MyHandler(this);
-        myHandler.sendEmptyMessageDelayed(1,5000);
+        myHandler.sendEmptyMessageDelayed(1,60000);
     }
 
     public static GPSUtils getInstance() {
@@ -93,7 +95,7 @@ public class GPSUtils {
         //关闭缓存机制
         mLocationOption.setLocationCacheEnable(false);
 
-        mLocationOption.enableLog(true);
+//        mLocationOption.enableLog(true);
 
         //给定位客户端对象设置定位参数 GPS定位结果不会被缓存
         mLocationClient.setLocationOption(mLocationOption);
@@ -105,10 +107,10 @@ public class GPSUtils {
         public void onLocationChanged(CmccLocation cmccLocation) {
             mcmccLocation = cmccLocation;
             if (cmccLocation != null) {
-                Log.i(this.getClass().getName(), "11111111Code==" + cmccLocation.getErrorCode() + "纬度=" + cmccLocation.getLatitude());
+                Timber.v("11111111Code==" + cmccLocation.getErrorCode() + "纬度=" + cmccLocation.getLatitude());
 //                    Log.i(this.getClass().getName(), "1111111日志==" + cmccLocation.getLocationDetail());
             } else {
-                Log.i(this.getClass().getName(), "111111111111111111111cmccLocation==" + cmccLocation);
+                Timber.v("111111111111111111111cmccLocation==" + cmccLocation);
             }
 
             if (locationListenerList == null) return;
@@ -280,7 +282,7 @@ public class GPSUtils {
                             weakActivity.mLocationClient.startLocation();
                         }
                     }
-                    sendEmptyMessageDelayed(1,5000);
+                    sendEmptyMessageDelayed(1,60000);
 
                     break;
             }
