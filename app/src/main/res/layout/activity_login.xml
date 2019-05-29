@@ -35,14 +35,13 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="用"
-                android:textColor="@color/color_text_title"
-                android:textSize="@dimen/t14" />
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/icon_user"/>
 
             <EditText
                 android:id="@+id/et_username"
@@ -51,6 +50,8 @@
                 android:background="@drawable/selector_frame_background"
                 android:inputType="text"
                 android:padding="8dp"
+                android:layout_marginLeft="5dp"
+                android:maxLength="20"
                 android:textColor="@color/color_text_title"
                 android:textColorHint="@color/color_text_tip"
                 android:textSize="@dimen/t14" />
@@ -65,14 +66,12 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <TextView
+            <ImageView
                 android:id="@+id/iv_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:text="密"
-                android:textColor="@color/color_text_title"
-                android:textSize="@dimen/t14" />
+                android:src="@mipmap/icon_password"/>
 
             <EditText
                 android:id="@+id/et_password"
@@ -86,6 +85,8 @@
                 android:inputType="textPassword"
                 android:maxLines="3"
                 android:padding="8dp"
+                android:layout_marginLeft="5dp"
+                android:maxLength="20"
                 android:textColor="@color/color_text_title"
                 android:textColorHint="@color/color_text_tip"
                 android:textSize="@dimen/t14" />

@@ -39,7 +39,7 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
     }
 
     @Override
-    public Observable<BaseResult<User>> login(String username, String password) {
+    public Observable<BaseResult<UserInfo>> login(String username, String password) {
         return mRepositoryManager.obtainRetrofitService(AppService.class).login(username, password);
     }
 

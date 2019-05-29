@@ -105,8 +105,8 @@ public class MyInfoActivity extends BaseActivity<MyInfoPresenter> implements MyI
         userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         if(userInfo!=null){
             Glide.with(MyApplication.get())
-//                    .load(Api.URL_BANNER + "/" + userInfo.getHeadUrl()) //图片地址
-                    .load(userInfo.getHeadUrl()) //图片地址
+                    .load(Api.URL_BANNER + "/" + userInfo.getHeadUrl()) //图片地址
+//                    .load(userInfo.getHeadUrl()) //图片地址
                     .apply(options)
                     .into(img_head);
 

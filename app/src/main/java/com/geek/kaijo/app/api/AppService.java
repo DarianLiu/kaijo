@@ -56,7 +56,7 @@ public interface AppService {
     @NonNull
     @Headers({DOMAIN_NAME_HEADER + Api.USER_DOMAIN_NAME})
     @POST("/user/loginForApp.json")
-    Observable<BaseResult<User>> login(@Query("username") String username, @Query("password") String password);
+    Observable<BaseResult<UserInfo>> login(@Query("username") String username, @Query("password") String password);
 
     /**
      * 根取当前登录用户，所属街道、社区、网格(8766端口)

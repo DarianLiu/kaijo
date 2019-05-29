@@ -50,10 +50,19 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
     public void login(String userName, String password) {
         mModel.login(userName, password).compose(RxUtils.applySchedulers(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
-                .subscribeWith(new ErrorHandleSubscriber<User>(mErrorHandler) {
+                .subscribeWith(new ErrorHandleSubscriber<UserInfo>(mErrorHandler) {
                     @Override
-                    public void onNext(User user) {
-                        findStreetById(user.getToken(), user.getUserId());
+                    public void onNext(UserInfo user) {
+//                        DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_ID, userId);
+//                        DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_TOKEN, token);
+                        if(user!=null && !TextUtils.isEmpty(user.getUsername())){
+                            DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_NAME, user.getUsername());
+                        }
+                        DataHelper.saveDeviceData(mApplication, Constant.SP_KEY_USER_INFO, user);
+                        mRootView.showMessage("登录成功");
+//                        findStreetById(user.getToken(), user.getUserId());
+                        mRootView.launchActivity(new Intent(mAppManager.getTopActivity(), MainActivity.class));
+                        mRootView.killMyself();
                     }
                 });
     }

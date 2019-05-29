@@ -101,7 +101,7 @@ public class InfoEditActivity extends BaseActivity<InfoEditPresenter> implements
                 }else if (Constant.info_phone.equals(title)){ //手机号
                     jsonObject.addProperty("mobile", edit_content.getText().toString().trim());
                 }else if (Constant.info_adress.equals(title)){ //地址
-                    jsonObject.addProperty("adress", edit_content.getText().toString().trim());
+                    jsonObject.addProperty("address", edit_content.getText().toString().trim());
                 }else if (Constant.info_code.equals(title)){ //身份证
                     jsonObject.addProperty("idcard", edit_content.getText().toString().trim());
                 }else if (Constant.info_equipment.equals(title)){ //终端设备编号
