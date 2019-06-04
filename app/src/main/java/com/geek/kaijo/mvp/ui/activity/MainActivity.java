@@ -40,6 +40,7 @@ import com.geek.kaijo.mvp.ui.fragment.ComponentFragment;
 import com.geek.kaijo.mvp.ui.fragment.MyMessageFragment;
 import com.geek.kaijo.view.FragmentTabHost;
 import com.geek.kaijo.view.autoviewpager.AutoScrollViewPager;
+import com.grid.im.activity.IMMainActivity;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
@@ -83,6 +84,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     TextView tvUserName;
     @BindView(R.id.tv_grid_name)
     TextView tvGridName;
+
+    @BindView(R.id.img_im)    //IM
+    ImageView img_im;
 
 
     @BindString(R.string.tab_case)
@@ -139,6 +143,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        UserInfo userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        if(userInfo!=null){
+            updateUserInfo(userInfo);
+        }
+    }
+
+    @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         tvToolbarTitle.setText(R.string.app_name);
         UserInfo userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
@@ -171,6 +184,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         }else {
             startService(new Intent(MainActivity.this, LocalService.class));
         }
+
+        img_im.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, IMMainActivity.class);
+            }
+        });
 
     }
 

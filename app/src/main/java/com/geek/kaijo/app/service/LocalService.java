@@ -37,6 +37,7 @@ import com.geek.kaijo.app.MyApplication;
 import com.geek.kaijo.app.api.Api;
 import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
 import com.geek.kaijo.mvp.model.entity.InspentionResult;
+import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.ui.activity.InspectionProjectRegisterActivity;
 import com.geek.kaijo.mvp.ui.activity.MainActivity;
 import com.geek.kaijo.mvp.ui.activity.MapActivity;
@@ -61,6 +62,8 @@ import static android.os.Build.ID;
 import static android.provider.ContactsContract.Intents.Insert.NAME;
 
 public class LocalService extends Service {
+    private static final int repeat_time = 60000;  //循环上传位置间隔时间
+    private static final int woking_time = 5000;   //巡查时上传位置间隔时间
 
     private MyHandler myHandler;
     private CmccLocation cmccLocation;
@@ -69,7 +72,8 @@ public class LocalService extends Service {
     int state; //0 未巡查 1 开始巡查 2 结束巡查
     private Vibrator mVibrator;  //震动
     private PowerManager.WakeLock wakeLock = null;  //电源锁，保持该服务在屏幕熄灭时仍然获取CPU时
-    private int spaseTime = 60000;
+    private int spaseTime = repeat_time;
+    private String userId;
 
     @Nullable
     @Override
@@ -80,44 +84,45 @@ public class LocalService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        UserInfo userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        if(userInfo!=null){
+            userId = userInfo.getUserId();
+        }
         myHandler = new MyHandler(this);
-//        myHandler.sendEmptyMessageDelayed(1, 60000);
+        myHandler.sendEmptyMessageDelayed(1, repeat_time);
 
         locationReceiver = new LocationReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constant.SP_KEY_Patrol_state);
         registerReceiver(locationReceiver, filter);
-
         GPSUtils.getInstance().setOnLocationListener(locationListener);
         initData();
-
         acquireWakeLock();
-
         setForeground();
-
-
-
-
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+//        userId = DataHelper.getStringSF(LocalService.this, Constant.SP_KEY_USER_ID);
+        UserInfo userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
+        if(userInfo!=null){
+            userId = userInfo.getUserId();
+        }
+//        new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                Log.i(this.getClass().getName(),"1111111111111111111111199999988");//这是定时所执行的任务
+//                String userId = DataHelper.getStringSF(LocalService.this, Constant.SP_KEY_USER_ID);
+//                if(cmccLocation!=null && cmccLocation.getLatitude()!=0 && cmccLocation.getLongitude()!=0){
+//                    httpUploadGpsLocation(userId, LocalService.this.cmccLocation.getLatitude(), cmccLocation.getLongitude());
+//                }
+//                cmccLocation = null;
+//            }
+//        }).start();
 
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                Log.i(this.getClass().getName(),"1111111111111111111111199999988");//这是定时所执行的任务
-                String userId = DataHelper.getStringSF(LocalService.this, Constant.SP_KEY_USER_ID);
-                if(cmccLocation!=null && cmccLocation.getLatitude()!=0 && cmccLocation.getLongitude()!=0){
-                    httpUploadGpsLocation(userId, LocalService.this.cmccLocation.getLatitude(), cmccLocation.getLongitude());
-                }
-                cmccLocation = null;
-            }
-        }).start();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long triggerAtTime = SystemClock.elapsedRealtime() + spaseTime;
+        long triggerAtTime = SystemClock.elapsedRealtime() + repeat_time;
         PendingIntent pi;
 //        Intent intent2 = new Intent(this, LocalService.class);
 //        PendingIntent pi = PendingIntent.getService(this, 0, intent2, 0);
@@ -205,11 +210,9 @@ public class LocalService extends Service {
 
     private static class MyHandler extends Handler {
         private final WeakReference<LocalService> weakTrainModelActivity;
-
         public MyHandler(LocalService activity) {
             weakTrainModelActivity = new WeakReference<LocalService>(activity);
         }
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -221,31 +224,11 @@ public class LocalService extends Service {
             }
             switch (msg.what) {
                 case 1:
-                    isServiceRunning(weakActivity);
                     if(weakActivity.cmccLocation!=null){
-                        Double mLat = weakActivity.cmccLocation.getLatitude();
-                        Double mLng = weakActivity.cmccLocation.getLongitude();
-                        if(weakActivity.result!=null){
-                            Toast.makeText(weakActivity,"经度："+mLng+"纬度："+mLat+"巡查项list.size="+weakActivity.result.size()+"巡查状态state="+weakActivity.state,Toast.LENGTH_LONG).show();
-                        }else {
-                            Toast.makeText(weakActivity,"经度："+mLng+"纬度："+mLat+"巡查状态state="+weakActivity.state,Toast.LENGTH_LONG).show();
-                        }
-                        if(mLat>0 && mLng>0){
-                           String userId = DataHelper.getStringSF(weakActivity, Constant.SP_KEY_USER_ID);
-                            weakActivity.httpUploadGpsLocation(userId, weakActivity.cmccLocation.getLatitude(), weakActivity.cmccLocation.getLongitude());
-                            weakActivity.cmccLocation = null;
-                        }
-                    }else {
-//                        GPSUtils.getInstance().startLocation(weakActivity.locationListener);
-//                        Intent intent = new Intent(weakActivity, MainActivity.class);
-//                        weakActivity.startActivity(intent);
-                        Toast.makeText(weakActivity,"定位获取失败",Toast.LENGTH_LONG).show();
+                        weakActivity.httpUploadGpsLocation(weakActivity.userId, weakActivity.cmccLocation.getLatitude(), weakActivity.cmccLocation.getLongitude());
+                        weakActivity.cmccLocation = null;
                     }
-
-                    LogUtils.debugInfo("11111111111111111一分钟上传一次locaListener=="+weakActivity.locationListener+"巡查项list="+weakActivity.result+"巡查状态state="+weakActivity.state);
-//                    weakActivity.acquireWakeLock();
-                    sendEmptyMessageDelayed(1, 10000); //1分钟 上传一次经纬度
-
+                    sendEmptyMessageDelayed(1, weakActivity.spaseTime); //1分钟 上传一次经纬度
                     break;
             }
         }
@@ -307,21 +290,21 @@ public class LocalService extends Service {
             if (intentAction.equals(Constant.SP_KEY_Patrol_state)) {
                 state = intent.getIntExtra(Constant.SP_KEY_Patrol_state,0);
                 if(state == 1){
-                    spaseTime = 5000;
+                    spaseTime = woking_time;
+                    if(myHandler!=null){
+                        if(myHandler.hasMessages(1)){
+                            myHandler.removeMessages(1);
+                        }
+                        myHandler.sendEmptyMessageDelayed(1, spaseTime);
+                    }
                 }else {
-                    spaseTime = 60000;
+                    spaseTime = repeat_time;
                 }
-//                if(state==1){ //开始巡查
-//                    DaoSession daoSession1 = MyApplication.get().getDaoSession();
-//                    IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
-//                    result = ipRegisterBeanDao.loadAll();
-//                }
                 if(intent.hasExtra(Constant.SP_KEY_Patrol_state_db)){
                     DaoSession daoSession1 = MyApplication.get().getDaoSession();
                     IPRegisterBeanDao ipRegisterBeanDao = daoSession1.getIPRegisterBeanDao();
                     result = ipRegisterBeanDao.loadAll();
                 }
-                LogUtils.debugInfo("1111111111111111111111111111111111111111state===="+state);
             }
 //            else if(intentAction.equals(Constant.SP_KEY_Patrol_state_db)){ //数据更新
 //                DaoSession daoSession1 = MyApplication.get().getDaoSession();

@@ -147,4 +147,5 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     // add library
     implementation files('libs/cmcc_locaion_sdk.jar')
+    implementation project(path: ':im')
 }

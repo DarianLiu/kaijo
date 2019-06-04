@@ -53,10 +53,11 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                 .subscribeWith(new ErrorHandleSubscriber<UserInfo>(mErrorHandler) {
                     @Override
                     public void onNext(UserInfo user) {
-//                        DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_ID, userId);
+
 //                        DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_TOKEN, token);
                         if(user!=null && !TextUtils.isEmpty(user.getUsername())){
                             DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_NAME, user.getUsername());
+                            DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_ID, user.getUserId());
                         }
                         DataHelper.saveDeviceData(mApplication, Constant.SP_KEY_USER_INFO, user);
                         mRootView.showMessage("登录成功");
