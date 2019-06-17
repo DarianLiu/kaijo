@@ -23,10 +23,9 @@
 
     <ImageView
         android:id="@+id/tv_toolbar_title_right"
-        android:layout_width="wrap_content"
+        android:layout_width="55dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:maxLines="1"
         android:paddingRight="15dp"
         android:paddingLeft="15dp"
         android:background="@drawable/selector_transparent_themebg"

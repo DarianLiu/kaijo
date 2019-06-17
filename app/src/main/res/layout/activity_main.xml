@@ -52,16 +52,26 @@
         android:paddingTop="10dp"
         android:text="登录名称"
         android:textColor="@color/color_text_black"
+        android:layout_centerVertical="true"
         android:textSize="@dimen/t12" />
-    <ImageView
-        android:id="@+id/img_im"
+    <LinearLayout
+        android:id="@+id/layout_im"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_user"
         android:layout_alignParentRight="true"
         android:paddingRight="15dp"
-        android:visibility="gone"
-        />
+        android:paddingLeft="15dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/selector_transparent_themebg">
+        <ImageView
+
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/icon_im"
+            />
+    </LinearLayout>
+
 </RelativeLayout>
 
 
@@ -74,10 +84,8 @@
         android:id="@+id/tv_grid_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/icon_grid_refresh"
         android:drawableLeft="@drawable/icon_grid_name"
         android:drawablePadding="5dp"
-        android:drawableRight="@drawable/icon_grid_refresh"
         android:drawableStart="@drawable/icon_grid_name"
         android:gravity="center_vertical"
         android:paddingBottom="10dp"

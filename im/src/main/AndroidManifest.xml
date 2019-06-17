@@ -1,2 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.grid.im" />
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.grid.im">
+
+    <application>
+        <activity android:name=".mvp.ui.activity.ContactDetailActivity"></activity>
+        <activity android:name=".mvp.ui.activity.ChatActivity" />
+        <activity
+            android:name=".mvp.ui.activity.IMMainActivity"
+            android:windowSoftInputMode="adjustNothing" />
+    </application>
+
+</manifest>

@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.4.1'
         //Gradle Android Maven plugin
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         //Gradle Bintray Plugin
@@ -23,8 +23,19 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url "https://jitpack.io" }
-        maven { url "https://maven.google.com" }
+
+        //添加ccwork sdk路径为本地仓库
+        maven { url "file:///${rootProject.getRootDir()}/ccwork" }
+        // 添加阿⾥云镜像，加速
+//        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+
+        // 第三⽅依赖必须
+        maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+
     }
 }
 

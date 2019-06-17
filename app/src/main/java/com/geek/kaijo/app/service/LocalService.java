@@ -127,19 +127,21 @@ public class LocalService extends Service {
 //        Intent intent2 = new Intent(this, LocalService.class);
 //        PendingIntent pi = PendingIntent.getService(this, 0, intent2, 0);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            pi = PendingIntent.getForegroundService(this, 0,
-                    intent,0);
-        }else{
-            pi = PendingIntent.getService(this, 0,
-                    intent, 0);
+        if(this!=null){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                pi = PendingIntent.getForegroundService(this, 0,
+                        intent,0);
+            }else{
+                pi = PendingIntent.getService(this, 0,
+                        intent, 0);
+            }
+            manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
         }
-
         //广播
 //        Intent intent2 = new Intent(this, AlarmReceiver.class);
 //         pi = PendingIntent.getBroadcast(this, 0, intent2, 0);
 
-        manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
+
 
         return super.onStartCommand(intent, flags, startId);
 

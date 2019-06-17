@@ -6,7 +6,7 @@
     <string name="tab_social">部件采集</string>
     <string name="tab_business">营商环境</string>
     <string name="tab_service">惠民服务</string>
-    <string name="tab_message">我的消息</string>
+    <string name="tab_message">我的信息</string>
 
     <!--案件相关-->
     <string name="case_time"> 案发时间</string>

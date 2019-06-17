@@ -10,7 +10,7 @@ public interface Api {
     /**
      * 测试环境与生产环境切换
      **/
-    boolean RELEASE_VERSION = true;
+    boolean RELEASE_VERSION = false;
 
     /**
      * 服务器IP地址
@@ -19,6 +19,8 @@ public interface Api {
 //    String IP = RELEASE_VERSION ? "192.168.0.252" : "221.180.255.15";
     String IP = RELEASE_VERSION ? "192.168.0.252" : "221.180.255.15";
 //    String IP = RELEASE_VERSION ? "192.168.0.29" : "221.180.255.15";
+
+    String IM_IP = "221.180.255.14:8767";
 
     /**
      * 端口号(用户/网格相关)

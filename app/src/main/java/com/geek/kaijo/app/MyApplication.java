@@ -11,6 +11,8 @@ import com.geek.kaijo.R;
 import com.geek.kaijo.app.api.Api;
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.ArmsUtils;
+import com.kook.im.FataErrorNotify;
+import com.kook.im.UIManager;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -75,6 +77,16 @@ public class MyApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        UIManager.init(getApplicationContext());
+        UIManager.registerFataError(new FataErrorNotify() {
+                                        @Override
+                                        public boolean onFataErr(String s) {
+                                            //被强踢的处理
+                                            //跳转到登录界⾯
+                                            return true;
+                                        }
+                                    }
+        );
 //        if (BuildConfig.LOG_DEBUG) {//Timber初始化
 //            //Timber 是一个日志框架容器,外部使用统一的Api,内部可以动态的切换成任何日志框架(打印策略)进行日志打印
 //            //并且支持添加多个日志框架(打印策略),做到外部调用一次 Api,内部却可以做到同时使用多个策略

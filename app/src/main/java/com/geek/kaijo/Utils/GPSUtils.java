@@ -276,12 +276,12 @@ public class GPSUtils {
             }
             switch (msg.what) {
                 case 1:
-                    if (weakActivity.mcmccLocation.getErrorCode() != 0) {
 //                initLocal();
                         if(weakActivity.mLocationClient!=null){
-                            weakActivity.mLocationClient.startLocation();
+                            if (weakActivity.mcmccLocation.getErrorCode() != 0) {
+                                weakActivity.mLocationClient.startLocation();
+                            }
                         }
-                    }
                     sendEmptyMessageDelayed(1,60000);
 
                     break;

@@ -13,6 +13,7 @@ import com.geek.kaijo.mvp.model.entity.IPRegisterBean;
 import com.geek.kaijo.mvp.model.entity.Inspection;
 import com.geek.kaijo.mvp.model.entity.InspentionResult;
 import com.geek.kaijo.mvp.model.entity.Menu;
+import com.geek.kaijo.mvp.model.entity.Nodes;
 import com.geek.kaijo.mvp.model.entity.ServiceBean;
 import com.geek.kaijo.mvp.model.entity.SocialThing;
 import com.geek.kaijo.mvp.model.entity.Street;
@@ -389,5 +390,28 @@ public interface AppService {
     @POST("/user/updateUserForApp.json")
     Observable<BaseResult<UserInfo>> updateUserForApp(@Body RequestBody body);
 
+    /**
+     * 新增笔记
+     *
+     */
+    @NonNull
+    @POST("/notepad/saveOrUpdateNotepad.json")
+    Observable<BaseResult<Nodes>> saveOrUpdateNotepad(@Body RequestBody body);
+
+    /**
+     * 查询笔记
+     *
+     */
+    @NonNull
+    @POST("/notepad/findNotepadList.json")
+    Observable<BaseResult<List<Nodes>>> findNotepadList(@Body RequestBody body);
+
+    /**
+     * 查询笔记
+     *
+     */
+    @NonNull
+    @POST("/notepad/delNotepad.json")
+    Observable<BaseResult<Nodes>> delNotepad(@Body RequestBody body);
 
 }

@@ -120,31 +120,32 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void onBackPressed() {
+        setResult(1);
         super.onBackPressed();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exit();
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private long exitTime = 0;
-
-    /**
-     * 退出应用
-     */
-    public void exit() {
-        if ((System.currentTimeMillis() - exitTime) > 2000) {
-            showMessage("再按一次退出程序");
-            exitTime = System.currentTimeMillis();
-        } else {
-            ArmsUtils.exitApp();
-        }
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            exit();
+//            return false;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+//
+//    private long exitTime = 0;
+//
+//    /**
+//     * 退出应用
+//     */
+//    public void exit() {
+//        if ((System.currentTimeMillis() - exitTime) > 2000) {
+//            showMessage("再按一次退出程序");
+//            exitTime = System.currentTimeMillis();
+//        } else {
+//            ArmsUtils.exitApp();
+//        }
+//    }
 
 
     @Override

@@ -1,16 +1,20 @@
 apply plugin: 'com.android.library'
-
 android {
-    compileSdkVersion 28
-
-
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 28
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+//        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        //添加multiDex ⽀持
+        multiDexEnabled true
+        //⽬前sdk只提供这三种abi⽀持
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }
 
     }
 
@@ -20,14 +24,67 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
 
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //support
+    implementation(rootProject.ext.dependencies["cardview-v7"]) {
+        exclude module: 'support-annotations'
+    }
+    implementation(rootProject.ext.dependencies["multidex"])
+    //support
+//    implementation (rootProject.ext.dependencies["design"]){
+//
+//    }
+    //    compile 'com.android.support:gridlayout-v7:22.+'
+    implementation('com.android.support:gridlayout-v7:22.+') {
+        exclude group: 'com.android.support'
+    }
+    //tools
+    //noinspection GradleCompatible
+//    implementation 'com.android.support:support-v4:28.0.0'
+    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+    implementation rootProject.ext.dependencies["progressmanager"]
+    implementation rootProject.ext.dependencies["retrofit-url-manager"]
+    //view
+    implementation(rootProject.ext.dependencies["butterknife"]) {
+        exclude module: 'support-annotations'
+    }
+    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+        exclude module: 'support-annotations'
+    }
+    //    implementation rootProject.ext.dependencies["paginate"]
+    //arms
+    //    compile project(':arms')
+    implementation rootProject.ext.dependencies["androideventbus"]
+    implementation('me.jessyan:arms:2.5.0') {
+        exclude module: 'support-annotations'
+//        exclude group: 'com.android.support', module: 'appcompat-v7'
+//        exclude group: 'com.android.support', module: 'support-v4'
+//        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support'
+        exclude group: 'com.github.tbruyelle'
+    }
+    implementation 'me.jessyan:arms-imageloader-glide:2.5.0'
+    implementation rootProject.ext.dependencies["androideventbus"]
+    //图片处理
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation rootProject.ext.dependencies["smartRefreshLayout"]
+    implementation rootProject.ext.dependencies["smartrefresh-header"]
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //添加ccsdk依赖，ccworkVersion 修改为 ccsdk的版本号
+    implementation ('com.ccwork.sdk:app:5.0.0.118'){
+//        exclude module: 'support-annotations'
+//        exclude group: 'com.android.support', module: 'appcompat-v7'
+//        exclude group: 'com.android.support', module: 'support-v4'
+//        exclude group: 'com.android.support', module: 'design'
+//        exclude group: 'com.tbruyelle.rxpermissions2'
+//        exclude group: 'com.android.support', module: 'design'
+    }
 }

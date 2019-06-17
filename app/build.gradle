@@ -9,41 +9,23 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
     }
 
-
     greendao {
         schemaVersion 2  //版本
         daoPackage 'dao' // 一般为app包名+生成文件的文件夹名
         targetGenDir 'src/main/java' //生成文件路径
     }
-
-//    signingConfigs {
-//        release {
-//            keyAlias 'newmanager'
-//            keyPassword 'manager66'
-//            storeFile file('C:/QianMing/NewManager.jks')
-//            storePassword 'manager66'
-//        }
-//        default_sign {
-//            keyAlias 'newmanager'
-//            keyPassword 'manager66'
-//            storeFile file('C:/QianMing/NewManager.jks')
-//            storePassword 'manager66'
-//        }
-//    }
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     buildToolsVersion rootProject.ext.android["buildToolsVersion"]
     defaultConfig {
         applicationId "com.geek.kaijo"
         minSdkVersion rootProject.ext.android["minSdkVersion"]
-        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+//        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
         multiDexEnabled true
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
-//            abiFilters 'armeabi'
-//            , 'armeabi-v7a', 'x86'
         }
 
     }
@@ -98,13 +80,15 @@ dependencies {
     }
     implementation(rootProject.ext.dependencies["multidex"])
     //support
-    implementation(rootProject.ext.dependencies["design"])
+//    implementation(rootProject.ext.dependencies["design"]) {
+//    }
     //    compile 'com.android.support:gridlayout-v7:22.+'
     implementation('com.android.support:gridlayout-v7:22.+') {
         exclude group: 'com.android.support'
     }
     //tools
-    implementation 'com.android.support:support-v4:28.0.0'
+    //noinspection GradleCompatible
+//    implementation 'com.android.support:support-v4:28.0.0'
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
@@ -121,15 +105,18 @@ dependencies {
     implementation rootProject.ext.dependencies["androideventbus"]
     implementation('me.jessyan:arms:2.5.0') {
         exclude module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'design'
+//        exclude group: 'com.android.support', module: 'appcompat-v7'
+//        exclude group: 'com.android.support', module: 'support-v4'
+//        exclude group: 'com.android.support', module: 'design'
+//        exclude group: 'com.android.support', module: 'loader'
+        exclude group: 'com.android.support'
+        exclude group: 'com.github.tbruyelle'
     }
     implementation 'me.jessyan:arms-imageloader-glide:2.5.0'
     implementation rootProject.ext.dependencies["androideventbus"]
     //权限
     //    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
-    implementation rootProject.ext.dependencies["rxpermissions2"]
+//    implementation rootProject.ext.dependencies["rxpermissions2"]
     //图片处理
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
@@ -148,4 +135,15 @@ dependencies {
     // add library
     implementation files('libs/cmcc_locaion_sdk.jar')
     implementation project(path: ':im')
+
+    //添加ccsdk依赖，ccworkVersion 修改为 ccsdk的版本号
+    implementation('com.ccwork.sdk:app:5.0.0.118') {
+//        exclude module: 'support-annotations'
+//        exclude group: 'com.android.support', module: 'appcompat-v7'
+//        exclude group: 'com.android.support', module: 'support-v4'
+//        exclude group: 'com.android.support', module: 'design'
+//        exclude group: 'com.tbruyelle.rxpermissions2'
+//        exclude group: 'com.android.support', module: 'design'
+    }
+
 }

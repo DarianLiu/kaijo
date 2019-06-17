@@ -109,7 +109,7 @@ public class MyMessageFragment extends BaseFragment<MyMessagePresenter> implemen
                 DataHelper.removeSF(getContext(), Constant.SP_KEY_USER_TOKEN);
                 DataHelper.removeSF(getContext(), Constant.SP_KEY_USER_ID);
                 launchActivity(new Intent(getActivity(), LoginActivity.class));
-                killMyself();
+                getActivity().finish();
                 break;
         }
     }

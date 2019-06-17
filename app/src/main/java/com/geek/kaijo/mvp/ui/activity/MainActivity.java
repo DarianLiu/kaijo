@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,12 +23,14 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geek.kaijo.R;
 import com.geek.kaijo.Utils.GPSUtils;
 import com.geek.kaijo.Utils.PermissionUtils;
 import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.app.EventBusTags;
+import com.geek.kaijo.app.api.Api;
 import com.geek.kaijo.app.service.LocalService;
 import com.geek.kaijo.di.component.DaggerMainComponent;
 import com.geek.kaijo.di.module.MainModule;
@@ -40,13 +43,15 @@ import com.geek.kaijo.mvp.ui.fragment.ComponentFragment;
 import com.geek.kaijo.mvp.ui.fragment.MyMessageFragment;
 import com.geek.kaijo.view.FragmentTabHost;
 import com.geek.kaijo.view.autoviewpager.AutoScrollViewPager;
-import com.grid.im.activity.IMMainActivity;
+import com.grid.im.mvp.ui.activity.IMMainActivity;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.http.imageloader.ImageLoader;
 import com.jess.arms.http.imageloader.glide.ImageConfigImpl;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.DataHelper;
+import com.kook.KKCallback;
+import com.kook.KKManager;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -63,6 +68,7 @@ import javax.inject.Inject;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 
 import static com.geek.kaijo.app.api.Api.URL_BANNER;
 import static com.geek.kaijo.app.api.Api.URL_FILE_UPLOAD;
@@ -84,11 +90,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     TextView tvUserName;
     @BindView(R.id.tv_grid_name)
     TextView tvGridName;
+    @BindView(R.id.tv_toolbar_title_right)
+    ImageView tv_toolbar_title_right;
 
-    @BindView(R.id.img_im)    //IM
-    ImageView img_im;
-
-
+    @BindView(R.id.layout_im)    //IM
+    LinearLayout layout_im;
     @BindString(R.string.tab_case)
     String str_tab_case;
     @BindString(R.string.tab_social)
@@ -156,7 +162,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         tvToolbarTitle.setText(R.string.app_name);
         UserInfo userInfo = DataHelper.getDeviceData(this, Constant.SP_KEY_USER_INFO);
         if (userInfo == null) {
-            launchActivity(new Intent(this, LoginActivity.class));
+//            launchActivity(new Intent(this, LoginActivity.class));
+            startActivityForResult(new Intent(this, LoginActivity.class),1);
         } else {
             updateUserInfo(userInfo);
         }
@@ -185,12 +192,64 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             startService(new Intent(MainActivity.this, LocalService.class));
         }
 
-        img_im.setOnClickListener(new View.OnClickListener() {
+        layout_im.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, IMMainActivity.class);
+
+//                com.kook.im.ui.home.MainActivity.launch(MainActivity.this);
+                // 判断
+                KKManager.getInstance().observableInitResult()
+                        .take(1)
+                        .subscribe(new Consumer<Integer>() {
+                            @Override
+                            public void accept(Integer integer) {
+                                if (integer == KKManager.LOGINED) {
+                                    // ⾃动登录成功,⽆需再次登陆，直接进主界⾯
+                                    Intent intent = new Intent(MainActivity.this, IMMainActivity.class);
+                                    startActivity(intent);
+                                } else if(integer == KKManager.UNLOGIN) {
+                                    // 登录失败，需要跳转到登录界⾯重新登录
+                                    if(userInfo==null)return;
+                                    KKManager.getInstance().login(userInfo.getUsername(), Api.IM_IP, new KKCallback() {
+                                        @Override
+                                        public void onError(int i) {
+//                                Log.i(this.getClass().getName(),"2222222222222222222222222登陆失败IM"+i);
+//                                            mRootView.showMessage("失败");
+                                            Toast.makeText(MainActivity.this,"IM登陆失败",Toast.LENGTH_LONG).show();
+                                        }
+
+                                        @Override
+                                        public void onSucceed() {
+                                            Intent intent = new Intent(MainActivity.this, IMMainActivity.class);
+                                            startActivity(intent);
+//                                Log.i(this.getClass().getName(),"1111111111111111111111登陆成功IM");
+//                                            mRootView.showMessage("登录成功");
+//                                            if(user!=null && !TextUtils.isEmpty(user.getUsername())){
+//                                                DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_NAME, user.getUsername());
+//                                                DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_ID, user.getUserId());
+//                                            }
+//                                            DataHelper.saveDeviceData(mApplication, Constant.SP_KEY_USER_INFO, user);
+//                                            mRootView.launchActivity(new Intent(mAppManager.getTopActivity(), MainActivity.class));
+//                                            mRootView.killMyself();
+                                        }
+                                    });  //IM登陆
+                                }
+                            }
+                        });
             }
         });
+        tv_toolbar_title_right.setVisibility(View.VISIBLE);
+        tv_toolbar_title_right.setImageResource(R.mipmap.icon_node);
+        tv_toolbar_title_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,NodesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
 
     }
 
@@ -401,7 +460,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     PagerAdapter mPagerAdapter = new PagerAdapter() {
         @Override
         public int getCount() {
-            return mBannerList.size();
+            return mBannerList==null?0:mBannerList.size();
         }
 
         @Override
@@ -546,5 +605,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             }
         });
         builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==1){
+            finish();
+        }
     }
 }

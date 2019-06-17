@@ -93,6 +93,7 @@ public class HandleActivity extends BaseActivity<HandlePresenter> implements Han
             caseSecondaryCategory = getIntent().getStringExtra("mCaseSecondaryCategory");
             caseChildCategory = getIntent().getStringExtra("mCaseChildCategory");
             handleType = getIntent().getIntExtra("handleType",0);
+            tvToolbarTitle.setText("案件列表");
         }
 
 
