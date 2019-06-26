@@ -210,7 +210,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                                 } else if(integer == KKManager.UNLOGIN) {
                                     // 登录失败，需要跳转到登录界⾯重新登录
                                     if(userInfo==null)return;
-                                    KKManager.getInstance().login(userInfo.getUsername(), Api.IM_IP, new KKCallback() {
+                                    KKManager.getInstance().login("xiaoxiao", Api.IM_IP, new KKCallback() {
                                         @Override
                                         public void onError(int i) {
 //                                Log.i(this.getClass().getName(),"2222222222222222222222222登陆失败IM"+i);

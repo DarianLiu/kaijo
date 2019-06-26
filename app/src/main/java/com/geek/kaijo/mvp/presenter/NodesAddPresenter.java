@@ -63,8 +63,8 @@ public class NodesAddPresenter extends BasePresenter<NodesAddContract.Model, Nod
 
 
         mModel.httpSaveOrUpdateNotepad(requestBody)
-//                .compose(RxUtils.applySchedulers(mRootView))
-                .compose(RxUtils.applySchedulersHide(mRootView))
+                .compose(RxUtils.applySchedulers(mRootView))
+//                .compose(RxUtils.applySchedulersHide(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<Nodes>(mErrorHandler) {
                     @Override

@@ -317,7 +317,7 @@ public interface AppService {
      *
      */
     @NonNull
-    @POST("/thing/findThingPositionListBy.json")
+    @POST("/thing/findThingListByManager.json")
     Observable<BaseResult<List<Inspection>>> httpThingList(@Body RequestBody body);
 
 
@@ -399,19 +399,19 @@ public interface AppService {
     Observable<BaseResult<Nodes>> saveOrUpdateNotepad(@Body RequestBody body);
 
     /**
-     * 查询笔记
+     * 查询笔记列表
      *
      */
     @NonNull
     @POST("/notepad/findNotepadList.json")
-    Observable<BaseResult<List<Nodes>>> findNotepadList(@Body RequestBody body);
+    Observable<BaseResult<BaseArrayResult<Nodes>>> findNotepadList(@Body RequestBody body);
 
     /**
-     * 查询笔记
+     * 记事本删除
      *
      */
     @NonNull
     @POST("/notepad/delNotepad.json")
-    Observable<BaseResult<Nodes>> delNotepad(@Body RequestBody body);
+    Observable<BaseResult<Nodes>> delNotepad(@Query("notepadIds") long notepadIds);
 
 }

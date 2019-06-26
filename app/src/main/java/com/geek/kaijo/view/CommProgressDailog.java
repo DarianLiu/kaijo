@@ -18,7 +18,7 @@ public class CommProgressDailog {
             progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
 //            progressDialog.setIcon(R.drawable.ic_launcher);//
             // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
-//            progressDialog.setTitle("正在连接蓝牙设备");
+//            progressDialog.setTitle("正在");
             if(!TextUtils.isEmpty(message)){
                 progressDialog.setMessage(message);
             }

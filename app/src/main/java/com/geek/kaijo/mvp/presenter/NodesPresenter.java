@@ -73,8 +73,8 @@ public class NodesPresenter extends BasePresenter<NodesContract.Model, NodesCont
     public void httpFindNotepadList(boolean isRefresh,String userId) {
         currPage = isRefresh ? 1 : currPage + 1;
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("current", currPage);
-        jsonObject.addProperty("size", 10);
+        jsonObject.addProperty("currPage", currPage);
+        jsonObject.addProperty("pageSize", 10);
         jsonObject.addProperty("userId", userId);
 
         RequestBody requestBody =  RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
@@ -92,13 +92,13 @@ public class NodesPresenter extends BasePresenter<NodesContract.Model, NodesCont
                     }
                 }).compose(RxLifecycleUtils.bindToLifecycle(mRootView))
                 .compose(RxUtils.handleBaseResult(mAppManager.getTopActivity()))
-                .subscribe(new ErrorHandleSubscriber<List<Nodes>>(mErrorHandler) {
+                .subscribe(new ErrorHandleSubscriber<BaseArrayResult<Nodes>>(mErrorHandler) {
                     @Override
-                    public void onNext(List<Nodes> datas) {
+                    public void onNext(BaseArrayResult<Nodes> datas) {
                         if (isRefresh) {
-                            mRootView.refreshData(datas);
+                            mRootView.refreshData(datas.getRecords());
                         } else {
-                            mRootView.loadMoreData(datas);
+                            mRootView.loadMoreData(datas.getRecords());
                         }
                     }
 
@@ -115,22 +115,22 @@ public class NodesPresenter extends BasePresenter<NodesContract.Model, NodesCont
     /**
      * 删除
      */
-    public void httpDelNotepad(RequestBody requestBody) {
+    public void httpDelNotepad(long notepadIds,int position) {
 
-
-        mModel.httpDelNotepad(requestBody)
-//                .compose(RxUtils.applySchedulers(mRootView))
-                .compose(RxUtils.applySchedulersHide(mRootView))
+        mModel.httpDelNotepad(notepadIds)
+                .compose(RxUtils.applySchedulers(mRootView))
+//                .compose(RxUtils.applySchedulersHide(mRootView))
                 .compose(RxUtils.handleBaseResult(mApplication))
                 .subscribeWith(new ErrorHandleSubscriber<Nodes>(mErrorHandler) {
                     @Override
                     public void onNext(Nodes ipRegisterBeans) {
 
-                        mRootView.httpDelNotepadSuccess(ipRegisterBeans);
+//                        mRootView.httpDelNotepadSuccess(ipRegisterBeans,position);
                     }
 
                     @Override
                     public void onComplete() {
+                        mRootView.httpDelNotepadSuccess(position);
                         super.onComplete();
 
                     }

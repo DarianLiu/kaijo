@@ -36,13 +36,14 @@ public interface NodesContract {
 
         void loadMoreData(List<Nodes> datas);
 
-        void httpDelNotepadSuccess(Nodes nodes);
+        void httpDelNotepadSuccess(Nodes nodes,int position);
+        void httpDelNotepadSuccess(int position);
     }
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<BaseResult<List<Nodes>>> httpFindNotepadList(RequestBody requestBody);
+        Observable<BaseResult<BaseArrayResult<Nodes>>> httpFindNotepadList(RequestBody requestBody);
 
-        Observable<BaseResult<Nodes>> httpDelNotepad(RequestBody body);
+        Observable<BaseResult<Nodes>> httpDelNotepad(long notepadIds);
     }
 }

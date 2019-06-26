@@ -65,17 +65,18 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model, LoginCont
                     @Override
                     public void onNext(UserInfo user) {
 
-                        KKManager.getInstance().login("wanfushequdiyiwangge01", Api.IM_IP, new KKCallback() {
+                        KKManager.getInstance().login("xiaoxiao", Api.IM_IP, new KKCallback() {
                             @Override
                             public void onError(int i) {
-//                                Log.i(this.getClass().getName(),"2222222222222222222222222登陆失败IM"+i);
-                                mRootView.showMessage("失败");
+                                if(mRootView!=null){
+                                    mRootView.showMessage("IM登陆失败"+i);
+                                }
                             }
 
                             @Override
                             public void onSucceed() {
-//                                Log.i(this.getClass().getName(),"1111111111111111111111登陆成功IM");
-                                mRootView.showMessage("登录成功");
+                                if(mRootView==null)return;
+                                mRootView.showMessage("IM登录成功");
                                 if(user!=null){
                                     DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_NAME, user.getUsername());
                                     DataHelper.setStringSF(mApplication, Constant.SP_KEY_USER_ID, user.getUserId());

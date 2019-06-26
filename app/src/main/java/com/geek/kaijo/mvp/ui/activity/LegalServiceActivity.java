@@ -198,7 +198,8 @@ public class LegalServiceActivity extends BaseActivity<LegalServicePresenter> im
         if (datas != null) {
             int index = datas.size();
             mDatas.addAll(datas);
-            mAdapter.notifyItemRangeInserted(index + 1, datas.size());
+//            mAdapter.notifyItemRangeInserted(index + 1, datas.size());
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

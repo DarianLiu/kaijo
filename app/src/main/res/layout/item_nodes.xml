@@ -38,7 +38,7 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="日期：2019-09-9 09:23:09"
+            android:text=""
             android:layout_centerVertical="true"
             android:textSize="@dimen/t13"/>
 

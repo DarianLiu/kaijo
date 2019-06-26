@@ -267,7 +267,8 @@ public class SocialManageActivity extends BaseActivity<SocialManagePresenter> im
         if (datas != null) {
             int index = mDatas.size();
             mDatas.addAll(datas);
-            mAdapter.notifyItemRangeInserted(index + 1, datas.size());
+//            mAdapter.notifyItemRangeInserted(index + 1, datas.size());
+            mAdapter.notifyDataSetChanged();
         }
     }
 

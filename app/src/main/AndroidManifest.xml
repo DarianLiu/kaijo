@@ -34,8 +34,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".mvp.ui.activity.NodesAddActivity"></activity>
-        <activity android:name=".mvp.ui.activity.NodesActivity" /> <!-- arms配置 -->
+        <activity android:name=".mvp.ui.activity.NodesAddActivity" android:screenOrientation="portrait" ></activity>
+        <activity android:name=".mvp.ui.activity.NodesActivity" android:screenOrientation="portrait"/>
         <meta-data
             android:name="com.geek.kaijo.app.GlobalConfiguration"
             android:value="ConfigModule" />

@@ -146,6 +146,7 @@ public class NodesAddActivity extends BaseActivity<NodesAddPresenter> implements
 
     @Override
     public void httpSaveOrUpdateNotepadSuccess(Nodes nodes) {
+        setResult(1);
         this.finish();
     }
 }

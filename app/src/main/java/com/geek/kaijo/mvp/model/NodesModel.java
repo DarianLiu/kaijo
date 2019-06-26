@@ -54,12 +54,12 @@ public class NodesModel extends BaseModel implements NodesContract.Model {
     }
 
     @Override
-    public Observable<BaseResult<List<Nodes>>> httpFindNotepadList(RequestBody requestBody) {
+    public Observable<BaseResult<BaseArrayResult<Nodes>>> httpFindNotepadList(RequestBody requestBody) {
         return mRepositoryManager.obtainRetrofitService(AppService.class).findNotepadList(requestBody);
     }
 
     @Override
-    public Observable<BaseResult<Nodes>> httpDelNotepad(RequestBody body) {
-        return mRepositoryManager.obtainRetrofitService(AppService.class).delNotepad(body);
+    public Observable<BaseResult<Nodes>> httpDelNotepad(long notepadIds) {
+        return mRepositoryManager.obtainRetrofitService(AppService.class).delNotepad(notepadIds);
     }
 }

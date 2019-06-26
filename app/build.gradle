@@ -137,7 +137,7 @@ dependencies {
     implementation project(path: ':im')
 
     //添加ccsdk依赖，ccworkVersion 修改为 ccsdk的版本号
-    implementation('com.ccwork.sdk:app:5.0.0.118') {
+    implementation('com.ccwork.sdk:app:5.0.0.121') {
 //        exclude module: 'support-annotations'
 //        exclude group: 'com.android.support', module: 'appcompat-v7'
 //        exclude group: 'com.android.support', module: 'support-v4'

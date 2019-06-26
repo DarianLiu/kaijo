@@ -172,7 +172,8 @@ public class WordGuildActivity extends BaseActivity<WordGuildPresenter> implemen
         if (datas != null) {
             int index = datas.size();
             mDatas.addAll(datas);
-            mAdapter.notifyItemRangeInserted(index + 1, datas.size());
+//            mAdapter.notifyItemRangeInserted(index + 1, datas.size());
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

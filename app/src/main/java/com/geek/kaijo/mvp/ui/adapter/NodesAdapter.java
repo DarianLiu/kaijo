@@ -12,8 +12,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.geek.kaijo.R;
+import com.geek.kaijo.Utils.DateUtils;
 import com.geek.kaijo.mvp.model.entity.Nodes;
 
+import org.joda.time.DateTime;
+
+import java.util.Date;
 import java.util.List;
 
 public class NodesAdapter extends RecyclerView.Adapter {
@@ -60,8 +64,7 @@ public class NodesAdapter extends RecyclerView.Adapter {
         BleViewHolder mHolder = (BleViewHolder) holder;
 //        mHolder.tv_code.setText(list.get(position).code);
         mHolder.name.setText(list.get(position).getContent());
-
-
+        mHolder.tv_date.setText(DateUtils.getDateToString(list.get(position).getCreateTime(),DateUtils.dateString1));
         mHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +112,7 @@ public class NodesAdapter extends RecyclerView.Adapter {
         public View view_line;
         public TextView tv_edite;
         public TextView tv_delete;
+        public TextView tv_date;
 
         public BleViewHolder(View view) {
             super(view);
@@ -117,6 +121,7 @@ public class NodesAdapter extends RecyclerView.Adapter {
             view_line = view.findViewById(R.id.view_line);
             tv_edite = view.findViewById(R.id.tv_edite);
             tv_delete = view.findViewById(R.id.tv_delete);
+            tv_date = view.findViewById(R.id.tv_date);
 
         }
     }

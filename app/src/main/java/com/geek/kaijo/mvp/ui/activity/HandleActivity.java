@@ -211,7 +211,8 @@ public class HandleActivity extends BaseActivity<HandlePresenter> implements Han
         if (caseList != null){
             int index = mCaseList.size();
             mCaseList.addAll(caseList);
-            mAdapter.notifyItemRangeInserted(index + 1, caseList.size());
+//            mAdapter.notifyItemRangeInserted(index + 1, caseList.size());
+            mAdapter.notifyDataSetChanged();
         }
     }
 

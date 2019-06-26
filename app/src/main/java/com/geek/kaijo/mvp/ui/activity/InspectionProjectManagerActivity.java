@@ -41,6 +41,9 @@ import butterknife.BindView;
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
+/**
+ * 巡查项管理
+ */
 public class InspectionProjectManagerActivity extends BaseActivity<InspectionProjectManagerPresenter> implements InspectionProjectManagerContract.View {
 
     @BindView(R.id.tv_toolbar_title)

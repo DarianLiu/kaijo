@@ -14,6 +14,7 @@ import com.geek.kaijo.app.Constant;
 import com.geek.kaijo.mvp.model.entity.Nodes;
 import com.geek.kaijo.mvp.model.entity.UserInfo;
 import com.geek.kaijo.mvp.ui.adapter.NodesAdapter;
+import com.geek.kaijo.view.LoadingProgressDialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jess.arms.base.BaseActivity;
@@ -67,6 +68,7 @@ public class NodesActivity extends BaseActivity<NodesPresenter> implements Nodes
     private List<Nodes> nodesList;
     private UserInfo userInfo;
     private NodesAdapter adapter;
+    private LoadingProgressDialog loadingDialog;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -92,7 +94,7 @@ public class NodesActivity extends BaseActivity<NodesPresenter> implements Nodes
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NodesActivity.this,NodesAddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -107,25 +109,23 @@ public class NodesActivity extends BaseActivity<NodesPresenter> implements Nodes
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(NodesActivity.this,NodesAddActivity.class);
                 intent.putExtra("Nodes",nodesList.get(position));
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
 
             @Override
             public void onEditeClick(View v, int position) {
                 Intent intent = new Intent(NodesActivity.this,NodesAddActivity.class);
                 intent.putExtra("Nodes",nodesList.get(position));
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
 
             @Override
             public void onDeleteClick(View v, int position) {
                 if(mPresenter!=null){
-
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("notepadId", nodesList.get(position).getNotepadId());
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"),
-                            new Gson().toJson(jsonObject));
-                    mPresenter.httpDelNotepad(requestBody);
+//                    JsonObject jsonObject = new JsonObject();
+//                    jsonObject.addProperty("notepadId", nodesList.get(position).getNotepadId());
+//                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), new Gson().toJson(jsonObject));
+                    mPresenter.httpDelNotepad(nodesList.get(position).getNotepadId(),position);
                 }
             }
         });
@@ -156,12 +156,18 @@ public class NodesActivity extends BaseActivity<NodesPresenter> implements Nodes
 
     @Override
     public void showLoading() {
-
+        if (loadingDialog == null)
+            loadingDialog = new LoadingProgressDialog.Builder(this)
+                    .setCancelable(true)
+                    .setCancelOutside(true).create();
+        if (!loadingDialog.isShowing())
+            loadingDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        if (loadingDialog != null && loadingDialog.isShowing())
+            loadingDialog.dismiss();
     }
 
     @Override
@@ -205,12 +211,30 @@ public class NodesActivity extends BaseActivity<NodesPresenter> implements Nodes
         if (datas != null) {
             int index = nodesList.size();
             nodesList.addAll(datas);
-            adapter.notifyItemRangeInserted(index + 1, datas.size());
+//            adapter.notifyItemRangeInserted(index + 1, datas.size());
+            adapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void httpDelNotepadSuccess(Nodes nodes) {
+    public void httpDelNotepadSuccess(Nodes nodes,int position) {
+//        adapter.notifyItemRemoved(position);
+      //  refreshLayout.autoRefresh();
+    }
 
+    @Override
+    public void httpDelNotepadSuccess(int position) { //删除成功
+        nodesList.remove(position);
+        adapter.notifyItemRemoved(position);
+        adapter.notifyItemRangeChanged(position,nodesList.size());
+//        refreshLayout.autoRefresh();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==1){
+            refreshLayout.autoRefresh();
+        }
     }
 }
